@@ -238,16 +238,34 @@
 # else
               bry_cor=0.0_r8
 # endif
+# ifdef ICESHELF
+              cff1=1.0_r8/(0.5_r8*(GRID(ng)%h(Istr-1,j)-                &
+     &                             ABS(GRID(ng)%zice(Istr-1,j))+        &
+     &                             zeta(Istr-1,j,know)+                 &
+     &                             GRID(ng)%h(Istr  ,j)-                &
+     &                             ABS(GRID(ng)%zice(Istr  ,j))+        &
+     &                             zeta(Istr  ,j,know)))
+# else
               cff1=1.0_r8/(0.5_r8*(GRID(ng)%h(Istr-1,j)+                &
      &                             zeta(Istr-1,j,know)+                 &
      &                             GRID(ng)%h(Istr  ,j)+                &
      &                             zeta(Istr  ,j,know)))
+# endif
               bry_str=cff1*(FORCES(ng)%sustr(Istr,j)-                   &
      &                      FORCES(ng)%bustr(Istr,j))
+# ifdef ICESHELF
+              Cx=1.0_r8/SQRT(g*0.5_r8*(GRID(ng)%h(Istr-1,j)-            &
+     &                                 ABS(GRID(ng)%zice(Istr-1,j))+    &
+     &                                 zeta(Istr-1,j,know)+             &
+     &                                 GRID(ng)%h(Istr  ,j)-            &
+     &                                 ABS(GRID(ng)%zice(Istr  ,j))+    &
+     &                                 zeta(Istr  ,j,know)))
+# else
               Cx=1.0_r8/SQRT(g*0.5_r8*(GRID(ng)%h(Istr-1,j)+            &
      &                                 zeta(Istr-1,j,know)+             &
      &                                 GRID(ng)%h(Istr  ,j)+            &
      &                                 zeta(Istr  ,j,know)))
+# endif
               cff2=GRID(ng)%om_u(Istr,j)*Cx
 !!            cff2=dt2d
               bry_val=ubar(Istr+1,j,know)+                              &
@@ -257,10 +275,22 @@
 #else
               bry_val=BOUNDARY(ng)%ubar_west(j)
 #endif
+#ifdef ICESHELF
+!
+! Note - Here cff is defined different from line 242, cff1, wonder why.
+!        Maybe the shelf side is considered static?
+! Chuning Wang 2021-06-20
+!
+              cff=1.0_r8/(0.5_r8*(GRID(ng)%h(Istr-1,j)-                 &
+     &                            ABS(GRID(ng)%zice(Istr-1,j))+         &
+     &                            GRID(ng)%h(Istr  ,j)-                 &
+     &                            ABS(GRID(ng)%zice(Istr  ,j))))
+#else
               cff=1.0_r8/(0.5_r8*(GRID(ng)%h(Istr-1,j)+                 &
      &                            zeta(Istr-1,j,know)+                  &
      &                            GRID(ng)%h(Istr  ,j)+                 &
      &                            zeta(Istr  ,j,know)))
+#endif
               Cx=SQRT(g*cff)
 #if defined ATM_PRESS && defined PRESS_COMPENSATE
               ubar(Istr,j,kout)=bry_val-                                &
@@ -413,10 +443,19 @@
 #else
               bry_cor=0.0_r8
 #endif
+#ifdef ICESHELF
+              cff=1.0_r8/(0.5_r8*(GRID(ng)%h(Istr-1,j)-                 &
+     &                            ABS(GRID(ng)%zice(Istr-1,j))+         &
+     &                            zeta(Istr-1,j,know)+                  &
+     &                            GRID(ng)%h(Istr  ,j)-                 &
+     &                            ABS(GRID(ng)%zice(Istr  ,j))+         &
+     &                            zeta(Istr  ,j,know)))
+#else
               cff=1.0_r8/(0.5_r8*(GRID(ng)%h(Istr-1,j)+                 &
      &                            zeta(Istr-1,j,know)+                  &
      &                            GRID(ng)%h(Istr  ,j)+                 &
      &                            zeta(Istr  ,j,know)))
+#endif
               bry_str=cff*(FORCES(ng)%sustr(Istr,j)-                    &
      &                     FORCES(ng)%bustr(Istr,j))
               ubar(Istr,j,kout)=ubar(Istr,j,know)+                      &
@@ -586,16 +625,34 @@
 # else
               bry_cor=0.0_r8
 # endif
+# ifdef ICESHELF
+              cff1=1.0_r8/(0.5_r8*(GRID(ng)%h(Iend  ,j)-                &
+     &                             ABS(GRID(ng)%zice(Iend  ,j))+        &
+     &                             zeta(Iend  ,j,know)+                 &
+     &                             GRID(ng)%h(Iend+1,j)-                &
+     &                             ABS(GRID(ng)%zice(Iend+1,j))+        &
+     &                             zeta(Iend+1,j,know)))
+# else
               cff1=1.0_r8/(0.5_r8*(GRID(ng)%h(Iend  ,j)+                &
      &                             zeta(Iend  ,j,know)+                 &
      &                             GRID(ng)%h(Iend+1,j)+                &
      &                             zeta(Iend+1,j,know)))
+# endif
               bry_str=cff1*(FORCES(ng)%sustr(Iend+1,j)-                 &
      &                      FORCES(ng)%bustr(Iend+1,j))
+# ifdef ICESHELF
+              Cx=1.0_r8/SQRT(g*0.5_r8*(GRID(ng)%h(Iend+1,j)-            &
+     &                                 ABS(GRID(ng)%zice(Iend+1,j))+    &
+     &                                 zeta(Iend+1,j,know)+             &
+     &                                 GRID(ng)%h(Iend  ,j)-            &
+     &                                 ABS(GRID(ng)%zice(Iend  ,j))+    &
+     &                                 zeta(Iend  ,j,know)))
+# else
               Cx=1.0_r8/SQRT(g*0.5_r8*(GRID(ng)%h(Iend+1,j)+            &
      &                                 zeta(Iend+1,j,know)+             &
      &                                 GRID(ng)%h(Iend  ,j)+            &
      &                                 zeta(Iend  ,j,know)))
+# endif
               cff2=GRID(ng)%om_u(Iend+1,j)*Cx
 !!            cff2=dt2d
               bry_val=ubar(Iend,j,know)+                                &
@@ -605,10 +662,17 @@
 #else
               bry_val=BOUNDARY(ng)%ubar_east(j)
 #endif
+#ifdef ICESHELF
+              cff=1.0_r8/(0.5_r8*(GRID(ng)%h(Iend  ,j)-                 &
+     &                            ABS(GRID(ng)%zice(Iend  ,j))+         &
+     &                            GRID(ng)%h(Iend+1,j)-                 &
+     &                            ABS(GRID(ng)%zice(Iend+1,j))))
+#else
               cff=1.0_r8/(0.5_r8*(GRID(ng)%h(Iend  ,j)+                 &
      &                            zeta(Iend  ,j,know)+                  &
      &                            GRID(ng)%h(Iend+1,j)+                 &
      &                            zeta(Iend+1,j,know)))
+#endif
               Cx=SQRT(g*cff)
 #if defined ATM_PRESS && defined PRESS_COMPENSATE
               ubar(Iend+1,j,kout)=bry_val+                              &
@@ -761,10 +825,19 @@
 #else
               bry_cor=0.0_r8
 #endif
+#ifdef ICESHELF
+              cff=1.0_r8/(0.5_r8*(GRID(ng)%h(Iend  ,j)-                 &
+     &                            ABS(GRID(ng)%zice(Iend  ,j))+         &
+     &                            zeta(Iend  ,j,know)+                  &
+     &                            GRID(ng)%h(Iend+1,j)-                 &
+     &                            ABS(GRID(ng)%zice(Iend+1,j))+         &
+     &                            zeta(Iend+1,j,know)))
+#else
               cff=1.0_r8/(0.5_r8*(GRID(ng)%h(Iend  ,j)+                 &
      &                            zeta(Iend  ,j,know)+                  &
      &                            GRID(ng)%h(Iend+1,j)+                 &
      &                            zeta(Iend+1,j,know)))
+#endif
               bry_str=cff*(FORCES(ng)%sustr(Iend+1,j)-                  &
      &                     FORCES(ng)%bustr(Iend+1,j))
               ubar(Iend+1,j,kout)=ubar(Iend+1,j,know)+                  &
@@ -917,10 +990,17 @@
             IF (LBC_apply(ng)%south(i)) THEN
               cff=dt2d*0.5_r8*(GRID(ng)%pn(i-1,Jstr)+                   &
      &                         GRID(ng)%pn(i  ,Jstr))
+#ifdef ICESHELF
+              cff1=SQRT(g*0.5_r8*(GRID(ng)%h(i-1,Jstr)-                 &
+     &                            ABS(GRID(ng)%zice(i-1,Jstr))+         &
+     &                            GRID(ng)%h(i  ,Jstr)-                 &
+     &                            ABS(GRID(ng)%zice(i  ,Jstr))))
+#else
               cff1=SQRT(g*0.5_r8*(GRID(ng)%h(i-1,Jstr)+                 &
      &                            zeta(i-1,Jstr,know)+                  &
      &                            GRID(ng)%h(i  ,Jstr)+                 &
      &                            zeta(i  ,Jstr,know)))
+#endif
               Ce=cff*cff1
               cff2=1.0_r8/(1.0_r8+Ce)
               ubar(i,Jstr-1,kout)=cff2*(ubar(i,Jstr-1,know)+            &
@@ -1075,10 +1155,17 @@
             IF (LBC_apply(ng)%north(i)) THEN
               cff=dt2d*0.5_r8*(GRID(ng)%pn(i-1,Jend)+                   &
      &                         GRID(ng)%pn(i  ,Jend))
+#ifdef ICESHELF
+              cff1=SQRT(g*0.5_r8*(GRID(ng)%h(i-1,Jend)-                 &
+     &                            ABS(GRID(ng)%zice(i-1,Jend))+         &
+     &                            GRID(ng)%h(i  ,Jend)-                 &
+     &                            ABS(GRID(ng)%zice(i  ,Jend))))
+#else
               cff1=SQRT(g*0.5_r8*(GRID(ng)%h(i-1,Jend)+                 &
      &                            zeta(i-1,Jend,know)+                  &
      &                            GRID(ng)%h(i  ,Jend)+                 &
      &                            zeta(i  ,Jend,know)))
+#endif
               Ce=cff*cff1
               cff2=1.0_r8/(1.0_r8+Ce)
               ubar(i,Jend+1,kout)=cff2*(ubar(i,Jend+1,know)+            &

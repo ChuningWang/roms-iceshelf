@@ -1213,6 +1213,13 @@
      &   'Include Ice Shelf Cavities'
       is=LEN_TRIM(Coptions)+1
       Coptions(is:is+10)=' ICESHELF,'
+# ifdef ICESHELF_MORPH
+!
+      IF (Master) WRITE (stdout,20) 'ICESHELF_MORPH',                   &
+     &   'Allow model ice draft to evolve.'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+11)=' ICESHELF_MORPH,'
+# endif
 #endif
 #if defined IMPACT_INNER             && \
     defined OBS_IMPACT               && \

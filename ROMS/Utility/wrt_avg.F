@@ -200,6 +200,72 @@
         END IF
       END IF
 # endif
+# ifdef ICESHELF
+!
+!  Write out ice shelf melt rate (m/s).
+!
+      IF (Aout(idismr,ng)) THEN
+        scale=1.0_dp
+        gtype=gfactor*r2dvar
+        status=nf_fwrite2d(ng, iNLM, AVG(ng)%ncid, AVG(ng)%Vid(idismr), &
+     &                     AVG(ng)%Rindex, gtype,                       &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+# ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+# endif
+     &                     AVERAGE(ng) % avgismr)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idismr)), AVG(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+# endif
+# ifdef SURFACE_OVERFLUX_FIX
+      IF (Aout(idssflxSOF,ng)) THEN
+        scale=1.0_dp
+        gtype=gfactor*r2dvar
+        status=nf_fwrite2d(ng, iNLM, AVG(ng)%ncid,                      &
+     &                     AVG(ng)%Vid(idssflxSOF),                     &
+     &                     AVG(ng)%Rindex, gtype,                       &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+# ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+# endif
+     &                     AVERAGE(ng) % avgssflxSOF)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idssflxSOF)), AVG(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+      IF (Aout(idshflxSOF,ng)) THEN
+        scale=1.0_dp
+        gtype=gfactor*r2dvar
+        status=nf_fwrite2d(ng, iNLM, AVG(ng)%ncid,                      &
+     &                     AVG(ng)%Vid(idshflxSOF),                     &
+     &                     AVG(ng)%Rindex, gtype,                       &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+# ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+# endif
+     &                     AVERAGE(ng) % avgshflxSOF)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idshflxSOF)), AVG(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+# endif
 !
 !  Write out 2D momentum component (m/s) in the XI-direction.
 !
@@ -2147,6 +2213,88 @@
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idFsuD)), AVG(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+#  endif
+#  ifdef ICESHELF
+!
+!  Write out ice shelf melt rate (m/s).
+!
+      IF (Aout(idismr,ng)) THEN
+        scale=1.0_dp
+        IF (AVG(ng)%pioVar(idismr)%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
+        status=nf_fwrite2d(ng, iNLM, AVG(ng)%pioFile,                   &
+     &                     AVG(ng)%pioVar(idismr),                      &
+     &                     AVG(ng)%Rindex,                              &
+     &                     ioDesc,                                      &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#   ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#   endif
+     &                     AVERAGE(ng) % avgismr)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idismr)), AVG(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+#  endif
+#  ifdef SURFACE_OVERFLUX_FIX
+      IF (Aout(idssflxSOF,ng)) THEN
+        scale=1.0_dp
+        IF (AVG(ng)%pioVar(idssflxSOF)%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
+        status=nf_fwrite2d(ng, iNLM, AVG(ng)%pioFile,                   &
+     &                     AVG(ng)%pioVar(idssflxSOF),                  &
+     &                     AVG(ng)%Rindex,                              &
+     &                     ioDesc,                                      &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#   ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#   endif
+     &                     AVERAGE(ng) % avgssflxSOF)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idssflxSOF)), AVG(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+      IF (Aout(idshflxSOF,ng)) THEN
+        scale=1.0_dp
+        IF (AVG(ng)%pioVar(idshflxSOF)%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
+        status=nf_fwrite2d(ng, iNLM, AVG(ng)%pioFile,                   &
+     &                     AVG(ng)%pioVar(idshflxSOF),                  &
+     &                     AVG(ng)%Rindex,                              &
+     &                     ioDesc,                                      &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#   ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#   endif
+     &                     AVERAGE(ng) % avgshflxSOF)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idshflxSOF)), AVG(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status

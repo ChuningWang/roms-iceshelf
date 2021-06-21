@@ -119,6 +119,9 @@
       USE mod_param
       USE mod_ncparam
       USE mod_average
+# ifdef ICESHELF
+      USE mod_iceshelfvar
+# endif
 # if defined FORWARD_WRITE && defined SOLVE3D
       USE mod_coupling
 # endif
@@ -214,6 +217,9 @@
      &                       GRID(ng) % on_v,                           &
      &                       GRID(ng) % pm,                             &
      &                       GRID(ng) % pn,                             &
+# ifdef ICESHELF
+     &                       GRID(ng) % zice,                           &
+# endif
 # ifdef SOLVE3D
      &                       GRID(ng) % z_r,                            &
      &                       OCEAN(ng) % pden,                          &
@@ -289,6 +295,47 @@
             END DO
           END DO
         END IF
+
+# ifdef ICESHELF
+        IF (Aout(idismr,ng)) THEN
+          DO j=JstrR,JendR
+            DO i=IstrR,IendR
+              AVERAGE(ng)%avgismr(i,j)=ICESHELFVAR(ng)%m(i,j)
+#  ifdef WET_DRY
+              AVERAGE(ng)%avgismr(i,j)=AVERAGE(ng)%avgismr(i,j)*        &
+     &                                 GRID(ng)%rmask_full(i,j)
+#  endif
+            END DO
+          END DO
+        END IF
+# endif
+
+# ifdef SURFACE_OVERFULX_FIX
+        IF (Aout(idssflxSOF,ng)) THEN
+          DO j=JstrR,JendR
+            DO i=IstrR,IendR
+              AVERAGE(ng)%avgssflxSOF(i,j)=ICESHELFVAR(ng)%ssflx(i,j)
+#  ifdef WET_DRY
+              AVERAGE(ng)%avgssflxSOF(i,j)=                             &
+     &                                    AVERAGE(ng)%avgssflxSOF(i,j)* &
+     &                                    GRID(ng)%rmask_full(i,j)
+#  endif
+            END DO
+          END DO
+        END IF
+        IF (Aout(idshflxSOF,ng)) THEN
+          DO j=JstrR,JendR
+            DO i=IstrR,IendR
+              AVERAGE(ng)%avgshflxSOF(i,j)=ICESHELFVAR(ng)%shflx(i,j)
+#  ifdef WET_DRY
+              AVERAGE(ng)%avgshflxSOF(i,j)=                             &
+     &                                    AVERAGE(ng)%avgshflxSOF(i,j)* &
+     &                                    GRID(ng)%rmask_full(i,j)
+#  endif
+            END DO
+          END DO
+        END IF
+# endif
 
         IF (Aout(idUbar,ng)) THEN
           DO j=JstrR,JendR
@@ -1312,6 +1359,46 @@
             END DO
           END DO
         END IF
+
+# ifdef ICESHELF
+        IF (Aout(idismr,ng)) THEN
+          DO j=JstrR,JendR
+            DO i=IstrR,IendR
+              AVERAGE(ng)%avgismr(i,j)=AVERAGE(ng)%avgismr(i,j)+        &
+#  ifdef WET_DRY
+     &                                 GRID(ng)%rmask_full(i,j)*        &
+#  endif
+     &                                 ICESHELFVAR(ng)%m(i,j)
+            END DO
+          END DO
+        END IF
+# endif
+# ifdef SURFACE_OVERFLUX_FIX
+        IF (Aout(idssflxSOF,ng)) THEN
+          DO j=JstrR,JendR
+            DO i=IstrR,IendR
+              AVERAGE(ng)%avgssflxSOF(i,j)=                             &
+     &                                   AVERAGE(ng)%avgssflxSOF(i,j)+  &
+#  ifdef WET_DRY
+     &                                 GRID(ng)%rmask_full(i,j)*        &
+#  endif
+     &                                 ICESHELFVAR(ng)%ssflxSOF(i,j)
+            END DO
+          END DO
+        END IF
+        IF (Aout(idshflxSOF,ng)) THEN
+          DO j=JstrR,JendR
+            DO i=IstrR,IendR
+              AVERAGE(ng)%avgshflxSOF(i,j)=                             &
+     &                                   AVERAGE(ng)%avgshflxSOF(i,j)+  &
+#  ifdef WET_DRY
+     &                                 GRID(ng)%rmask_full(i,j)*        &
+#  endif
+     &                                 ICESHELFVAR(ng)%shflxSOF(i,j)
+            END DO
+          END DO
+        END IF
+# endif
 
         IF (Aout(idUbar,ng)) THEN
           DO j=JstrR,JendR
@@ -2348,6 +2435,72 @@
 # endif
           END IF
         END IF
+
+# ifdef ICESHELF
+        IF (Aout(idismr,ng)) THEN
+          DO j=JstrR,JendR
+            DO i=IstrR,IendR
+              AVERAGE(ng)%avgismr(i,j)=rfac(i,j)*                       &
+     &                                 AVERAGE(ng)%avgismr(i,j)
+            END DO
+          END DO
+          IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+             CALL exchange_r2d_tile (ng, tile,                          &
+     &                               LBi, UBi, LBj, UBj,                &
+     &                               AVERAGE(ng)%avgismr)
+#  ifdef DISTRIBUTE
+             CALL mp_exchange2d (ng, tile, iNLM, 1,                     &
+     &                           LBi, UBi, LBj, UBj,                    &
+     &                           NghostPoints,                          &
+     &                           EWperiodic(ng), NSperiodic(ng),        &
+     &                           AVERAGE(ng)%avgismr)
+#  endif
+           END IF
+         END IF
+# endif 
+
+# ifdef SURFACE_OVERFLUX_FIX
+        IF (Aout(idssflxSOF,ng)) THEN
+          DO j=JstrR,JendR
+            DO i=IstrR,IendR
+              AVERAGE(ng)%avgssflxSOF(i,j)=rfac(i,j)*                       &
+     &                                 AVERAGE(ng)%avgssflxSOF(i,j)
+            END DO
+          END DO
+          IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+             CALL exchange_r2d_tile (ng, tile,                          &
+     &                               LBi, UBi, LBj, UBj,                &
+     &                               AVERAGE(ng)%avgssflxSOF)
+#  ifdef DISTRIBUTE
+             CALL mp_exchange2d (ng, tile, iNLM, 1,                     &
+     &                           LBi, UBi, LBj, UBj,                    &
+     &                           NghostPoints,                          &
+     &                           EWperiodic(ng), NSperiodic(ng),        &
+     &                           AVERAGE(ng)%avgssflxSOF)
+#  endif
+           END IF
+         END IF
+        IF (Aout(idshflxSOF,ng)) THEN
+          DO j=JstrR,JendR
+            DO i=IstrR,IendR
+              AVERAGE(ng)%avgshflxSOF(i,j)=rfac(i,j)*                       &
+     &                                 AVERAGE(ng)%avgshflxSOF(i,j)
+            END DO
+          END DO
+          IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+             CALL exchange_r2d_tile (ng, tile,                          &
+     &                               LBi, UBi, LBj, UBj,                &
+     &                               AVERAGE(ng)%avgshflxSOF)
+#  ifdef DISTRIBUTE
+             CALL mp_exchange2d (ng, tile, iNLM, 1,                     &
+     &                           LBi, UBi, LBj, UBj,                    &
+     &                           NghostPoints,                          &
+     &                           EWperiodic(ng), NSperiodic(ng),        &
+     &                           AVERAGE(ng)%avgshflxSOF)
+#  endif
+           END IF
+         END IF
+# endif 
 
         IF (Aout(idUbar,ng)) THEN
           DO j=JstrR,JendR

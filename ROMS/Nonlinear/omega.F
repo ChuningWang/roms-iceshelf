@@ -32,7 +32,11 @@
       USE mod_param
       USE mod_grid
       USE mod_ocean
-# if defined SEDIMENT && defined SED_MORPH
+# if defined ICESHELF && defined ICESHELF_MORPH
+      USE mod_iceshelfvar
+# endif
+# if (defined SEDIMENT && defined SED_MORPH) || \
+     (defined ICESHELF && defined ICESHELF_MORPH)
       USE mod_sedbed
       USE mod_stepping
 # endif
@@ -54,10 +58,16 @@
       CALL omega_tile (ng, tile, model,                                 &
      &                 LBi, UBi, LBj, UBj,                              &
      &                 IminS, ImaxS, JminS, JmaxS,                      &
-# if defined SEDIMENT && defined SED_MORPH
+# if (defined SEDIMENT && defined SED_MORPH) || \
+     (defined ICESHELF && defined ICESHELF_MORPH)
      &                 nstp(ng), nnew(ng),                              &
      &                 GRID(ng) % omn,                                  &
+#  if defined ICESHELF && defined ICESHELF_MORPH
+     &                 ICESHELFVAR(ng) % iceshelf_draft,                &
+#  endif
+#  if defined SEDIMENT && defined SED_MORPH
      &                 SEDBED(ng) % bed_thick,                          &
+#  endif
 # endif
      &                 GRID(ng) % Huon,                                 &
      &                 GRID(ng) % Hvom,                                 &
@@ -74,9 +84,16 @@
       SUBROUTINE omega_tile (ng, tile, model,                           &
      &                       LBi, UBi, LBj, UBj,                        &
      &                       IminS, ImaxS, JminS, JmaxS,                &
-# if defined SEDIMENT && defined SED_MORPH
+# if (defined SEDIMENT && defined SED_MORPH) || \
+     (defined ICESHELF && defined ICESHELF_MORPH)
      &                       nstp, nnew,                                &
-     &                       omn, bed_thick,                            &
+     &                       omn,                                       &
+#  if defined ICESHELF && defined ICESHELF_MORPH
+     &                       iceshelf_draft,                            &
+#  endif
+#  if defined SEDIMENT && defined SED_MORPH
+     &                       bed_thick,                                 &
+#  endif
 # endif
      &                       Huon, Hvom,                                &
      &                       z_w,                                       &
@@ -97,14 +114,21 @@
       integer, intent(in) :: ng, tile, model
       integer, intent(in) :: LBi, UBi, LBj, UBj
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
-# if defined SEDIMENT && defined SED_MORPH
+# if (defined SEDIMENT && defined SED_MORPH) || \
+     (defined ICESHELF && defined ICESHELF_MORPH)
       integer, intent(in) :: nstp, nnew
 # endif
 !
 # ifdef ASSUMED_SHAPE
-#  if defined SEDIMENT && defined SED_MORPH
+#  if (defined SEDIMENT && defined SED_MORPH) || \
+      (defined ICESHELF && defined ICESHELF_MORPH)
       real(r8), intent(in) :: omn(LBi:,LBj:)
+#   if defined ICESHELF && defined ICESHELF_MORPH
+      real(r8), intent(in) :: iceshelf_draft(LBi:,LBj:,:)
+#   endif
+#   if defined SEDIMENT && defined SED_MORPH
       real(r8), intent(in):: bed_thick(LBi:,LBj:,:)
+#   endif
 #  endif
       real(r8), intent(in) :: Huon(LBi:,LBj:,:)
       real(r8), intent(in) :: Hvom(LBi:,LBj:,:)
@@ -113,9 +137,15 @@
 
 # else
 
-#  if defined SEDIMENT && defined SED_MORPH
+#  if (defined SEDIMENT && defined SED_MORPH) || \
+      (defined ICESHELF && defined ICESHELF_MORPH)
       real(r8), intent(in) :: omn(LBi:UBi,LBj:UBj)
+#   if defined ICESHELF && defined ICESHELF_MORPH
+      real(r8), intent(in):: iceshelf_draft(LBi:,LBj:,:)
+#   endif
+#   if defined SEDIMENT && defined SED_MORPH
       real(r8), intent(in):: bed_thick(LBi:UBi,LBj:UBj,2)
+#   endif
 #  endif
       real(r8), intent(in) :: Huon(LBi:UBi,LBj:UBj,N(ng))
       real(r8), intent(in) :: Hvom(LBi:UBi,LBj:UBj,N(ng))
@@ -126,7 +156,8 @@
 !  Local variable declarations.
 !
       integer :: i, ii, is, j, jj, k
-# if defined SEDIMENT && defined SED_MORPH
+# if (defined SEDIMENT && defined SED_MORPH) || \
+     (defined ICESHELF && defined ICESHELF_MORPH)
       real(r8) :: cff1
 # endif
       real(r8), dimension(IminS:ImaxS) :: wrk
@@ -142,7 +173,8 @@
 !  contains the vertical velocity at the free-surface, d(zeta)/d(t).
 !  Notice that barotropic mass flux divergence is not used directly.
 !
-# if defined SEDIMENT && defined SED_MORPH
+# if (defined SEDIMENT && defined SED_MORPH) || \
+     (defined ICESHELF && defined ICESHELF_MORPH)
       cff1=1.0_r8/dt(ng)
 # endif
       DO j=Jstr,Jend
@@ -159,6 +191,13 @@
             W(i,j,k)=W(i,j,k-1)-                                        &
      &               (Huon(i+1,j,k)-Huon(i,j,k)+                        &
      &                Hvom(i,j+1,k)-Hvom(i,j,k))
+# if defined ICESHELF && defined ICESHELF_MORPH
+            IF(k.eq.N(ng)) THEN
+              W(i,j,N(ng))=                                             &
+     &          W(i,j,N(ng))-cff1*(iceshelf_draft(i,j,nstp)-            &
+     &          iceshelf_draft(i,j,nnew))*omn(i,j)
+            END IF
+# endif            
           END DO
         END DO
 !

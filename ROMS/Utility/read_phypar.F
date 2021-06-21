@@ -1390,6 +1390,76 @@
               END IF
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Hout(idFsur,1:Ngrids)=Lswitch(1:Ngrids)
+#ifdef ICESHELF
+            CASE ('Hout(idismr)')
+              IF (idismr.eq.0) THEN
+                IF (Master) WRITE (out,280) 'idismr'
+                exit_flag=5
+                RETURN
+              END IF
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Hout(idismr,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Hout(idisTstar)')
+              IF (idisTstar.eq.0) THEN
+                IF (Master) WRITE (out,280) 'idisTstar'
+                exit_flag=5
+                RETURN
+              END IF
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Hout(idisTstar,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Hout(idisUstar)')
+              IF (idisUstar.eq.0) THEN
+                IF (Master) WRITE (out,280) 'idisUstar'
+                exit_flag=5
+                RETURN
+              END IF
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Hout(idisUstar,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Hout(idisTb)')
+              IF (idisTb.eq.0) THEN
+                IF (Master) WRITE (out,280) 'idisTb'
+                exit_flag=5
+                RETURN
+              END IF
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Hout(idisTb,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Hout(idisSb)')
+              IF (idisSb.eq.0) THEN
+                IF (Master) WRITE (out,280) 'idisSb'
+                exit_flag=5
+                RETURN
+              END IF
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Hout(idisSb,1:Ngrids)=Lswitch(1:Ngrids)
+# if defined ICESHELF_MORPH
+            CASE ('Hout(idDraft)')
+              IF (iddraft.eq.0) THEN
+                IF (Master) WRITE (out,280) 'iddraft'
+                exit_flag=5
+                RETURN
+              END IF
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Hout(iddraft,1:Ngrids)=Lswitch(1:Ngrids)
+# endif
+#endif
+#if defined SURFACE_OVERFLUX_FIX
+            CASE ('Hout(idssflxSOF)')
+              IF (idssflxSOF.eq.0) THEN
+                IF (Master) WRITE (out,280) 'idssflxSOF'
+                exit_flag=5
+                RETURN
+              END IF
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Hout(idssflxSOF,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Hout(idshflxSOF)')
+              IF (idshflxSOF.eq.0) THEN
+                IF (Master) WRITE (out,280) 'idshflxSOF'
+                exit_flag=5
+                RETURN
+              END IF
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Hout(idshflxSOF,1:Ngrids)=Lswitch(1:Ngrids)
+#endif
 #if defined SEDIMENT && defined SED_MORPH
             CASE ('Hout(idBath)')
               IF (idbath.eq.0) THEN
@@ -2310,6 +2380,19 @@
             CASE ('Aout(idFsur)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Aout(idFsur,1:Ngrids)=Lswitch(1:Ngrids)
+# if defined ICESHELF
+            CASE ('Aout(idismr)')
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Aout(idismr,1:Ngrids)=Lswitch(1:Ngrids)
+# endif
+# if defined SURFACE_OVERFLUX_FIX
+            CASE ('Aout(idssflxSOF)')
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Aout(idssflxSOF,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Aout(idshflxSOF)')
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Aout(idshflxSOF,1:Ngrids)=Lswitch(1:Ngrids)
+# endif
             CASE ('Aout(idu2dE)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Aout(idu2dE,1:Ngrids)=Lswitch(1:Ngrids)
@@ -5188,6 +5271,38 @@
 #endif
           IF ((nHIS(ng).gt.0).and.ANY(Hout(:,ng))) THEN
             WRITE (out,'(1x)')
+#if defined ICESHELF
+            IF (Hout(idismr,ng)) WRITE (out,170) Hout(idismr,ng),       &
+     &         'Hout(idismr)',                                          &
+     &         'Write out ice shelf melt rate.'
+            IF (Hout(idisTb,ng)) WRITE (out,170) Hout(idisTb,ng),       &
+     &         'Hout(idisTb)',                                          &
+     &         'Write out temperature at base of ice shelf.'
+            IF (Hout(idisTstar,ng)) WRITE (out,170) Hout(idisTstar,ng), &
+     &         'Hout(idisTstar)',                                       &
+     &         'Write out temperature drive force at base of iceshelf.'
+            IF (Hout(idisUstar,ng)) WRITE (out,170) Hout(idisUstar,ng), &
+     &         'Hout(idisUstar)',                                       &
+     &         'Write out Friction velocity at base of ice shelf.'
+            IF (Hout(idisSb,ng)) WRITE (out,170) Hout(idisSb,ng),       &
+     &         'Hout(idisSb)',                                          &
+     &         'Write out temperature at base of ice shelf.'
+# if defined ICESHELF_MORPH
+            IF (Hout(idDraft,ng)) WRITE (out,170) Hout(idDraft,ng),     &
+     &         'Hout(idDraft)',                                         &
+     &         'Write out time-dependent ice draft.'
+# endif
+#endif
+#if defined SURFACE_OVERFLUX_FIX
+            IF (Hout(idssflxSOF,ng)) WRITE (out,170)                    &
+     &         Hout(idssflxSOF,ng),                                     &
+     &         'Hout(idssflxSOF)',                                      &
+     &         'Write out ice shelf melt rate.'
+            IF (Hout(idshflxSOF,ng)) WRITE (out,170)                    &
+     &         Hout(idshflxSOF,ng),                                     &
+     &         'Hout(idshflxSOF)',                                      &
+     &         'Write out ice shelf melt rate.'
+#endif
 #if defined SEDIMENT && defined SED_MORPH
             IF (Hout(idBath,ng)) WRITE (out,170) Hout(idBath,ng),       &
      &         'Hout(idBath)',                                          &
@@ -5800,6 +5915,21 @@
             IF (Aout(idFsur,ng)) WRITE (out,170) Aout(idFsur,ng),       &
      &         'Aout(idFsur)',                                          &
      &         'Write out averaged free-surface.'
+# if defined ICESHELF
+            IF (Aout(idismr,ng)) WRITE (out,170) Aout(idismr,ng),       &
+     &         'Aout(idismr)',                                          &
+     &         'Write out averaged melt rate.'
+# endif
+# if defined SURFACE_OVERFLUX_FIX
+            IF (Aout(idssflxSOF,ng)) WRITE (out,170)                    &
+     &         Aout(idssflxSOF,ng),                                     &
+     &         'Aout(idssflxSOF)',                                      &
+     &         'Write out averaged melt rate.'
+            IF (Aout(idshflxSOF,ng)) WRITE (out,170)                    &
+     &         Aout(idshflxSOF,ng),                                     &
+     &         'Aout(idshflxSOF)',                                      &
+     &         'Write out averaged melt rate.'
+# endif
             IF (Aout(idUbar,ng)) WRITE (out,170) Aout(idUbar,ng),       &
      &         'Aout(idUbar)',                                          &
      &         'Write out averaged 2D U-momentum component.'

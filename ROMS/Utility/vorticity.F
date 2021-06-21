@@ -98,6 +98,9 @@
      &                     GRID(ng) % on_v,                             &
      &                     GRID(ng) % pm,                               &
      &                     GRID(ng) % pn,                               &
+# ifdef ICESHELF
+     &                     GRID(ng) % zice,                             &
+# endif
 # ifdef SOLVE3D
      &                     GRID(ng) % z_r,                              &
      &                     OCEAN(ng) % pden,                            &
@@ -134,6 +137,9 @@
      &                           pmask, umask, vmask,                   &
 # endif
      &                           f, h, om_u, on_v, pm, pn,              &
+# ifdef ICESHELF
+     &                           zice,                                  &
+# endif
 # ifdef SOLVE3D
      &                           z_r, pden, u, v,                       &
 # endif
@@ -182,6 +188,9 @@
       real(r8), intent(in) :: on_v(LBi:,LBj:)
       real(r8), intent(in) :: pm(LBi:,LBj:)
       real(r8), intent(in) :: pn(LBi:,LBj:)
+#  ifdef ICESHELF
+      real(r8), intent(in) :: zice(LBi:,LBj:)
+#  endif
 #  ifdef SOLVE3D
       real(r8), intent(in) :: z_r(LBi:,LBj:,:)
       real(r8), intent(in) :: pden(LBi:,LBj:,:)
@@ -212,6 +221,9 @@
       real(r8), intent(in) :: on_v(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: pm(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: pn(LBi:UBi,LBj:UBj)
+#  ifdef ICESHELF
+      real(r8), intent(in) :: zice(LBi:UBi,LBj:UBj)
+#  endif
 #  ifdef SOLVE3D
       real(r8), intent(in) :: z_r(LBi:UBi,LBj:UBj,N(ng))
       real(r8), intent(in) :: pden(LBi:UBi,LBj:UBj,N(ng))
@@ -426,7 +438,11 @@
 # endif
           rvor_bar(i,j)=cff*(dVdx_p-dUde_p)
           pvor_bar(i,j)=cff*((fomn_p+dVdx_p-dUde_p)/                    &
+# ifdef ICESHELF
+     &                       (h(i,j)-ABS(zice(i,j))+zeta(i,j,kout)))
+# else
      &                       (h(i,j)+zeta(i,j,kout)))
+# endif
         END DO
       END DO
 !

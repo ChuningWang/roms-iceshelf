@@ -2465,6 +2465,9 @@
 #  endif
       USE mod_grid
       USE mod_ocean
+#  if defined ICESHELF && defined ICESHELF_MORPH && defined SOLVE3D
+      USE mod_iceshelfvar
+#  endif
 #  if defined SEDIMENT && defined SED_MORPH && defined SOLVE3D
       USE mod_sedbed
 #  endif
@@ -2503,6 +2506,9 @@
      &                       GRID(ng) % on_u,                           &
 #   ifdef ICESHELF
      &                       GRID(ng) % zice,                           &
+#    ifdef ICESHELF_MORPH
+     &                       ICESHELFVAR(ng) % iceshelf_draft,          &
+#    endif
 #   endif
      &                       GRID(ng) % z_r,                            &
      &                       GRID(ng) % z_w,                            &
@@ -2542,6 +2548,9 @@
      &                             Hz, h, om_v, on_u,                   &
 #   ifdef ICESHELF
      &                             zice,                                &
+#    ifdef ICESHELF_MORPH
+     &                             iceshelf_draft,                      &
+#    endif
 #   endif
      &                             z_r, z_w, Zt_avg1,                   &
      &                             ad_t, ad_u, ad_v,                    &
@@ -2601,6 +2610,9 @@
       real(r8), intent(in) :: on_u(LBi:,LBj:)
 #    ifdef ICESHELF
       real(r8), intent(in) :: zice(LBi:,LBj:)
+#     ifdef ICESHELF_MORPH
+      real(r8), intent(in) :: iceshelf_draft(LBi:,LBj:,:)
+#     endif
 #    endif
       real(r8), intent(in) :: ad_t(LBi:,LBj:,:,:,:)
       real(r8), intent(in) :: ad_u(LBi:,LBj:,:,:)
@@ -2638,6 +2650,9 @@
       real(r8), intent(in) :: on_u(LBi:UBi,LBj:UBj)
 #    ifdef ICESHELF
       real(r8), intent(in) :: zice(LBi:,LBj:)
+#     ifdef ICESHELF_MORPH
+      real(r8), intent(in) :: iceshelf_draft(LBi:UBi,LBj:UBj,2)
+#     endif
 #    endif
       real(r8), intent(in) :: ad_t(LBi:UBi,LBj:UBj,N(ng),3,NT(ng))
       real(r8), intent(in) :: ad_u(LBi:UBi,LBj:UBj,N(ng),2)
@@ -2899,6 +2914,9 @@
      &                     h,                                           &
 #   ifdef ICESHELF
      &                     zice,                                        &
+#    ifdef ICESHELF_MORPH
+     &                     iceshelf_draft,                              &
+#    endif
 #   endif
 #   if defined SEDIMENT && defined SED_MORPH
      &                     bed_thick,                                   &

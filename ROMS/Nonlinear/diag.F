@@ -64,6 +64,9 @@
      &                OCEAN(ng) % v,                                    &
      &                OCEAN(ng) % wvel,                                 &
 #endif
+#ifdef ICESHELF
+     &                GRID(ng) % zice,                                  &
+#endif
      &                OCEAN(ng) % ubar,                                 &
      &                OCEAN(ng) % vbar,                                 &
      &                OCEAN(ng) % zeta)
@@ -86,6 +89,9 @@
 #ifdef SOLVE3D
      &                      Hz, z_r, z_w,                               &
      &                      rho, u, v, wvel,                            &
+#endif
+#ifdef ICESHELF
+     &                      zice,                                       &
 #endif
      &                      ubar, vbar, zeta)
 !***********************************************************************
@@ -123,6 +129,9 @@
       real(r8), intent(in) :: u(LBi:,LBj:,:,:)
       real(r8), intent(in) :: v(LBi:,LBj:,:,:)
       real(r8), intent(in) :: wvel(LBi:,LBj:,0:)
+# endif
+# ifdef ICESHELF
+      real(r8), intent(in) :: zice(LBi:,LBj:)
 # endif
       real(r8), intent(in) :: ubar(LBi:,LBj:,:)
       real(r8), intent(in) :: vbar(LBi:,LBj:,:)
@@ -217,8 +226,13 @@
      &             u(i+1,j,k,nstp)*u(i+1,j,k,nstp)+                     &
      &             v(i,j  ,k,nstp)*v(i,j  ,k,nstp)+                     &
      &             v(i,j+1,k,nstp)*v(i,j+1,k,nstp)
+#ifdef ICESHELF
+              ke2d(i,j)=(zeta(i,j,krhs)+h(i,j)-ABS(zice(i,j)))*         &
+     &                  0.25_r8*u2v2
+#else
               ke2d(i,j)=ke2d(i,j)+                                      &
      &                  Hz(i,j,k)*0.25_r8*u2v2
+#endif
               pe2d(i,j)=pe2d(i,j)+                                      &
      &                  cff*Hz(i,j,k)*(rho(i,j,k)+1000.0_r8)*           &
      &                  (z_r(i,j,k)-z_w(i,j,0))
@@ -287,8 +301,14 @@
             pe2d(i,Jend+1)=pe2d(i,Jend+1)+                              &
      &                     omn(i,j)*(z_w(i,j,N(ng))-z_w(i,j,0))
 #else
+# ifdef ICESHELF
+            pe2d(i,Jend+1)=pe2d(i,Jend+1)+                              &
+     &                     omn(i,j)*(zeta(i,j,krhs)+h(i,j)-             &
+     &                               ABS(zice(i,j)))
+# else
             pe2d(i,Jend+1)=pe2d(i,Jend+1)+                              &
      &                     omn(i,j)*(zeta(i,j,krhs)+h(i,j))
+# endif
 #endif
             pe2d(i,Jstr-1)=pe2d(i,Jstr-1)+omn(i,j)*pe2d(i,j)
             ke2d(i,Jstr-1)=ke2d(i,Jstr-1)+omn(i,j)*ke2d(i,j)

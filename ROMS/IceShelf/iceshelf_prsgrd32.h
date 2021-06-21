@@ -1,7 +1,6 @@
       SUBROUTINE prsgrd (ng, tile)
 !
-!git $Id$
-!svn $Id: prsgrd32.h 1054 2021-03-06 19:47:12Z arango $
+!svn $Id$
 !***********************************************************************
 !  Copyright (c) 2002-2021 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -72,9 +71,9 @@
      &                  GRID(ng) % Hz,                                  &
      &                  GRID(ng) % z_r,                                 &
      &                  GRID(ng) % z_w,                                 &
-#ifdef ICESHELF
+# ifdef ICESHELF
      &                  GRID(ng) % zice,                                &
-#endif
+# endif
      &                  OCEAN(ng) % rho,                                &
 #ifdef ATM_PRESS
      &                  FORCES(ng) % Pair,                              &
@@ -105,9 +104,9 @@
 #endif
      &                        om_v, on_u,                               &
      &                        Hz, z_r, z_w,                             &
-#ifdef ICESHELF
+# ifdef ICESHELF
      &                        zice,                                     &
-#endif
+# endif
      &                        rho,                                      &
 #ifdef ATM_PRESS
      &                        Pair,                                     &
@@ -142,9 +141,9 @@
       real(r8), intent(in) :: Hz(LBi:,LBj:,:)
       real(r8), intent(in) :: z_r(LBi:,LBj:,:)
       real(r8), intent(in) :: z_w(LBi:,LBj:,0:)
-# ifdef ICESHELF
+#  ifdef ICESHELF
       real(r8), intent(in) :: zice(LBi:,LBj:)
-# endif
+#  endif
       real(r8), intent(in) :: rho(LBi:,LBj:,:)
 # ifdef ATM_PRESS
       real(r8), intent(in) :: Pair(LBi:,LBj:)
@@ -169,9 +168,9 @@
       real(r8), intent(in) :: Hz(LBi:UBi,LBj:UBj,N(ng))
       real(r8), intent(in) :: z_r(LBi:UBi,LBj:UBj,N(ng))
       real(r8), intent(in) :: z_w(LBi:UBi,LBj:UBj,0:N(ng))
-# ifdef ICESHELF
+#  ifdef ICESHELF
       real(r8), intent(in) :: zice(LBi:UBi,LBj:UBj)
-# endif
+#  endif
       real(r8), intent(in) :: rho(LBi:UBi,LBj:UBj,N(ng))
 # ifdef ATM_PRESS
       real(r8), intent(in) :: Pair(LBi:UBi,LBj:UBj)
@@ -260,13 +259,13 @@
      &                 (z_w(i,j,N(ng))-z_r(i,j,N(ng)))
 #else
           P(i,j,N(ng))=GRho0*z_w(i,j,N(ng))+                            &
-#ifdef ATM_PRESS
+# ifdef ATM_PRESS
      &                 fac*(Pair(i,j)-OneAtm)+                          &
-#endif
+# endif
      &                 GRho*(rho(i,j,N(ng))+cff2)*                      &
      &                 (z_w(i,j,N(ng))-z_r(i,j,N(ng)))
-#endif
         END DO
+#endif
         DO k=N(ng)-1,1,-1
           DO i=IstrU-1,Iend
             P(i,j,k)=P(i,j,k+1)+                                        &

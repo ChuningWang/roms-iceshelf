@@ -181,6 +181,9 @@
      &                           GRID(ng) % h,                          &
 #  ifdef ICESHELF
      &                           GRID(ng) % zice,                       &
+#   ifdef ICESHELF_MORPH
+     &                           ICESHELFVAR(ng) % iceshelf_draft,      &
+#   endif
 #  endif
 #  if defined SEDIMENT && defined SED_MORPH
      &                           SEDBED(ng) % bed_thick,                &
@@ -253,6 +256,9 @@
      &                           GRID(ng) % h,                          &
 #  ifdef ICESHELF
      &                           GRID(ng) % zice,                       &
+#   ifdef ICESHELF_MORPH
+     &                           ICESHELFVAR(ng) % iceshelf_draft,      &
+#   endif
 #  endif
 #  if defined SEDIMENT && defined SED_MORPH
      &                           SEDBED(ng) % bed_thick,                &
@@ -312,6 +318,9 @@
      &                               h,                                 &
 #  ifdef ICESHELF
      &                               zice,                              &
+#   ifdef ICESHELF_MORPH
+     &                               iceshelf_draft,                    &
+#   endif
 #  endif
 #  if defined SEDIMENT && defined SED_MORPH
      &                               bed_thick,                         &
@@ -375,6 +384,9 @@
       real(r8), intent(in) :: Kv(LBi:,LBj:,0:)
 #   ifdef ICESHELF
       real(r8), intent(in) :: zice(LBi:,LBj:)
+#    ifdef ICESHELF_MORPH
+      real(r8), intent(in) :: iceshelf_draft(LBi:,LBj:,:)
+#    endif
 #   endif
 #   if defined SEDIMENT && defined SED_MORPH
       real(r8), intent(in):: bed_thick(LBi:,LBj:,:)
@@ -439,6 +451,9 @@
       real(r8), intent(in) :: Kv(LBi:UBi,LBj:UBj,0:N(ng))
 #   ifdef ICESHELF
       real(r8), intent(in) :: zice(LBi:UBi,LBj:UBj)
+#    ifdef ICESHELF_MORPH
+      real(r8), intent(in) :: iceshelf_draft(LBi:UBi,LBj:UBj,2)
+#    endif
 #   endif
 #   if defined SEDIMENT && defined SED_MORPH
       real(r8), intent(in):: bed_thick0(LBi:UBi,LBj:UBj,2)
@@ -560,6 +575,9 @@
      &                     h,                                           &
 #  ifdef ICESHELF
      &                     zice,                                        &
+#   ifdef ICESHELF_MORPH
+     &                     iceshelf_draft,                              &
+#   endif
 #  endif
 #  if defined SEDIMENT && defined SED_MORPH
      &                     bed_thick,                                   &
@@ -3386,6 +3404,9 @@
      &                               h,                                 &
 #  ifdef ICESHELF
      &                               zice,                              &
+#   ifdef ICESHELF_MORPH
+     &                               iceshelf_draft,                    &
+#   endif
 #  endif
 #  if defined SEDIMENT && defined SED_MORPH
      &                               bed_thick,                         &
@@ -3449,6 +3470,9 @@
       real(r8), intent(in) :: Kv(LBi:,LBj:,0:)
 #   ifdef ICESHELF
       real(r8), intent(in) :: zice(LBi:,LBj:)
+#    ifdef ICESHELF_MORPH
+      real(r8), intent(in) :: iceshelf_draft(LBi:,LBj:,:)
+#    endif
 #   endif
 #   if defined SEDIMENT && defined SED_MORPH
       real(r8), intent(in):: bed_thick(LBi:,LBj:,:)
@@ -3513,6 +3537,9 @@
       real(r8), intent(in) :: Kv(LBi:UBi,LBj:UBj,0:N(ng))
 #   ifdef ICESHELF
       real(r8), intent(in) :: zice(LBi:UBi,LBj:UBj)
+#    ifdef ICESHELF_MORPH
+      real(r8), intent(in) :: iceshelf_draft(LBi:UBi,LBj:UBj,2)
+#    endif
 #   endif
 #   if defined SEDIMENT && defined SED_MORPH
       real(r8), intent(in):: bed_thick(LBi:UBi,LBj:UBj,2)
@@ -3641,6 +3668,9 @@
      &                     h,                                           &
 #  ifdef ICESHELF
      &                     zice,                                        &
+#   ifdef ICESHELF_MORPH
+     &                     iceshelf_draft,                              &
+#   endif
 #  endif
 #  if defined SEDIMENT && defined SED_MORPH
      &                     bed_thick,                                   &

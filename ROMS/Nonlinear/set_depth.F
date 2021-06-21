@@ -38,6 +38,9 @@
       USE mod_coupling
       USE mod_grid
       USE mod_ocean
+# if defined ICESHELF && defined ICESHELF_MORPH
+      USE mod_iceshelfvar
+# endif
 # if defined SEDIMENT && defined SED_MORPH
       USE mod_sedbed
 # endif
@@ -64,6 +67,9 @@
      &                     GRID(ng) % h,                                &
 # ifdef ICESHELF
      &                     GRID(ng) % zice,                             &
+#  ifdef ICESHELF_MORPH
+     &                     ICESHELFVAR(ng) % iceshelf_draft,            &
+#  endif
 # endif
 # if defined SEDIMENT && defined SED_MORPH
      &                     SEDBED(ng) % bed_thick,                      &
@@ -87,6 +93,9 @@
      &                           h,                                     &
 # ifdef ICESHELF
      &                           zice,                                  &
+#  ifdef ICESHELF_MORPH
+     &                           iceshelf_draft,                        &
+#  endif
 # endif
 # if defined SEDIMENT && defined SED_MORPH
      &                           bed_thick,                             &
@@ -113,7 +122,10 @@
 !
 # ifdef ASSUMED_SHAPE
 #  ifdef ICESHELF
-      real(r8), intent(in) :: zice(LBi:,LBj:)
+      real(r8), intent(inout) :: zice(LBi:,LBj:)
+#   ifdef ICESHELF_MORPH
+      real(r8), intent(in) :: iceshelf_draft(LBi:,LBj:,:)
+#   endif
 #  endif
 #  if defined SEDIMENT && defined SED_MORPH
       real(r8), intent(in):: bed_thick(LBi:,LBj:,:)
@@ -125,7 +137,10 @@
       real(r8), intent(out) :: z_w(LBi:,LBj:,0:)
 # else
 #  ifdef ICESHELF
-      real(r8), intent(in) :: zice(LBi:UBi,LBj:UBj)
+      real(r8), intent(inout) :: zice(LBi:UBi,LBj:UBj)
+#   ifdef ICESHELF_MORPH
+      real(r8), intent(in) :: iceshelf_draft(LBi:UBi,LBj:UBj,2)
+#   endif
 #  endif
 #  if defined SEDIMENT && defined SED_MORPH
       real(r8), intent(in):: bed_thick(LBi:UBi,LBj:UBj,2)
@@ -163,6 +178,10 @@
       IF (Vtransform(ng).eq.1) THEN
         DO j=JstrT,JendT
           DO i=IstrT,IendT
+# if defined ICESHELF && defined ICESHELF_MORPH
+            zice(i,j)=zice(i,j)-iceshelf_draft(i,j,nstp)                &
+     &                         +iceshelf_draft(i,j,nnew)
+# endif
 # if defined SEDIMENT && defined SED_MORPH
             h(i,j)=h(i,j)-bed_thick(i,j,nstp)+bed_thick(i,j,nnew)
 # endif
@@ -211,6 +230,10 @@
       ELSE IF (Vtransform(ng).eq.2) THEN
         DO j=JstrT,JendT
           DO i=IstrT,IendT
+# if defined ICESHELF && defined ICESHELF_MORPH
+            zice(i,j)=zice(i,j)-iceshelf_draft(i,j,nstp)                &
+     &                         +iceshelf_draft(i,j,nnew)
+# endif
 # if defined SEDIMENT && defined SED_MORPH
             h(i,j)=h(i,j)-bed_thick(i,j,nstp)+bed_thick(i,j,nnew)
 # endif

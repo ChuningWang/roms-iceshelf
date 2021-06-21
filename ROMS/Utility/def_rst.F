@@ -731,6 +731,22 @@
      &                 SetFillVal = .FALSE.)
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 #endif
+#if defined ICESHELF && defined ICESHELF_MORPH
+!
+!  Define time-varying ice draft.
+!
+        Vinfo( 1)=Vname(1,iddraft)
+        Vinfo( 2)=Vname(2,iddraft)
+        Vinfo( 3)=Vname(3,iddraft)
+        Vinfo(14)=Vname(4,iddraft)
+        Vinfo(16)=Vname(1,idtime)
+        Vinfo(22)='coordinates'
+        Aval(5)=REAL(Iinfo(1,iddraft,ng),r8)
+        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(iddraft),    &
+     &                 NF_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname,      &
+     &                 SetFillVal = .FALSE.)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+#endif
 #if defined SEDIMENT && defined SED_MORPH
 !
 !  Define time-varying bathymetry.
@@ -1586,6 +1602,11 @@
           IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idtime))) THEN
             got_var(idtime)=.TRUE.
             RST(ng)%Vid(idtime)=var_id(i)
+#if defined ICESHELF && defined ICESHELF_MORPH
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,iddraft))) THEN
+            got_var(iddraft)=.TRUE.
+            RST(ng)%Vid(iddraft)=var_id(i)
+#endif
 #if defined SEDIMENT && defined SED_MORPH
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idbath))) THEN
             got_var(idbath)=.TRUE.
@@ -1774,6 +1795,14 @@
           exit_flag=3
           RETURN
         END IF
+#if defined ICESHELF && defined ICESHELF_MORPH
+        IF (.not.got_var(iddraft)) THEN
+          IF (Master) WRITE (stdout,40) TRIM(Vname(1,iddraft)),         &
+     &                                  TRIM(ncname)
+          exit_flag=3
+          RETURN
+        END IF
+#endif
 #if defined SEDIMENT && defined SED_MORPH
         IF (.not.got_var(idbath)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idbath)),          &
@@ -2697,6 +2726,26 @@
         status=def_var(ng, iNLM, RST(ng)%pioFile,                       &
      &                 RST(ng)%pioVar(idVwet)%vd,                       &
      &                 PIO_FRST, nvd3, sv2dgrd, Aval, Vinfo, ncname,    &
+     &                 SetFillVal = .FALSE.)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+#endif
+#if defined ICESHELF && defined ICESHELF_MORPH
+!
+!  Define time-varying ice draft.
+!
+        Vinfo( 1)=Vname(1,iddraft)
+        Vinfo( 2)=Vname(2,iddraft)
+        Vinfo( 3)=Vname(3,iddraft)
+        Vinfo(14)=Vname(4,iddraft)
+        Vinfo(16)=Vname(1,idtime)
+        Vinfo(22)='coordinates'
+        Aval(5)=REAL(Iinfo(1,iddraft,ng),r8)
+        RST(ng)%pioVar(iddraft)%dkind=PIO_FRST
+        RST(ng)%pioVar(iddraft)%gtype=r2dvar
+!
+        status=def_var(ng, iNLM, RST(ng)%pioFile,                       &
+     &                 RST(ng)%pioVar(iddraft)%vd,                      &
+     &                 PIO_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname,     &
      &                 SetFillVal = .FALSE.)
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 #endif
@@ -3692,6 +3741,13 @@
             RST(ng)%pioVar(idtime)%vd=var_desc(i)
             RST(ng)%pioVar(idtime)%dkind=PIO_TOUT
             RST(ng)%pioVar(idtime)%gtype=0
+#if defined ICESHELF && defined ICESHELF_MORPH
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,iddraft))) THEN
+            got_var(iddraft)=.TRUE.
+            RST(ng)%pioVar(iddraft)%vd=var_desc(i)
+            RST(ng)%pioVar(iddraft)%dkind=PIO_FRST
+            RST(ng)%pioVar(iddraft)%gtype=r2dvar
+#endif
 #if defined SEDIMENT && defined SED_MORPH
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idbath))) THEN
             got_var(idbath)=.TRUE.
@@ -3958,6 +4014,14 @@
           exit_flag=3
           RETURN
         END IF
+#if defined ICESHELF && defined ICESHELF_MORPH
+        IF (.not.got_var(iddraft)) THEN
+          IF (Master) WRITE (stdout,40) TRIM(Vname(1,iddraft)),         &
+     &                                  TRIM(ncname)
+          exit_flag=3
+          RETURN
+        END IF
+#endif
 #if defined SEDIMENT && defined SED_MORPH
         IF (.not.got_var(idbath)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idbath)),          &

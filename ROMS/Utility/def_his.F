@@ -26,6 +26,9 @@
       USE mod_iounits
       USE mod_ncparam
       USE mod_scalars
+#if defined ICESHELF
+      USE mod_iceshelf
+#endif
 #if defined SEDIMENT || defined BBL_MODEL
       USE mod_sediment
 #endif
@@ -497,6 +500,141 @@
      &                 1, (/recdim/), Aval, Vinfo, ncname,              &
      &                 SetParAccess = .TRUE.)
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+#endif
+#if defined ICESHELF
+!
+!  Define ice shelf basal melt rate.
+!
+        IF (Hout(idismr,ng)) THEN
+          Vinfo( 1)=Vname(1,idismr)
+          Vinfo( 2)=Vname(2,idismr)
+          Vinfo( 3)=Vname(3,idismr)
+          Vinfo(14)=Vname(4,idismr)
+          Vinfo(16)=Vname(1,idismr)
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(Iinfo(1,idismr,ng),r8)
+          status=def_var(ng, iNLM, HIS(ng)%ncid, HIS(ng)%Vid(idismr),   &
+     &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
+     &                   SetFillVal = .FALSE.)
+          IF (exit_flag.ne.NoError) RETURN
+        END IF
+# if defined ICESHELF_3EQN_VBC
+!
+!  Define temperature driving force at the base of the ice shelf.
+!
+        IF (Hout(idisTstar,ng)) THEN
+          Vinfo( 1)=Vname(1,idisTstar)
+          Vinfo( 2)=Vname(2,idisTstar)
+          Vinfo( 3)=Vname(3,idisTstar)
+          Vinfo(14)=Vname(4,idisTstar)
+          Vinfo(16)=Vname(1,idisTstar)
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(Iinfo(1,idisTstar,ng),r8)
+          status=def_var(ng, iNLM, HIS(ng)%ncid, HIS(ng)%Vid(idisTstar),&
+     &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
+     &                   SetFillVal = .FALSE.)
+          IF (exit_flag.ne.NoError) RETURN
+        END IF
+!
+!  Define friction velocity at the base of the ice shelf.
+!
+        IF (Hout(idisUstar,ng)) THEN
+          Vinfo( 1)=Vname(1,idisUstar)
+          Vinfo( 2)=Vname(2,idisUstar)
+          Vinfo( 3)=Vname(3,idisUstar)
+          Vinfo(14)=Vname(4,idisUstar)
+          Vinfo(16)=Vname(1,idisUstar)
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(Iinfo(1,idisUstar,ng),r8)
+          status=def_var(ng, iNLM, HIS(ng)%ncid, HIS(ng)%Vid(idisUstar),&
+     &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
+     &                   SetFillVal = .FALSE.)
+          IF (exit_flag.ne.NoError) RETURN
+        END IF
+!
+!  Define temperature at the base of the ice shelf.
+!
+        IF (Hout(idisTb,ng)) THEN
+          Vinfo( 1)=Vname(1,idisTb)
+          Vinfo( 2)=Vname(2,idisTb)
+          Vinfo( 3)=Vname(3,idisTb)
+          Vinfo(14)=Vname(4,idisTb)
+          Vinfo(16)=Vname(1,idisTb)
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(Iinfo(1,idisTb,ng),r8)
+          status=def_var(ng, iNLM, HIS(ng)%ncid, HIS(ng)%Vid(idisTb),   &
+     &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
+     &                   SetFillVal = .FALSE.)
+          IF (exit_flag.ne.NoError) RETURN
+        END IF
+!
+!  Define salinity at the base of the ice shelf.
+!
+        IF (Hout(idisSb,ng)) THEN
+          Vinfo( 1)=Vname(1,idisSb)
+          Vinfo( 2)=Vname(2,idisSb)
+          Vinfo( 3)=Vname(3,idisSb)
+          Vinfo(14)=Vname(4,idisSb)
+          Vinfo(16)=Vname(1,idisSb)
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(Iinfo(1,idisTb,ng),r8)
+          status=def_var(ng, iNLM, HIS(ng)%ncid, HIS(ng)%Vid(idisSb),   &
+     &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
+     &                   SetFillVal = .FALSE.)
+          IF (exit_flag.ne.NoError) RETURN
+        END IF
+# endif
+# if defined ICESHELF_MORPH
+!
+!  Define time-varying bathymetry.
+!
+        IF (Hout(iddraft,ng)) THEN
+          Vinfo( 1)=Vname(1,iddraft)
+          Vinfo( 2)=Vname(2,iddraft)
+          Vinfo( 3)=Vname(3,iddraft)
+          Vinfo(14)=Vname(4,iddraft)
+          Vinfo(16)=Vname(1,iddraft)
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(Iinfo(1,iddraft,ng),r8)
+          status=def_var(ng, iNLM, HIS(ng)%ncid, HIS(ng)%Vid(iddraft),  &
+     &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
+     &                   SetFillVal = .FALSE.)
+          IF (exit_flag.ne.NoError) RETURN
+        END IF
+# endif
+#endif
+#if defined SURFACE_OVERFLUX_FIX
+!
+!  Define ice shelf basal melt rate.
+!
+        IF (Hout(idssflxSOF,ng)) THEN
+          Vinfo( 1)=Vname(1,idssflxSOF)
+          Vinfo( 2)=Vname(2,idssflxSOF)
+          Vinfo( 3)=Vname(3,idssflxSOF)
+          Vinfo(14)=Vname(4,idssflxSOF)
+          Vinfo(16)=Vname(1,idssflxSOF)
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(Iinfo(1,idssflxSOF,ng),r8)
+          status=def_var(ng, iNLM, HIS(ng)%ncid,                        &
+     &                   HIS(ng)%Vid(idssflxSOF),                       &
+     &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
+     &                   SetFillVal = .FALSE.)
+          IF (exit_flag.ne.NoError) RETURN
+        END IF
+        IF (Hout(idshflxSOF,ng)) THEN
+          Vinfo( 1)=Vname(1,idshflxSOF)
+          Vinfo( 2)=Vname(2,idshflxSOF)
+          Vinfo( 3)=Vname(3,idshflxSOF)
+          Vinfo(14)=Vname(4,idshflxSOF)
+          Vinfo(16)=Vname(1,idshflxSOF)
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(Iinfo(1,idshflxSOF,ng),r8)
+          status=def_var(ng, iNLM, HIS(ng)%ncid,                        &
+     &                    HIS(ng)%Vid(idshflxSOF),                      &
+     &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
+     &                   SetFillVal = .FALSE.)
+          IF (exit_flag.ne.NoError) RETURN
+        END IF
 #endif
 #if defined SEDIMENT && defined SED_MORPH
 !
@@ -2536,6 +2674,38 @@
           IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idtime))) THEN
             got_var(idtime)=.TRUE.
             HIS(ng)%Vid(idtime)=var_id(i)
+#if defined ICESHELF
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idismr))) THEN
+            got_var(idismr)=.TRUE.
+            HIS(ng)%Vid(idismr)=var_id(i)
+# if defined ICESHELF_3EQN_VBC
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idisTstar))) THEN
+            got_var(idisTstar)=.TRUE.
+            HIS(ng)%Vid(idisTstar)=var_id(i)
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idisUstar))) THEN
+            got_var(idisUstar)=.TRUE.
+            HIS(ng)%Vid(idisUstar)=var_id(i)
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idisTb))) THEN
+            got_var(idisTb)=.TRUE.
+            HIS(ng)%Vid(idisTb)=var_id(i)
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idisSb))) THEN
+            got_var(idisSb)=.TRUE.
+            HIS(ng)%Vid(idisSb)=var_id(i)
+# endif
+# if defined ICESHELF_MORPH
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,iddraft))) THEN
+            got_var(iddraft)=.TRUE.
+            HIS(ng)%Vid(iddraft)=var_id(i)
+# endif
+#endif
+#if defined SURFACE_OVERFLUX_FIX
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idssflxSOF))) THEN
+            got_var(idssflxSOF)=.TRUE.
+            HIS(ng)%Vid(idssflxSOF)=var_id(i)
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idshflxSOF))) THEN
+            got_var(idshflxSOF)=.TRUE.
+            HIS(ng)%Vid(idshflxSOF)=var_id(i)
+#endif
 #if defined SEDIMENT && defined SED_MORPH
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idbath))) THEN
             got_var(idbath)=.TRUE.
@@ -4026,6 +4196,171 @@
      &                 1, (/recdim/), Aval, Vinfo, ncname,              &
      &                 SetParAccess = .TRUE.)
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+# endif
+# if defined ICESHELF
+!
+!  Define ice shelf basal melt rate.
+!
+        IF (Hout(idismr,ng)) THEN
+          Vinfo( 1)=Vname(1,idismr)
+          Vinfo( 2)=Vname(2,idismr)
+          Vinfo( 3)=Vname(3,idismr)
+          Vinfo(14)=Vname(4,idismr)
+          Vinfo(16)=Vname(1,idismr)
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(Iinfo(1,idismr,ng),r8)
+          HIS(ng)%pioVar(idismr)%dkind=PIO_TOUT
+          HIS(ng)%pioVar(idismr)%gtype=0
+!
+          status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
+     &                   HIS(ng)%pioVar(idismr)%vd,                     &
+     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
+     &                   SetFillVal = .FALSE.)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END IF
+#  if defined ICESHELF_3EQN_VBC
+!
+!  Define temperature driving force at the base of the ice shelf.
+!
+        IF (Hout(idisTstar,ng)) THEN
+          Vinfo( 1)=Vname(1,idisTstar)
+          Vinfo( 2)=Vname(2,idisTstar)
+          Vinfo( 3)=Vname(3,idisTstar)
+          Vinfo(14)=Vname(4,idisTstar)
+          Vinfo(16)=Vname(1,idisTstar)
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(Iinfo(1,idisTstar,ng),r8)
+          HIS(ng)%pioVar(idisTstar)%dkind=PIO_TOUT
+          HIS(ng)%pioVar(idisTstar)%gtype=0
+!
+          status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
+     &                   HIS(ng)%pioVar(idisTstar)%vd,                  &
+     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
+     &                   SetFillVal = .FALSE.)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END IF
+!
+!  Define friction velocity at the base of the ice shelf.
+!
+        IF (Hout(idisUstar,ng)) THEN
+          Vinfo( 1)=Vname(1,idisUstar)
+          Vinfo( 2)=Vname(2,idisUstar)
+          Vinfo( 3)=Vname(3,idisUstar)
+          Vinfo(14)=Vname(4,idisUstar)
+          Vinfo(16)=Vname(1,idisUstar)
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(Iinfo(1,idisUstar,ng),r8)
+          HIS(ng)%pioVar(idisUstar)%dkind=PIO_TOUT
+          HIS(ng)%pioVar(idisUstar)%gtype=0
+!
+          status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
+     &                   HIS(ng)%pioVar(idisUstar)%vd,                  &
+     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
+     &                   SetFillVal = .FALSE.)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END IF
+!
+!  Define temperature at the base of the ice shelf.
+!
+        IF (Hout(idisTb,ng)) THEN
+          Vinfo( 1)=Vname(1,idisTb)
+          Vinfo( 2)=Vname(2,idisTb)
+          Vinfo( 3)=Vname(3,idisTb)
+          Vinfo(14)=Vname(4,idisTb)
+          Vinfo(16)=Vname(1,idisTb)
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(Iinfo(1,idisTb,ng),r8)
+          HIS(ng)%pioVar(idisTb)%dkind=PIO_TOUT
+          HIS(ng)%pioVar(idisTb)%gtype=0
+!
+          status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
+     &                   HIS(ng)%pioVar(idisTb)%vd,                     &
+     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
+     &                   SetFillVal = .FALSE.)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END IF
+!
+!  Define salinity at the base of the ice shelf.
+!
+        IF (Hout(idisSb,ng)) THEN
+          Vinfo( 1)=Vname(1,idisSb)
+          Vinfo( 2)=Vname(2,idisSb)
+          Vinfo( 3)=Vname(3,idisSb)
+          Vinfo(14)=Vname(4,idisSb)
+          Vinfo(16)=Vname(1,idisSb)
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(Iinfo(1,idisTb,ng),r8)
+          HIS(ng)%pioVar(idisSb)%dkind=PIO_TOUT
+          HIS(ng)%pioVar(idisSb)%gtype=0
+!
+          status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
+     &                   HIS(ng)%pioVar(idisSb)%vd,                     &
+     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
+     &                   SetFillVal = .FALSE.)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END IF
+#  endif
+#  if defined ICESHELF_MORPH
+!
+!  Define time-varying bathymetry.
+!
+        IF (Hout(iddraft,ng)) THEN
+          Vinfo( 1)=Vname(1,iddraft)
+          Vinfo( 2)=Vname(2,iddraft)
+          Vinfo( 3)=Vname(3,iddraft)
+          Vinfo(14)=Vname(4,iddraft)
+          Vinfo(16)=Vname(1,iddraft)
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(Iinfo(1,iddraft,ng),r8)
+          HIS(ng)%pioVar(iddraft)%dkind=PIO_TOUT
+          HIS(ng)%pioVar(iddraft)%gtype=0
+!
+          status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
+     &                   HIS(ng)%pioVar(iddraft)%vd,                    &
+     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
+     &                   SetFillVal = .FALSE.)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END IF
+#  endif
+# endif
+# if defined SURFACE_OVERFLUX_FIX
+!
+!  Define ice shelf basal melt rate.
+!
+        IF (Hout(idssflxSOF,ng)) THEN
+          Vinfo( 1)=Vname(1,idssflxSOF)
+          Vinfo( 2)=Vname(2,idssflxSOF)
+          Vinfo( 3)=Vname(3,idssflxSOF)
+          Vinfo(14)=Vname(4,idssflxSOF)
+          Vinfo(16)=Vname(1,idssflxSOF)
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(Iinfo(1,idssflxSOF,ng),r8)
+          HIS(ng)%pioVar(idssflxSOF)%dkind=PIO_TOUT
+          HIS(ng)%pioVar(idssflxSOF)%gtype=0
+!
+          status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
+     &                   HIS(ng)%pioVar(idssflxSOF)%vd,                 &
+     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
+     &                   SetFillVal = .FALSE.)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END IF
+        IF (Hout(idshflxSOF,ng)) THEN
+          Vinfo( 1)=Vname(1,idshflxSOF)
+          Vinfo( 2)=Vname(2,idshflxSOF)
+          Vinfo( 3)=Vname(3,idshflxSOF)
+          Vinfo(14)=Vname(4,idshflxSOF)
+          Vinfo(16)=Vname(1,idshflxSOF)
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(Iinfo(1,idshflxSOF,ng),r8)
+          HIS(ng)%pioVar(idshflxSOF)%dkind=PIO_TOUT
+          HIS(ng)%pioVar(idshflxSOF)%gtype=0
+!
+          status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
+     &                   HIS(ng)%pioVar(idshflxSOF)%vd,                 &
+     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
+     &                   SetFillVal = .FALSE.)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END IF
 # endif
 # if defined SEDIMENT && defined SED_MORPH
 !
@@ -6512,6 +6847,55 @@
             HIS(ng)%pioVar(idtime)%vd=var_desc(i)
             HIS(ng)%pioVar(idtime)%dkind=PIO_TOUT
             HIS(ng)%pioVar(idtime)%gtype=0
+# if defined ICESHELF
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idismr))) THEN
+            got_var(idismr)=.TRUE.
+            HIS(ng)%pioVar(idismr)%vd=var_desc(i)
+            HIS(ng)%pioVar(idismr)%dkind=PIO_TOUT
+            HIS(ng)%pioVar(idismr)%gtype=r2dvar
+#  if defined ICESHELF_3EQN_VBC
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idisTstar))) THEN
+            got_var(idisTstar)=.TRUE.
+            HIS(ng)%pioVar(idisTstar)%vd=var_desc(i)
+            HIS(ng)%pioVar(idisTstar)%dkind=PIO_TOUT
+            HIS(ng)%pioVar(idisTstar)%gtype=r2dvar
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idisUstar))) THEN
+            got_var(idisUstar)=.TRUE.
+            HIS(ng)%pioVar(idisUstar)%vd=var_desc(i)
+            HIS(ng)%pioVar(idisUstar)%dkind=PIO_TOUT
+            HIS(ng)%pioVar(idisUstar)%gtype=r2dvar
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idisTb))) THEN
+            got_var(idisTb)=.TRUE.
+            HIS(ng)%pioVar(idisTb)%vd=var_desc(i)
+            HIS(ng)%pioVar(idisTb)%dkind=PIO_TOUT
+            HIS(ng)%pioVar(idisTb)%gtype=r2dvar
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idisSb))) THEN
+            got_var(idisSb)=.TRUE.
+            HIS(ng)%pioVar(idisSb)%vd=var_desc(i)
+            HIS(ng)%pioVar(idisSb)%dkind=PIO_TOUT
+            HIS(ng)%pioVar(idisSb)%gtype=r2dvar
+#  endif
+#  if defined ICESHELF_MORPH
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,iddraft))) THEN
+            got_var(iddraft)=.TRUE.
+            HIS(ng)%pioVar(iddraft)%vd=var_desc(i)
+            HIS(ng)%pioVar(iddraft)%dkind=PIO_TOUT
+            HIS(ng)%pioVar(iddraft)%gtype=r2dvar
+#  endif
+# endif
+# if defined SURFACE_OVERFLUX_FIX
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idssflxSOF))) THEN
+            got_var(idssflxSOF)=.TRUE.
+            HIS(ng)%Vid(idssflxSOF)=var_id(i)
+            HIS(ng)%pioVar(idssflxSOF)%vd=var_desc(i)
+            HIS(ng)%pioVar(idssflxSOF)%dkind=PIO_TOUT
+            HIS(ng)%pioVar(idssflxSOF)%gtype=r2dvar
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idshflxSOF))) THEN
+            got_var(idshflxSOF)=.TRUE.
+            HIS(ng)%pioVar(idshflxSOF)%vd=var_desc(i)
+            HIS(ng)%pioVar(idshflxSOF)%dkind=PIO_TOUT
+            HIS(ng)%pioVar(idshflxSOF)%gtype=r2dvar
+# endif
 # if defined SEDIMENT && defined SED_MORPH
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idbath))) THEN
             got_var(idbath)=.TRUE.

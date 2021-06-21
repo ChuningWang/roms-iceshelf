@@ -39,6 +39,10 @@
       USE mod_nesting, ONLY : allocate_nesting, initialize_nesting
 #endif
       USE mod_ocean, ONLY : allocate_ocean, initialize_ocean
+#if defined ICESHELF
+      USE mod_iceshelfvar,                                              &
+     &  ONLY : allocate_iceshelfvar, initialize_iceshelfvar
+#endif
 #if defined SEDIMENT || defined BBL_MODEL
       USE mod_sedbed, ONLY : allocate_sedbed, initialize_sedbed
 #endif
@@ -133,6 +137,9 @@
           CALL allocate_grid (ng, LBi, UBi, LBj, UBj, LBij, UBij)
           CALL allocate_mixing (ng, LBi, UBi, LBj, UBj)
           CALL allocate_ocean (ng, LBi, UBi, LBj, UBj)
+#if defined ICESHELF
+          CALL allocate_iceshelfvar (ng, LBi, UBi, LBj, UBj)
+#endif
 #if defined SEDIMENT || defined BBL_MODEL
           CALL allocate_sedbed (ng, LBi, UBi, LBj, UBj)
 #endif
@@ -193,6 +200,9 @@
           CALL initialize_grid (ng, tile, model)
           CALL initialize_mixing (ng, tile, model)
           CALL initialize_ocean (ng, tile, model)
+#if defined ICESHELF
+          CALL initialize_iceshelfvar (ng, tile, model)
+#endif
 #if defined SEDIMENT || defined BBL_MODEL
           CALL initialize_sedbed (ng, tile, model)
 #endif

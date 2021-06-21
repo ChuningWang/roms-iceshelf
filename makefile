@@ -415,8 +415,10 @@ endif
 		ROMS/Utility \
 		ROMS/Drivers \
 		ROMS/Modules
+ modules  +=  ROMS/IceShelf
 
  includes :=	ROMS/Include
+ includes +=	ROMS/IceShelf
 ifdef MY_ANALYTICAL
  includes +=	$(MY_ANALYTICAL_DIR)
 endif
@@ -582,3 +584,205 @@ rm_macros:
 
 print-%:
 	@echo $* = $($*)
+# DO NOT DELETE THIS LINE - used by make depend
+coupler.o: mct_coupler.h mct_roms_swan.h tile.h mct_roms_wrf.h cppdefs.h
+coupler.o: globaldefs.h esmf_coupler.h
+coupler.o: /home/chuning/projects/iceshelf_test/Build_roms/distribute.o
+coupler.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_coupler.o
+coupler.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_esmf_esm.o
+coupler.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_forces.o
+coupler.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_grid.o
+coupler.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_iounits.o
+coupler.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_kinds.o
+coupler.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_ocean.o
+coupler.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_parallel.o
+coupler.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_param.o
+coupler.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_scalars.o
+coupler.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_sedbed.o
+coupler.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_sediment.o
+coupler.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_stepping.o
+coupler.o: /home/chuning/projects/iceshelf_test/Build_roms/roms_export.o
+coupler.o: /home/chuning/projects/iceshelf_test/Build_roms/roms_import.o
+coupler.o: /home/chuning/projects/iceshelf_test/Build_roms/strings.o
+
+esmf_atm.o: esmf_atm_void.h esmf_atm_wrf.h esmf_atm_regcm.h esmf_atm_coamps.h
+esmf_atm.o: cppdefs.h globaldefs.h
+esmf_atm.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_esmf_esm.o
+esmf_atm.o: /home/chuning/projects/iceshelf_test/Build_roms/strings.o
+
+esmf_data.o: cppdefs.h globaldefs.h
+esmf_data.o: /home/chuning/projects/iceshelf_test/Build_roms/dateclock.o
+esmf_data.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_esmf_esm.o
+esmf_data.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_iounits.o
+esmf_data.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_netcdf.o
+esmf_data.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_parallel.o
+esmf_data.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_param.o
+esmf_data.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_scalars.o
+esmf_data.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_strings.o
+esmf_data.o: /home/chuning/projects/iceshelf_test/Build_roms/strings.o
+
+esmf_esm.o: cppdefs.h globaldefs.h
+esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/coupler.o
+esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/esmf_atm.o
+esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/esmf_atm.o
+esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/esmf_atm.o
+esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/esmf_atm.o
+esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/esmf_data.o
+esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/esmf_ice.o
+esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/esmf_roms.o
+esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/esmf_wav.o
+esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/esmf_wav.o
+esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_esmf_esm.o
+
+esmf_ice.o: esmf_ice_void.h cppdefs.h globaldefs.h esmf_ice_cice.h
+esmf_ice.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_esmf_esm.o
+
+esmf_roms.o: cppdefs.h globaldefs.h
+esmf_roms.o: /home/chuning/projects/iceshelf_test/Build_roms/dateclock.o
+esmf_roms.o: /home/chuning/projects/iceshelf_test/Build_roms/exchange_2d.o
+esmf_roms.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_esmf_esm.o
+esmf_roms.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_forces.o
+esmf_roms.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_grid.o
+esmf_roms.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_iounits.o
+esmf_roms.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_mixing.o
+esmf_roms.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_ncparam.o
+esmf_roms.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_netcdf.o
+esmf_roms.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_ocean.o
+esmf_roms.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_param.o
+esmf_roms.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_scalars.o
+esmf_roms.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_stepping.o
+esmf_roms.o: /home/chuning/projects/iceshelf_test/Build_roms/mp_exchange.o
+esmf_roms.o: /home/chuning/projects/iceshelf_test/Build_roms/roms_kernel.o
+esmf_roms.o: /home/chuning/projects/iceshelf_test/Build_roms/strings.o
+
+esmf_wav.o: esmf_wav_wam.h esmf_wav_void.h cppdefs.h globaldefs.h
+esmf_wav.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_esmf_esm.o
+
+master.o: cppdefs.h globaldefs.h roms.h esmf_driver.h mct_driver.h
+master.o: /home/chuning/projects/iceshelf_test/Build_roms/coupler.o
+master.o: /home/chuning/projects/iceshelf_test/Build_roms/esmf_esm.o
+master.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_coupler.o
+master.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_esmf_esm.o
+master.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_iounits.o
+master.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_parallel.o
+master.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_param.o
+master.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_scalars.o
+master.o: /home/chuning/projects/iceshelf_test/Build_roms/roms_kernel.o
+master.o: /home/chuning/projects/iceshelf_test/Build_roms/set_pio.o
+
+mod_esmf_esm.o: cppdefs.h globaldefs.h
+mod_esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/dateclock.o
+mod_esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/def_dim.o
+mod_esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/def_var.o
+mod_esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/distribute.o
+mod_esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/inp_decode.o
+mod_esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_iounits.o
+mod_esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_kinds.o
+mod_esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_netcdf.o
+mod_esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_parallel.o
+mod_esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_param.o
+mod_esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_scalars.o
+mod_esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_strings.o
+mod_esmf_esm.o: /home/chuning/projects/iceshelf_test/Build_roms/strings.o
+
+propagator.o: propagator_op.h propagator_hop.h cppdefs.h globaldefs.h
+propagator.o: propagator_so.h propagator_hso.h propagator_fte.h
+propagator.o: propagator_so_semi.h propagator_afte.h propagator_fsv.h
+propagator.o: /home/chuning/projects/iceshelf_test/Build_roms/close_io.o
+propagator.o: /home/chuning/projects/iceshelf_test/Build_roms/dotproduct.o
+propagator.o: /home/chuning/projects/iceshelf_test/Build_roms/ini_adjust.o
+propagator.o: /home/chuning/projects/iceshelf_test/Build_roms/inner2state.o
+propagator.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_coupling.o
+propagator.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_forces.o
+propagator.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_iounits.o
+propagator.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_kinds.o
+propagator.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_netcdf.o
+propagator.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_ocean.o
+propagator.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_parallel.o
+propagator.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_param.o
+propagator.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_scalars.o
+propagator.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_stepping.o
+propagator.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_storage.o
+propagator.o: /home/chuning/projects/iceshelf_test/Build_roms/packing.o
+propagator.o: /home/chuning/projects/iceshelf_test/Build_roms/set_depth.o
+propagator.o: /home/chuning/projects/iceshelf_test/Build_roms/strings.o
+
+roms_export.o: set_bounds.h cppdefs.h globaldefs.h
+roms_export.o: /home/chuning/projects/iceshelf_test/Build_roms/distribute.o
+roms_export.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_kinds.o
+roms_export.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_ncparam.o
+roms_export.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_param.o
+
+roms_import.o: cppdefs.h globaldefs.h
+roms_import.o: /home/chuning/projects/iceshelf_test/Build_roms/distribute.o
+roms_import.o: /home/chuning/projects/iceshelf_test/Build_roms/exchange_2d.o
+roms_import.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_kinds.o
+roms_import.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_ncparam.o
+roms_import.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_param.o
+roms_import.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_scalars.o
+roms_import.o: /home/chuning/projects/iceshelf_test/Build_roms/mp_exchange.o
+
+roms_kernel.o: fte_roms.h op_roms.h array_modes.h optobs_roms.h
+roms_kernel.o: tl_r4dvar_roms.h r4dvar_roms.h obs_sen_r4dvar_analysis.h
+roms_kernel.o: ad_roms.h correlation.h picard_roms.h so_roms.h tl_roms.h
+roms_kernel.o: nl_roms.h adsen_roms.h so_semi_roms.h tl_rbl4dvar_roms.h
+roms_kernel.o: obs_sen_i4dvar_analysis.h pert_roms.h symmetry.h
+roms_kernel.o: hessian_so_roms.h rbl4dvar_roms.h split_r4dvar_roms.h
+roms_kernel.o: obs_sen_rbl4dvar_forecast.h hessian_op_roms.h afte_roms.h
+roms_kernel.o: tlcheck_roms.h cppdefs.h globaldefs.h fsv_roms.h
+roms_kernel.o: split_rbl4dvar_roms.h i4dvar_roms.h rp_roms.h
+roms_kernel.o: split_i4dvar_roms.h obs_sen_rbl4dvar_analysis.h
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/analytical.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/array_modes.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/close_io.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/congrad.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/convolve.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/coupler.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/def_dai.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/def_gst.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/def_impulse.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/def_mod.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/def_norm.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/distribute.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/dotproduct.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/get_gst.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/get_state.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/i4dvar.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/ini_adjust.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/inp_par.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_boundary.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_forces.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_fourdvar.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_iounits.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_ncparam.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_netcdf.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_ocean.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_parallel.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_param.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_pio_netcdf.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_scalars.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_stepping.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/mod_storage.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/normalization.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/packing.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/propagator.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/r4dvar.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/rbl4dvar.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/rpcg_lanczos.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/stats_modobs.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/stdinp_mod.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/strings.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/wrt_dai.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/wrt_gst.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/wrt_impulse.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/wrt_ini.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/wrt_rst.o
+roms_kernel.o: /home/chuning/projects/iceshelf_test/Build_roms/zeta_balance.o
+
+i4dvar.o: cppdefs.h globaldefs.h
+i4dvar.o: /home/chuning/projects/iceshelf_test/Build_roms/back_cost.o
+i4dvar.o: /home/chuning/projects/iceshelf_test/Build_roms/cgradient.o
+i4dvar.o: /home/chuning/projects/iceshelf_test/Build_roms/close_io.o
+i4dvar.o: /home/chuning/projects/iceshelf_test/Build_roms/cost_grad.o
+i4dvar.o: /home/chuning/projects/iceshelf_test/Build_roms/def_hessian.o
+i4dvar.o: /home/chuning/projec

@@ -1439,6 +1439,46 @@
 #else
       GRID_VARS : IF (ncid.ne.FLT(ng)%ncid) THEN
 #endif
+#if defined ICESHELF && !(defined ICESHELF_MORPH) 
+!
+!  Ice draft.
+!
+        IF (exit_flag.eq.NoError) THEN
+          scale=1.0_dp
+          IF (ncid.ne.STA(ng)%ncid) THEN
+            IF (find_string(var_name, n_var, 'zice', varid)) THEN
+              status=nf_fwrite2d(ng, model, ncid, varid, 0, r2dvar,     &
+     &                           LBi, UBi, LBj, UBj, scale,             &
+# ifdef MASKING
+     &                           GRID(ng) % rmask,                      &
+# endif
+     &                           GRID(ng) % zice,                       &
+     &                           SetFillVal = .FALSE.)
+              IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+                IF (Master) WRITE (stdout,10) 'zice', TRIM(ncname)
+                exit_flag=3
+                ioerror=status
+              END IF
+            ELSE
+              IF (Master) WRITE (stdout,20) 'zice', TRIM(ncname)
+              exit_flag=3
+              ioerror=nf90_enotvar
+            END IF
+# ifdef STATIONS
+          ELSE
+            CALL extract_sta2d (ng, model, Cgrid, ifield, r2dvar,       &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          scale, GRID(ng)%h,                      &
+     &                          Nstation(ng), SCALARS(ng)%SposX,        &
+     &                          SCALARS(ng)%SposY, wrk)
+            CALL netcdf_put_fvar (ng, model, ncname, 'zice',            &
+     &                            wrk, (/1/), (/Nstation(ng)/),         &
+     &                            ncid = ncid)
+            IF (exit_flag.ne.NoError) RETURN
+# endif
+          END IF
+        END IF
+#endif
 #if !(defined SED_MORPH && defined SEDIMENT)
 !
 !  Bathymetry.
@@ -3748,6 +3788,56 @@
 # else
       GRID_VARS : IF (FileH.ne.ABS(FLT(ng)%pioFile%fh)) THEN
 # endif
+#if defined ICESHELF && !(defined ICESHELF_MORPH) 
+!
+!  Ice draft.
+!
+        IF (exit_flag.eq.NoError) THEN
+          scale=1.0_dp
+          IF (FileH.ne.ABS(STA(ng)%pioFile%fh)) THEN
+            IF (pio_netcdf_find_var(ng, model, pioFile, 'zice',         &
+     &                              pioVar%vd)) THEN
+              pioVar%gtype=r2dvar
+              IF (PIO_TYPE.eq.PIO_double) THEN
+                pioVar%dkind=PIO_double
+                ioDesc => ioDesc_dp_r2dvar(ng)
+              ELSE
+                pioVar%dkind=PIO_real
+                ioDesc => ioDesc_sp_r2dvar(ng)
+              END IF
+              status=nf_fwrite2d(ng, model, pioFile, pioVar,            &
+     &                           0, ioDesc,                             &
+     &                           LBi, UBi, LBj, UBj, scale,             &
+#  ifdef MASKING
+     &                           GRID(ng) % rmask,                      &
+#  endif
+     &                           GRID(ng) % zice,                       &
+     &                           SetFillVal = .FALSE.)
+              IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
+                IF (Master) WRITE (stdout,10) 'zice', TRIM(ncname)
+                exit_flag=3
+                ioerror=status
+              END IF
+            ELSE
+              IF (Master) WRITE (stdout,20) 'zice', TRIM(ncname)
+              exit_flag=3
+              ioerror=nf90_enotvar
+            END IF
+#  ifdef STATIONS
+          ELSE
+            CALL extract_sta2d (ng, model, Cgrid, ifield, r2dvar,       &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          scale, GRID(ng)%zice,                   &
+     &                          Nstation(ng), SCALARS(ng)%SposX,        &
+     &                          SCALARS(ng)%SposY, wrk)
+            CALL pio_netcdf_put_fvar (ng, model, ncname, 'zice',        &
+     &                                wrk, (/1/), (/Nstation(ng)/),     &
+     &                                pioFile = pioFile)
+            IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+#  endif
+          END IF
+        END IF
+#endif
 # if !(defined SED_MORPH && defined SEDIMENT)
 !
 !  Bathymetry.

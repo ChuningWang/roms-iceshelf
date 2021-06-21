@@ -307,6 +307,24 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 
+# if defined ICESHELF && defined ICESHELF_MORPH
+!
+!  Define time-varying ice draft.
+!
+        IF (Sout(iddraft,ng)) THEN
+          Vinfo( 1)=Vname(1,iddraft)
+          Vinfo( 2)=Vname(2,iddraft)
+          Vinfo( 3)=Vname(3,iddraft)
+          Vinfo(14)=Vname(4,iddraft)
+          Vinfo(16)=Vname(1,idtime)
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(iddraft),  &
+     &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
+     &                   SetFillVal = .FALSE.,                          &
+     &                   SetParAccess = .FALSE.)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END IF
+# endif
+
 # if defined SEDIMENT && defined SED_MORPH
 !
 !  Define time-varying bathymetry.

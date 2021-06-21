@@ -120,6 +120,9 @@
 
       integer :: brydim, i, ie, is, j, lstr, varid
       integer :: srdim, stadim, status, swdim, trcdim, usrdim
+#ifdef ICESHELF
+      integer :: iceshelfdim
+#endif
 #ifdef SEDIMENT
       integer :: seddim
 #endif
@@ -171,6 +174,9 @@
       srdim=DimIDs(9)
       swdim=DimIDs(10)
       trcdim=DimIDs(11)
+#ifdef ICESHELF
+      iceshelfdim=DimIDs(5)
+#endif
 #ifdef SEDIMENT
       seddim=DimIDs(32)
 #endif
@@ -2840,6 +2846,10 @@
 # endif
 #endif
 
+#ifdef ICESHELF
+# include <iceshelf_def.h>
+#endif
+
 #ifdef SEDIMENT
 # include <sediment_def.h>
 #endif
@@ -2948,6 +2958,8 @@
       END IF
 # if defined SEDIMENT && defined SED_MORPH
       Vinfo(23)='s: s_rho C: Cs_r eta: zeta depth: bath depth_c: hc'
+# elif defined ICESHELF && defined ICESHELF_MORPH
+      Vinfo(23)='s: s_rho C: Cs_r eta: zeta depth: draft depth_c: hc'
 # else
       Vinfo(23)='s: s_rho C: Cs_r eta: zeta depth: h depth_c: hc'
 # endif
@@ -2974,6 +2986,8 @@
       END IF
 # if defined SEDIMENT && defined SED_MORPH
       Vinfo(23)='s: s_w C: Cs_w eta: zeta depth: bath depth_c: hc'
+# elif defined ICESHELF && defined ICESHELF_MORPH
+      Vinfo(23)='s: s_w C: Cs_r eta: zeta depth: draft depth_c: hc'
 # else
       Vinfo(23)='s: s_w C: Cs_w eta: zeta depth: h depth_c: hc'
 # endif
@@ -3051,6 +3065,26 @@
       IF (ncid.eq.STA(ng)%ncid) THEN
 #else
       IF (ncid.ne.FLT(ng)%ncid) THEN
+#endif
+#if !(defined ICESHELF_MORPH) && defined ICESHELF
+!
+!  Ice draft.
+!
+        Vinfo( 1)='zice'
+        Vinfo( 2)='ice draft at RHO-points'
+        Vinfo( 3)='meter'
+        Vinfo(14)='bath, scalar'
+        Vinfo(22)='coordinates'
+        Aval(5)=REAL(r2dvar,r8)
+        IF (ncid.eq.STA(ng)%ncid) THEN
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   1, (/stadim/), Aval, Vinfo, ncname)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        ELSE
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   2, t2dgrd, Aval, Vinfo, ncname)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END IF
 #endif
 #if !(defined SED_MORPH && defined SEDIMENT)
 !
@@ -3507,6 +3541,9 @@
 
       integer :: brydim, FileH, i, ie, is, j, lstr
       integer :: srdim, stadim, status, swdim, trcdim, usrdim
+#ifdef ICESHELF
+      integer :: iceshelfdim
+#endif
 # ifdef SEDIMENT
       integer :: seddim
 # endif
@@ -3560,6 +3597,9 @@
       srdim=DimIDs(9)
       swdim=DimIDs(10)
       trcdim=DimIDs(11)
+#ifdef ICESHELF
+      iceshelfdim=DimIDs(5)
+#endif
 # ifdef SEDIMENT
       seddim=DimIDs(32)
 # endif
@@ -6220,6 +6260,10 @@
 #  endif
 # endif
 
+# ifdef ICESHELF
+#  include <iceshelf_def_pio.h>
+# endif
+
 # ifdef SEDIMENT
 #  include <sediment_def_pio.h>
 # endif
@@ -6328,6 +6372,8 @@
       END IF
 #  if defined SEDIMENT && defined SED_MORPH
       Vinfo(23)='s: s_rho C: Cs_r eta: zeta depth: bath depth_c: hc'
+#  elif defined ICESHELF && defined ICESHELF_MORPH
+      Vinfo(23)='s: s_rho C: Cs_r eta: zeta depth: draft depth_c: hc'
 #  else
       Vinfo(23)='s: s_rho C: Cs_r eta: zeta depth: h depth_c: hc'
 #  endif
@@ -6354,6 +6400,8 @@
       END IF
 #  if defined SEDIMENT && defined SED_MORPH
       Vinfo(23)='s: s_w C: Cs_w eta: zeta depth: bath depth_c: hc'
+# elif defined ICESHELF && defined ICESHELF_MORPH
+      Vinfo(23)='s: s_w C: Cs_r eta: zeta depth: draft depth_c: hc'
 #  else
       Vinfo(23)='s: s_w C: Cs_w eta: zeta depth: h depth_c: hc'
 #  endif
@@ -6452,6 +6500,26 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 # endif
+#if !(defined ICESHELF_MORPH) && defined ICESHELF
+!
+!  Ice draft.
+!
+        Vinfo( 1)='zice'
+        Vinfo( 2)='ice draft at RHO-points'
+        Vinfo( 3)='meter'
+        Vinfo(14)='bath, scalar'
+        Vinfo(22)='coordinates'
+        Aval(5)=REAL(r2dvar,r8)
+        IF (ncid.eq.STA(ng)%ncid) THEN
+          status=def_var(ng, model, pioFile, pioVar, PIO_TYPE,          &
+     &                   1, (/stadim/), Aval, Vinfo, ncname)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        ELSE
+          status=def_var(ng, model, pioFile, pioVar, PIO_TYPE,          &
+     &                   2, t2dgrd, Aval, Vinfo, ncname)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END IF
+#endif
 !
 !  Coriolis Parameter.
 !

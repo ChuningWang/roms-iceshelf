@@ -223,6 +223,24 @@
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
       END IF
 
+# if defined ICESHELF && defined ICESHELF_MORPH
+!
+!  Define time-varying ice draft.
+!
+      IF (Sout(iddraft,ng)) THEN
+        scale=1.0_dp
+        CALL extract_sta2d (ng, iNLM, Cgrid, iddraft, r2dvar,           &
+     &                      LBi, UBi, LBj, UBj,                         &
+     &                      scale, GRID(ng)%zice,                       &
+     &                      Nstation(ng), Xpos, Ypos, psta)
+        CALL netcdf_put_fvar (ng, iNLM, STA(ng)%name,                   &
+     &                        TRIM(Vname(1,iddraft)), psta,             &
+     &                        (/1,STA(ng)%Rindex/), (/Nstation(ng),1/), &
+     &                        ncid = STA(ng)%ncid,                      &
+     &                        varid = STA(ng)%Vid(iddraft))
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+      END IF
+# endif
 # if defined SEDIMENT && defined SED_MORPH
 !
 !  Define time-varying bathymetry.
@@ -1664,6 +1682,25 @@
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
       END IF
 
+# if defined ICESHELF && defined ICESHELF_MORPH
+!
+!  Define time-varying ice draft.
+!
+      IF (Sout(iddraft,ng)) THEN
+        scale=1.0_dp
+        CALL extract_sta2d (ng, iNLM, Cgrid, iddraft, r2dvar,           &
+     &                      LBi, UBi, LBj, UBj,                         &
+     &                      scale, GRID(ng)%zice,                       &
+     &                      Nstation(ng), Xpos, Ypos, psta)
+        CALL pio_netcdf_put_fvar (ng, iNLM, STA(ng)%name,               &
+     &                            TRIM(Vname(1,iddraft)), psta,         &
+     &                            (/1,STA(ng)%Rindex/),                 &
+     &                            (/Nstation(ng),1/),                   &
+     &                            pioFile = STA(ng)%pioFile,            &
+     &                            pioVar = STA(ng)%pioVar(iddraft)%vd)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+      END IF
+# endif
 #  if defined SEDIMENT && defined SED_MORPH
 !
 !  Define time-varying bathymetry.

@@ -41,6 +41,10 @@
       USE mod_sedbed
       USE mod_sediment
 #endif
+#if defined ICESHELF
+      USE mod_iceshelfvar
+      USE mod_iceshelf
+#endif
       USE mod_stepping
 !
       USE nf_fwrite2d_mod,     ONLY : nf_fwrite2d
@@ -200,6 +204,184 @@
      &                      varid = HIS(ng)%Vid(idtime))
       IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 
+#if defined ICESHELF
+!
+!  Write out iceshelf variables here: wct, gammas, m, Tb, Ts
+!
+      IF (Hout(idismr,ng)) THEN
+        scale=1.0_dp
+        gtype=gfactor*r2dvar
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid, HIS(ng)%Vid(idismr), &
+     &                     HIS(ng)%Rindex, gtype,                       &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+# ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+# endif
+     &                     ICESHELFVAR(ng) % m,                         &
+     &                     SetFillVal = .FALSE.)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idismr)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+# if defined ICESHELF_3EQN_VBC
+      IF (Hout(idisTstar,ng)) THEN
+        scale=1.0_dp
+        gtype=gfactor*r2dvar
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid,                      &
+     &                     HIS(ng)%Vid(idisTstar),                      &
+     &                     HIS(ng)%Rindex, gtype,                       &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#  ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#  endif
+     &                     ICESHELFVAR(ng) % Tstar,                     &
+     &                     SetFillVal = .FALSE.)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idisTstar)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+      IF (Hout(idisUstar,ng)) THEN
+        scale=1.0_dp
+        gtype=gfactor*r2dvar
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid,                      &
+     &                     HIS(ng)%Vid(idisUstar),                      &
+     &                     HIS(ng)%Rindex, gtype,                       &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#  ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#  endif
+     &                     ICESHELFVAR(ng) % Ustar,                     &
+     &                     SetFillVal = .FALSE.)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idisUstar)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+      IF (Hout(idisTb,ng)) THEN
+        scale=1.0_dp
+        gtype=gfactor*r2dvar
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid, HIS(ng)%Vid(idisTb), &
+     &                     HIS(ng)%Rindex, gtype,                       &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#  ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#  endif
+     &                     ICESHELFVAR(ng) % Sb,                        &
+     &                     SetFillVal = .FALSE.)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idisTb)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+      IF (Hout(idisSb,ng)) THEN
+        scale=1.0_dp
+        gtype=gfactor*r2dvar
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid, HIS(ng)%Vid(idisSb), &
+     &                     HIS(ng)%Rindex, gtype,                       &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#  ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#  endif
+     &                     ICESHELFVAR(ng) % Sb,                        &
+     &                     SetFillVal = .FALSE.)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idisSb)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+# endif
+# if defined ICESHELF_MORPH
+!
+!  Write out time-dependent ice draft (m)
+!
+      IF (Hout(idDraft,ng)) THEN
+        scale=1.0_dp
+        gtype=gfactor*r2dvar
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid, HIS(ng)%Vid(iddraft),&
+     &                     HIS(ng)%Rindex, gtype,                       &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#  ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#  endif
+     &                     GRID(ng) % zice,                             &
+     &                     SetFillVal = .FALSE.)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,iddraft)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+# endif
+#endif
+#if defined SURFACE_OVERFLUX_FIX
+      IF (Hout(idssflxSOF,ng)) THEN
+        scale=1.0_dp
+        gtype=gfactor*r2dvar
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid,                      &
+     &                     HIS(ng)%Vid(idssflxSOF),                     &
+     &                     HIS(ng)%Rindex, gtype,                       &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+# ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+# endif
+     &                     ICESHELFVAR(ng) % ssflxSOF,                  &
+     &                     SetFillVal = .FALSE.)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idssflxSOF)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+      IF (Hout(idshflxSOF,ng)) THEN
+        scale=1.0_dp
+        gtype=gfactor*r2dvar
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid,                      &
+     &                     HIS(ng)%Vid(idshflxSOF),                     &
+     &                     HIS(ng)%Rindex, gtype,                       &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+# ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+# endif
+     &                     ICESHELFVAR(ng) % shflxSOF,                  &
+     &                     SetFillVal = .FALSE.)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idshflxSOF)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+#endif
 #if defined SEDIMENT && defined SED_MORPH
 !
 !  Write out time-dependent bathymetry (m)
@@ -2744,6 +2926,228 @@
      &                           pioVar = HIS(ng)%pioVar(idtime)%vd)
       IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 
+# if defined ICESHELF 
+!
+!  Write out iceshelf variables here: wct, gammas, m, Tb, Ts
+!
+      IF (Hout(idismr,ng)) THEN
+        scale=1.0_dp
+        IF (HIS(ng)%pioVar(idismr)%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
+     &                     HIS(ng)%pioVar(idismr),                      &
+     &                     HIS(ng)%Rindex,                              &
+     &                     ioDesc,                                      &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#  ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#  endif
+     &                     ICESHELFVAR(ng) % m,                         &
+     &                     SetFillVal = .FALSE.)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idismr)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+#  if defined ICESHELF_3EQN_VBC
+      IF (Hout(idisTstar,ng)) THEN
+        scale=1.0_dp
+        IF (HIS(ng)%pioVar(idisTstar)%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
+     &                     HIS(ng)%pioVar(idisTstar),                   &
+     &                     HIS(ng)%Rindex,                              &
+     &                     ioDesc,                                      &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#   ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#   endif
+     &                     ICESHELFVAR(ng) % Tstar,                     &
+     &                     SetFillVal = .FALSE.)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idisTstar)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+      IF (Hout(idisUstar,ng)) THEN
+        scale=1.0_dp
+        IF (HIS(ng)%pioVar(idisUstar)%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
+     &                     HIS(ng)%pioVar(idisUstar),                   &
+     &                     HIS(ng)%Rindex,                              &
+     &                     ioDesc,                                      &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#   ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#   endif
+     &                     ICESHELFVAR(ng) % Ustar,                     &
+     &                     SetFillVal = .FALSE.)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idisUstar)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+      IF (Hout(idisTb,ng)) THEN
+        scale=1.0_dp
+        IF (HIS(ng)%pioVar(idisTb)%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
+     &                     HIS(ng)%pioVar(idisTb),                      &
+     &                     HIS(ng)%Rindex,                              &
+     &                     ioDesc,                                      &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#   ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#   endif
+     &                     ICESHELFVAR(ng) % Sb,                        &
+     &                     SetFillVal = .FALSE.)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idisTb)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+      IF (Hout(idisSb,ng)) THEN
+        scale=1.0_dp
+        IF (HIS(ng)%pioVar(idisSb)%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
+     &                     HIS(ng)%pioVar(idisSb),                      &
+     &                     HIS(ng)%Rindex,                              &
+     &                     ioDesc,                                      &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#   ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#   endif
+     &                     ICESHELFVAR(ng) % Sb,                        &
+     &                     SetFillVal = .FALSE.)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idisSb)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+#  endif
+#  if defined ICESHELF_MORPH
+!
+!  Write out time-dependent ice draft (m)
+!
+      IF (Hout(iddraft,ng)) THEN
+        scale=1.0_dp
+        IF (HIS(ng)%pioVar(iddraft)%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
+     &                     HIS(ng)%pioVar(iddraft),                     &
+     &                     HIS(ng)%Rindex,                              &
+     &                     ioDesc,                                      &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#  ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#  endif
+     &                     GRID(ng) % zice,                             &
+     &                     SetFillVal = .FALSE.)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,iddraft)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+#  endif
+# endif
+# if defined SURFACE_OVERFLUX_FIX
+      IF (Hout(idssflxSOF,ng)) THEN
+        scale=1.0_dp
+        IF (HIS(ng)%pioVar(idssflxSOF)%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
+     &                     HIS(ng)%pioVar(idssflxSOF),                  &
+     &                     HIS(ng)%Rindex,                              &
+     &                     ioDesc,                                      &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#  ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#  endif
+     &                     ICESHELFVAR(ng) % ssflxSOF,                  &
+     &                     SetFillVal = .FALSE.)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idssflxSOF)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+      IF (Hout(idshflxSOF,ng)) THEN
+        scale=1.0_dp
+        IF (HIS(ng)%pioVar(idshflxSOF)%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
+     &                     HIS(ng)%pioVar(idshflxSOF),                  &
+     &                     HIS(ng)%Rindex,                              &
+     &                     ioDesc,                                      &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#  ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#  endif
+     &                     ICESHELFVAR(ng) % shflxSOF,                  &
+     &                     SetFillVal = .FALSE.)
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idshflxSOF)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+# endif
 # if defined SEDIMENT && defined SED_MORPH
 !
 !  Write out time-dependent bathymetry (m)

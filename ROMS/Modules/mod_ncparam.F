@@ -200,6 +200,14 @@
 !  Input/output identification indices.
 !
       integer  :: idAice        ! fraction of cell covered by ice
+      integer  :: idismr        ! iceshelf melt rate
+      integer  :: idisTstar     ! Temperature at base of the ice shelf
+      integer  :: idisUstar     ! Temperature at base of the ice shelf
+      integer  :: idisTb        ! Temperature at base of the ice shelf
+      integer  :: idisSb        ! Salinity at base of the ice shelf
+      integer  :: iddraft       ! iceshelf draft
+      integer  :: idshflxSOF    ! iceshelf melt rate
+      integer  :: idssflxSOF    ! iceshelf melt rate
       integer  :: idbath        ! bathymetry
       integer  :: idBgEr        ! Background error at observations
       integer  :: idBgTh        ! Threshold for BQC check
@@ -1269,6 +1277,22 @@
           SELECT CASE (TRIM(ADJUSTL(Vinfo(6))))
             CASE ('idtime')
               idtime=varid
+            CASE ('idismr')
+              idismr=varid
+            CASE ('idisTstar')
+              idisTstar=varid
+            CASE ('idisUstar')
+              idisUstar=varid
+            CASE ('idisTb')
+              idisTb=varid
+            CASE ('idisSb')
+              idisSb=varid
+            CASE ('iddraft')
+              iddraft=varid
+            CASE ('idssflxSOF')
+              idssflxSOF=varid
+            CASE ('idshflxSOF')
+              idshflxSOF=varid
             CASE ('idbath')
               idbath=varid
             CASE ('idpthR')

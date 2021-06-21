@@ -34,6 +34,9 @@
       USE mod_coupling
 # endif
       USE mod_ocean
+# if defined SOLVE3D && defined ICESHELF
+      USE mod_iceshelfvar
+# endif
 # if defined SOLVE3D && (defined SEDIMENT || defined BBL_MODEL)
       USE mod_sedbed
 # endif
@@ -787,6 +790,9 @@
       USE mod_coupling
 # endif
       USE mod_ocean
+# if defined SOLVE3D && defined ICESHELF && defined ICESHELF_MORPH
+      USE mod_iceshelfvar
+# endif
 # if defined SOLVE3D && defined SEDIMENT && defined SED_MORPH
       USE mod_sedbed
 # endif
@@ -818,6 +824,11 @@
      &                    GRID(ng) % h,                                 &
 # endif
 # ifdef SOLVE3D
+#  if defined ICESHELF && defined ICESHELF_MORPH
+     &                    GRID(ng) % zice,                              &
+     &                    ICESHELFVAR(ng) % iceshelf_draft0,            &
+     &                    ICESHELFVAR(ng) % iceshelf_draft,             &
+#  endif
 #  if defined SEDIMENT && defined SED_MORPH
      &                    SEDBED(ng) % bed,                             &
      &                    SEDBED(ng) % bed_thick0,                      &
@@ -846,6 +857,9 @@
      &                          h,                                      &
 # endif
 # ifdef SOLVE3D
+#  if defined ICESHELF && defined ICESHELF_MORPH
+     &                          zice, iceshelf_draft0, iceshelf_draft,  &
+#  endif
 #  if defined SEDIMENT && defined SED_MORPH
      &                          bed, bed_thick0, bed_thick,             &
 #  endif
@@ -857,6 +871,9 @@
       USE mod_param
       USE mod_ncparam
       USE mod_scalars
+# if defined ICESHELF && defined ICESHELF_MORPH
+      USE mod_iceshelfvar
+# endif
 # if defined SEDIMENT && defined SED_MORPH
       USE mod_sediment
 # endif
@@ -881,6 +898,11 @@
 #  ifdef WET_DRY
       real(r8), intent(in) :: h(LBi:,LBj:)
 #  endif
+#  if defined SOLVE3D && defined ICESHELF && defined ICESHELF_MORPH
+      real(r8), intent(in) :: zice(LBi:,LBj:)
+      real(r8), intent(inout) :: iceshelf_draft0(LBi:,LBj:)
+      real(r8), intent(inout) :: iceshelf_draft(LBi:,LBj:,:)
+#  endif
 #  if defined SOLVE3D && defined SEDIMENT && defined SED_MORPH
       real(r8), intent(in) :: bed(LBi:,LBj:,:,:)
       real(r8), intent(inout) :: bed_thick0(LBi:,LBj:)
@@ -901,6 +923,11 @@
 #  endif
 #  ifdef WET_DRY
       real(r8), intent(in) :: h(LBi:UBi,LBj:UBj)
+#  endif
+#  if defined SOLVE3D && defined ICESHELF && defined ICESHELF_MORPH
+      real(r8), intent(in) :: zice(LBi:UBi,LBj:UBj)
+      real(r8), intent(inout) :: iceshelf_draft0(LBi:UBi,LBj:UBj)
+      real(r8), intent(inout) :: iceshelf_draft(LBi:UBi,LBj:UBj,2)
 #  endif
 #  if defined SOLVE3D && defined SEDIMENT && defined SED_MORPH
       real(r8), intent(in) :: bed(LBi:UBi,LBj:UBj,Nbed,MBEDP)
@@ -1092,6 +1119,45 @@
      &                    NghostPoints,                                 &
      &                    EWperiodic(ng), NSperiodic(ng),               &
      &                    Zt_avg1)
+#  endif
+
+#  if defined ICESHELF && defined ICESHELF_MORPH
+!
+!-----------------------------------------------------------------------
+!  Compute initial total thickness for ice shelf
+!-----------------------------------------------------------------------
+!
+      DO j=JstrT,JendT
+        DO i=IstrT,IendT
+          iceshelf_draft0(i,j)=zice(i,j)
+!          DO kbed=1,Nbed
+!            bed_thick0(i,j)=bed_thick0(i,j)+bed(i,j,kbed,ithck)
+!          END DO
+          iceshelf_draft(i,j,1)=iceshelf_draft0(i,j)
+          iceshelf_draft(i,j,2)=iceshelf_draft0(i,j)
+        END DO
+      END DO
+!
+      IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+        CALL exchange_r2d_tile (ng, tile,                               &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          iceshelf_draft0)
+        CALL exchange_r2d_tile (ng, tile,                               &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          iceshelf_draft(:,:,1))
+        CALL exchange_r2d_tile (ng, tile,                               &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          iceshelf_draft(:,:,2))
+      END IF
+
+#   ifdef DISTRIBUTE
+      CALL mp_exchange2d (ng, tile, model, 3,                           &
+     &                    LBi, UBi, LBj, UBj,                           &
+     &                    NghostPoints,                                 &
+     &                    EWperiodic(ng), NSperiodic(ng),               &
+     &                    iceshelf_draft0,                              &
+     &                    iceshelf_draft(:,:,1), iceshelf_draft(:,:,2))
+#   endif
 #  endif
 
 #  if defined SEDIMENT && defined SED_MORPH

@@ -429,6 +429,27 @@
 **                                                                           **
 ** FULL_GRID               to consider both interior and boundary points     **
 **                                                                           **
+** Ice shelf model OPTIONS:                                                  **
+**                                                                           **
+** ICESHELF             use if including ice shelf cavities                  **
+** ICESHELF_MORPH       use if allow ice draft to evolve                     **
+** ICESHELF_2EQN_VBC    use to activate 2-equation ice/ocean thermodynamics  **          
+** ICESHELF_3EQN_VBC    use to activate 3-equation ice/ocean thermodynamics  **
+** ICESHELF_TEOS10      use for teos10 in situ freezing point temperature    **
+** ANA_SEAICE           use to prescribe simple open ocean sea ice model     **
+** SEAICE_CLIMA         use to prescribe seasonal climatology surface fluxes **
+** SEAICE_WINTER        use to prescribe constant winter surface fluxes      **
+** LIMIT_ICESTRESS      use to limit the magnitude of ice shelf basal stress **    
+** SURFACE_OVERFLUX_FIX use to reduce surface salt flux if surface temp too  **
+**                      warm. Do not use with a dynamic sea ice model.       **
+**                                                                           **
+** OPTIONS to enable coupling to an ice shet model using the Framework for   ** 
+** Ice Sheet-Ocean model Coupling (FISOC), using an alternate implemenation  **
+** of ESMF libraries, requiring ROMS to be built as a shared library:        **
+**                                                                           **
+** FISOC                use Framework for Ice Sheet-Ocean model Coupling     ** 
+** FISOC_DDDT           use to provide rate of change of ice draft to FISOC  **
+**                                                                           **
 ** Fennel et al. (2006) biology model OPTIONS:                               **
 **                                                                           **
 ** BIO_FENNEL              if Fennel et al. (2006) nitrogen-based model      **
