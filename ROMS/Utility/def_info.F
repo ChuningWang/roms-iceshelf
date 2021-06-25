@@ -120,9 +120,6 @@
 
       integer :: brydim, i, ie, is, j, lstr, varid
       integer :: srdim, stadim, status, swdim, trcdim, usrdim
-#ifdef ICESHELF
-      integer :: iceshelfdim
-#endif
 #ifdef SEDIMENT
       integer :: seddim
 #endif
@@ -174,9 +171,6 @@
       srdim=DimIDs(9)
       swdim=DimIDs(10)
       trcdim=DimIDs(11)
-#ifdef ICESHELF
-      iceshelfdim=DimIDs(5)
-#endif
 #ifdef SEDIMENT
       seddim=DimIDs(32)
 #endif
@@ -2846,10 +2840,6 @@
 # endif
 #endif
 
-#ifdef ICESHELF
-# include <iceshelf_def.h>
-#endif
-
 #ifdef SEDIMENT
 # include <sediment_def.h>
 #endif
@@ -3066,7 +3056,7 @@
 #else
       IF (ncid.ne.FLT(ng)%ncid) THEN
 #endif
-#if !(defined ICESHELF_MORPH) && defined ICESHELF
+#if defined ICESHELF && !(defined ICESHELF_MORPH) 
 !
 !  Ice draft.
 !
@@ -3541,9 +3531,6 @@
 
       integer :: brydim, FileH, i, ie, is, j, lstr
       integer :: srdim, stadim, status, swdim, trcdim, usrdim
-#ifdef ICESHELF
-      integer :: iceshelfdim
-#endif
 # ifdef SEDIMENT
       integer :: seddim
 # endif
@@ -3597,9 +3584,6 @@
       srdim=DimIDs(9)
       swdim=DimIDs(10)
       trcdim=DimIDs(11)
-#ifdef ICESHELF
-      iceshelfdim=DimIDs(5)
-#endif
 # ifdef SEDIMENT
       seddim=DimIDs(32)
 # endif
@@ -6260,10 +6244,6 @@
 #  endif
 # endif
 
-# ifdef ICESHELF
-#  include <iceshelf_def_pio.h>
-# endif
-
 # ifdef SEDIMENT
 #  include <sediment_def_pio.h>
 # endif
@@ -6500,7 +6480,7 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 # endif
-#if !(defined ICESHELF_MORPH) && defined ICESHELF
+#if defined ICESHELF && !(defined ICESHELF_MORPH) 
 !
 !  Ice draft.
 !
