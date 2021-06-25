@@ -3696,6 +3696,11 @@
                 sparnam(i:i)=blank
               END DO
               sparnam=TRIM(ADJUSTL(Cval(Nval)))
+            !CASE ('IPARNAM')
+            !  DO i=1,LEN(iparnam)
+            !    iparnam(i:i)=blank
+            !  END DO
+            !  iparnam=TRIM(ADJUSTL(Cval(Nval)))
             CASE ('USRNAME')
               DO i=1,LEN(USRname)
                 USRname(i:i)=blank

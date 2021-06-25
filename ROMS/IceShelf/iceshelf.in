@@ -43,7 +43,7 @@
 ! Logical switches (TRUE/FALSE) to activate writing of iceshelf layer
 ! parameters into HISTORY output files, [1:Ngrids] values expected.
 
- Hout(idDraft)    == F  ! draft       time-dependent iceshelf draft
+ Hout(iddraft)    == F  ! draft       time-dependent iceshelf draft
  Hout(idismr)     == T  ! ismr        ice-shelf melt rate
  Hout(idssflxSOF) == F  ! ssflxSOF    surface salt flux correction due to SOF
  Hout(idshflxSOF) == F  ! shflxSOF    surface heat flux correction due to SOF

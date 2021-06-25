@@ -235,6 +235,17 @@
       CALL read_SedPar (model, 25, out, Lwrite)
       IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 #endif
+!#ifdef ICESHELF
+!!
+!!-----------------------------------------------------------------------
+!!  Read in iceshelf model input parameters.
+!!-----------------------------------------------------------------------
+!!
+!      OPEN (26, FILE=TRIM(iparnam), FORM='formatted', STATUS='old')
+!
+!      CALL read_IcePar (model, 26, out, Lwrite)
+!      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+!#endif
 #ifdef NESTING
 !
 !-----------------------------------------------------------------------
