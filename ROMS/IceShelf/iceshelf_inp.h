@@ -105,13 +105,13 @@
               Hout(idisSb,1:Ngrids)=Lswitch(1:Ngrids)
 # if defined ICESHELF_MORPH
             CASE ('Hout(idDraft)')
-              IF (iddraft.eq.0) THEN
-                IF (Master) WRITE (out,280) 'iddraft'
+              IF (idDraft.eq.0) THEN
+                IF (Master) WRITE (out,280) 'idDraft'
                 exit_flag=5
                 RETURN
               END IF
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(iddraft,1:Ngrids)=Lswitch(1:Ngrids)
+              Hout(idDraft,1:Ngrids)=Lswitch(1:Ngrids)
 # endif
 #endif
 #if defined SURFACE_OVERFLUX_FIX

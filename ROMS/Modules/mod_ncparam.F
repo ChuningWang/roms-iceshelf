@@ -205,7 +205,7 @@
       integer  :: idisUstar     ! Temperature at base of the ice shelf
       integer  :: idisTb        ! Temperature at base of the ice shelf
       integer  :: idisSb        ! Salinity at base of the ice shelf
-      integer  :: iddraft       ! iceshelf draft
+      integer  :: idDraft       ! iceshelf draft
       integer  :: idshflxSOF    ! iceshelf melt rate
       integer  :: idssflxSOF    ! iceshelf melt rate
       integer  :: idbath        ! bathymetry
@@ -1287,8 +1287,8 @@
               idisTb=varid
             CASE ('idisSb')
               idisSb=varid
-            CASE ('iddraft')
-              iddraft=varid
+            CASE ('idDraft')
+              idDraft=varid
             CASE ('idssflxSOF')
               idssflxSOF=varid
             CASE ('idshflxSOF')

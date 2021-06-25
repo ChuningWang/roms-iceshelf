@@ -311,13 +311,13 @@
 !
 !  Define time-varying ice draft.
 !
-        IF (Sout(iddraft,ng)) THEN
-          Vinfo( 1)=Vname(1,iddraft)
-          Vinfo( 2)=Vname(2,iddraft)
-          Vinfo( 3)=Vname(3,iddraft)
-          Vinfo(14)=Vname(4,iddraft)
+        IF (Sout(idDraft,ng)) THEN
+          Vinfo( 1)=Vname(1,idDraft)
+          Vinfo( 2)=Vname(2,idDraft)
+          Vinfo( 3)=Vname(3,idDraft)
+          Vinfo(14)=Vname(4,idDraft)
           Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(iddraft),  &
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idDraft),  &
      &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
      &                   SetFillVal = .FALSE.,                          &
      &                   SetParAccess = .FALSE.)

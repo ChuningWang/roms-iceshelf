@@ -735,14 +735,14 @@
 !
 !  Define time-varying ice draft.
 !
-        Vinfo( 1)=Vname(1,iddraft)
-        Vinfo( 2)=Vname(2,iddraft)
-        Vinfo( 3)=Vname(3,iddraft)
-        Vinfo(14)=Vname(4,iddraft)
+        Vinfo( 1)=Vname(1,idDraft)
+        Vinfo( 2)=Vname(2,idDraft)
+        Vinfo( 3)=Vname(3,idDraft)
+        Vinfo(14)=Vname(4,idDraft)
         Vinfo(16)=Vname(1,idtime)
         Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,iddraft,ng),r8)
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(iddraft),    &
+        Aval(5)=REAL(Iinfo(1,idDraft,ng),r8)
+        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idDraft),    &
      &                 NF_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname,      &
      &                 SetFillVal = .FALSE.)
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
@@ -1603,9 +1603,9 @@
             got_var(idtime)=.TRUE.
             RST(ng)%Vid(idtime)=var_id(i)
 #if defined ICESHELF && defined ICESHELF_MORPH
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,iddraft))) THEN
-            got_var(iddraft)=.TRUE.
-            RST(ng)%Vid(iddraft)=var_id(i)
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idDraft))) THEN
+            got_var(idDraft)=.TRUE.
+            RST(ng)%Vid(idDraft)=var_id(i)
 #endif
 #if defined SEDIMENT && defined SED_MORPH
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idbath))) THEN
@@ -1796,8 +1796,8 @@
           RETURN
         END IF
 #if defined ICESHELF && defined ICESHELF_MORPH
-        IF (.not.got_var(iddraft)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,iddraft)),         &
+        IF (.not.got_var(idDraft)) THEN
+          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idDraft)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
@@ -2733,18 +2733,18 @@
 !
 !  Define time-varying ice draft.
 !
-        Vinfo( 1)=Vname(1,iddraft)
-        Vinfo( 2)=Vname(2,iddraft)
-        Vinfo( 3)=Vname(3,iddraft)
-        Vinfo(14)=Vname(4,iddraft)
+        Vinfo( 1)=Vname(1,idDraft)
+        Vinfo( 2)=Vname(2,idDraft)
+        Vinfo( 3)=Vname(3,idDraft)
+        Vinfo(14)=Vname(4,idDraft)
         Vinfo(16)=Vname(1,idtime)
         Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,iddraft,ng),r8)
-        RST(ng)%pioVar(iddraft)%dkind=PIO_FRST
-        RST(ng)%pioVar(iddraft)%gtype=r2dvar
+        Aval(5)=REAL(Iinfo(1,idDraft,ng),r8)
+        RST(ng)%pioVar(idDraft)%dkind=PIO_FRST
+        RST(ng)%pioVar(idDraft)%gtype=r2dvar
 !
         status=def_var(ng, iNLM, RST(ng)%pioFile,                       &
-     &                 RST(ng)%pioVar(iddraft)%vd,                      &
+     &                 RST(ng)%pioVar(idDraft)%vd,                      &
      &                 PIO_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname,     &
      &                 SetFillVal = .FALSE.)
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
@@ -3742,11 +3742,11 @@
             RST(ng)%pioVar(idtime)%dkind=PIO_TOUT
             RST(ng)%pioVar(idtime)%gtype=0
 #if defined ICESHELF && defined ICESHELF_MORPH
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,iddraft))) THEN
-            got_var(iddraft)=.TRUE.
-            RST(ng)%pioVar(iddraft)%vd=var_desc(i)
-            RST(ng)%pioVar(iddraft)%dkind=PIO_FRST
-            RST(ng)%pioVar(iddraft)%gtype=r2dvar
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idDraft))) THEN
+            got_var(idDraft)=.TRUE.
+            RST(ng)%pioVar(idDraft)%vd=var_desc(i)
+            RST(ng)%pioVar(idDraft)%dkind=PIO_FRST
+            RST(ng)%pioVar(idDraft)%gtype=r2dvar
 #endif
 #if defined SEDIMENT && defined SED_MORPH
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idbath))) THEN
@@ -4015,8 +4015,8 @@
           RETURN
         END IF
 #if defined ICESHELF && defined ICESHELF_MORPH
-        IF (.not.got_var(iddraft)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,iddraft)),         &
+        IF (.not.got_var(idDraft)) THEN
+          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idDraft)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN

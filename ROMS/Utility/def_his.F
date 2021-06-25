@@ -588,15 +588,15 @@
 !
 !  Define time-varying bathymetry.
 !
-        IF (Hout(iddraft,ng)) THEN
-          Vinfo( 1)=Vname(1,iddraft)
-          Vinfo( 2)=Vname(2,iddraft)
-          Vinfo( 3)=Vname(3,iddraft)
-          Vinfo(14)=Vname(4,iddraft)
-          Vinfo(16)=Vname(1,iddraft)
+        IF (Hout(idDraft,ng)) THEN
+          Vinfo( 1)=Vname(1,idDraft)
+          Vinfo( 2)=Vname(2,idDraft)
+          Vinfo( 3)=Vname(3,idDraft)
+          Vinfo(14)=Vname(4,idDraft)
+          Vinfo(16)=Vname(1,idDraft)
           Vinfo(22)='coordinates'
-          Aval(5)=REAL(Iinfo(1,iddraft,ng),r8)
-          status=def_var(ng, iNLM, HIS(ng)%ncid, HIS(ng)%Vid(iddraft),  &
+          Aval(5)=REAL(Iinfo(1,idDraft,ng),r8)
+          status=def_var(ng, iNLM, HIS(ng)%ncid, HIS(ng)%Vid(idDraft),  &
      &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
      &                   SetFillVal = .FALSE.)
           IF (exit_flag.ne.NoError) RETURN
@@ -2693,9 +2693,9 @@
             HIS(ng)%Vid(idisSb)=var_id(i)
 # endif
 # if defined ICESHELF_MORPH
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,iddraft))) THEN
-            got_var(iddraft)=.TRUE.
-            HIS(ng)%Vid(iddraft)=var_id(i)
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idDraft))) THEN
+            got_var(idDraft)=.TRUE.
+            HIS(ng)%Vid(idDraft)=var_id(i)
 # endif
 #endif
 #if defined SURFACE_OVERFLUX_FIX
@@ -4304,19 +4304,19 @@
 !
 !  Define time-varying bathymetry.
 !
-        IF (Hout(iddraft,ng)) THEN
-          Vinfo( 1)=Vname(1,iddraft)
-          Vinfo( 2)=Vname(2,iddraft)
-          Vinfo( 3)=Vname(3,iddraft)
-          Vinfo(14)=Vname(4,iddraft)
-          Vinfo(16)=Vname(1,iddraft)
+        IF (Hout(idDraft,ng)) THEN
+          Vinfo( 1)=Vname(1,idDraft)
+          Vinfo( 2)=Vname(2,idDraft)
+          Vinfo( 3)=Vname(3,idDraft)
+          Vinfo(14)=Vname(4,idDraft)
+          Vinfo(16)=Vname(1,idDraft)
           Vinfo(22)='coordinates'
-          Aval(5)=REAL(Iinfo(1,iddraft,ng),r8)
-          HIS(ng)%pioVar(iddraft)%dkind=PIO_TOUT
-          HIS(ng)%pioVar(iddraft)%gtype=0
+          Aval(5)=REAL(Iinfo(1,idDraft,ng),r8)
+          HIS(ng)%pioVar(idDraft)%dkind=PIO_TOUT
+          HIS(ng)%pioVar(idDraft)%gtype=0
 !
           status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
-     &                   HIS(ng)%pioVar(iddraft)%vd,                    &
+     &                   HIS(ng)%pioVar(idDraft)%vd,                    &
      &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
      &                   SetFillVal = .FALSE.)
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
@@ -6876,11 +6876,11 @@
             HIS(ng)%pioVar(idisSb)%gtype=r2dvar
 #  endif
 #  if defined ICESHELF_MORPH
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,iddraft))) THEN
-            got_var(iddraft)=.TRUE.
-            HIS(ng)%pioVar(iddraft)%vd=var_desc(i)
-            HIS(ng)%pioVar(iddraft)%dkind=PIO_TOUT
-            HIS(ng)%pioVar(iddraft)%gtype=r2dvar
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idDraft))) THEN
+            got_var(idDraft)=.TRUE.
+            HIS(ng)%pioVar(idDraft)%vd=var_desc(i)
+            HIS(ng)%pioVar(idDraft)%dkind=PIO_TOUT
+            HIS(ng)%pioVar(idDraft)%gtype=r2dvar
 #  endif
 # endif
 # if defined SURFACE_OVERFLUX_FIX

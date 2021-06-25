@@ -560,13 +560,13 @@
 !
 !  Read in time-evolving ice draft (m).
 !
-        IF (get_var(iddraft)) THEN
-          foundit=find_string(var_name, n_var, TRIM(Vname(1,iddraft)),  &
+        IF (get_var(idDraft)) THEN
+          foundit=find_string(var_name, n_var, TRIM(Vname(1,idDraft)),  &
      &                        varid)
           IF (foundit) THEN
             gtype=var_flag(varid)*r2dvar
             status=nf_fread2d(ng, IDmod, ncname, ncINPid,               &
-     &                        Vname(1,iddraft), varid,                  &
+     &                        Vname(1,idDraft), varid,                  &
      &                        InpRec, gtype, Vsize,                     &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        Fscl, Fmin, Fmax,                         &
@@ -581,7 +581,7 @@
 #  endif
             IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
               IF (Master) THEN
-                WRITE (stdout,60) string, TRIM(Vname(1,iddraft)),       &
+                WRITE (stdout,60) string, TRIM(Vname(1,idDraft)),       &
      &                            InpRec, TRIM(ncname)
               END IF
               exit_flag=2
@@ -590,17 +590,17 @@
             ELSE
               IF (Master) THEN
 #  ifdef CHECKSUM
-                WRITE (stdout,70) TRIM(Vname(2,iddraft)), Fmin, Fmax,   &
+                WRITE (stdout,70) TRIM(Vname(2,idDraft)), Fmin, Fmax,   &
      &                            Fhash
 #  else
-                WRITE (stdout,70) TRIM(Vname(2,iddraft)), Fmin, Fmax
+                WRITE (stdout,70) TRIM(Vname(2,idDraft)), Fmin, Fmax
 #  endif
 
               END IF
             END IF
           ELSE
             IF (Master) THEN
-              WRITE (stdout,80) string, TRIM(Vname(1,iddraft)),         &
+              WRITE (stdout,80) string, TRIM(Vname(1,idDraft)),         &
      &                          TRIM(ncname)
             END IF
             exit_flag=4
@@ -7841,8 +7841,8 @@
 !
 !  Read in time-evolving ice draft (m).
 !
-        IF (get_var(iddraft)) THEN
-          foundit=find_string(var_name, n_var, TRIM(Vname(1,iddraft)),  &
+        IF (get_var(idDraft)) THEN
+          foundit=find_string(var_name, n_var, TRIM(Vname(1,idDraft)),  &
      &                        varid)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
@@ -7856,7 +7856,7 @@
             END IF
 !
             status=nf_fread2d(ng, IDmod, ncname, pioFile,               &
-     &                        Vname(1,iddraft), my_pioVar,              &
+     &                        Vname(1,idDraft), my_pioVar,              &
      &                        InpRec, ioDesc, Vsize,                    &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        Fscl, Fmin, Fmax,                         &
@@ -7871,7 +7871,7 @@
 #   endif
             IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
               IF (Master) THEN
-                WRITE (stdout,60) string, TRIM(Vname(1,iddraft)),       &
+                WRITE (stdout,60) string, TRIM(Vname(1,idDraft)),       &
      &                            InpRec, TRIM(ncname)
               END IF
               exit_flag=2
@@ -7880,17 +7880,17 @@
             ELSE
               IF (Master) THEN
 #   ifdef CHECKSUM
-                WRITE (stdout,70) TRIM(Vname(2,iddraft)), Fmin, Fmax,   &
+                WRITE (stdout,70) TRIM(Vname(2,idDraft)), Fmin, Fmax,   &
      &                            Fhash
 #   else
-                WRITE (stdout,70) TRIM(Vname(2,iddraft)), Fmin, Fmax
+                WRITE (stdout,70) TRIM(Vname(2,idDraft)), Fmin, Fmax
 #   endif
 
               END IF
             END IF
           ELSE
             IF (Master) THEN
-              WRITE (stdout,80) string, TRIM(Vname(1,iddraft)),         &
+              WRITE (stdout,80) string, TRIM(Vname(1,idDraft)),         &
      &                          TRIM(ncname)
             END IF
             exit_flag=4

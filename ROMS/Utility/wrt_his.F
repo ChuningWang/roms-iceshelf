@@ -280,7 +280,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     ICESHELFVAR(ng) % Sb,                        &
+     &                     ICESHELFVAR(ng) % Tb,                        &
      &                     SetFillVal = .FALSE.)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
@@ -319,7 +319,7 @@
       IF (Hout(idDraft,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
-        status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid, HIS(ng)%Vid(iddraft),&
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid, HIS(ng)%Vid(idDraft),&
      &                     HIS(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #  ifdef MASKING
@@ -329,7 +329,7 @@
      &                     SetFillVal = .FALSE.)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,iddraft)), HIS(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idDraft)), HIS(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -3024,7 +3024,7 @@
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     ICESHELFVAR(ng) % Sb,                        &
+     &                     ICESHELFVAR(ng) % Tb,                        &
      &                     SetFillVal = .FALSE.)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
@@ -3066,15 +3066,15 @@
 !
 !  Write out time-dependent ice draft (m)
 !
-      IF (Hout(iddraft,ng)) THEN
+      IF (Hout(idDraft,ng)) THEN
         scale=1.0_dp
-        IF (HIS(ng)%pioVar(iddraft)%dkind.eq.PIO_double) THEN
+        IF (HIS(ng)%pioVar(idDraft)%dkind.eq.PIO_double) THEN
           ioDesc => ioDesc_dp_r2dvar(ng)
         ELSE
           ioDesc => ioDesc_sp_r2dvar(ng)
         END IF
         status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
-     &                     HIS(ng)%pioVar(iddraft),                     &
+     &                     HIS(ng)%pioVar(idDraft),                     &
      &                     HIS(ng)%Rindex,                              &
      &                     ioDesc,                                      &
      &                     LBi, UBi, LBj, UBj, scale,                   &
@@ -3085,7 +3085,7 @@
      &                     SetFillVal = .FALSE.)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,iddraft)), HIS(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idDraft)), HIS(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status

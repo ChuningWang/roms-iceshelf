@@ -205,10 +205,10 @@
 !
 !  Write out time-dependent ice draft (m)
 !
-      IF (Hout(iddraft,ng)) THEN
+      IF (Hout(idDraft,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
-        status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(iddraft),&
+        status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idDraft),&
      &                     RST(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 # ifdef MASKING
@@ -218,7 +218,7 @@
      &                     SetFillVal = .FALSE.)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,iddraft)), RST(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idDraft)), RST(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -1298,15 +1298,15 @@
 !
 !  Write out time-dependent ice draft (m)
 !
-      IF (Hout(iddraft,ng)) THEN
+      IF (Hout(idDraft,ng)) THEN
         scale=1.0_dp
-        IF (RST(ng)%pioVar(iddraft)%dkind.eq.PIO_double) THEN
+        IF (RST(ng)%pioVar(idDraft)%dkind.eq.PIO_double) THEN
           ioDesc => ioDesc_dp_r2dvar(ng)
         ELSE
           ioDesc => ioDesc_sp_r2dvar(ng)
         END IF
         status=nf_fwrite2d(ng, iNLM, RST(ng)%pioFile,                   &
-     &                     RST(ng)%pioVar(iddraft),                     &
+     &                     RST(ng)%pioVar(idDraft),                     &
      &                     RST(ng)%Rindex,                              &
      &                     ioDesc,                                      &
      &                     LBi, UBi, LBj, UBj, scale,                   &
@@ -1317,7 +1317,7 @@
      &                     SetFillVal = .FALSE.)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,iddraft)), RST(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idDraft)), RST(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status

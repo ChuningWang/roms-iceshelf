@@ -2078,7 +2078,7 @@
   'meter'                                          ! [m]
   'bathymetry, scalar, series'
   'ocean_time'
-  'iddraft'
+  'idDraft'
   'r2dvar'
   1.0d0
 
