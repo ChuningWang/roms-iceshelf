@@ -2015,6 +2015,75 @@
 
 !
 !------------------------------------------------------------------------------
+! ICEPLUME variables (Chuning Wang)
+!------------------------------------------------------------------------------
+!
+
+'m'                                                ! Output
+  'ice shelf melt rate'
+  'meter second-1'                                 ! [m/s]
+  'melt_rate, scalar, series'
+  'ocean_time'
+  'idismr'
+  'r2dvar'
+  1.0d0
+
+'wb'                                                ! Input
+  'ice shelf melt rate observations'
+  'meter second-1'                                 ! [m/s]
+  'melt_rate, scalar, series'
+  'sst_time'
+  'idwb'
+  'r2dvar'
+  1.0d0
+
+'Tstar'                                                ! Output
+  'insitu temperature driving force at ice base'
+  'Celsius'                                            !
+  'temperature_driving_force, scalar, series'
+  'ocean_time'
+  'idisTstar'
+  'r2dvar'
+  1.0d0
+
+'Ustar'                                                ! Output
+  'friction velocity at ice base'
+  'meter second-1'                                 ! [m/s]
+  'friction_velocity, scalar, series'
+  'ocean_time'
+  'idisUstar'
+  'r2dvar'
+  1.0d0
+
+'Tb'                                                ! Output
+  'temperature at ice-shelf base'
+  'Celcius'                                         ! [Celcius]
+  'temperature_base, scalar, series'
+  'ocean_time'
+  'idisTb'
+  'r2dvar'
+  1.0d0
+
+'Sb'                                                ! Output
+  'salinity at ice-shelf base'
+  'nondimensional'                                  ! [PSU]
+  'salinity_base, scalar, series'
+  'ocean_time'
+  'idisSb'
+  'r2dvar'
+  1.0d0
+
+'draft'                                            ! Input/Output
+  'ice draft'
+  'meter'                                          ! [m]
+  'bathymetry, scalar, series'
+  'ocean_time'
+  'iddraft'
+  'r2dvar'
+  1.0d0
+
+!
+!------------------------------------------------------------------------------
 !  Boundary layer variables.
 !------------------------------------------------------------------------------
 !

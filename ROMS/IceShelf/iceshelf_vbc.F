@@ -192,7 +192,7 @@
       integer, intent(in) :: ng, tile
       integer, intent(in) :: LBi, UBi, LBj, UBj
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
-      integer, intent(in) :: nrhs,nnew
+      integer, intent(in) :: nrhs, nnew
 # ifdef ASSUMED_SHAPE
       real(r8), intent(in) :: u(LBi:,LBj:,:,:)
       real(r8), intent(in) :: v(LBi:,LBj:,:,:)
@@ -278,15 +278,15 @@
 !
 !      integer :: IstrR, IENDR, JstrR, JendR, IstrU, JstrV
       integer :: i, j, itrc
-      real(r8) :: Pradj,Scadj, Cdrt, cp_i
-!      real(r8) :: a,b,c,Pr,Sc,Cd,small
-!      real(r8) :: cp_w,ustar,visc,turb,TFb,rho_i
-      real(r8) :: Sm,Tm,rhoi_on_rho0,TFb,turb
+      real(r8) :: Pradj, Scadj, Cdrt, cp_i
+!      real(r8) :: a, b, c, Pr, Sc, Cd, small
+!      real(r8) :: cp_w, ustar, visc, turb, TFb, rho_i
+      real(r8) :: Sm, Tm, rhoi_on_rho0, TFb, turb
 # ifdef ICESHELF_VBC_HFPROPTOM
       real(r8) :: Ex1,Ex2,Ex3,Ex4,Ex5,Ex6,Ep1,Ep2,Ep3,Ep31,Ep4,Ep5
       real(r8) :: Sr1,Sr2,Sf1,Sf2,Tf1,Tf2,rho_r
 # else
-      real(r8) :: mflag,TFi,cff3 
+      real(r8) :: mflag, TFi, cff3
 # endif
       real(r8) :: cff1, cff2
 # ifdef LIMIT_ICESTRESS
