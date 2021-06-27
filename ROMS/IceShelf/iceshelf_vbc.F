@@ -604,68 +604,68 @@
 !
 !  Negative heat flux term in the ice (due to -kappa/D)
 !
-            Ex1 = a*(Ep1-Ep2)
-            Ex2 = Ep1*(Ep4-Tm)+Ep2*(Ti+a*Sm-Ep4)-Ep3
-            Ex3 = Sm*(Ep2*(Ep4-Ti)+Ep3)
-            Ex6 = -0.5
-          END IF
-          Ex4 = Ex2/Ex1
-          Ex5 = Ex3/Ex1
-          Sr1 = 0.25*Ex4*Ex4-Ex5
-          Sr2 = Ex6*Ex4
-          Sf1 = Sr2+sqrt(Sr1)
-          Tf1 = a*Sf1+Ep4
-          Sf2 = Sr2-sqrt(Sr1)
-          Tf2 = a*Sf2+Ep4
+              Ex1 = a*(Ep1-Ep2)
+              Ex2 = Ep1*(Ep4-Tm)+Ep2*(Ti+a*Sm-Ep4)-Ep3
+              Ex3 = Sm*(Ep2*(Ep4-Ti)+Ep3)
+              Ex6 = -0.5
+            END IF
+            Ex4 = Ex2/Ex1
+            Ex5 = Ex3/Ex1
+            Sr1 = 0.25*Ex4*Ex4-Ex5
+            Sr2 = Ex6*Ex4
+            Sf1 = Sr2+sqrt(Sr1)
+            Tf1 = a*Sf1+Ep4
+            Sf2 = Sr2-sqrt(Sr1)
+            Tf2 = a*Sf2+Ep4
 !
 !  Salinities < 0 psu are NOT defined, i.e....
 !
-          IF (Sf1.gt.0.) THEN
-            Tb(i,j) = Tf1
-            Sb(i,j) = Sf1
-          ELSE
-            Tb(i,j) = Tf2
-            Sb(i,j) = Sf2
-          END IF
+            IF (Sf1.gt.0.) THEN
+              Tb(i,j) = Tf1
+              Sb(i,j) = Sf1
+            ELSE
+              Tb(i,j) = Tf2
+              Sb(i,j) = Sf2
+            END IF
 !
-          m(i,j) = -Ep5*(1.0-Sm/Sb(i,j))
-!          m(i,j)= Seta * dtfast
+            m(i,j) = -Ep5*(1.0-Sm/Sb(i,j))
+!            m(i,j)= Seta * dtfast
 !
 !  Calculates fluxes:
 !
-          stflx(i,j,itemp)=(gammaT(i,j)-rho_r*m(i,j))*(Tb(i,j)-Tm)
-          stflx(i,j,isalt)=(gammaS(i,j)-rho_r*m(i,j))*(Sb(i,j)-Sm)
+            stflx(i,j,itemp)=(gammaT(i,j)-rho_r*m(i,j))*(Tb(i,j)-Tm)
+            stflx(i,j,isalt)=(gammaS(i,j)-rho_r*m(i,j))*(Sb(i,j)-Sm)
 #  else
-          TFb = a*Sm + b + c*zice(i,j)
-          Tstar(i,j) = Tm - TFb
-          mflag= 0.5*(1 + SIGN(1.0_r8,Tm-TFb))
-          TFi = (1 - mflag)*a*Si + b + c*zice(i,j)
+            TFb = a*Sm + b + c*zice(i,j)
+            Tstar(i,j) = Tm - TFb
+            mflag= 0.5*(1 + SIGN(1.0_r8,Tm-TFb))
+            TFi = (1 - mflag)*a*Si + b + c*zice(i,j)
 !
 !  Calculate coefficents in quadratic to be solved:
 !
-          cff1 = L/cp_w + mflag*(cp_i/cp_w)*(TFi-Ti)
-          cff2 = gammaS(i,j)*(L/cp_w + mflag*(cp_i/cp_w)*(TFb-Ti))      &
-     &           + gammaT(i,j)*(TFi-Tm)
-          cff3 = gammaS(i,j)*gammaT(i,j)*(TFb - Tm)
+            cff1 = L/cp_w + mflag*(cp_i/cp_w)*(TFi-Ti)
+            cff2 = gammaS(i,j)*(L/cp_w + mflag*(cp_i/cp_w)*(TFb-Ti))    &
+     &             + gammaT(i,j)*(TFi-Tm)
+            cff3 = gammaS(i,j)*gammaT(i,j)*(TFb - Tm)
 !
 !  Calculate melt rate:
 !
-          m(i,j) = -(cff2 - SQRT(cff2*cff2 - 4*cff1*cff3))/(2*cff1)
+            m(i,j) = -(cff2 - SQRT(cff2*cff2 - 4*cff1*cff3))/(2*cff1)
 #   ifdef NUDGE_MELT
-          m(i,j) = m(i,j) + (wb(i,j) - m(i,j))*0.9_r8
+            m(i,j) = m(i,j) + (wb(i,j) - m(i,j))*0.9_r8
 #   endif
 !
 !  Calculate basal temperature and salinity:
 !
-          Tb(i,j) = (gammaT(i,j)*Tm+mflag*(cp_i/cp_w)*m(i,j)*Ti         &
-     &            - (L/cp_w)*m(i,j))                                    &
-     &            /(gammaT(i,j) + mflag*(cp_i/cp_w)*m(i,j))
-          Sb(i,j) = (Tb(i,j) - b - c*zice(i,j))/a
+            Tb(i,j) = (gammaT(i,j)*Tm+mflag*(cp_i/cp_w)*m(i,j)*Ti       &
+     &              - (L/cp_w)*m(i,j))                                  &
+     &              /(gammaT(i,j) + mflag*(cp_i/cp_w)*m(i,j))
+            Sb(i,j) = (Tb(i,j) - b - c*zice(i,j))/a
 
         stflx(i,j,itemp)=(gammaT(i,j)+rhoi_on_rho0*m(i,j))*(Tb(i,j)-Tm)
         stflx(i,j,isalt)=(gammaS(i,j)+rhoi_on_rho0*m(i,j))*(Sb(i,j)-Sm)
 !
-!           write(6,*) gammaT,gammaS,Tb,Sb,Tm,Sm,rhoi_on_rho0
+!            write(6,*) gammaT,gammaS,Tb,Sb,Tm,Sm,rhoi_on_rho0
 !
 #   ifdef SURFACE_OVERFLUX_FIX
 !
@@ -702,14 +702,14 @@
                shflx_old = stflx(i,j,itemp)
                stflx(i,j,itemp)=Hz(i,j,N(ng))*(Tf-Temp_insitu)/trelax
                shflxSOF(i,j) = stflx(i,j,itemp) - shflx_old
-!         ELSE IF(stflx(i,j,itemp).gt.0.0_r8.and.Temp_insitu.gt.0.0_r8)
-!         THEN
+!            ELSE IF (stflx(i,j,itemp).gt.0.0_r8.and.
+!                     Temp_insitu.gt.0.0_r8) THEN
 !
 !  summer condition: decrease input of heat from the surface forcing
 !  relax to new temperature at the surface to avoir over warming from
 !  strong Takeshi flux in summer
 !
-!         stflx(i,j,itemp)=Hz(i,j,N(ng))*(0.0_r8-Temp_insitu)/trelax
+!              stflx(i,j,itemp)=Hz(i,j,N(ng))*(0.0_r8-Temp_insitu)/trelax
             END IF
 !
 !  Oles code: account for the missing salt due to Eva's Winter
@@ -738,9 +738,9 @@
             stflx(i,j,isalt)=Hz(i,j,N(ng))*                             &
                              (sfcSalt-t(i,j,N(ng),nrhs,isalt))/trelax
 !# else
-!          DO itrc=1,NT(ng)
-!             stflx(i,j,itrc)=0.0_r8
-!          END DO
+!            DO itrc=1,NT(ng)
+!              stflx(i,j,itrc)=0.0_r8
+!            END DO
 # endif
           END IF
         END DO
