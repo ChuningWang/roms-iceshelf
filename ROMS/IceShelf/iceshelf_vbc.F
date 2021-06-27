@@ -339,10 +339,10 @@
             sustr(i,j)=-0.5_r8*(wrk(i-1,j)+wrk(i,j))*                   &
      &                 u(i,j,N(ng),nrhs)*cff2
 #  ifdef LIMIT_ICESTRESS
-          cff3=cff*0.5_r8*(Hz(i-1,j,N(ng))+Hz(i,j,N(ng)))
-          sustr(i,j)=SIGN(1.0_r8, sustr(i,j))*                          &
-     &               MIN(ABS(sustr(i,j)),                               &
-     &                   ABS(u(i,j,N(ng),nrhs))*cff3)
+            cff3=cff*0.5_r8*(Hz(i-1,j,N(ng))+Hz(i,j,N(ng)))
+            sustr(i,j)=SIGN(1.0_r8, sustr(i,j))*                        &
+     &                 MIN(ABS(sustr(i,j)),                             &
+     &                     ABS(u(i,j,N(ng),nrhs))*cff3)
 #  endif
           END IF
         END DO
@@ -358,10 +358,10 @@
             svstr(i,j)=-0.5_r8*(wrk(i,j-1)+wrk(i,j))*                   &
      &                 v(i,j,N(ng),nrhs)*cff2
 #  ifdef LIMIT_ICESTRESS
-          cff3=cff*0.5_r8*(Hz(i,j-1,N(ng))+Hz(i,j,N(ng)))
-          svstr(i,j)=SIGN(1.0_r8, svstr(i,j))*                          &
-     &               MIN(ABS(svstr(i,j)),                               &
-     &                   ABS(v(i,j,N(ng),nrhs))*cff3)
+            cff3=cff*0.5_r8*(Hz(i,j-1,N(ng))+Hz(i,j,N(ng)))
+            svstr(i,j)=SIGN(1.0_r8, svstr(i,j))*                        &
+     &                 MIN(ABS(svstr(i,j)),                             &
+     &                     ABS(v(i,j,N(ng),nrhs))*cff3)
 #  endif
           END IF
         END DO
@@ -380,10 +380,10 @@
             cff2=SQRT(u(i,j,N(ng),nrhs)*u(i,j,N(ng),nrhs)+cff1*cff1)
             sustr(i,j)=-rdrg2(ng)*u(i,j,N(ng),nrhs)*cff2
 #  ifdef LIMIT_ICESTRESS
-          cff3=cff*0.5_r8*(Hz(i-1,j,N(ng))+Hz(i,j,N(ng)))
-          sustr(i,j)=SIGN(1.0_r8, sustr(i,j))*                          &
-     &               MIN(ABS(sustr(i,j)),                               &
-     &                   ABS(u(i,j,N(ng),nrhs))*cff3)
+            cff3=cff*0.5_r8*(Hz(i-1,j,N(ng))+Hz(i,j,N(ng)))
+            sustr(i,j)=SIGN(1.0_r8, sustr(i,j))*                        &
+     &                 MIN(ABS(sustr(i,j)),                             &
+     &                     ABS(u(i,j,N(ng),nrhs))*cff3)
 #  endif
           END IF
         END DO
@@ -398,10 +398,10 @@
             cff2=SQRT(cff1*cff1+v(i,j,N(ng),nrhs)*v(i,j,N(ng),nrhs))
             svstr(i,j)=-rdrg2(ng)*v(i,j,N(ng),nrhs)*cff2
 #  ifdef LIMIT_ICESTRESS
-          cff3=cff*0.5_r8*(Hz(i,j-1,N(ng))+Hz(i,j,N(ng)))
-          svstr(i,j)=SIGN(1.0_r8, svstr(i,j))*                          &
-     &               MIN(ABS(svstr(i,j)),                               &
-     &                   ABS(v(i,j,N(ng),nrhs))*cff3)
+            cff3=cff*0.5_r8*(Hz(i,j-1,N(ng))+Hz(i,j,N(ng)))
+            svstr(i,j)=SIGN(1.0_r8, svstr(i,j))*                        &
+     &                 MIN(ABS(svstr(i,j)),                             &
+     &                     ABS(v(i,j,N(ng),nrhs))*cff3)
 #  endif
           END IF
         END DO
@@ -415,10 +415,10 @@
           IF (zice(i,j)*zice(i-1,j).ne.0.0_r8) THEN
             sustr(i,j)=-rdrg(ng)*u(i,j,N(ng),nrhs)
 #  ifdef LIMIT_ICESTRESS
-          cff1=cff*0.5_r8*(Hz(i-1,j,N(ng))+Hz(i,j,N(ng)))
-          sustr(i,j)=SIGN(1.0_r8, sustr(i,j))*                          &
-     &               MIN(ABS(sustr(i,j)),                               &
-     &                   ABS(u(i,j,N(ng),nrhs))*cff1)
+            cff1=cff*0.5_r8*(Hz(i-1,j,N(ng))+Hz(i,j,N(ng)))
+            sustr(i,j)=SIGN(1.0_r8, sustr(i,j))*                        &
+     &                 MIN(ABS(sustr(i,j)),                             &
+     &                     ABS(u(i,j,N(ng),nrhs))*cff1)
 #  endif
           END IF
         END DO
@@ -428,10 +428,10 @@
           IF (zice(i,j)*zice(i,j-1).ne.0.0_r8) THEN
             svstr(i,j)=-rdrg(ng)*v(i,j,N(ng),nrhs)
 #  ifdef LIMIT_ICESTRESS
-          cff1=cff*0.5_r8*(Hz(i,j-1,N(ng))+Hz(i,j,N(ng)))
-          svstr(i,j)=SIGN(1.0_r8, svstr(i,j))*                          &
-     &               MIN(ABS(svstr(i,j)),                               &
-     &                   ABS(v(i,j,N(ng),nrhs))*cff1)
+            cff1=cff*0.5_r8*(Hz(i,j-1,N(ng))+Hz(i,j,N(ng)))
+            svstr(i,j)=SIGN(1.0_r8, svstr(i,j))*                        &
+     &                 MIN(ABS(svstr(i,j)),                             &
+     &                     ABS(v(i,j,N(ng),nrhs))*cff1)
 #  endif
           END IF
         END DO
@@ -762,8 +762,10 @@
 #  endif
         END DO
       END DO
-!
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+!
+!  Apply periodic boundary conditions draft depth
+!
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          iceshelf_draft(:,:,nnew))
@@ -779,16 +781,11 @@
      &                  LBi, UBi, LBj, UBj,                             &
      &                  stflx(:,:,isalt))
 # ifdef DISTRIBUTE
-      CALL mp_exchange2d (ng, tile, iNLM, 1,                            &
+      CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints,                                 &
      &                    EWperiodic(ng), NSperiodic(ng),               &
-     &                    stflx(:,:,itemp))
-      CALL mp_exchange2d (ng, tile, iNLM, 1,                            &
-     &                    LBi, UBi, LBj, UBj,                           &
-     &                    NghostPoints,                                 &
-     &                    EWperiodic(ng), NSperiodic(ng),               &
-     &                    stflx(:,:,isalt))
+     &                    stflx(:,:,itemp), stflx(:,:,isalt))
 # endif
 # ifdef SHORTWAVE
       DO j=JstrR,JendR
