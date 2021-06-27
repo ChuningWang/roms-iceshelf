@@ -24,7 +24,7 @@
 !                                                                      !
 !  ================================                                    !
 !                                                                      !
-!   Laminar sublayer  Tb, Sb, ustar                                    !                      
+!   Laminar sublayer  Tb, Sb, ustar                                    !
 !                                                                      !
 !  --------------------------------                                    !
 !                                                                      !
@@ -781,11 +781,13 @@
 # ifdef DISTRIBUTE
       CALL mp_exchange2d (ng, tile, iNLM, 1,                            &
      &                    LBi, UBi, LBj, UBj,                           &
-     &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
+     &                    NghostPoints,                                 &
+     &                    EWperiodic(ng), NSperiodic(ng),               &
      &                    stflx(:,:,itemp))
       CALL mp_exchange2d (ng, tile, iNLM, 1,                            &
      &                    LBi, UBi, LBj, UBj,                           &
-     &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
+     &                    NghostPoints,                                 &
+     &                    EWperiodic(ng), NSperiodic(ng),               &
      &                    stflx(:,:,isalt))
 # endif
 # ifdef SHORTWAVE
