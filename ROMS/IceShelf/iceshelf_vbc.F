@@ -82,52 +82,51 @@
       CALL wclock_on (ng, iNLM, 6, __LINE__, MyFile)
 # endif
       CALL iceshelf_vbc_tile (ng, tile,                                 &
-     &                   LBi, UBi, LBj, UBj,                            &
-     &                   IminS, ImaxS, JminS, JmaxS,                    &
-     &                   nrhs(ng), nnew(ng),                            &
+     &                        LBi, UBi, LBj, UBj,                       &
+     &                        IminS, ImaxS, JminS, JmaxS,               &
+     &                        nrhs(ng), nnew(ng),                       &
 # if defined ICESHELF_3EQN_VBC || defined ANA_SEAICE
-     &                   GRID(ng) % Hz,                                 &
+     &                        GRID(ng) % Hz,                            &
 # endif
 # ifdef MASKING
-     &                   GRID(ng) % rmask,                              &
+     &                        GRID(ng) % rmask,                         &
 # endif
-     &                   GRID(ng) % z_r,                                &
-     &                   GRID(ng) % z_w,                                &
-     &                   GRID(ng) % zice,                               &
-     &                   GRID(ng) % f,                                  &
+     &                        GRID(ng) % z_r,                           &
+     &                        GRID(ng) % z_w,                           &
+     &                        GRID(ng) % zice,                          &
+     &                        GRID(ng) % f,                             &
 # ifdef ICESHELF_MORPH
-     &                   ICESHELFVAR(ng) % iceshelf_draft,              &
+     &                        ICESHELFVAR(ng) % iceshelf_draft,         &
 #  ifdef FISOC_DDDT
-     &                   ICESHELFVAR(ng) % iceshelf_dddt,               &
+     &                        ICESHELFVAR(ng) % iceshelf_dddt,          &
 #  endif
 # endif
-     &                   OCEAN(ng) % u,                                 &
-     &                   OCEAN(ng) % v,                                 &
-     &                   OCEAN(ng) % t,                                 &
+     &                        OCEAN(ng) % u,                            &
+     &                        OCEAN(ng) % v,                            &
+     &                        OCEAN(ng) % t,                            &
 # ifdef ICESHELF_3EQN_VBC
-     &                   ICESHELFVAR(ng) % gammaT,                      &
-     &                   ICESHELFVAR(ng) % gammaS,                      &
-     &                   ICESHELFVAR(ng) % Tb,                          &
-     &                   ICESHELFVAR(ng) % Tstar,                       &
-     &                   ICESHELFVAR(ng) % Ustar,                       &
-     &                   ICESHELFVAR(ng) % Sb,                          &
+     &                        ICESHELFVAR(ng) % gammaT,                 &
+     &                        ICESHELFVAR(ng) % gammaS,                 &
+     &                        ICESHELFVAR(ng) % Tb,                     &
+     &                        ICESHELFVAR(ng) % Tstar,                  &
+     &                        ICESHELFVAR(ng) % Ustar,                  &
+     &                        ICESHELFVAR(ng) % Sb,                     &
 # endif
-     &                   ICESHELFVAR(ng) % m,                           &
+     &                        ICESHELFVAR(ng) % m,                      &
 # ifdef SURFACE_OVERFLUX_FIX
-     &                   ICESHELFVAR(ng) % ssflxSOF,                    &
-     &                   ICESHELFVAR(ng) % shflxSOF,                    &
+     &                        ICESHELFVAR(ng) % ssflxSOF,               &
+     &                        ICESHELFVAR(ng) % shflxSOF,               &
 # endif
-     &                   OCEAN(ng) % rho,                               &
-     &                   FORCES(ng) % sustr,                            &
-     &                   FORCES(ng) % svstr,                            &
+     &                        OCEAN(ng) % rho,                          &
+     &                        FORCES(ng) % sustr,                       &
+     &                        FORCES(ng) % svstr,                       &
 # ifdef SHORTWAVE
-     &                   FORCES(ng) % srflx,                            &
+     &                        FORCES(ng) % srflx,                       &
 # endif
 # ifdef NUDGE_MELT
-     &                   FORCES(ng) % wb,                               &
+     &                        FORCES(ng) % wb,                          &
 # endif
-     &                   FORCES(ng) % stflx                             &
-     &                   )
+     &                        FORCES(ng) % stflx)
 # ifdef PROFILE
       CALL wclock_off (ng, iNLM, 6, __LINE__, MyFile)
 # endif
@@ -136,42 +135,42 @@
 !
 !***********************************************************************
       SUBROUTINE iceshelf_vbc_tile (ng, tile,                           &
-     &                         LBi, UBi, LBj, UBj,                      &
-     &                         IminS, ImaxS, JminS, JmaxS,              &
-     &                         nrhs,nnew,                               &
+     &                              LBi, UBi, LBj, UBj,                 &
+     &                              IminS, ImaxS, JminS, JmaxS,         &
+     &                              nrhs,nnew,                          &
 # if defined ICESHELF_3EQN_VBC || defined ANA_SEAICE
-     &                         Hz,                                      &
+     &                              Hz,                                 &
 # endif
 # ifdef MASKING                 
-     &                         rmask,                                   &
+     &                              rmask,                              &
 # endif
-     &                         z_r, z_w,                                &
-     &                         zice,f,                                  &
+     &                              z_r, z_w,                           &
+     &                              zice,f,                             &
 # ifdef ICESHELF_MORPH
-     &                         iceshelf_draft,                          &
+     &                              iceshelf_draft,                     &
 #  ifdef FISOC_DDDT
-     &                         iceshelf_dddt,                           &
+     &                              iceshelf_dddt,                      &
 #  endif
 # endif
-     &                         u, v, t,                                 &
+     &                              u, v, t,                            &
 # ifdef ICESHELF_3EQN_VBC
-     &                         gammaT, gammaS,                          &
-     &                         Tb, Tstar, Ustar, Sb,                    &
+     &                              gammaT, gammaS,                     &
+     &                              Tb, Tstar, Ustar, Sb,               &
 # endif 
-     &                         m,                                       &
+     &                              m,                                  &
 # ifdef SURFACE_OVERFLUX_FIX
-     &                         ssflxSOF,                                &
-     &                         shflxSOF,                                &
+     &                              ssflxSOF,                           &
+     &                              shflxSOF,                           &
 # endif
-     &                         rho,                                     &
-     &                         sustr, svstr,                            &
+     &                              rho,                                &
+     &                              sustr, svstr,                       &
 # ifdef SHORTWAVE
-     &                         srflx,                                   &
+     &                              srflx,                              &
 # endif
 # ifdef NUDGE_MELT
-     &                         wb,                                      &
+     &                              wb,                                 &
 # endif
-     &                         stflx)                                   
+     &                              stflx)
 !***********************************************************************
 !
       USE mod_param
@@ -519,12 +518,12 @@
           IF (zice(i,j).ne.0.0_r8) THEN
 # endif
 # if defined ICESHELF_2EQN_VBC
-            TFb = a*Sm+b+c*zice(i,j)
+            TFb = a*Sm + b - c*zice(i,j)
 #  ifdef ICESHELF_TEOS10
             ct = ct_from_theta(Sm,t(i,j,N(ng),nrhs,itemp))
-            Tm = t_from_ct(Sm,ct,-zice(i,j))
+            Tm = t_from_ct(Sm,ct,zice(i,j))
 #  else
-            CALL potit(Sm,t(i,j,N(ng),nrhs,itemp),-zice(i,j),0.0_r8,Tm, &
+            CALL potit(Sm,t(i,j,N(ng),nrhs,itemp),zice(i,j),0.0_r8,Tm,  &
      &                 i,j)
 #  endif
             stflx(i,j,itemp)=gamma*(TFb-Tm)
@@ -536,9 +535,9 @@
 !
 #  ifdef ICESHELF_TEOS10
             ct = ct_from_theta(Sm,t(i,j,N(ng),nrhs,itemp))
-            Tm = t_from_ct(Sm,ct,-zice(i,j))
+            Tm = t_from_ct(Sm,ct,zice(i,j))
 #  else
-            CALL potit(Sm,t(i,j,N(ng),nrhs,itemp),-zice(i,j),0.0_r8,Tm, &
+            CALL potit(Sm,t(i,j,N(ng),nrhs,itemp),zice(i,j),0.0_r8,Tm,  &
      &                 i,j)
 #  endif
 !
@@ -587,7 +586,7 @@
 #   ifdef ICESHELF2D_TOY
             Ep31 = 0.0_r8
 #   else
-            Ep31 = -rho_r*cp_i*dt_i/zice(i,j)
+            Ep31 = rho_r*cp_i*dt_i/zice(i,j)
 #   endif
             Ep4  = b+c*z_w(i,j,N(ng))
             Ep5  = gammaS(i,j)/rho_r
@@ -636,10 +635,10 @@
             stflx(i,j,itemp)=(gammaT(i,j)-rho_r*m(i,j))*(Tb(i,j)-Tm)
             stflx(i,j,isalt)=(gammaS(i,j)-rho_r*m(i,j))*(Sb(i,j)-Sm)
 #  else
-            TFb = a*Sm + b + c*zice(i,j)
+            TFb = a*Sm + b - c*zice(i,j)
             Tstar(i,j) = Tm - TFb
             mflag= 0.5*(1 + SIGN(1.0_r8,Tm-TFb))
-            TFi = (1 - mflag)*a*Si + b + c*zice(i,j)
+            TFi = (1 - mflag)*a*Si + b - c*zice(i,j)
 !
 !  Calculate coefficents in quadratic to be solved:
 !
@@ -660,7 +659,7 @@
             Tb(i,j) = (gammaT(i,j)*Tm+mflag*(cp_i/cp_w)*m(i,j)*Ti       &
      &              - (L/cp_w)*m(i,j))                                  &
      &              /(gammaT(i,j) + mflag*(cp_i/cp_w)*m(i,j))
-            Sb(i,j) = (Tb(i,j) - b - c*zice(i,j))/a
+            Sb(i,j) = (Tb(i,j) - b + c*zice(i,j))/a
 
         stflx(i,j,itemp)=(gammaT(i,j)+rhoi_on_rho0*m(i,j))*(Tb(i,j)-Tm)
         stflx(i,j,isalt)=(gammaS(i,j)+rhoi_on_rho0*m(i,j))*(Sb(i,j)-Sm)
@@ -754,11 +753,11 @@
       DO j=JstrR,JendR
         DO i=IstrR,IendR
 #  if defined FISOC_DDDT
-          iceshelf_draft(i,j,nnew) = zice(i,j) +                        &
+          iceshelf_draft(i,j,nnew) = zice(i,j) -                        &
      &                               (iceshelf_dddt(i,j)*dt(ng))
 #  else
-          iceshelf_draft(i,j,nnew) = zice(i,j)+(m(i,j)*dt(ng))!         &
-!     &                             MIN(m(i,j)*dt(ng),1.0e-8_r8) 
+          iceshelf_draft(i,j,nnew) = zice(i,j) - (m(i,j)*dt(ng)) !      &
+!     &                               MIN(m(i,j)*dt(ng),1.0e-8_r8) 
 #  endif
         END DO
       END DO
@@ -1225,37 +1224,37 @@
 ! *********************************************************************
 !
 ! Calculates from the salinity (sal, psu), potential temperature 
-! (theta, degC) and reference pressure (pres, dbar) the in-situ 
-! temperaure (Temp_insitu, degC) related to the in-situ pressure 
-! (rfpres, dbar) with the help of an iterative method.
+! (theta, degC) and in-situ pressure (Pres, dbar) the in-situ temperaure
+! (Temp_insitu, degC) related to the reference pressure (RPres, dbar)
+! with the help of an iterative method.
 !
       USE mod_kinds, ONLY : r8
 !
       integer, intent(in)   :: i, j
-      real(r8), intent(in)  :: Sal, Pres,theta
+      real(r8), intent(in)  :: Sal, theta, Pres, RPres
       real(r8), intent(out) :: Temp
 !
       integer               :: ind
-      real(r8)              :: tpmd, theta1, thetad, epsi, RPres
+      real(r8)              :: tpmd, theta1, thetad, epsi
 !
       data tpmd / 0.001 /
 !
       epsi = 0.
-      do ind=1,100
-      Temp   = theta+epsi
-      thetad  = thetaa(Sal,Temp,Pres,RPres)-theta
-      IF(abs(thetad).lt.tpmd) return
-       epsi = epsi-thetad
-      ENDdo
+      DO ind=1,100
+        Temp   = theta + epsi
+        thetad = thetaa(Sal,Temp,Pres,RPres) - theta
+        IF(ABS(thetad).LT.tpmd) RETURN
+        epsi = epsi - thetad
+      END DO
       write(6,*) ' WARNING!',                                           &
-     & ' in-situ temperature calculation has not converged!', i,j
+     & ' in-situ temperature calculation has not converged!', i, j
       RETURN
       END SUBROUTINE potit
 ! *********************************************************************
       REAL FUNCTION thetaa(Sal,Temp,Pres,RPres)
 !
 ! Calculates from the salinity (sal, psu), the in-situ temperature 
-! (Temp, degC) and the in-situ pressure press, dbar) the potential 
+! (Temp, degC) and the in-situ pressure (pres, dbar) the potential 
 ! temperature (Theta, degC) converted to the reference pressure
 ! (RPres, dbar). A Runge-Kutta procedure of the fourth order is used.
 !

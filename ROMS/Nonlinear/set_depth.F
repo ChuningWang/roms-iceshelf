@@ -179,8 +179,8 @@
         DO j=JstrT,JendT
           DO i=IstrT,IendT
 # if defined ICESHELF && defined ICESHELF_MORPH
-            zice(i,j)=zice(i,j)-iceshelf_draft(i,j,nstp)                &
-     &                         +iceshelf_draft(i,j,nnew)
+            zice(i,j)=MAX(zice(i,j)-iceshelf_draft(i,j,nstp)            &
+     &                             +iceshelf_draft(i,j,nnew), 0.0_r8)
 # endif
 # if defined SEDIMENT && defined SED_MORPH
             h(i,j)=h(i,j)-bed_thick(i,j,nstp)+bed_thick(i,j,nnew)
@@ -200,7 +200,7 @@
             DO i=IstrT,IendT
               hwater=h(i,j)
 # ifdef ICESHELF
-              hwater=hwater-ABS(zice(i,j))
+              hwater=hwater-zice(i,j)
 # endif
               hinv=1.0_r8/hwater
               z_w0=cff_w+cff1_w*hwater
@@ -208,8 +208,8 @@
               z_r0=cff_r+cff1_r*hwater
               z_r(i,j,k)=z_r0+Zt_avg1(i,j)*(1.0_r8+z_r0*hinv)
 # ifdef ICESHELF
-              z_w(i,j,k)=z_w(i,j,k)-ABS(zice(i,j))
-              z_r(i,j,k)=z_r(i,j,k)-ABS(zice(i,j))
+              z_w(i,j,k)=z_w(i,j,k)-zice(i,j)
+              z_r(i,j,k)=z_r(i,j,k)-zice(i,j)
 # endif
               Hz(i,j,k)=z_w(i,j,k)-z_w(i,j,k-1)
             END DO
@@ -231,8 +231,8 @@
         DO j=JstrT,JendT
           DO i=IstrT,IendT
 # if defined ICESHELF && defined ICESHELF_MORPH
-            zice(i,j)=zice(i,j)-iceshelf_draft(i,j,nstp)                &
-     &                         +iceshelf_draft(i,j,nnew)
+            zice(i,j)=MAX(zice(i,j)-iceshelf_draft(i,j,nstp)            &
+     &                             +iceshelf_draft(i,j,nnew), 0.0_r8)
 # endif
 # if defined SEDIMENT && defined SED_MORPH
             h(i,j)=h(i,j)-bed_thick(i,j,nstp)+bed_thick(i,j,nnew)
@@ -252,7 +252,7 @@
             DO i=IstrT,IendT
               hwater=h(i,j)
 # ifdef ICESHELF
-              hwater=hwater-ABS(zice(i,j))
+              hwater=hwater-zice(i,j)
 # endif
               hinv=1.0_r8/(hc(ng)+hwater)
               cff2_r=(cff_r+cff1_r*hwater)*hinv
@@ -261,8 +261,8 @@
               z_w(i,j,k)=Zt_avg1(i,j)+(Zt_avg1(i,j)+hwater)*cff2_w
               z_r(i,j,k)=Zt_avg1(i,j)+(Zt_avg1(i,j)+hwater)*cff2_r
 # ifdef ICESHELF
-              z_w(i,j,k)=z_w(i,j,k)-ABS(zice(i,j))
-              z_r(i,j,k)=z_r(i,j,k)-ABS(zice(i,j))
+              z_w(i,j,k)=z_w(i,j,k)-zice(i,j)
+              z_r(i,j,k)=z_r(i,j,k)-zice(i,j)
 # endif
               Hz(i,j,k)=z_w(i,j,k)-z_w(i,j,k-1)
             END DO
@@ -451,7 +451,7 @@
             DO i=IstrT,IendT
               hwater=h(i,j)
 # ifdef ICESHELF
-              hwater=hwater-ABS(zice(i,j))
+              hwater=hwater-zice(i,j)
 # endif
               hinv=1.0_r8/hwater
               z_w0=cff_w+cff1_w*hwater
@@ -459,8 +459,8 @@
               z_r0=cff_r+cff1_r*hwater
               z_r(i,j,k)=z_r0+zeta0*(1.0_r8+z_r0*hinv)
 # ifdef ICESHELF
-              z_w(i,j,k)=z_w(i,j,k)-ABS(zice(i,j))
-              z_r(i,j,k)=z_r(i,j,k)-ABS(zice(i,j))
+              z_w(i,j,k)=z_w(i,j,k)-zice(i,j)
+              z_r(i,j,k)=z_r(i,j,k)-zice(i,j)
 # endif
             END DO
           END DO
@@ -492,7 +492,7 @@
             DO i=IstrT,IendT
               hwater=h(i,j)
 # ifdef ICESHELF
-              hwater=hwater-ABS(zice(i,j))
+              hwater=hwater-zice(i,j)
 # endif
               hinv=1.0_r8/(hc(ng)+hwater)
               cff2_r=(cff_r+cff1_r*hwater)*hinv
@@ -501,8 +501,8 @@
               z_w(i,j,k)=zeta0+(zeta0+hwater)*cff2_w
               z_r(i,j,k)=zeta0+(zeta0+hwater)*cff2_r
 # ifdef ICESHELF
-              z_w(i,j,k)=z_w(i,j,k)-ABS(zice(i,j))
-              z_r(i,j,k)=z_r(i,j,k)-ABS(zice(i,j))
+              z_w(i,j,k)=z_w(i,j,k)-zice(i,j)
+              z_r(i,j,k)=z_r(i,j,k)-zice(i,j)
 # endif
             END DO
           END DO
@@ -646,7 +646,7 @@
           DO j=JstrT,JendT
             hwater=h(i,j)
 #  ifdef ICESHELF
-            hwater=hwater-ABS(zice(i,j))
+            hwater=hwater-zice(i,j)
 #  endif
             hinv=1.0_r8/hwater
             Zw(0)=-h(i,j)
@@ -656,7 +656,7 @@
               z_w0=cff_w+cff1_w*hwater
               Zw(k)=z_w0+BOUNDARY(ng)%zeta_west(j)*(1.0_r8+z_w0*hinv)
 #  ifdef ICESHELF
-              Zw(k)=Zw(k)-ABS(zice(i,j))
+              Zw(k)=Zw(k)-zice(i,j)
 #  endif
               Hz_bry(j,k,iwest)=Zw(k)-Zw(k-1)
             END DO
@@ -669,7 +669,7 @@
           DO j=JstrT,JendT
             hwater=h(i,j)
 #  ifdef ICESHELF
-            hwater=hwater-ABS(zice(i,j))
+            hwater=hwater-zice(i,j)
 #  endif
             hinv=1.0_r8/hwater
             Zw(0)=-h(i,j)
@@ -679,7 +679,7 @@
               z_w0=cff_w+cff1_w*hwater
               Zw(k)=z_w0+BOUNDARY(ng)%zeta_east(j)*(1.0_r8+z_w0*hinv)
 #  ifdef ICESHELF
-              Zw(k)=Zw(k)-ABS(zice(i,j))
+              Zw(k)=Zw(k)-zice(i,j)
 #  endif
               Hz_bry(j,k,ieast)=Zw(k)-Zw(k-1)
             END DO
@@ -692,7 +692,7 @@
           DO i=IstrT,IendT
             hwater=h(i,j)
 #  ifdef ICESHELF
-            hwater=hwater-ABS(zice(i,j))
+            hwater=hwater-zice(i,j)
 #  endif
             hinv=1.0_r8/hwater
             Zw(0)=-h(i,j)
@@ -702,7 +702,7 @@
               z_w0=cff_w+cff1_w*hwater
               Zw(k)=z_w0+BOUNDARY(ng)%zeta_south(i)*(1.0_r8+z_w0*hinv)
 #  ifdef ICESHELF
-              Zw(k)=Zw(k)-ABS(zice(i,j))
+              Zw(k)=Zw(k)-zice(i,j)
 #  endif
               Hz_bry(i,k,isouth)=Zw(k)-Zw(k-1)
             END DO
@@ -715,7 +715,7 @@
           DO i=IstrT,IendT
             hwater=h(i,j)
 #  ifdef ICESHELF
-            hwater=hwater-ABS(zice(i,j))
+            hwater=hwater-zice(i,j)
 #  endif
             hinv=1.0_r8/hwater
             Zw(0)=-h(i,j)
@@ -725,7 +725,7 @@
               z_w0=cff_w+cff1_w*hwater
               Zw(k)=z_w0+BOUNDARY(ng)%zeta_north(i)*(1.0_r8+z_w0*hinv)
 #  ifdef ICESHELF
-              Zw(k)=Zw(k)-ABS(zice(i,j))
+              Zw(k)=Zw(k)-zice(i,j)
 #  endif
               Hz_bry(i,k,inorth)=Zw(k)-Zw(k-1)
             END DO
@@ -751,7 +751,7 @@
           DO j=JstrT,JendT
             hwater=h(i,j)
 #  ifdef ICESHELF
-            hwater=hwater-ABS(zice(i,j))
+            hwater=hwater-zice(i,j)
 #  endif
             hinv=1.0_r8/(hc(ng)+hwater)
             Zw(0)=-h(i,j)
@@ -762,7 +762,7 @@
               Zw(k)=BOUNDARY(ng)%zeta_west(j)+                          &
      &              (BOUNDARY(ng)%zeta_west(j)+hwater)*cff2_w
 #  ifdef ICESHELF
-              Zw(k)=Zw(k)-ABS(zice(i,j))
+              Zw(k)=Zw(k)-zice(i,j)
 #  endif
               Hz_bry(j,k,iwest)=Zw(k)-Zw(k-1)
             END DO
@@ -775,7 +775,7 @@
           DO j=JstrT,JendT
             hwater=h(i,j)
 #  ifdef ICESHELF
-            hwater=hwater-ABS(zice(i,j))
+            hwater=hwater-zice(i,j)
 #  endif
             hinv=1.0_r8/(hc(ng)+hwater)
             Zw(0)=-h(i,j)
@@ -786,7 +786,7 @@
               Zw(k)=BOUNDARY(ng)%zeta_east(j)+                          &
      &              (BOUNDARY(ng)%zeta_east(j)+hwater)*cff2_w
 #  ifdef ICESHELF
-              Zw(k)=Zw(k)-ABS(zice(i,j))
+              Zw(k)=Zw(k)-zice(i,j)
 #  endif
               Hz_bry(j,k,ieast)=Zw(k)-Zw(k-1)
             END DO
@@ -799,7 +799,7 @@
           DO i=IstrT,IendT
             hwater=h(i,j)
 #  ifdef ICESHELF
-            hwater=hwater-ABS(zice(i,j))
+            hwater=hwater-zice(i,j)
 #  endif
             hinv=1.0_r8/(hc(ng)+hwater)
             Zw(0)=-h(i,j)
@@ -810,7 +810,7 @@
               Zw(k)=BOUNDARY(ng)%zeta_south(i)+                         &
      &              (BOUNDARY(ng)%zeta_south(i)+hwater)*cff2_w
 #  ifdef ICESHELF
-              Zw(k)=Zw(k)-ABS(zice(i,j))
+              Zw(k)=Zw(k)-zice(i,j)
 #  endif
               Hz_bry(i,k,isouth)=Zw(k)-Zw(k-1)
             END DO
@@ -823,7 +823,7 @@
           DO i=IstrT,IendT
             hwater=h(i,j)
 #  ifdef ICESHELF
-            hwater=hwater-ABS(zice(i,j))
+            hwater=hwater-zice(i,j)
 #  endif
             hinv=1.0_r8/(hc(ng)+hwater)
             Zw(0)=-h(i,j)
@@ -834,7 +834,7 @@
               Zw(k)=BOUNDARY(ng)%zeta_north(i)+                         &
      &              (BOUNDARY(ng)%zeta_north(i)+hwater)*cff2_w
 #  ifdef ICESHELF
-              Zw(k)=Zw(k)-ABS(zice(i,j))
+              Zw(k)=Zw(k)-zice(i,j)
 #  endif
               Hz_bry(i,k,inorth)=Zw(k)-Zw(k-1)
             END DO

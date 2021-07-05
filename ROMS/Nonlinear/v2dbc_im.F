@@ -242,10 +242,10 @@
 # endif
 # ifdef ICESHELF
               cff1=1.0_r8/(0.5_r8*(GRID(ng)%h(i,Jstr-1)-                &
-     &                             ABS(GRID(ng)%zice(i,Jstr-1))+        &
+     &                             GRID(ng)%zice(i,Jstr-1)+             &
      &                             zeta(i,Jstr-1,know)+                 &
      &                             GRID(ng)%h(i,Jstr  )-                &
-     &                             ABS(GRID(ng)%zice(i,Jstr  ))+        &
+     &                             GRID(ng)%zice(i,Jstr  )+             &
      &                             zeta(i,Jstr  ,know)))
 # else
               cff1=1.0_r8/(0.5_r8*(GRID(ng)%h(i,Jstr-1)+                &
@@ -257,10 +257,10 @@
      &                      FORCES(ng)%bvstr(i,Jstr))
 # ifdef ICESHELF
               Ce=1.0_r8/SQRT(g*0.5_r8*(GRID(ng)%h(i,Jstr-1)-            &
-     &                             ABS(GRID(ng)%zice(i,Jstr-1))+        &
+     &                             GRID(ng)%zice(i,Jstr-1)+             &
      &                             zeta(i,Jstr-1,know)+                 &
      &                             GRID(ng)%h(i,Jstr  )-                &
-     &                             ABS(GRID(ng)%zice(i,Jstr  ))+        &
+     &                             GRID(ng)%zice(i,Jstr  )+             &
      &                             zeta(i,Jstr  ,know)))
 # else
               Ce=1.0_r8/SQRT(g*0.5_r8*(GRID(ng)%h(i,Jstr-1)+            &
@@ -279,9 +279,9 @@
 #endif
 #ifdef ICESHELF
               cff=1.0_r8/(0.5_r8*(GRID(ng)%h(i,Jstr-1)-                 &
-     &                            ABS(GRID(ng)%zice(i,Jstr-1))+         &
+     &                            GRID(ng)%zice(i,Jstr-1)+              &
      &                            GRID(ng)%h(i,Jstr  )-                 &
-     &                            ABS(GRID(ng)%zice(i,Jstr  ))))
+     &                            GRID(ng)%zice(i,Jstr  )))
 #else
               cff=1.0_r8/(0.5_r8*(GRID(ng)%h(i,Jstr-1)+                 &
      &                            zeta(i,Jstr-1,know)+                  &
@@ -442,10 +442,10 @@
 #endif
 #ifdef ICESHELF
               cff=1.0_r8/(0.5_r8*(GRID(ng)%h(i,Jstr-1)-                 &
-     &                            ABS(GRID(ng)%zice(i,Jstr-1))+         &
+     &                            GRID(ng)%zice(i,Jstr-1)+              &
      &                            zeta(i,Jstr-1,know)+                  &
      &                            GRID(ng)%h(i,Jstr  )-                 &
-     &                            ABS(GRID(ng)%zice(i,Jstr  ))+         &
+     &                            GRID(ng)%zice(i,Jstr  )+              &
      &                            zeta(i,Jstr  ,know)))
 #else
               cff=1.0_r8/(0.5_r8*(GRID(ng)%h(i,Jstr-1)+                 &
@@ -625,10 +625,10 @@
 # endif
 # ifdef ICESHELF
               cff1=1.0_r8/(0.5_r8*(GRID(ng)%h(i,Jend  )-                &
-     &                             ABS(GRID(ng)%zice(i,Jend  ))+        &
+     &                             GRID(ng)%zice(i,Jend  )+             &
      &                             zeta(i,Jend  ,know)+                 &
      &                             GRID(ng)%h(i,Jend+1)-                &
-     &                             ABS(GRID(ng)%zice(i,Jend+1))+        &
+     &                             GRID(ng)%zice(i,Jend+1)+             &
      &                             zeta(i,Jend+1,know)))
 # else
               cff1=1.0_r8/(0.5_r8*(GRID(ng)%h(i,Jend  )+                &
@@ -640,10 +640,10 @@
      &                      FORCES(ng)%bvstr(i,Jend+1))
 # ifdef ICESHELF
               Ce=1.0_r8/SQRT(g*0.5_r8*(GRID(ng)%h(i,Jend+1)-            &
-     &                                 ABS(GRID(ng)%zice(i,Jend+1))+    &
+     &                                 GRID(ng)%zice(i,Jend+1)+         &
      &                                 zeta(i,Jend+1,know)+             &
      &                                 GRID(ng)%h(i,Jend  )-            &
-     &                                 ABS(GRID(ng)%zice(i,Jend  ))+    &
+     &                                 GRID(ng)%zice(i,Jend  )+         &
      &                                 zeta(i,Jend  ,know)))
 # else
               Ce=1.0_r8/SQRT(g*0.5_r8*(GRID(ng)%h(i,Jend+1)+            &
@@ -662,9 +662,9 @@
 #endif
 #ifdef ICESHELF
               cff=1.0_r8/(0.5_r8*(GRID(ng)%h(i,Jend  )-                 &
-     &                            ABS(GRID(ng)%zice(i,Jend  ))+         &
+     &                            GRID(ng)%zice(i,Jend  )+              &
      &                            GRID(ng)%h(i,Jend+1)-                 &
-     &                            ABS(GRID(ng)%zice(i,Jend+1))))
+     &                            GRID(ng)%zice(i,Jend+1)))
 #else
               cff=1.0_r8/(0.5_r8*(GRID(ng)%h(i,Jend  )+                 &
      &                            zeta(i,Jend  ,know)+                  &
@@ -825,10 +825,10 @@
 #endif
 #ifdef ICESHELF
           cff=1.0_r8/(0.5_r8*(GRID(ng)%h(i,Jend  )-                     &
-     &                        ABS(GRID(ng)%zice(i,Jend  ))+             &
+     &                        GRID(ng)%zice(i,Jend  )+                  &
      &                        zeta(i,Jend  ,know)+                      &
      &                        GRID(ng)%h(i,Jend+1)-                     &
-     &                        ABS(GRID(ng)%zice(i,Jend+1))+             &
+     &                        GRID(ng)%zice(i,Jend+1)+                  &
      &                        zeta(i,Jend+1,know)))
 #else
               cff=1.0_r8/(0.5_r8*(GRID(ng)%h(i,Jend  )+                 &
@@ -990,9 +990,9 @@
      &                         GRID(ng)%pm(Istr,j  ))
 #ifdef ICESHELF
               cff1=SQRT(g*0.5_r8*(GRID(ng)%h(Istr,j-1)-                 &
-     &                            ABS(GRID(ng)%zice(Istr,j-1))+         &
+     &                            GRID(ng)%zice(Istr,j-1)+              &
      &                            GRID(ng)%h(Istr,j  )-                 &
-     &                            ABS(GRID(ng)%zice(Istr,j  ))))
+     &                            GRID(ng)%zice(Istr,j  )))
 #else
               cff1=SQRT(g*0.5_r8*(GRID(ng)%h(Istr,j-1)+                 &
      &                            zeta(Istr,j-1,know)+                  &
@@ -1145,9 +1145,9 @@
      &                         GRID(ng)%pm(Iend,j  ))
 #ifdef ICESHELF
               cff1=SQRT(g*0.5_r8*(GRID(ng)%h(Iend,j-1)-                 &
-     &                            ABS(GRID(ng)%zice(Iend,j-1))+         &
+     &                            GRID(ng)%zice(Iend,j-1)+              &
      &                            GRID(ng)%h(Iend,j  )-                 &
-     &                            ABS(GRID(ng)%zice(Iend,j  ))))
+     &                            GRID(ng)%zice(Iend,j  )))
 #else
               cff1=SQRT(g*0.5_r8*(GRID(ng)%h(Iend,j-1)+                 &
      &                            zeta(Iend,j-1,know)+                  &

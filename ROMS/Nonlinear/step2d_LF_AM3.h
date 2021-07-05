@@ -514,7 +514,7 @@
       DO j=JstrV-2,Jendp2
         DO i=IstrU-2,Iendp2
 #  ifdef ICESHELF
-          hw(i,j)=h(i,j)+zice(i,j)
+          hw(i,j)=h(i,j)-zice(i,j)
           Drhs(i,j)=zeta(i,j,krhs)+hw(i,j)
 #  else
           Drhs(i,j)=zeta(i,j,krhs)+h(i,j)
@@ -549,7 +549,7 @@
       DO j=JstrVm2-1,Jendp2
         DO i=IstrUm2-1,Iendp2
 #  ifdef ICESHELF
-          hw(i,j)=h(i,j)+zice(i,j)
+          hw(i,j)=h(i,j)-zice(i,j)
           Drhs(i,j)=zeta(i,j,krhs)+hw(i,j)
 #  else
           Drhs(i,j)=zeta(i,j,krhs)+h(i,j)

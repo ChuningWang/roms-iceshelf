@@ -253,19 +253,16 @@
           cff2=0.5_r8*(rho(i,j,N(ng))-rho(i,j,N(ng)-1))*                &
      &         (z_w(i,j,N(ng))-z_r(i,j,N(ng)))*cff1
 #ifdef ICESHELF
-          P(i,j,N(ng))=GRho0*(z_w(i,j,N(ng))-zice(i,j))-                &
-     &                 GRho*(rho(i,j,N(ng))+0.5_r8*drhodz*zice(i,j))*   &
-     &                 zice(i,j)+                                       &
-     &                 GRho*(rho(i,j,N(ng))+cff2)*                      &
-     &                 (z_w(i,j,N(ng))-z_r(i,j,N(ng)))
+          P(i,j,N(ng))=GRho0*(z_w(i,j,N(ng))+zice(i,j))+                &
+     &      GRho*(rho(i,j,N(ng))-0.5_r8*drhodz*zice(i,j))*zice(i,j)+    &
 #else
           P(i,j,N(ng))=GRho0*z_w(i,j,N(ng))+                            &
+#endif
 #ifdef ATM_PRESS
      &                 fac*(Pair(i,j)-OneAtm)+                          &
 #endif
      &                 GRho*(rho(i,j,N(ng))+cff2)*                      &
      &                 (z_w(i,j,N(ng))-z_r(i,j,N(ng)))
-#endif
         END DO
         DO k=N(ng)-1,1,-1
           DO i=IstrU-1,Iend
