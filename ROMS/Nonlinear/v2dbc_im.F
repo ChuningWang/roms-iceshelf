@@ -824,12 +824,12 @@
               bry_cor=0.0_r8
 #endif
 #ifdef ICESHELF
-          cff=1.0_r8/(0.5_r8*(GRID(ng)%h(i,Jend  )-                     &
-     &                        GRID(ng)%zice(i,Jend  )+                  &
-     &                        zeta(i,Jend  ,know)+                      &
-     &                        GRID(ng)%h(i,Jend+1)-                     &
-     &                        GRID(ng)%zice(i,Jend+1)+                  &
-     &                        zeta(i,Jend+1,know)))
+              cff=1.0_r8/(0.5_r8*(GRID(ng)%h(i,Jend  )-                 &
+     &                            GRID(ng)%zice(i,Jend  )+              &
+     &                            zeta(i,Jend  ,know)+                  &
+     &                            GRID(ng)%h(i,Jend+1)-                 &
+     &                            GRID(ng)%zice(i,Jend+1)+              &
+     &                            zeta(i,Jend+1,know)))
 #else
               cff=1.0_r8/(0.5_r8*(GRID(ng)%h(i,Jend  )+                 &
      &                            zeta(i,Jend  ,know)+                  &
