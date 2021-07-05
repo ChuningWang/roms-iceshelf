@@ -257,11 +257,11 @@
      &                      FORCES(ng)%bvstr(i,Jstr))
 # ifdef ICESHELF
               Ce=1.0_r8/SQRT(g*0.5_r8*(GRID(ng)%h(i,Jstr-1)-            &
-     &                             GRID(ng)%zice(i,Jstr-1)+             &
-     &                             zeta(i,Jstr-1,know)+                 &
-     &                             GRID(ng)%h(i,Jstr  )-                &
-     &                             GRID(ng)%zice(i,Jstr  )+             &
-     &                             zeta(i,Jstr  ,know)))
+     &                                 GRID(ng)%zice(i,Jstr-1)+         &
+     &                                 zeta(i,Jstr-1,know)+             &
+     &                                 GRID(ng)%h(i,Jstr  )-            &
+     &                                 GRID(ng)%zice(i,Jstr  )+         &
+     &                                 zeta(i,Jstr  ,know)))
 # else
               Ce=1.0_r8/SQRT(g*0.5_r8*(GRID(ng)%h(i,Jstr-1)+            &
      &                                 zeta(i,Jstr-1,know)+             &
