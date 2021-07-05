@@ -194,7 +194,7 @@
 # if defined ICESHELF && defined ICESHELF_MORPH
             IF(k.eq.N(ng)) THEN
               W(i,j,N(ng))=                                             &
-     &          W(i,j,N(ng))-cff1*(iceshelf_draft(i,j,nstp)-            &
+     &          W(i,j,N(ng))+cff1*(iceshelf_draft(i,j,nstp)-            &
      &          iceshelf_draft(i,j,nnew))*omn(i,j)
             END IF
 # endif            
