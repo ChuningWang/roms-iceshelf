@@ -1253,8 +1253,8 @@
 ! *********************************************************************
       REAL FUNCTION thetaa(Sal,Temp,Pres,RPres)
 !
-! Calculates from the salinity (sal, psu), the in-situ temperature 
-! (Temp, degC) and the in-situ pressure (pres, dbar) the potential 
+! Calculates from the salinity (sal, psu), the in-situ temperature
+! (Temp, degC) and the in-situ pressure (pres, dbar) the potential
 ! temperature (Theta, degC) converted to the reference pressure
 ! (RPres, dbar). A Runge-Kutta procedure of the fourth order is used.
 !
