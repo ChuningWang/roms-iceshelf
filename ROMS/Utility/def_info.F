@@ -6490,7 +6490,7 @@
         Vinfo(14)='bath, scalar'
         Vinfo(22)='coordinates'
         Aval(5)=REAL(r2dvar,r8)
-        IF (ncid.eq.STA(ng)%ncid) THEN
+        IF (FileH.eq.ABS(STA(ng)%pioFile%fh)) THEN
           status=def_var(ng, model, pioFile, pioVar, PIO_TYPE,          &
      &                   1, (/stadim/), Aval, Vinfo, ncname)
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
