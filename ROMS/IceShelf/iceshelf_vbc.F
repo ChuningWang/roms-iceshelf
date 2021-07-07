@@ -275,12 +275,9 @@
 !
 !  Local variable declarations.
 !
-!      integer :: IstrR, IENDR, JstrR, JendR, IstrU, JstrV
       integer :: i, j, itrc
       real(r8) :: Pradj, Scadj, Cdrt, cp_i
-!      real(r8) :: a, b, c, Pr, Sc, Cd, small
-!      real(r8) :: cp_w, ustar, visc, turb, TFb, rho_i
-      real(r8) :: Sm, Tm, rhoi_on_rho0, TFb, turb
+      real(r8) :: Sm, Tm, rhoi_on_rho0, TFb, turb, TFm
 # ifdef ICESHELF_VBC_HFPROPTOM
       real(r8) :: Ex1,Ex2,Ex3,Ex4,Ex5,Ex6,Ep1,Ep2,Ep3,Ep31,Ep4,Ep5
       real(r8) :: Sr1,Sr2,Sf1,Sf2,Tf1,Tf2,rho_r
@@ -635,10 +632,12 @@
             stflx(i,j,itemp)=(gammaT(i,j)-rho_r*m(i,j))*(Tb(i,j)-Tm)
             stflx(i,j,isalt)=(gammaS(i,j)-rho_r*m(i,j))*(Sb(i,j)-Sm)
 #  else
+#   ifdef ICESHELF_3EQN_OLD
+!
             TFb = a*Sm + b - c*zice(i,j)
             Tstar(i,j) = Tm - TFb
-            mflag= 0.5*(1 + SIGN(1.0_r8,Tm-TFb))
-            TFi = (1 - mflag)*a*Si + b - c*zice(i,j)
+            mflag = 0.5_r8*(1.0_r8 + SIGN(1.0_r8,Tstar(i,j)))
+            TFi = (1.0_r8 - mflag)*a*Si + b - c*zice(i,j)
 !
 !  Calculate coefficents in quadratic to be solved:
 !
@@ -666,6 +665,47 @@
 !
 !            write(6,*) gammaT,gammaS,Tb,Sb,Tm,Sm,rhoi_on_rho0
 !
+#   else
+!
+!  Melting temperature
+!
+            TFm = a*Sm + b - c*zice(i,j)
+            Tstar(i,j) = Tm - TFm
+!
+!  3-EQ formula:
+!
+            IF (Tm.gt.TFm) THEN
+!
+!  Melting, use iceshelf temperature
+!
+              cff1 = a*(gammaT(i,j)*cp_w-gammaS(i,j)*cp_i)
+              cff2 = gammaS(i,j)*cp_i*(a*sM-b-c*zice(i,j) +             &
+     &                                 Ti - (L/cp_i)) -                 &
+     &               gammaT(i,j)*cp_w*(Tm-b-c*zice(i,j)+a*Si)
+              cff3 = gammmS(i,j)*Sm*(cp_i*(b+c*zice(i,j)-Ti) + L) +     &
+     &               gammaT(i,j)*Si*cp_w*(Tm-b-c*zice(i,j))
+!
+              Sb(i,j) = -1.0_r8*(cff2 + SQRT(cff2**2-4.0*cff1*cff3)) /  &
+     &                  (2.0_r8*cff1)
+              Tb(i,j) = a*Sb(i,j) + b + c*zice(i,j)
+              m(i,j) = gammaS(i,j)*(Sm-Sb(i,j))/Sb(i,j)
+            ELSE
+!
+!  Freezing, use boundary layer temperature
+!
+              here
+              cff1 = a*gammaT(i,j)*cp_w
+              cff2 = -1.0_r8*gammaS(i,j)*L -                            &
+     &               gammaT(i,j)*cp_w*(Tm-b-c*zice(i,j)+a*Si)
+              cff3 = gammmS(i,j)*Sm*L +                                 &
+     &               gammaT(i,j)*Si*cp_w*(Tm-b-c*zice(i,j))
+!
+              Sb(i,j) = -1.0_r8*(cff2 + SQRT(cff2**2-4.0*cff1*cff3)) /  &
+     &                  (2.0_r8*cff1)
+              Tb(i,j) = a*Sb(i,j) + b + c*zice(i,j)
+              m(i,j) = gammaS(i,j)*(Sm-Sb(i,j))/Sb(i,j)
+            END IF
+#   endif
 #   ifdef SURFACE_OVERFLUX_FIX
 !
 !  Addition by Eva Cougnon 2016
