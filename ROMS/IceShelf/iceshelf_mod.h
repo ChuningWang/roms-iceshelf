@@ -48,9 +48,5 @@
       real(r8), parameter :: Tmax = 0.5_r8 !-1.85_r8
       real(r8), parameter :: Tmin = -1.85_r8
       real(r8) :: tyear, sfcTemp, sfcSalt
-#   else
-      real(r8), parameter :: trelax = 10.0_r8 * 86400.0_r8 !1 day
-      real(r8), parameter :: sfcTemp = -1.85_r8
-      real(r8), parameter :: sfcSalt = 34.5_r8
 #   endif
       real(r8), parameter :: eps = 1.0E-14_r8
