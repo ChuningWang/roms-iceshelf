@@ -7843,7 +7843,7 @@
 !
         IF (get_var(idDraft)) THEN
           foundit=find_string(var_name, n_var, TRIM(Vname(1,idDraft)),  &
-     &                        varid)
+     &                        vindex)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
             my_pioVar%gtype=r2dvar
