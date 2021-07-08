@@ -39,14 +39,4 @@
       real(r8), parameter :: Ti = -20.0_r8
       real(r8), parameter :: Si = 0.0_r8
 #  endif
-#  ifdef ANA_SEAICE
-      real(r8), parameter :: trelax = 3.0_r8 * 86400.0_r8 ! 3 days
-      real(r8), parameter :: saltMax = 34.6_r8 !34.5_r8
-      real(r8), parameter :: saltMin = 34.5_r8
-      real(r8), parameter :: sRateInc = 0.0085_r8
-      real(r8), parameter :: sRateDec = 0.0283333_r8
-      real(r8), parameter :: Tmax = 0.5_r8 !-1.85_r8
-      real(r8), parameter :: Tmin = -1.85_r8
-      real(r8) :: tyear, sfcTemp, sfcSalt
-#   endif
       real(r8), parameter :: eps = 1.0E-14_r8

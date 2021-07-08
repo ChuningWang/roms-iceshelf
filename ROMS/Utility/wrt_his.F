@@ -42,8 +42,7 @@
       USE mod_sediment
 #endif
 #if defined ICESHELF
-      USE mod_iceshelfvar
-      USE mod_iceshelf
+      USE mod_iceshelf, ONLY : ICESHELFVAR
 #endif
       USE mod_stepping
 !
@@ -337,8 +336,7 @@
         END IF
       END IF
 # endif
-#endif
-#if defined SURFACE_OVERFLUX_FIX
+# if defined SURFACE_OVERFLUX_FIX
       IF (Hout(idssflxSOF,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
@@ -346,9 +344,9 @@
      &                     HIS(ng)%Vid(idssflxSOF),                     &
      &                     HIS(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
-# ifdef MASKING
+#  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
-# endif
+#  endif
      &                     ICESHELFVAR(ng) % ssflxSOF,                  &
      &                     SetFillVal = .FALSE.)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
@@ -367,9 +365,9 @@
      &                     HIS(ng)%Vid(idshflxSOF),                     &
      &                     HIS(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
-# ifdef MASKING
+#  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
-# endif
+#  endif
      &                     ICESHELFVAR(ng) % shflxSOF,                  &
      &                     SetFillVal = .FALSE.)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
@@ -381,6 +379,7 @@
           RETURN
         END IF
       END IF
+# endif
 #endif
 #if defined SEDIMENT && defined SED_MORPH
 !
@@ -3093,8 +3092,7 @@
         END IF
       END IF
 #  endif
-# endif
-# if defined SURFACE_OVERFLUX_FIX
+#  if defined SURFACE_OVERFLUX_FIX
       IF (Hout(idssflxSOF,ng)) THEN
         scale=1.0_dp
         IF (HIS(ng)%pioVar(idssflxSOF)%dkind.eq.PIO_double) THEN
@@ -3107,9 +3105,9 @@
      &                     HIS(ng)%Rindex,                              &
      &                     ioDesc,                                      &
      &                     LBi, UBi, LBj, UBj, scale,                   &
-#  ifdef MASKING
+#   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
-#  endif
+#   endif
      &                     ICESHELFVAR(ng) % ssflxSOF,                  &
      &                     SetFillVal = .FALSE.)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
@@ -3133,9 +3131,9 @@
      &                     HIS(ng)%Rindex,                              &
      &                     ioDesc,                                      &
      &                     LBi, UBi, LBj, UBj, scale,                   &
-#  ifdef MASKING
+#   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
-#  endif
+#   endif
      &                     ICESHELFVAR(ng) % shflxSOF,                  &
      &                     SetFillVal = .FALSE.)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
@@ -3147,6 +3145,7 @@
           RETURN
         END IF
       END IF
+#  endif
 # endif
 # if defined SEDIMENT && defined SED_MORPH
 !

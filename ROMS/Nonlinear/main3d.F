@@ -110,7 +110,7 @@
 # endif
       USE set_vbc_mod,          ONLY : set_vbc
 # ifdef ICESHELF
-      USE iceshelf_mod,         ONLY : iceshelf
+      USE iceshelf_mod,         ONLY : iceshelf_vbc
 # endif
       USE set_zeta_mod,         ONLY : set_zeta
       USE step2d_mod,           ONLY : step2d
@@ -390,7 +390,7 @@
 # endif
                 CALL set_vbc (ng, tile)
 # ifdef ICESHELF
-                CALL iceshelf (ng, tile)
+                CALL iceshelf_vbc (ng, tile)
 # endif
 # if defined SSH_TIDES || defined UV_TIDES
                 CALL set_tides (ng, tile)

@@ -1441,8 +1441,7 @@
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Hout(idDraft,1:Ngrids)=Lswitch(1:Ngrids)
 # endif
-#endif
-#if defined SURFACE_OVERFLUX_FIX
+# if defined SURFACE_OVERFLUX_FIX
             CASE ('Hout(idssflxSOF)')
               IF (idssflxSOF.eq.0) THEN
                 IF (Master) WRITE (out,280) 'idssflxSOF'
@@ -1459,6 +1458,7 @@
               END IF
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Hout(idshflxSOF,1:Ngrids)=Lswitch(1:Ngrids)
+# endif
 #endif
 #if defined SEDIMENT && defined SED_MORPH
             CASE ('Hout(idBath)')
@@ -2384,14 +2384,14 @@
             CASE ('Aout(idismr)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Aout(idismr,1:Ngrids)=Lswitch(1:Ngrids)
-# endif
-# if defined SURFACE_OVERFLUX_FIX
+#  if defined SURFACE_OVERFLUX_FIX
             CASE ('Aout(idssflxSOF)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Aout(idssflxSOF,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Aout(idshflxSOF)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Aout(idshflxSOF,1:Ngrids)=Lswitch(1:Ngrids)
+#  endif
 # endif
             CASE ('Aout(idu2dE)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
@@ -5297,8 +5297,7 @@
      &         'Hout(idDraft)',                                         &
      &         'Write out time-dependent ice draft.'
 # endif
-#endif
-#if defined SURFACE_OVERFLUX_FIX
+# if defined SURFACE_OVERFLUX_FIX
             IF (Hout(idssflxSOF,ng)) WRITE (out,170)                    &
      &         Hout(idssflxSOF,ng),                                     &
      &         'Hout(idssflxSOF)',                                      &
@@ -5307,6 +5306,7 @@
      &         Hout(idshflxSOF,ng),                                     &
      &         'Hout(idshflxSOF)',                                      &
      &         'Write out ice shelf melt rate.'
+# endif
 #endif
 #if defined SEDIMENT && defined SED_MORPH
             IF (Hout(idBath,ng)) WRITE (out,170) Hout(idBath,ng),       &
@@ -5924,8 +5924,7 @@
             IF (Aout(idismr,ng)) WRITE (out,170) Aout(idismr,ng),       &
      &         'Aout(idismr)',                                          &
      &         'Write out averaged melt rate.'
-# endif
-# if defined SURFACE_OVERFLUX_FIX
+#  if defined SURFACE_OVERFLUX_FIX
             IF (Aout(idssflxSOF,ng)) WRITE (out,170)                    &
      &         Aout(idssflxSOF,ng),                                     &
      &         'Aout(idssflxSOF)',                                      &
@@ -5934,6 +5933,7 @@
      &         Aout(idshflxSOF,ng),                                     &
      &         'Aout(idshflxSOF)',                                      &
      &         'Write out averaged melt rate.'
+#  endif
 # endif
             IF (Aout(idUbar,ng)) WRITE (out,170) Aout(idUbar,ng),       &
      &         'Aout(idUbar)',                                          &

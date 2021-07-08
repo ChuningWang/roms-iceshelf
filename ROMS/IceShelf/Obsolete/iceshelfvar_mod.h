@@ -1,3 +1,4 @@
+#if defined ICESHELF 
 !
 !svn $Id$
 !================================================== Hernan G. Arango ===
@@ -18,7 +19,6 @@
 !
 !  Nonlinear model state.
 !
-#if defined ICESHELF 
 # if defined ICESHELF_3EQN_VBC
         real(r8), pointer :: gammaT(:,:)
         real(r8), pointer :: gammaS(:,:)
@@ -39,7 +39,6 @@
         real(r8), pointer :: iceshelf_dddt(:,:)
 #  endif
 # endif
-#endif
       END TYPE T_ICESHELFVAR
 
       TYPE (T_ICESHELFVAR), allocatable :: ICESHELFVAR(:)
@@ -71,7 +70,6 @@
 !
 !  Nonlinear model state.
 !
-#if defined ICESHELF
 # if defined ICESHELF_3EQN_VBC
       allocate ( ICESHELFVAR(ng) % gammaT(LBi:UBi,LBj:UBj) )
       allocate ( ICESHELFVAR(ng) % gammaS(LBi:UBi,LBj:UBj) )
@@ -92,7 +90,6 @@
       allocate ( ICESHELFVAR(ng) % iceshelf_dddt(LBi:UBi,LBj:UBj) )
 #  endif
 # endif
-#endif
 
       RETURN
       END SUBROUTINE allocate_iceshelfvar
@@ -163,7 +160,6 @@
 !  Nonlinear model state.
 !
       IF ((model.eq.0).or.(model.eq.iNLM)) THEN
-#if defined ICESHELF
         DO j=Jmin,Jmax
           DO i=Imin,Imax
 # if defined ICESHELF_3EQN_VBC 
@@ -189,7 +185,7 @@
 # endif
           END DO
         END DO
-#endif
       END IF
       RETURN
       END SUBROUTINE initialize_iceshelfvar
+#endif

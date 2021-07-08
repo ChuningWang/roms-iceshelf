@@ -544,9 +544,8 @@
      &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname)
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
-# endif
 
-# ifdef SURFACE_OVERFLUX_FIX
+#  ifdef SURFACE_OVERFLUX_FIX
 !
 !  Define ice shelf surface overflux.
 !
@@ -556,9 +555,9 @@
           Vinfo( 3)=Vname(3,idssflxSOF)
           Vinfo(14)=Vname(4,idssflxSOF)
           Vinfo(16)=Vname(1,idtime)
-#  if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
+#   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
-#  endif
+#   endif
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idssflxSOF,ng),r8)
           status=def_var(ng, model, AVG(ng)%ncid,                       &
@@ -572,9 +571,9 @@
           Vinfo( 3)=Vname(3,idshflxSOF)
           Vinfo(14)=Vname(4,idshflxSOF)
           Vinfo(16)=Vname(1,idtime)
-#  if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
+#   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
-#  endif
+#   endif
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idshflxSOF,ng),r8)
           status=def_var(ng, model, AVG(ng)%ncid,                       &
@@ -582,6 +581,7 @@
      &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname)
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
+#  endif
 # endif
 !
 !  Define 2D momentum in the XI-direction.
@@ -2126,14 +2126,14 @@
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idismr))) THEN
             got_var(idismr)=.TRUE.
             AVG(ng)%Vid(idismr)=var_id(i)
-# endif
-# ifdef SURFACE_OVERFLUX_FIX
+#  ifdef SURFACE_OVERFLUX_FIX
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idssflxSOF))) THEN
             got_var(idssflxSOF)=.TRUE.
             AVG(ng)%Vid(idssflxSOF)=var_id(i)
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idshflxSOF))) THEN
             got_var(idshflxSOF)=.TRUE.
             AVG(ng)%Vid(idshflxSOF)=var_id(i)
+#  endif
 # endif
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idUbar))) THEN
             got_var(idUbar)=.TRUE.
@@ -2454,8 +2454,7 @@
           exit_flag=3
           RETURN
         END IF
-# endif
-# ifdef SURFACE_OVERFLUX_FIX
+#  ifdef SURFACE_OVERFLUX_FIX
         IF (.not.got_var(idssflxSOF).and.Aout(idssflxSOF,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idssflxSOF)),      &
      &                                  TRIM(ncname)
@@ -2468,6 +2467,7 @@
           exit_flag=3
           RETURN
         END IF
+#  endif
 # endif
         IF (.not.got_var(idUbar).and.Aout(idUbar,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idUbar)),          &
@@ -3505,9 +3505,8 @@
      &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname)
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
-#  endif
 
-#  ifdef SURFACE_OVERFLUX_FIX
+#   ifdef SURFACE_OVERFLUX_FIX
 !
 !  Define ice shelf melt rate.
 !
@@ -3517,9 +3516,9 @@
           Vinfo( 3)=Vname(3,idssflxSOF)
           Vinfo(14)=Vname(4,idssflxSOF)
           Vinfo(16)=Vname(1,idtime)
-#   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
+#    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
-#   endif
+#    endif
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idssflxSOF,ng),r8)
           AVG(ng)%pioVar(idssflxSOF)%dkind=PIO_FOUT
@@ -3536,9 +3535,9 @@
           Vinfo( 3)=Vname(3,idshflxSOF)
           Vinfo(14)=Vname(4,idshflxSOF)
           Vinfo(16)=Vname(1,idtime)
-#   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
+#    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
-#   endif
+#    endif
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idshflxSOF,ng),r8)
           AVG(ng)%pioVar(idshflxSOF)%dkind=PIO_FOUT
@@ -3549,6 +3548,7 @@
      &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname)
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
+#   endif
 #  endif
 !
 !  Define 2D momentum in the XI-direction.
@@ -5404,8 +5404,7 @@
             AVG(ng)%pioVar(idismr)%vd=var_desc(i)
             AVG(ng)%pioVar(idismr)%dkind=PIO_FOUT
             AVG(ng)%pioVar(idismr)%gtype=r2dvar
-# endif
-# ifdef SURFACE_OVERFLUX_FIX
+#  ifdef SURFACE_OVERFLUX_FIX
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idssflxSOF))) THEN
             got_var(idssflxSOF)=.TRUE.
             AVG(ng)%pioVar(idssflxSOF)%vd=var_desc(i)
@@ -5416,6 +5415,7 @@
             AVG(ng)%pioVar(idshflxSOF)%vd=var_desc(i)
             AVG(ng)%pioVar(idshflxSOF)%dkind=PIO_FOUT
             AVG(ng)%pioVar(idshflxSOF)%gtype=r2dvar
+#  endif
 # endif
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idUbar))) THEN
             got_var(idUbar)=.TRUE.
@@ -5890,8 +5890,7 @@
           exit_flag=3
           RETURN
         END IF
-# endif
-# ifdef SURFACE_OVERFLUX_FIX
+#  ifdef SURFACE_OVERFLUX_FIX
         IF (.not.got_var(idssflxSOF).and.Aout(idssflxSOF,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idssflxSOF)),          &
      &                                  TRIM(ncname)
@@ -5904,6 +5903,7 @@
           exit_flag=3
           RETURN
         END IF
+#  endif
 # endif
         IF (.not.got_var(idUbar).and.Aout(idUbar,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idUbar)),          &

@@ -1,9 +1,9 @@
 #include "cppdefs.h"
-      MODULE mod_iceshelfvar
+      MODULE mod_iceshelf
 
 /*
 ** svn $Id$
-*************************************************** Hernan G. Arango ***
+************************************************************************
 ** Copyright (c) 2002-2013 The ROMS/TOMS Group                        **
 **   Licensed under a MIT/X style license                             **
 **   See License_ROMS.txt                                             **
@@ -21,7 +21,6 @@
 */
 
 #if defined ICESHELF
-# include <iceshelfvar_mod.h>
+# include <iceshelf_mod.h>
 #endif
-
-      END MODULE mod_iceshelfvar
+      END MODULE mod_iceshelf

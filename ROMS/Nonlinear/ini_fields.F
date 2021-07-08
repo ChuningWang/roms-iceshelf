@@ -34,9 +34,6 @@
       USE mod_coupling
 # endif
       USE mod_ocean
-# if defined SOLVE3D && defined ICESHELF
-      USE mod_iceshelfvar
-# endif
 # if defined SOLVE3D && (defined SEDIMENT || defined BBL_MODEL)
       USE mod_sedbed
 # endif
@@ -791,7 +788,7 @@
 # endif
       USE mod_ocean
 # if defined SOLVE3D && defined ICESHELF && defined ICESHELF_MORPH
-      USE mod_iceshelfvar
+      USE mod_iceshelf, ONLY : ICESHELFVAR
 # endif
 # if defined SOLVE3D && defined SEDIMENT && defined SED_MORPH
       USE mod_sedbed
@@ -876,9 +873,6 @@
       USE mod_param
       USE mod_ncparam
       USE mod_scalars
-# if defined ICESHELF && defined ICESHELF_MORPH
-      USE mod_iceshelfvar
-# endif
 # if defined SEDIMENT && defined SED_MORPH
       USE mod_sediment
 # endif

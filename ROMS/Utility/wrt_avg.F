@@ -210,9 +210,9 @@
         status=nf_fwrite2d(ng, iNLM, AVG(ng)%ncid, AVG(ng)%Vid(idismr), &
      &                     AVG(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
-# ifdef MASKING
+#  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
-# endif
+#  endif
      &                     AVERAGE(ng) % avgismr)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
@@ -223,8 +223,7 @@
           RETURN
         END IF
       END IF
-# endif
-# ifdef SURFACE_OVERFLUX_FIX
+#  ifdef SURFACE_OVERFLUX_FIX
       IF (Aout(idssflxSOF,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
@@ -232,9 +231,9 @@
      &                     AVG(ng)%Vid(idssflxSOF),                     &
      &                     AVG(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
-# ifdef MASKING
+#  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
-# endif
+#  endif
      &                     AVERAGE(ng) % avgssflxSOF)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
@@ -252,9 +251,9 @@
      &                     AVG(ng)%Vid(idshflxSOF),                     &
      &                     AVG(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
-# ifdef MASKING
+#  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
-# endif
+#  endif
      &                     AVERAGE(ng) % avgshflxSOF)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
@@ -265,6 +264,7 @@
           RETURN
         END IF
       END IF
+#  endif
 # endif
 !
 !  Write out 2D momentum component (m/s) in the XI-direction.
@@ -2249,8 +2249,7 @@
           RETURN
         END IF
       END IF
-#  endif
-#  ifdef SURFACE_OVERFLUX_FIX
+#   ifdef SURFACE_OVERFLUX_FIX
       IF (Aout(idssflxSOF,ng)) THEN
         scale=1.0_dp
         IF (AVG(ng)%pioVar(idssflxSOF)%dkind.eq.PIO_double) THEN
@@ -2263,9 +2262,9 @@
      &                     AVG(ng)%Rindex,                              &
      &                     ioDesc,                                      &
      &                     LBi, UBi, LBj, UBj, scale,                   &
-#   ifdef MASKING
+#    ifdef MASKING
      &                     GRID(ng) % rmask,                            &
-#   endif
+#    endif
      &                     AVERAGE(ng) % avgssflxSOF)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
@@ -2288,9 +2287,9 @@
      &                     AVG(ng)%Rindex,                              &
      &                     ioDesc,                                      &
      &                     LBi, UBi, LBj, UBj, scale,                   &
-#   ifdef MASKING
+#    ifdef MASKING
      &                     GRID(ng) % rmask,                            &
-#   endif
+#    endif
      &                     AVERAGE(ng) % avgshflxSOF)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
@@ -2301,6 +2300,7 @@
           RETURN
         END IF
       END IF
+#   endif
 #  endif
 !
 !  Write out 2D momentum component (m/s) in the XI-direction.

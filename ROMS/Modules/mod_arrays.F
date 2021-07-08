@@ -40,7 +40,7 @@
 #endif
       USE mod_ocean, ONLY : allocate_ocean, initialize_ocean
 #if defined ICESHELF
-      USE mod_iceshelfvar,                                              &
+      USE mod_iceshelf,                                                 &
      &  ONLY : allocate_iceshelfvar, initialize_iceshelfvar
 #endif
 #if defined SEDIMENT || defined BBL_MODEL

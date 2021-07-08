@@ -2466,7 +2466,7 @@
       USE mod_grid
       USE mod_ocean
 #  if defined ICESHELF && defined ICESHELF_MORPH && defined SOLVE3D
-      USE mod_iceshelfvar
+      USE mod_iceshelf, ONLY : ICESHELFVAR
 #  endif
 #  if defined SEDIMENT && defined SED_MORPH && defined SOLVE3D
       USE mod_sedbed

@@ -120,7 +120,7 @@
       USE mod_ncparam
       USE mod_average
 # ifdef ICESHELF
-      USE mod_iceshelfvar
+      USE mod_iceshelf, ONLY : ICESHELFVAR
 # endif
 # if defined FORWARD_WRITE && defined SOLVE3D
       USE mod_coupling
@@ -308,33 +308,34 @@
             END DO
           END DO
         END IF
-# endif
 
-# ifdef SURFACE_OVERFULX_FIX
+#  ifdef SURFACE_OVERFULX_FIX
         IF (Aout(idssflxSOF,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
               AVERAGE(ng)%avgssflxSOF(i,j)=ICESHELFVAR(ng)%ssflx(i,j)
-#  ifdef WET_DRY
+#   ifdef WET_DRY
               AVERAGE(ng)%avgssflxSOF(i,j)=                             &
      &                                    AVERAGE(ng)%avgssflxSOF(i,j)* &
      &                                    GRID(ng)%rmask_full(i,j)
-#  endif
+#   endif
             END DO
           END DO
         END IF
+
         IF (Aout(idshflxSOF,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
               AVERAGE(ng)%avgshflxSOF(i,j)=ICESHELFVAR(ng)%shflx(i,j)
-#  ifdef WET_DRY
+#   ifdef WET_DRY
               AVERAGE(ng)%avgshflxSOF(i,j)=                             &
      &                                    AVERAGE(ng)%avgshflxSOF(i,j)* &
      &                                    GRID(ng)%rmask_full(i,j)
-#  endif
+#   endif
             END DO
           END DO
         END IF
+#  endif
 # endif
 
         IF (Aout(idUbar,ng)) THEN
@@ -1372,16 +1373,16 @@
             END DO
           END DO
         END IF
-# endif
-# ifdef SURFACE_OVERFLUX_FIX
+
+#  ifdef SURFACE_OVERFLUX_FIX
         IF (Aout(idssflxSOF,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
               AVERAGE(ng)%avgssflxSOF(i,j)=                             &
      &                                   AVERAGE(ng)%avgssflxSOF(i,j)+  &
-#  ifdef WET_DRY
+#   ifdef WET_DRY
      &                                 GRID(ng)%rmask_full(i,j)*        &
-#  endif
+#   endif
      &                                 ICESHELFVAR(ng)%ssflxSOF(i,j)
             END DO
           END DO
@@ -1391,13 +1392,14 @@
             DO i=IstrR,IendR
               AVERAGE(ng)%avgshflxSOF(i,j)=                             &
      &                                   AVERAGE(ng)%avgshflxSOF(i,j)+  &
-#  ifdef WET_DRY
+#   ifdef WET_DRY
      &                                 GRID(ng)%rmask_full(i,j)*        &
-#  endif
+#   endif
      &                                 ICESHELFVAR(ng)%shflxSOF(i,j)
             END DO
           END DO
         END IF
+#  endif
 # endif
 
         IF (Aout(idUbar,ng)) THEN

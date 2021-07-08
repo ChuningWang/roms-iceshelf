@@ -602,8 +602,7 @@
           IF (exit_flag.ne.NoError) RETURN
         END IF
 # endif
-#endif
-#if defined SURFACE_OVERFLUX_FIX
+# if defined SURFACE_OVERFLUX_FIX
 !
 !  Define ice shelf basal melt rate.
 !
@@ -635,6 +634,7 @@
      &                   SetFillVal = .FALSE.)
           IF (exit_flag.ne.NoError) RETURN
         END IF
+# endif
 #endif
 #if defined SEDIMENT && defined SED_MORPH
 !
@@ -2697,14 +2697,14 @@
             got_var(idDraft)=.TRUE.
             HIS(ng)%Vid(idDraft)=var_id(i)
 # endif
-#endif
-#if defined SURFACE_OVERFLUX_FIX
+# if defined SURFACE_OVERFLUX_FIX
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idssflxSOF))) THEN
             got_var(idssflxSOF)=.TRUE.
             HIS(ng)%Vid(idssflxSOF)=var_id(i)
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idshflxSOF))) THEN
             got_var(idshflxSOF)=.TRUE.
             HIS(ng)%Vid(idshflxSOF)=var_id(i)
+# endif
 #endif
 #if defined SEDIMENT && defined SED_MORPH
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idbath))) THEN
@@ -4322,8 +4322,7 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 #  endif
-# endif
-# if defined SURFACE_OVERFLUX_FIX
+#  if defined SURFACE_OVERFLUX_FIX
 !
 !  Define ice shelf basal melt rate.
 !
@@ -4361,6 +4360,7 @@
      &                   SetFillVal = .FALSE.)
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
+#  endif
 # endif
 # if defined SEDIMENT && defined SED_MORPH
 !
@@ -6882,8 +6882,7 @@
             HIS(ng)%pioVar(idDraft)%dkind=PIO_TOUT
             HIS(ng)%pioVar(idDraft)%gtype=r2dvar
 #  endif
-# endif
-# if defined SURFACE_OVERFLUX_FIX
+#  if defined SURFACE_OVERFLUX_FIX
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idssflxSOF))) THEN
             got_var(idssflxSOF)=.TRUE.
             HIS(ng)%Vid(idssflxSOF)=var_id(i)
@@ -6895,6 +6894,7 @@
             HIS(ng)%pioVar(idshflxSOF)%vd=var_desc(i)
             HIS(ng)%pioVar(idshflxSOF)%dkind=PIO_TOUT
             HIS(ng)%pioVar(idshflxSOF)%gtype=r2dvar
+#  endif
 # endif
 # if defined SEDIMENT && defined SED_MORPH
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idbath))) THEN
