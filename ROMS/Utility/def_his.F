@@ -4214,8 +4214,7 @@
 !
           status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
      &                   HIS(ng)%pioVar(idismr)%vd,                     &
-     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
-     &                   SetFillVal = .FALSE.)
+     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname)
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 #  if defined ICESHELF_3EQN_VBC
