@@ -2944,8 +2944,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     ICESHELFVAR(ng) % m,                         &
-     &                     SetFillVal = .FALSE.)
+     &                     ICESHELFVAR(ng) % m)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idismr)), HIS(ng)%Rindex
@@ -2971,8 +2970,7 @@
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     ICESHELFVAR(ng) % Tstar,                     &
-     &                     SetFillVal = .FALSE.)
+     &                     ICESHELFVAR(ng) % Tstar)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idisTstar)), HIS(ng)%Rindex
@@ -2997,8 +2995,7 @@
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     ICESHELFVAR(ng) % Ustar,                     &
-     &                     SetFillVal = .FALSE.)
+     &                     ICESHELFVAR(ng) % Ustar)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idisUstar)), HIS(ng)%Rindex
@@ -3023,8 +3020,7 @@
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     ICESHELFVAR(ng) % Tb,                        &
-     &                     SetFillVal = .FALSE.)
+     &                     ICESHELFVAR(ng) % Tb)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idisTb)), HIS(ng)%Rindex
@@ -3049,8 +3045,7 @@
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     ICESHELFVAR(ng) % Sb,                        &
-     &                     SetFillVal = .FALSE.)
+     &                     ICESHELFVAR(ng) % Sb)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idisSb)), HIS(ng)%Rindex
@@ -3080,8 +3075,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     GRID(ng) % zice,                             &
-     &                     SetFillVal = .FALSE.)
+     &                     GRID(ng) % zice)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idDraft)), HIS(ng)%Rindex
@@ -3108,8 +3102,7 @@
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     ICESHELFVAR(ng) % ssflxSOF,                  &
-     &                     SetFillVal = .FALSE.)
+     &                     ICESHELFVAR(ng) % ssflxSOF)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idssflxSOF)), HIS(ng)%Rindex
@@ -3134,8 +3127,7 @@
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     ICESHELFVAR(ng) % shflxSOF,                  &
-     &                     SetFillVal = .FALSE.)
+     &                     ICESHELFVAR(ng) % shflxSOF)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idshflxSOF)), HIS(ng)%Rindex
