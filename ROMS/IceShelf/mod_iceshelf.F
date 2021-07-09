@@ -111,6 +111,8 @@
 !=======================================================================
 !
       USE mod_param
+      USE mod_ncparam
+      USE mod_scalars
 !
 !  Imported variable declarations.
 !
@@ -193,6 +195,8 @@
 !=======================================================================
 !
       USE mod_param
+      USE mod_ncparam
+      USE mod_scalars
 !
 !  Imported variable declarations.
 !
