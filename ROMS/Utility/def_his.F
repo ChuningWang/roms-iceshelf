@@ -3123,6 +3123,62 @@
           exit_flag=3
           RETURN
         END IF
+#if defined ICESHELF
+        IF (.not.got_var(idismr).and.Hout(idismr,ng)) THEN
+          IF (Master) WRITE (stdout,70) TRIM(Vname(1,idismr)),          &
+     &                                  TRIM(ncname)
+          exit_flag=3
+          RETURN
+        END IF
+# if defined ICESHELF_3EQN_VBC
+        IF (.not.got_var(idisTstar).and.Hout(idisTstar,ng)) THEN
+          IF (Master) WRITE (stdout,70) TRIM(Vname(1,idisTstar)),       &
+     &                                  TRIM(ncname)
+          exit_flag=3
+          RETURN
+        END IF
+        IF (.not.got_var(idisUstar).and.Hout(idisUstar,ng)) THEN
+          IF (Master) WRITE (stdout,70) TRIM(Vname(1,idisUstar)),       &
+     &                                  TRIM(ncname)
+          exit_flag=3
+          RETURN
+        END IF
+        IF (.not.got_var(idisTb).and.Hout(idisTb,ng)) THEN
+          IF (Master) WRITE (stdout,70) TRIM(Vname(1,idisTb)),          &
+     &                                  TRIM(ncname)
+          exit_flag=3
+          RETURN
+        END IF
+        IF (.not.got_var(idisSb).and.Hout(idisSb,ng)) THEN
+          IF (Master) WRITE (stdout,70) TRIM(Vname(1,idisSb)),          &
+     &                                  TRIM(ncname)
+          exit_flag=3
+          RETURN
+        END IF
+# endif
+# if defined ICESHELF_MORPH
+        IF (.not.got_var(idDraft).and.Hout(idDraft,ng)) THEN
+          IF (Master) WRITE (stdout,70) TRIM(Vname(1,idDraft)),         &
+     &                                  TRIM(ncname)
+          exit_flag=3
+          RETURN
+        END IF
+# endif
+# if defined SURFACE_OVERFLUX_FIX
+        IF (.not.got_var(idssflxSOF).and.Hout(idssflxSOF,ng)) THEN
+          IF (Master) WRITE (stdout,70) TRIM(Vname(1,idssflxSOF)),      &
+     &                                  TRIM(ncname)
+          exit_flag=3
+          RETURN
+        END IF
+        IF (.not.got_var(idshflxSOF).and.Hout(idshflxSOF,ng)) THEN
+          IF (Master) WRITE (stdout,70) TRIM(Vname(1,idshflxSOF)),      &
+     &                                  TRIM(ncname)
+          exit_flag=3
+          RETURN
+        END IF
+# endif
+#endif
 #if defined SEDIMENT && defined SED_MORPH
         IF (.not.got_var(idbath).and.Hout(idbath,ng)) THEN
           IF (Master) WRITE (stdout,70) TRIM(Vname(1,idbath)),          &
@@ -4209,7 +4265,7 @@
           Vinfo(16)=Vname(1,idtime)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idismr,ng),r8)
-          HIS(ng)%pioVar(idismr)%dkind=PIO_TOUT
+          HIS(ng)%pioVar(idismr)%dkind=PIO_FOUT
           HIS(ng)%pioVar(idismr)%gtype=r2dvar
 !
           status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
@@ -4230,7 +4286,7 @@
           Vinfo(16)=Vname(1,idtime)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idisTstar,ng),r8)
-          HIS(ng)%pioVar(idisTstar)%dkind=PIO_TOUT
+          HIS(ng)%pioVar(idisTstar)%dkind=PIO_FOUT
           HIS(ng)%pioVar(idisTstar)%gtype=r2dvar
 !
           status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
@@ -4250,7 +4306,7 @@
           Vinfo(16)=Vname(1,idtime)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idisUstar,ng),r8)
-          HIS(ng)%pioVar(idisUstar)%dkind=PIO_TOUT
+          HIS(ng)%pioVar(idisUstar)%dkind=PIO_FOUT
           HIS(ng)%pioVar(idisUstar)%gtype=r2dvar
 !
           status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
@@ -4270,7 +4326,7 @@
           Vinfo(16)=Vname(1,idtime)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idisTb,ng),r8)
-          HIS(ng)%pioVar(idisTb)%dkind=PIO_TOUT
+          HIS(ng)%pioVar(idisTb)%dkind=PIO_FOUT
           HIS(ng)%pioVar(idisTb)%gtype=r2dvar
 !
           status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
@@ -4290,7 +4346,7 @@
           Vinfo(16)=Vname(1,idtime)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idisTb,ng),r8)
-          HIS(ng)%pioVar(idisSb)%dkind=PIO_TOUT
+          HIS(ng)%pioVar(idisSb)%dkind=PIO_FOUT
           HIS(ng)%pioVar(idisSb)%gtype=r2dvar
 !
           status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
@@ -4312,7 +4368,7 @@
           Vinfo(16)=Vname(1,idtime)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idDraft,ng),r8)
-          HIS(ng)%pioVar(idDraft)%dkind=PIO_TOUT
+          HIS(ng)%pioVar(idDraft)%dkind=PIO_FOUT
           HIS(ng)%pioVar(idDraft)%gtype=r2dvar
 !
           status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
@@ -4334,7 +4390,7 @@
           Vinfo(16)=Vname(1,idtime)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idssflxSOF,ng),r8)
-          HIS(ng)%pioVar(idssflxSOF)%dkind=PIO_TOUT
+          HIS(ng)%pioVar(idssflxSOF)%dkind=PIO_FOUT
           HIS(ng)%pioVar(idssflxSOF)%gtype=r2dvar
 !
           status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
@@ -4351,7 +4407,7 @@
           Vinfo(16)=Vname(1,idtime)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idshflxSOF,ng),r8)
-          HIS(ng)%pioVar(idshflxSOF)%dkind=PIO_TOUT
+          HIS(ng)%pioVar(idshflxSOF)%dkind=PIO_FOUT
           HIS(ng)%pioVar(idshflxSOF)%gtype=r2dvar
 !
           status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
@@ -6851,48 +6907,47 @@
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idismr))) THEN
             got_var(idismr)=.TRUE.
             HIS(ng)%pioVar(idismr)%vd=var_desc(i)
-            HIS(ng)%pioVar(idismr)%dkind=PIO_TOUT
+            HIS(ng)%pioVar(idismr)%dkind=PIO_FOUT
             HIS(ng)%pioVar(idismr)%gtype=r2dvar
 #  if defined ICESHELF_3EQN_VBC
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idisTstar))) THEN
             got_var(idisTstar)=.TRUE.
             HIS(ng)%pioVar(idisTstar)%vd=var_desc(i)
-            HIS(ng)%pioVar(idisTstar)%dkind=PIO_TOUT
+            HIS(ng)%pioVar(idisTstar)%dkind=PIO_FOUT
             HIS(ng)%pioVar(idisTstar)%gtype=r2dvar
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idisUstar))) THEN
             got_var(idisUstar)=.TRUE.
             HIS(ng)%pioVar(idisUstar)%vd=var_desc(i)
-            HIS(ng)%pioVar(idisUstar)%dkind=PIO_TOUT
+            HIS(ng)%pioVar(idisUstar)%dkind=PIO_FOUT
             HIS(ng)%pioVar(idisUstar)%gtype=r2dvar
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idisTb))) THEN
             got_var(idisTb)=.TRUE.
             HIS(ng)%pioVar(idisTb)%vd=var_desc(i)
-            HIS(ng)%pioVar(idisTb)%dkind=PIO_TOUT
+            HIS(ng)%pioVar(idisTb)%dkind=PIO_FOUT
             HIS(ng)%pioVar(idisTb)%gtype=r2dvar
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idisSb))) THEN
             got_var(idisSb)=.TRUE.
             HIS(ng)%pioVar(idisSb)%vd=var_desc(i)
-            HIS(ng)%pioVar(idisSb)%dkind=PIO_TOUT
+            HIS(ng)%pioVar(idisSb)%dkind=PIO_FOUT
             HIS(ng)%pioVar(idisSb)%gtype=r2dvar
 #  endif
 #  if defined ICESHELF_MORPH
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idDraft))) THEN
             got_var(idDraft)=.TRUE.
             HIS(ng)%pioVar(idDraft)%vd=var_desc(i)
-            HIS(ng)%pioVar(idDraft)%dkind=PIO_TOUT
+            HIS(ng)%pioVar(idDraft)%dkind=PIO_FOUT
             HIS(ng)%pioVar(idDraft)%gtype=r2dvar
 #  endif
 #  if defined SURFACE_OVERFLUX_FIX
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idssflxSOF))) THEN
             got_var(idssflxSOF)=.TRUE.
-            HIS(ng)%Vid(idssflxSOF)=var_id(i)
             HIS(ng)%pioVar(idssflxSOF)%vd=var_desc(i)
-            HIS(ng)%pioVar(idssflxSOF)%dkind=PIO_TOUT
+            HIS(ng)%pioVar(idssflxSOF)%dkind=PIO_FOUT
             HIS(ng)%pioVar(idssflxSOF)%gtype=r2dvar
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idshflxSOF))) THEN
             got_var(idshflxSOF)=.TRUE.
             HIS(ng)%pioVar(idshflxSOF)%vd=var_desc(i)
-            HIS(ng)%pioVar(idshflxSOF)%dkind=PIO_TOUT
+            HIS(ng)%pioVar(idshflxSOF)%dkind=PIO_FOUT
             HIS(ng)%pioVar(idshflxSOF)%gtype=r2dvar
 #  endif
 # endif
@@ -7515,6 +7570,62 @@
           exit_flag=3
           RETURN
         END IF
+#if defined ICESHELF
+        IF (.not.got_var(idismr).and.Hout(idismr,ng)) THEN
+          IF (Master) WRITE (stdout,70) TRIM(Vname(1,idismr)),          &
+     &                                  TRIM(ncname)
+          exit_flag=3
+          RETURN
+        END IF
+# if defined ICESHELF_3EQN_VBC
+        IF (.not.got_var(idisTstar).and.Hout(idisTstar,ng)) THEN
+          IF (Master) WRITE (stdout,70) TRIM(Vname(1,idisTstar)),       &
+     &                                  TRIM(ncname)
+          exit_flag=3
+          RETURN
+        END IF
+        IF (.not.got_var(idisUstar).and.Hout(idisUstar,ng)) THEN
+          IF (Master) WRITE (stdout,70) TRIM(Vname(1,idisUstar)),       &
+     &                                  TRIM(ncname)
+          exit_flag=3
+          RETURN
+        END IF
+        IF (.not.got_var(idisTb).and.Hout(idisTb,ng)) THEN
+          IF (Master) WRITE (stdout,70) TRIM(Vname(1,idisTb)),          &
+     &                                  TRIM(ncname)
+          exit_flag=3
+          RETURN
+        END IF
+        IF (.not.got_var(idisSb).and.Hout(idisSb,ng)) THEN
+          IF (Master) WRITE (stdout,70) TRIM(Vname(1,idisSb)),          &
+     &                                  TRIM(ncname)
+          exit_flag=3
+          RETURN
+        END IF
+# endif
+# if defined ICESHELF_MORPH
+        IF (.not.got_var(idDraft).and.Hout(idDraft,ng)) THEN
+          IF (Master) WRITE (stdout,70) TRIM(Vname(1,idDraft)),         &
+     &                                  TRIM(ncname)
+          exit_flag=3
+          RETURN
+        END IF
+# endif
+# if defined SURFACE_OVERFLUX_FIX
+        IF (.not.got_var(idssflxSOF).and.Hout(idssflxSOF,ng)) THEN
+          IF (Master) WRITE (stdout,70) TRIM(Vname(1,idssflxSOF)),      &
+     &                                  TRIM(ncname)
+          exit_flag=3
+          RETURN
+        END IF
+        IF (.not.got_var(idshflxSOF).and.Hout(idshflxSOF,ng)) THEN
+          IF (Master) WRITE (stdout,70) TRIM(Vname(1,idshflxSOF)),      &
+     &                                  TRIM(ncname)
+          exit_flag=3
+          RETURN
+        END IF
+# endif
+#endif
 # if defined SEDIMENT && defined SED_MORPH
         IF (.not.got_var(idbath).and.Hout(idbath,ng)) THEN
           IF (Master) WRITE (stdout,70) TRIM(Vname(1,idbath)),          &
