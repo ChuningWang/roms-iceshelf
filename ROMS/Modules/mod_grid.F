@@ -837,7 +837,7 @@
             GRID(ng) % yu(i,j) = IniMetricVal
             GRID(ng) % yv(i,j) = IniMetricVal
 
-#if defined ICESHELF && defined SOLVE3D
+#if defined ICESHELF
             GRID(ng) % IcePress(i,j) = IniVal
             GRID(ng) % zice(i,j) = IniVal
 #endif

@@ -53,7 +53,7 @@
      &                  GRID(ng) % pmask,       GRID(ng) % rmask,       &
      &                  GRID(ng) % umask,       GRID(ng) % vmask,       &
 # endif
-# if defined SOLVE3D && defined ICESHELF
+# ifdef ICESHELF
      &                  GRID(ng) % zice,                                &
 # endif
 # ifdef WET_DRY
@@ -137,7 +137,7 @@
 # ifdef MASKING
      &                        pmask, rmask, umask, vmask,               &
 # endif
-# if defined SOLVE3D && defined ICESHELF
+# ifdef ICESHELF
      &                        zice,                                     &
 # endif
 # ifdef WET_DRY
@@ -233,7 +233,7 @@
       real(r8), intent(in) :: umask(LBi:,LBj:)
       real(r8), intent(in) :: vmask(LBi:,LBj:)
 #  endif
-#  if defined SOLVE3D && defined ICESHELF
+#  ifdef ICESHELF
       real(r8), intent(in) :: zice(LBi:,LBj:)
 #  endif
       real(r8), intent(in) :: fomn(LBi:,LBj:)
@@ -339,7 +339,7 @@
       real(r8), intent(in) :: umask(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: vmask(LBi:UBi,LBj:UBj)
 #  endif
-#  if defined SOLVE3D && defined ICESHELF
+#  ifdef ICESHELF
       real(r8), intent(in) :: zice(LBi:UBi,LBj:UBj)
 #  endif
       real(r8), intent(in) :: fomn(LBi:UBi,LBj:UBj)
