@@ -4234,8 +4234,7 @@
 !
           status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
      &                   HIS(ng)%pioVar(idisTstar)%vd,                  &
-     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
-     &                   SetFillVal = .FALSE.)
+     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname)
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 !
@@ -4254,8 +4253,7 @@
 !
           status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
      &                   HIS(ng)%pioVar(idisUstar)%vd,                  &
-     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
-     &                   SetFillVal = .FALSE.)
+     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname)
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 !
@@ -4274,8 +4272,7 @@
 !
           status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
      &                   HIS(ng)%pioVar(idisTb)%vd,                     &
-     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
-     &                   SetFillVal = .FALSE.)
+     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname)
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 !
@@ -4294,8 +4291,7 @@
 !
           status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
      &                   HIS(ng)%pioVar(idisSb)%vd,                     &
-     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
-     &                   SetFillVal = .FALSE.)
+     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname)
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 #  endif
@@ -4316,8 +4312,7 @@
 !
           status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
      &                   HIS(ng)%pioVar(idDraft)%vd,                    &
-     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
-     &                   SetFillVal = .FALSE.)
+     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname)
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 #  endif
@@ -4338,8 +4333,7 @@
 !
           status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
      &                   HIS(ng)%pioVar(idssflxSOF)%vd,                 &
-     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
-     &                   SetFillVal = .FALSE.)
+     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname)
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
         IF (Hout(idshflxSOF,ng)) THEN
@@ -4355,8 +4349,7 @@
 !
           status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
      &                   HIS(ng)%pioVar(idshflxSOF)%vd,                 &
-     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
-     &                   SetFillVal = .FALSE.)
+     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname)
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 #  endif
