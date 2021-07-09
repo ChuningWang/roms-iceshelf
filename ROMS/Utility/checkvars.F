@@ -236,6 +236,11 @@
 #  endif
 # endif
 #endif
+#if defined ICESHELF && defined ICESHELF_MORPH
+        IF (nrrec(ng).ne.0) THEN
+          get_var(idDraft)=.TRUE.
+        END IF
+#endif
 #ifdef PERFECT_RESTART
 !
 !  Determine perfect restart fields to read from input NetCDF file.
@@ -322,6 +327,10 @@
 #if defined SEDIMENT && defined SED_MORPH
         ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idbath))) THEN
           have_var(idbath)=.TRUE.
+#endif
+#if defined ICESHELF && defined ICESHELF_MORPH
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idDraft))) THEN
+          have_var(idDraft)=.TRUE.
 #endif
 #ifdef ADJUST_BOUNDARY
         ELSE IF (ANY(Lobc(:,isFsur,ng)).and.                            &
@@ -479,6 +488,14 @@
 #if defined SEDIMENT && defined SED_MORPH
       IF (.not.have_var(idbath).and.get_var(idbath)) THEN
         IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idbath)),    &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+#endif
+#if defined ICESHELF && defined ICESHELF_MORPH
+      IF (.not.have_var(idDraft).and.get_var(idDraft)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idDraft)),   &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
@@ -927,6 +944,11 @@
 #   endif
 #  endif
 # endif
+# if defined ICESHELF && defined ICESHELF_MORPH
+        IF (nrrec(ng).ne.0) THEN
+          get_var(idDraft)=.TRUE.
+        END IF
+# endif
 # ifdef PERFECT_RESTART
 !
 !  Determine perfect restart fields to read from input NetCDF file.
@@ -1013,6 +1035,10 @@
 # if defined SEDIMENT && defined SED_MORPH
         ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idbath))) THEN
           have_var(idbath)=.TRUE.
+# endif
+# if defined ICESHELF && defined ICESHELF_MORPH
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idDraft))) THEN
+          have_var(idDraft)=.TRUE.
 # endif
 # ifdef ADJUST_BOUNDARY
         ELSE IF (ANY(Lobc(:,isFsur,ng)).and.                            &
@@ -1170,6 +1196,14 @@
 # if defined SEDIMENT && defined SED_MORPH
       IF (.not.have_var(idbath).and.get_var(idbath)) THEN
         IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idbath)),    &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+# endif
+# if defined ICESHELF && defined ICESHELF_MORPH
+      IF (.not.have_var(idDraft).and.get_var(idDraft)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idDraft)),   &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
