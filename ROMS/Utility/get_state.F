@@ -574,10 +574,10 @@
      &                        GRID(ng) % rmask,                         &
 #  endif
 #  ifdef CHECKSUM
-     &                        GRID(ng) % h,                             &
+     &                        GRID(ng) % zice,                          &
      &                        checksum = Fhash)
 #  else
-     &                        GRID(ng) % h)
+     &                        GRID(ng) % zice)
 #  endif
             IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
               IF (Master) THEN
@@ -7864,10 +7864,10 @@
      &                        GRID(ng) % rmask,                         &
 #   endif
 #   ifdef CHECKSUM
-     &                        GRID(ng) % h,                             &
+     &                        GRID(ng) % zice,                          &
      &                        checksum = Fhash)
 #   else
-     &                        GRID(ng) % h)
+     &                        GRID(ng) % zice)
 #   endif
             IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
               IF (Master) THEN
