@@ -35,7 +35,7 @@
 !
       real(r8), parameter :: a = -0.057_r8
       real(r8), parameter :: b = 0.0939_r8
-      real(r8), parameter :: c = 7.61e-4_r8
+      real(r8), parameter :: c = -7.61e-4_r8
 !
 # if defined ICESHELF_2EQN_VBC
       real(r8), parameter :: L = 3.34e5_r8
