@@ -57,6 +57,7 @@
       real(r8), parameter :: Si = 0.0_r8
 # endif
       real(r8), parameter :: eps = 1.0E-14_r8
+      real(r8), parameter :: trcIce = 1.0_r8
 !
 ! =====================================================================!
 !                                                                      !
@@ -94,6 +95,10 @@
 #  ifdef FISOC_DDDT
         real(r8), pointer :: iceshelf_dddt(:,:)
 #  endif
+# endif
+# ifdef ICESHELF_TRACER
+        real(r8), pointer :: iceshelf_tint(:,:,:)
+        real(r8), pointer :: iceshelf_vol(:,:)
 # endif
       END TYPE T_ICESHELFVAR
 
@@ -178,6 +183,15 @@
 
 #  endif
 # endif
+# ifdef ICESHELF_TRACER
+      allocate ( ICESHELFVAR(ng) % iceshelf_tint(LBi:UBi,LBj:UBj,       &
+     &                                           NAT+1:NT(ng)) )
+      Dmem(ng)=Dmem(ng)+REAL(NT(ng)-2)*size2d
+
+      allocate ( ICESHELFVAR(ng) % iceshelf_vol(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+
+# endif
 !
       RETURN
       END SUBROUTINE allocate_iceshelfvar
@@ -205,7 +219,7 @@
 !  Local variable declarations.
 !
       integer :: Imin, Imax, Jmin, Jmax
-      integer :: i, j
+      integer :: i, j, itrc
 
       real(r8), parameter :: IniVal = 0.0_r8
 
@@ -270,6 +284,12 @@
 #  ifdef FISOC_DDDT
             ICESHELFVAR(ng) % iceshelf_dddt(i,j) = IniVal
 #  endif
+# endif
+# ifdef ICESHELF_TRACER
+            DO itrc=NAT+1,NT(ng)
+              ICESHELFVAR(ng) % iceshelf_tint(i,j,itrc) = IniVal
+            END DO
+            ICESHELFVAR(ng) % iceshelf_vol(i,j) = IniVal
 # endif
           END DO
         END DO

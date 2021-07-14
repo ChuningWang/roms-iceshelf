@@ -489,6 +489,9 @@
         logical, allocatable :: LuvSrc(:)            ! momentum
         logical, allocatable :: LwSrc(:)             ! mass
         logical, allocatable :: LtracerSrc(:,:)      ! tracers
+#if defined ICESHELF && defined T_PASSIVE && defined ICESHELF_TRACER
+        logical, allocatable :: LtracerIce(:,:)      ! iceshelf tracers
+#endif
 !
 !  Execution termination flag.
 !
@@ -2142,6 +2145,12 @@
         allocate ( LtracerSrc(MT,Ngrids) )
         Dmem(1)=Dmem(1)+REAL(MT*Ngrids,r8)
       END IF
+#if defined ICESHELF && defined T_PASSIVE && defined ICESHELF_TRACER
+      IF (.not.allocated(LtracerIce)) THEN
+        allocate ( LtracerIce(MT,Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(MT*Ngrids,r8)
+      END IF
+#endif
 
       IF (.not.allocated(maxspeed)) THEN
         allocate ( maxspeed(Ngrids) )
@@ -3481,6 +3490,9 @@
           LnudgeTCLM(itrc,ng)=.FALSE.
           LtracerCLM(itrc,ng)=.FALSE.
           LtracerSrc(itrc,ng)=.FALSE.
+#if defined ICESHELF && defined T_PASSIVE && defined ICESHELF_TRACER
+          LtracerIce(itrc,ng)=.FALSE.
+#endif
           LtracerSponge(itrc,ng)=.FALSE.
           ad_Akt_fac(itrc,ng)=1.0_r8
           tl_Akt_fac(itrc,ng)=1.0_r8

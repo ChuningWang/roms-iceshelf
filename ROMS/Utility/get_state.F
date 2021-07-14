@@ -47,6 +47,9 @@
       USE mod_sedbed
       USE mod_sediment
 #endif
+#if defined ICESHELF && defined ICESHELF_TRACER
+      USE mod_iceshelf, ONLY : ICESHELFVAR
+#endif
       USE mod_stepping
       USE mod_strings
 !
@@ -556,7 +559,8 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 # endif
-# if defined ICESHELF && defined ICESHELF_MORPH
+# ifdef ICESHELF
+#  ifdef ICESHELF_MORPH
 !
 !  Read in time-evolving ice draft (m).
 !
@@ -570,15 +574,15 @@
      &                        InpRec, gtype, Vsize,                     &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        Fscl, Fmin, Fmax,                         &
-#  ifdef MASKING
+#   ifdef MASKING
      &                        GRID(ng) % rmask,                         &
-#  endif
-#  ifdef CHECKSUM
+#   endif
+#   ifdef CHECKSUM
      &                        GRID(ng) % zice,                          &
      &                        checksum = Fhash)
-#  else
+#   else
      &                        GRID(ng) % zice)
-#  endif
+#   endif
             IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
               IF (Master) THEN
                 WRITE (stdout,60) string, TRIM(Vname(1,idDraft)),       &
@@ -589,12 +593,12 @@
               RETURN
             ELSE
               IF (Master) THEN
-#  ifdef CHECKSUM
+#   ifdef CHECKSUM
                 WRITE (stdout,70) TRIM(Vname(2,idDraft)), Fmin, Fmax,   &
      &                            Fhash
-#  else
+#   else
                 WRITE (stdout,70) TRIM(Vname(2,idDraft)), Fmin, Fmax
-#  endif
+#   endif
 
               END IF
             END IF
@@ -610,6 +614,116 @@
             END IF
           END IF
         END IF
+#  endif
+#  ifdef ICESHELF_TRACER
+!
+!  Read in iceshelf volume (m) and integrated tracer (m Tunits).
+!
+        IF (get_var(idIvol)) THEN
+          foundit=find_string(var_name, n_var, TRIM(Vname(1,idIvol)),   &
+     &                        varid)
+          IF (foundit) THEN
+            gtype=var_flag(varid)*r2dvar
+            status=nf_fread2d(ng, IDmod, ncname, ncINPid,               &
+     &                        Vname(1,idIvol), varid,                   &
+     &                        InpRec, gtype, Vsize,                     &
+     &                        LBi, UBi, LBj, UBj,                       &
+     &                        Fscl, Fmin, Fmax,                         &
+#   ifdef MASKING
+     &                        GRID(ng) % rmask,                         &
+#   endif
+#   ifdef CHECKSUM
+     &                        ICESHELFVAR(ng) % iceshelf_vol,           &
+     &                        checksum = Fhash)
+#   else
+     &                        ICESHELFVAR(ng) % iceshelf_vol)
+#   endif
+            IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+              IF (Master) THEN
+                WRITE (stdout,60) string, TRIM(Vname(1,idIvol)),        &
+     &                            InpRec, TRIM(ncname)
+              END IF
+              exit_flag=2
+              ioerror=status
+              RETURN
+            ELSE
+              IF (Master) THEN
+#   ifdef CHECKSUM
+                WRITE (stdout,70) TRIM(Vname(2,idIvol)), Fmin, Fmax,    &
+     &                            Fhash
+#   else
+                WRITE (stdout,70) TRIM(Vname(2,idIvol)), Fmin, Fmax
+#   endif
+
+              END IF
+            END IF
+          ELSE
+            IF (Master) THEN
+              WRITE (stdout,80) string, TRIM(Vname(1,idIvol)),          &
+     &                          TRIM(ncname)
+            END IF
+            exit_flag=4
+            IF (FoundError(exit_flag, nf90_noerr,                       &
+     &                     __LINE__, MyFile)) THEN
+              RETURN
+            END IF
+          END IF
+        END IF
+!
+        DO itrc=NAT+1,NT(ng)
+          IF (get_var(idItrc(itrc))) THEN
+            foundit=find_string(var_name, n_var,                        &
+     &                          TRIM(Vname(1,idItrc(itrc))), varid)
+            IF (foundit) THEN
+              gtype=var_flag(varid)*r2dvar
+              status=nf_fread2d(ng, IDmod, ncname, ncINPid,             &
+     &                          Vname(1,idItrc(itrc)), varid,           &
+     &                          InpRec, gtype, Vsize,                   &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          Fscl, Fmin, Fmax,                       &
+#   ifdef MASKING
+     &                          GRID(ng) % rmask,                       &
+#   endif
+#   ifdef CHECKSUM
+     &                          ICESHELFVAR(ng)%iceshelf_tint(:,:,itrc),&
+     &                          checksum = Fhash)
+#   else
+     &                          ICESHELFVAR(ng)%iceshelf_tint(:,:,itrc))
+#   endif
+              IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+                IF (Master) THEN
+                  WRITE (stdout,60) string, TRIM(Vname(1,idItrc(itrc))),&
+     &                              InpRec, TRIM(ncname)
+                END IF
+                exit_flag=2
+                ioerror=status
+                RETURN
+              ELSE
+                IF (Master) THEN
+#   ifdef CHECKSUM
+                  WRITE (stdout,70) TRIM(Vname(2,idItrc(itrc))),        &
+     &                              Fmin, Fmax, Fhash
+#   else
+                  WRITE (stdout,70) TRIM(Vname(2,idItrc(itrc))),        &
+     &                              Fmin, Fmax
+#   endif
+
+                END IF
+              END IF
+            ELSE
+              IF (Master) THEN
+                WRITE (stdout,80) string, TRIM(Vname(1,idItrc(itrc))),  &
+     &                            TRIM(ncname)
+              END IF
+              exit_flag=4
+              IF (FoundError(exit_flag, nf90_noerr,                     &
+     &                       __LINE__, MyFile)) THEN
+                RETURN
+              END IF
+            END IF
+          END IF
+        END DO
+#  endif
 # endif
 # if defined SEDIMENT && defined SED_MORPH
 !
@@ -7837,7 +7951,8 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 #  endif
-#  if defined ICESHELF && defined ICESHELF_MORPH
+#  ifdef ICESHELF
+#   ifdef ICESHELF_MORPH
 !
 !  Read in time-evolving ice draft (m).
 !
@@ -7860,15 +7975,15 @@
      &                        InpRec, ioDesc, Vsize,                    &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        Fscl, Fmin, Fmax,                         &
-#   ifdef MASKING
+#    ifdef MASKING
      &                        GRID(ng) % rmask,                         &
-#   endif
-#   ifdef CHECKSUM
+#    endif
+#    ifdef CHECKSUM
      &                        GRID(ng) % zice,                          &
      &                        checksum = Fhash)
-#   else
+#    else
      &                        GRID(ng) % zice)
-#   endif
+#    endif
             IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
               IF (Master) THEN
                 WRITE (stdout,60) string, TRIM(Vname(1,idDraft)),       &
@@ -7879,12 +7994,12 @@
               RETURN
             ELSE
               IF (Master) THEN
-#   ifdef CHECKSUM
+#    ifdef CHECKSUM
                 WRITE (stdout,70) TRIM(Vname(2,idDraft)), Fmin, Fmax,   &
      &                            Fhash
-#   else
+#    else
                 WRITE (stdout,70) TRIM(Vname(2,idDraft)), Fmin, Fmax
-#   endif
+#    endif
 
               END IF
             END IF
@@ -7900,6 +8015,134 @@
             END IF
           END IF
         END IF
+#   endif
+#   ifdef ICESHELF_TRACER
+!
+!  Read in iceshelf volume (m) and integrated tracer (m Tunits).
+!
+        IF (get_var(idIvol)) THEN
+          foundit=find_string(var_name, n_var, TRIM(Vname(1,idIvol)),   &
+     &                        vindex)
+          IF (foundit) THEN
+            my_pioVar%vd=var_desc(vindex)
+            my_pioVar%gtype=r2dvar
+            IF (KIND(GRID(ng)%h).eq.8) THEN
+              my_pioVar%dkind=PIO_double
+              ioDesc => ioDesc_dp_r2dvar(ng)
+            ELSE
+              my_pioVar%dkind=PIO_real
+              ioDesc => ioDesc_sp_r2dvar(ng)
+            END IF
+!
+            status=nf_fread2d(ng, IDmod, ncname, pioFile,               &
+     &                        Vname(1,idIvol), my_pioVar,               &
+     &                        InpRec, ioDesc, Vsize,                    &
+     &                        LBi, UBi, LBj, UBj,                       &
+     &                        Fscl, Fmin, Fmax,                         &
+#    ifdef MASKING
+     &                        GRID(ng) % rmask,                         &
+#    endif
+#    ifdef CHECKSUM
+     &                        ICESHELFVAR(ng) % iceshelf_vol,           &
+     &                        checksum = Fhash)
+#    else
+     &                        ICESHELFVAR(ng) % iceshelf_vol)
+#    endif
+            IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
+              IF (Master) THEN
+                WRITE (stdout,60) string, TRIM(Vname(1,idIvol)),        &
+     &                            InpRec, TRIM(ncname)
+              END IF
+              exit_flag=2
+              ioerror=status
+              RETURN
+            ELSE
+              IF (Master) THEN
+#    ifdef CHECKSUM
+                WRITE (stdout,70) TRIM(Vname(2,idIvol)), Fmin, Fmax,    &
+     &                            Fhash
+#    else
+                WRITE (stdout,70) TRIM(Vname(2,idIvol)), Fmin, Fmax
+#    endif
+
+              END IF
+            END IF
+          ELSE
+            IF (Master) THEN
+              WRITE (stdout,80) string, TRIM(Vname(1,idIvol)),          &
+     &                          TRIM(ncname)
+            END IF
+            exit_flag=4
+            IF (FoundError(exit_flag, PIO_noerr,                        &
+     &                     __LINE__, MyFile)) THEN
+              RETURN
+            END IF
+          END IF
+        END IF
+!
+        DO itrc=NAT+1,NT(ng)
+          IF (get_var(idItrc(itrc))) THEN
+            foundit=find_string(var_name, n_var,                        &
+     &                          TRIM(Vname(1,idItrc(itrc))),            &
+     &                          vindex)
+            IF (foundit) THEN
+              my_pioVar%vd=var_desc(vindex)
+              my_pioVar%gtype=r2dvar
+              IF (KIND(GRID(ng)%h).eq.8) THEN
+                my_pioVar%dkind=PIO_double
+                ioDesc => ioDesc_dp_r2dvar(ng)
+              ELSE
+                my_pioVar%dkind=PIO_real
+                ioDesc => ioDesc_sp_r2dvar(ng)
+              END IF
+!
+              status=nf_fread2d(ng, IDmod, ncname, pioFile,             &
+     &                          Vname(1,idItrc(itrc)), my_pioVar,       &
+     &                          InpRec, ioDesc, Vsize,                  &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          Fscl, Fmin, Fmax,                       &
+#    ifdef MASKING
+     &                          GRID(ng) % rmask,                       &
+#    endif
+#    ifdef CHECKSUM
+     &                          ICESHELFVAR(ng)%iceshelf_tint(:,:,itrc),&
+     &                          checksum = Fhash)
+#    else
+     &                          ICESHELFVAR(ng)%iceshelf_tint(:,:,itrc))
+#    endif
+              IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
+                IF (Master) THEN
+                  WRITE (stdout,60) string, TRIM(Vname(1,idItrc(itrc))),&
+     &                              InpRec, TRIM(ncname)
+                END IF
+                exit_flag=2
+                ioerror=status
+                RETURN
+              ELSE
+                IF (Master) THEN
+#    ifdef CHECKSUM
+                WRITE (stdout,70) TRIM(Vname(2,idItrc(itrc))),          &
+     &                            Fmin, Fmax, Fhash
+#    else
+                WRITE (stdout,70) TRIM(Vname(2,idItrc(itrc))),          &
+     &                            Fmin, Fmax
+#    endif
+                END IF
+              END IF
+            ELSE
+              IF (Master) THEN
+                WRITE (stdout,80) string, TRIM(Vname(1,idItrc(itrc))),  &
+     &                            TRIM(ncname)
+              END IF
+              exit_flag=4
+              IF (FoundError(exit_flag, PIO_noerr,                      &
+     &                       __LINE__, MyFile)) THEN
+                RETURN
+              END IF
+            END IF
+          END IF
+        END DO
+#   endif
 #  endif
 #  if defined SEDIMENT && defined SED_MORPH
 !

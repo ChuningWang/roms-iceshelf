@@ -32,6 +32,9 @@
       USE mod_sedbed
       USE mod_sediment
 #endif
+#if defined ICESHELF && defined ICESHELF_TRACER
+      USE mod_iceshelf, ONLY : ICESHELFVAR
+#endif
       USE mod_stepping
 !
       USE nf_fwrite2d_mod, ONLY : nf_fwrite2d
@@ -201,30 +204,73 @@
      &                      varid = RST(ng)%Vid(idtime))
       IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 
-#if defined ICESHELF && defined ICESHELF_MORPH
+#ifdef ICESHELF
+# ifdef ICESHELF_MORPH
 !
 !  Write out time-dependent ice draft (m)
 !
-      IF (Hout(idDraft,ng)) THEN
-        scale=1.0_dp
-        gtype=gfactor*r2dvar
-        status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idDraft),&
+      scale=1.0_dp
+      gtype=gfactor*r2dvar
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idDraft),  &
+     &                   RST(ng)%Rindex, gtype,                         &
+     &                   LBi, UBi, LBj, UBj, scale,                     &
+#  ifdef MASKING
+     &                   GRID(ng) % rmask,                              &
+#  endif
+     &                   GRID(ng) % zice,                               &
+     &                   SetFillVal = .FALSE.)
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idDraft)), RST(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+# endif
+# ifdef ICESHELF_TRACER
+!
+!  Write out iceshelf volume (m) and integrated tracer (m Tunits)
+!
+      scale=1.0_dp
+      gtype=gfactor*r2dvar
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIvol),   &
+     &                   RST(ng)%Rindex, gtype,                         &
+     &                   LBi, UBi, LBj, UBj, scale,                     &
+#  ifdef MASKING
+     &                   GRID(ng) % rmask,                              &
+#  endif
+     &                   ICESHELFVAR(ng) % iceshelf_vol)
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idIvol)), RST(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+!
+      scale=1.0_dp
+      gtype=gfactor*r2dvar
+      DO itrc=NAT+1,NT(ng)
+        status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid,                      &
+     &                     RST(ng)%Vid(idItrc(itrc)),                   &
      &                     RST(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
-# ifdef MASKING
+#  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
-# endif
-     &                     GRID(ng) % zice,                             &
-     &                     SetFillVal = .FALSE.)
+#  endif
+     &                     ICESHELFVAR(ng) % iceshelf_tint(:,:,itrc))
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idDraft)), RST(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idItrc(itrc))), RST(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
           RETURN
         END IF
-      END IF
+      END DO
+# endif
 #endif
 #if defined SEDIMENT && defined SED_MORPH
 !
@@ -1294,37 +1340,92 @@
      &                          pioVar = RST(ng)%pioVar(idtime)%vd)
       IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 
-#if defined ICESHELF && defined ICESHELF_MORPH
+# ifdef ICESHELF
+#  ifdef ICESHELF_MORPH
 !
 !  Write out time-dependent ice draft (m)
 !
-      IF (Hout(idDraft,ng)) THEN
-        scale=1.0_dp
-        IF (RST(ng)%pioVar(idDraft)%dkind.eq.PIO_double) THEN
-          ioDesc => ioDesc_dp_r2dvar(ng)
-        ELSE
-          ioDesc => ioDesc_sp_r2dvar(ng)
+      scale=1.0_dp
+      IF (RST(ng)%pioVar(idDraft)%dkind.eq.PIO_double) THEN
+        ioDesc => ioDesc_dp_r2dvar(ng)
+      ELSE
+        ioDesc => ioDesc_sp_r2dvar(ng)
+      END IF
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%pioFile,                     &
+     &                   RST(ng)%pioVar(idDraft),                       &
+     &                   RST(ng)%Rindex,                                &
+     &                   ioDesc,                                        &
+     &                   LBi, UBi, LBj, UBj, scale,                     &
+#   ifdef MASKING
+     &                   GRID(ng) % rmask,                              &
+#   endif
+     &                   GRID(ng) % zice,                               &
+     &                   SetFillVal = .FALSE.)
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idDraft)), RST(ng)%Rindex
         END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+#  endif
+#  ifdef ICESHELF_TRACER
+!
+!  Write out iceshelf volume (m) and integrated tracer (m Tunits)
+!
+      scale=1.0_dp
+      IF (RST(ng)%pioVar(idIvol)%dkind.eq.PIO_double) THEN
+        ioDesc => ioDesc_dp_r2dvar(ng)
+      ELSE
+        ioDesc => ioDesc_sp_r2dvar(ng)
+      END IF
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%pioFile,                     &
+     &                   RST(ng)%pioVar(idIvol),                        &
+     &                   RST(ng)%Rindex,                                &
+     &                   ioDesc,                                        &
+     &                   LBi, UBi, LBj, UBj, scale,                     &
+#   ifdef MASKING
+     &                   GRID(ng) % rmask,                              &
+#   endif
+     &                   ICESHELF(ng) % iceshelf_vol)
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idIvol)), RST(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+!
+      scale=1.0_dp
+      IF (RST(ng)%pioVar(idItrc)%dkind.eq.PIO_double) THEN
+        ioDesc => ioDesc_dp_r2dvar(ng)
+      ELSE
+        ioDesc => ioDesc_sp_r2dvar(ng)
+      END IF
+      DO itrc=NAT+1,NT(ng)
         status=nf_fwrite2d(ng, iNLM, RST(ng)%pioFile,                   &
-     &                     RST(ng)%pioVar(idDraft),                     &
+     &                     RST(ng)%pioVar(idItrc(itrc)),                &
      &                     RST(ng)%Rindex,                              &
      &                     ioDesc,                                      &
      &                     LBi, UBi, LBj, UBj, scale,                   &
-# ifdef MASKING
+#   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
-# endif
-     &                     GRID(ng) % zice,                             &
-     &                     SetFillVal = .FALSE.)
+#   endif
+     &                     ICESHELF(ng) % iceshelf_tint(:,:,itrc))
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idDraft)), RST(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idItrc(itrc))),              &
+     &                        RST(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
           RETURN
         END IF
-      END IF
-#endif
+      END DO
+#  endif
+# endif
 # if defined SEDIMENT && defined SED_MORPH
 !
 !  Write out time-dependent bathymetry (m)

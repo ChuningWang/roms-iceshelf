@@ -2082,6 +2082,24 @@
   'r2dvar'
   1.0d0
 
+'iceshelf_vol'                                     ! Input/Output
+  'refreezed iceshelf draft'
+  'meter'                                          ! [m]
+  'bathymetry, scalar, series'
+  'ocean_time'
+  'idIvol'
+  'r2dvar'
+  1.0d0
+
+'iceshelf_tint_'                                   ! Input/Output
+  'integrated passive tracer in refreezed iceshelf draft'
+  'meter kilogram meter-3'                         ! [m kg/m3]
+  'dye_, scalar, series'
+  'ocean_time'
+  'idItrc(inert(i))'
+  'r2dvar'
+  1.0d0
+
 !
 !------------------------------------------------------------------------------
 !  Boundary layer variables.

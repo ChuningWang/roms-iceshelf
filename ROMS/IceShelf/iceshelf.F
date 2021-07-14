@@ -91,6 +91,10 @@
      &                        ICESHELFVAR(ng) % iceshelf_dddt,          &
 #  endif
 # endif
+# ifdef ICESHELF_TRACER
+     &                        ICESHELFVAR(ng) % iceshelf_tint,          &
+     &                        ICESHELFVAR(ng) % iceshelf_vol,           &
+# endif
      &                        OCEAN(ng) % u,                            &
      &                        OCEAN(ng) % v,                            &
      &                        OCEAN(ng) % t,                            &
@@ -136,6 +140,10 @@
 #  ifdef FISOC_DDDT
      &                              iceshelf_dddt,                      &
 #  endif
+# endif
+# ifdef ICESHELF_TRACER
+     &                              iceshelf_tint,                      &
+     &                              iceshelf_vol,                       &
 # endif
      &                              u, v, t,                            &
 # ifdef ICESHELF_3EQN_VBC
@@ -186,10 +194,14 @@
       real(r8), intent(in) :: zice(LBi:,LBj:)
       real(r8), intent(in) :: f(LBi:,LBj:)
 #  ifdef ICESHELF_MORPH
-      real(r8), intent(inout) :: iceshelf_draft(LBi:,LBj:,:)
+      real(r8), intent(out) :: iceshelf_draft(LBi:,LBj:,:)
 #   ifdef FISOC_DDDT
-      real(r8), intent(inout) :: iceshelf_dddt(LBi:,LBj:)
+      real(r8), intent(in) :: iceshelf_dddt(LBi:,LBj:)
 #   endif
+#  endif
+#  ifdef ICESHELF_TRACER
+      real(r8), intent(inout) :: iceshelf_tint(LBi:,LBj:,3:)
+      real(r8), intent(inout) :: iceshelf_vol(LBi:,LBj:)
 #  endif
       real(r8), intent(in) :: t(LBi:,LBj:,:,:,:)
 #  ifdef ICESHELF_3EQN_VBC
@@ -224,10 +236,14 @@
       real(r8), intent(in) :: zice(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: f(LBi:UBi,LBj:UBj)
 #  ifdef ICESHELF_MORPH
-      real(r8), intent(in) :: iceshelf_draft(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(out) :: iceshelf_draft(LBi:UBi,LBj:UBj,2)
 #   ifdef FISOC_DDDT
       real(r8), intent(in) :: iceshelf_dddt(LBi:UBi,LBj:UBj)
 #   endif
+#  endif
+#  ifdef ICESHELF_TRACER
+      real(r8), intent(inout) :: iceshelf_tint(LBi:UBi,LBj:UBj,3:NT(ng))
+      real(r8), intent(inout) :: iceshelf_vol(LBi:UBi,LBj:UBj)
 #  endif
       real(r8), intent(in) :: t(LBi:UBi,LBj:UBj,N(ng),3,NT(ng))
 #  ifdef ICESHELF_3EQN_VBC
@@ -684,6 +700,51 @@
           END IF
         END DO
       END DO
+# ifdef ICESHELF_TRACER
+!
+!  Calculate melting/freezing passive tracer fluxes.
+!
+      DO itrc=NAT+1,NT(ng)
+        IF (LtracerIce(itrc,ng)) THEN
+          DO j=Jstr,Jend
+            DO i=Istr,Iend
+              IF ((m(i,j)*dt(ng)).gt.iceshelf_vol(i,j)) THEN
+!
+!  Melt, use refreezed ice as well as iceshelf ice.
+!
+                stflx(i,j,itrc)=iceshelf_tint(i,j,itrc)+                &
+     &                          (m(i,j)-iceshelf_vol(i,j)/dt(ng))*trcIce
+                iceshelf_tint(i,j,itrc)=0.0_r8
+              ELSE
+!
+!  Melt or refreeze of refreezed ice only.
+!
+                stflx(i,j,itrc)=                                        &
+     &  MIN(m(i,j),0.0_r8)*t(i,j,N(ng),nrhs,itrc)
+                IF (iceshelf_vol(i,j).gt.0.0_r8) THEN
+                  stflx(i,j,itrc)=stflx(i,j,itrc)+                      &
+     &  MAX(m(i,j),0.0_r8)*iceshelf_tint(i,j,itrc)/iceshelf_vol(i,j)
+                END IF
+                iceshelf_tint(i,j,itrc)=iceshelf_tint(i,j,itrc)-        &
+     &                                  stflx(i,j,itrc)*dt(ng)
+              END IF
+            END DO
+          END DO
+        END IF
+      END DO
+!
+!  Update refreezed water total volume.
+!
+      DO j=Jstr,Jend
+        DO i=Istr,Iend
+          IF ((m(i,j)*dt(ng)).gt.iceshelf_vol(i,j)) THEN
+            iceshelf_vol(i,j)=0.0_r8
+          ELSE
+            iceshelf_vol(i,j)=iceshelf_vol(i,j)-m(i,j)*dt(ng)
+          END IF
+        END DO
+      END DO
+# endif
 !
 !-----------------------------------------------------------------------
 ! Store old ice shelf thickness.

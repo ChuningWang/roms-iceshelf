@@ -731,7 +731,8 @@
      &                 SetFillVal = .FALSE.)
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 #endif
-#if defined ICESHELF && defined ICESHELF_MORPH
+#ifdef ICESHELF
+# ifdef ICESHELF_MORPH
 !
 !  Define time-varying ice draft.
 !
@@ -740,12 +741,53 @@
         Vinfo( 3)=Vname(3,idDraft)
         Vinfo(14)=Vname(4,idDraft)
         Vinfo(16)=Vname(1,idtime)
+#  if defined WRITE_WATER && defined MASKING
+        Vinfo(20)='mask_rho'
+#  endif
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idDraft,ng),r8)
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idDraft),    &
      &                 NF_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname,      &
      &                 SetFillVal = .FALSE.)
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+# endif
+# ifdef ICESHELF_TRACER
+!
+!  Define iceshelf volume and integrated tracer.
+!
+        Vinfo( 1)=Vname(1,idIvol)
+        Vinfo( 2)=Vname(2,idIvol)
+        Vinfo( 3)=Vname(3,idIvol)
+        Vinfo(14)=Vname(4,idIvol)
+        Vinfo(16)=Vname(1,idtime)
+#  if defined WRITE_WATER && defined MASKING
+        Vinfo(20)='mask_rho'
+#  endif
+        Vinfo(22)='coordinates'
+        Aval(5)=REAL(Iinfo(1,idIvol,ng),r8)
+        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIvol),     &
+     &                 NF_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname,      &
+     &                 SetFillVal = .FALSE.)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+!
+        DO itrc=NAT+1,NT(ng)
+          Vinfo( 1)=Vname(1,idItrc(itrc))
+          Vinfo( 2)=Vname(2,idItrc(itrc))
+          Vinfo( 3)=Vname(3,idItrc(itrc))
+          Vinfo(14)=Vname(4,idItrc(itrc))
+          Vinfo(16)=Vname(1,idtime)
+#  if defined WRITE_WATER && defined MASKING
+          Vinfo(20)='mask_rho'
+#  endif
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(r3dvar,r8)
+          status=def_var(ng, iNLM, RST(ng)%ncid,                        &
+     &                   RST(ng)%Vid(idItrc(itrc)),                     &
+     &                   NF_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
+     &                   SetFillVal = .FALSE.)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END DO
+# endif
 #endif
 #if defined SEDIMENT && defined SED_MORPH
 !
@@ -1151,8 +1193,8 @@
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idGhat(itrc),ng),r8)
           status=def_var(ng, iNLM, RST(ng)%ncid,                        &
-     &                     RST(ng)%Vid(idGhat(itrc)), NF_FRST,          &
-     &                     nvd4, w3dgrd, Aval, Vinfo, ncname)
+     &                   RST(ng)%Vid(idGhat(itrc)), NF_FRST,            &
+     &                   nvd4, w3dgrd, Aval, Vinfo, ncname)
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END DO
 # endif
@@ -1602,10 +1644,17 @@
           IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idtime))) THEN
             got_var(idtime)=.TRUE.
             RST(ng)%Vid(idtime)=var_id(i)
-#if defined ICESHELF && defined ICESHELF_MORPH
+#ifdef ICESHELF
+# ifdef ICESHELF_MORPH
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idDraft))) THEN
             got_var(idDraft)=.TRUE.
             RST(ng)%Vid(idDraft)=var_id(i)
+# endif
+# ifdef ICESHELF_TRACER
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIvol))) THEN
+            got_var(idIvol)=.TRUE.
+            RST(ng)%Vid(idIvol)=var_id(i)
+# endif
 #endif
 #if defined SEDIMENT && defined SED_MORPH
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idbath))) THEN
@@ -1739,6 +1788,14 @@
 # endif
 #endif
           END IF
+#if defined ICESHELF && defined ICESHELF_TRACER
+          DO itrc=NAT+1,NT(ng)
+            IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idItrc(itrc)))) THEN
+              got_var(idItrc(itrc))=.TRUE.
+              RST(ng)%Vid(idItrc(itrc))=var_id(i)
+            END IF
+          END DO
+#endif
 #ifdef SOLVE3D
           DO itrc=1,NT(ng)
             IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idTvar(itrc)))) THEN
@@ -1795,13 +1852,31 @@
           exit_flag=3
           RETURN
         END IF
-#if defined ICESHELF && defined ICESHELF_MORPH
+#ifdef ICESHELF
+# ifdef ICESHELF_MORPH
         IF (.not.got_var(idDraft)) THEN
           IF (Master) WRITE (stdout,40) TRIM(Vname(1,idDraft)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
+# endif
+# ifdef ICESHELF_TRACER
+        IF (.not.got_var(idIvol)) THEN
+          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idIvol)),          &
+     &                                  TRIM(ncname)
+          exit_flag=3
+          RETURN
+        END IF
+        DO itrc=NAT+1,NT(ng)
+          IF (.not.got_var(idItrc(itrc))) THEN
+            IF (Master) WRITE (stdout,60) TRIM(Vname(1,idItrc(itrc))),  &
+     &                                    TRIM(ncname)
+            exit_flag=3
+            RETURN
+          END IF
+        END DO
+# endif
 #endif
 #if defined SEDIMENT && defined SED_MORPH
         IF (.not.got_var(idbath)) THEN
@@ -2729,7 +2804,8 @@
      &                 SetFillVal = .FALSE.)
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 #endif
-#if defined ICESHELF && defined ICESHELF_MORPH
+#ifdef ICESHELF
+# ifdef ICESHELF_MORPH
 !
 !  Define time-varying ice draft.
 !
@@ -2738,6 +2814,9 @@
         Vinfo( 3)=Vname(3,idDraft)
         Vinfo(14)=Vname(4,idDraft)
         Vinfo(16)=Vname(1,idtime)
+#  if defined WRITE_WATER && defined MASKING
+        Vinfo(20)='mask_rho'
+#  endif
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idDraft,ng),r8)
         RST(ng)%pioVar(idDraft)%dkind=PIO_FRST
@@ -2748,6 +2827,51 @@
      &                 PIO_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname,     &
      &                 SetFillVal = .FALSE.)
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+# endif
+# ifdef ICESHELF_TRACER
+!
+!  Define iceshelf volume and integrated tracer.
+!
+        Vinfo( 1)=Vname(1,idIvol)
+        Vinfo( 2)=Vname(2,idIvol)
+        Vinfo( 3)=Vname(3,idIvol)
+        Vinfo(14)=Vname(4,idIvol)
+        Vinfo(16)=Vname(1,idtime)
+#  if defined WRITE_WATER && defined MASKING
+        Vinfo(20)='mask_rho'
+#  endif
+        Vinfo(22)='coordinates'
+        Aval(5)=REAL(Iinfo(1,idIvol,ng),r8)
+        RST(ng)%pioVar(idIvol)%dkind=PIO_FRST
+        RST(ng)%pioVar(idIvol)%gtype=r2dvar
+!
+        status=def_var(ng, iNLM, RST(ng)%pioFile,                       &
+     &                 RST(ng)%pioVar(idIvol)%vd,                       &
+     &                 PIO_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname,     &
+     &                 SetFillVal = .FALSE.)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+!
+        DO itrc=NAT+1,NT(ng)
+          Vinfo( 1)=Vname(1,idItrc(itrc))
+          Vinfo( 2)=Vname(2,idItrc(itrc))
+          Vinfo( 3)=Vname(3,idItrc(itrc))
+          Vinfo(14)=Vname(4,idItrc(itrc))
+          Vinfo(16)=Vname(1,idtime)
+#  if defined WRITE_WATER && defined MASKING
+          Vinfo(20)='mask_rho'
+#  endif
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(r2dvar,r8)
+          RST(ng)%pioVar(idItrc(itrc))%dkind=PIO_FRST
+          RST(ng)%pioVar(idItrc(itrc))%gtype=r2dvar
+!
+          status=def_var(ng, iNLM, RST(ng)%pioFile,                     &
+     &                   RST(ng)%pioVar(idItrc(itrc))%vd,               &
+     &                   PIO_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
+     &                   SetFillVal = .FALSE.)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END DO
+# endif
 #endif
 #if defined SEDIMENT && defined SED_MORPH
 !
@@ -3741,12 +3865,21 @@
             RST(ng)%pioVar(idtime)%vd=var_desc(i)
             RST(ng)%pioVar(idtime)%dkind=PIO_TOUT
             RST(ng)%pioVar(idtime)%gtype=0
-#if defined ICESHELF && defined ICESHELF_MORPH
+#ifdef ICESHELF
+# ifdef ICESHELF_MORPH
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idDraft))) THEN
             got_var(idDraft)=.TRUE.
             RST(ng)%pioVar(idDraft)%vd=var_desc(i)
             RST(ng)%pioVar(idDraft)%dkind=PIO_FRST
             RST(ng)%pioVar(idDraft)%gtype=r2dvar
+# endif
+# ifdef ICESHELF_TRACER
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIvol))) THEN
+            got_var(idIvol)=.TRUE.
+            RST(ng)%pioVar(idIvol)%vd=var_desc(i)
+            RST(ng)%pioVar(idIvol)%dkind=PIO_FRST
+            RST(ng)%pioVar(idIvol)%gtype=r2dvar
+# endif
 #endif
 #if defined SEDIMENT && defined SED_MORPH
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idbath))) THEN
@@ -3944,6 +4077,16 @@
 # endif
 #endif
           END IF
+#if defined ICESHELF && defined ICESHELF_TRACER
+          DO itrc=NAT+1,NT(ng)
+            IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idItrc(itrc)))) THEN
+              got_var(idItrc(itrc))=.TRUE.
+              RST(ng)%pioVar(idItrc(itrc))%vd=var_desc(i)
+              RST(ng)%pioVar(idItrc(itrc))%dkind=PIO_FRST
+              RST(ng)%pioVar(idItrc(itrc))%gtype=r2dvar
+            END IF
+          END DO
+#endif
 #ifdef SOLVE3D
           DO itrc=1,NT(ng)
             IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idTvar(itrc)))) THEN
@@ -4014,13 +4157,31 @@
           exit_flag=3
           RETURN
         END IF
-#if defined ICESHELF && defined ICESHELF_MORPH
+#ifdef ICESHELF
+# ifdef ICESHELF_MORPH
         IF (.not.got_var(idDraft)) THEN
           IF (Master) WRITE (stdout,40) TRIM(Vname(1,idDraft)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
+# endif
+# ifdef ICESHELF_TRACER
+        IF (.not.got_var(idIvol)) THEN
+          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idIvol)),          &
+     &                                  TRIM(ncname)
+          exit_flag=3
+          RETURN
+        END IF
+        DO itrc=NAT+1,NT(ng)
+          IF (.not.got_var(idItrc(itrc))) THEN
+            IF (Master) WRITE (stdout,60) TRIM(Vname(1,idItrc(itrc))),  &
+     &                                    TRIM(ncname)
+            exit_flag=3
+            RETURN
+          END IF
+        END DO
+# endif
 #endif
 #if defined SEDIMENT && defined SED_MORPH
         IF (.not.got_var(idbath)) THEN

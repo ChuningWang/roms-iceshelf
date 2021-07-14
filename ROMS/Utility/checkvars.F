@@ -236,10 +236,22 @@
 #  endif
 # endif
 #endif
-#if defined ICESHELF && defined ICESHELF_MORPH
+#ifdef ICESHELF
+# ifdef ICESHELF_MORPH
         IF (nrrec(ng).ne.0) THEN
           get_var(idDraft)=.TRUE.
         END IF
+# endif
+# ifdef ICESHELF_TRACER
+        IF (nrrec(ng).ne.0) THEN
+          get_var(idIvol)=.TRUE.
+        END IF
+        IF (nrrec(ng).ne.0) THEN
+          DO itrc=NAT+1,NT(ng)
+            get_var(idItrc(itrc))=.TRUE.
+          END DO
+        END IF
+# endif
 #endif
 #ifdef PERFECT_RESTART
 !
@@ -328,9 +340,15 @@
         ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idbath))) THEN
           have_var(idbath)=.TRUE.
 #endif
-#if defined ICESHELF && defined ICESHELF_MORPH
+#ifdef ICESHELF
+# ifdef ICESHELF_MORPH
         ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idDraft))) THEN
           have_var(idDraft)=.TRUE.
+# endif
+# ifdef ICESHELF_TRACER
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIvol))) THEN
+          have_var(idIvol)=.TRUE.
+# endif
 #endif
 #ifdef ADJUST_BOUNDARY
         ELSE IF (ANY(Lobc(:,isFsur,ng)).and.                            &
@@ -427,6 +445,13 @@
         ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idKhor))) THEN
           have_var(idKhor)=.TRUE.
         END IF
+#if defined ICESHELF && defined ICESHELF_TRACER
+        DO itrc=NAT+1,NT(ng)
+          IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idItrc(itrc)))) THEN
+            have_var(idItrc(itrc))=.TRUE.
+          END IF
+        END DO
+#endif
 #ifdef SOLVE3D
         DO itrc=1,NT(ng)
           IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idTvar(itrc)))) THEN
@@ -493,13 +518,32 @@
         RETURN
       END IF
 #endif
-#if defined ICESHELF && defined ICESHELF_MORPH
+#ifdef ICESHELF
+# ifdef ICESHELF_MORPH
       IF (.not.have_var(idDraft).and.get_var(idDraft)) THEN
         IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idDraft)),   &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
       END IF
+# endif
+# ifdef ICESHELF_TRACER
+      IF (.not.have_var(idIvol).and.get_var(idIvol)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIvol)),    &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+      DO itrc=NAT+1,NT(ng)
+        IF (.not.have_var(idItrc(itrc)).and.get_var(idItrc(itrc))) THEN
+          IF (Master) WRITE (stdout,10) string,                         &
+     &                                  TRIM(Vname(1,idItrc(itrc))),    &
+     &                                  TRIM(ncname)
+          exit_flag=2
+          RETURN
+        END IF
+      END DO
+# endif
 #endif
       IF (.not.have_var(idFsur).and.get_var(idFsur)) THEN
         IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idFsur)),    &
@@ -944,10 +988,22 @@
 #   endif
 #  endif
 # endif
-# if defined ICESHELF && defined ICESHELF_MORPH
+# ifdef ICESHELF
+#  ifdef ICESHELF_MORPH
         IF (nrrec(ng).ne.0) THEN
           get_var(idDraft)=.TRUE.
         END IF
+#  endif
+#  ifdef ICESHELF_TRACER
+        IF (nrrec(ng).ne.0) THEN
+          get_var(idIvol)=.TRUE.
+        END IF
+        IF (nrrec(ng).ne.0) THEN
+          DO itrc=NAT+1,NT(ng)
+            get_var(idItrc(itrc))=.TRUE.
+          END DO
+        END IF
+#  endif
 # endif
 # ifdef PERFECT_RESTART
 !
@@ -1036,9 +1092,15 @@
         ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idbath))) THEN
           have_var(idbath)=.TRUE.
 # endif
-# if defined ICESHELF && defined ICESHELF_MORPH
+# ifdef ICESHELF
+#  ifdef ICESHELF_MORPH
         ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idDraft))) THEN
           have_var(idDraft)=.TRUE.
+#  endif
+#  ifdef ICESHELF_TRACER
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIvol))) THEN
+          have_var(idIvol)=.TRUE.
+#  endif
 # endif
 # ifdef ADJUST_BOUNDARY
         ELSE IF (ANY(Lobc(:,isFsur,ng)).and.                            &
@@ -1135,6 +1197,13 @@
         ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idKhor))) THEN
           have_var(idKhor)=.TRUE.
         END IF
+#if defined ICESHELF && defined ICESHELF_TRACER
+        DO itrc=NAT+1,NT(ng)
+          IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idItrc(itrc)))) THEN
+            have_var(idItrc(itrc))=.TRUE.
+          END IF
+        END DO
+#endif
 # ifdef SOLVE3D
         DO itrc=1,NT(ng)
           IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idTvar(itrc)))) THEN
@@ -1201,13 +1270,24 @@
         RETURN
       END IF
 # endif
-# if defined ICESHELF && defined ICESHELF_MORPH
-      IF (.not.have_var(idDraft).and.get_var(idDraft)) THEN
-        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idDraft)),   &
+# ifdef ICESHELF
+#  ifdef ICESHELF_MORPH
+      IF (.not.have_var(idIvol).and.get_var(idIvol)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIvol)),    &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
       END IF
+      DO itrc=NAT+1,NT(ng)
+        IF (.not.have_var(idItrc(itrc)).and.get_var(idItrc(itrc))) THEN
+          IF (Master) WRITE (stdout,10) string,                         &
+     &                                  TRIM(Vname(1,idItrc(itrc))),    &
+     &                                  TRIM(ncname)
+          exit_flag=2
+          RETURN
+        END IF
+      END DO
+#  endif
 # endif
       IF (.not.have_var(idFsur).and.get_var(idFsur)) THEN
         IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idFsur)),    &

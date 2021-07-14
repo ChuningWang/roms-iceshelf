@@ -206,6 +206,7 @@
       integer  :: idisTb        ! Temperature at base of the ice shelf
       integer  :: idisSb        ! Salinity at base of the ice shelf
       integer  :: idDraft       ! iceshelf draft
+      integer  :: idIvol        ! iceshelf refreezed draft
       integer  :: idshflxSOF    ! iceshelf melt rate
       integer  :: idssflxSOF    ! iceshelf melt rate
       integer  :: idbath        ! bathymetry
@@ -416,6 +417,7 @@
 !  Input/output identification tracer indices.
 !
       integer, allocatable :: idRtrc(:)    ! river runoff for tracers
+      integer, allocatable :: idItrc(:)    ! river runoff for tracers
       integer, allocatable :: idsurT(:)    ! model surface tracers
       integer, allocatable :: idTads(:)    ! tracers adjoint sentivity
       integer, allocatable :: idTbot(:)    ! bottom flux for tracers
@@ -750,6 +752,10 @@
 
       IF (.not.allocated(idRtrc)) THEN
         allocate ( idRtrc(MT) )
+        Dmem(1)=Dmem(1)+REAL(MT,r8)
+      END IF
+      IF (.not.allocated(idItrc)) THEN
+        allocate ( idItrc(MT) )
         Dmem(1)=Dmem(1)+REAL(MT,r8)
       END IF
       IF (.not.allocated(idsurT)) THEN
@@ -1289,6 +1295,8 @@
               idisSb=varid
             CASE ('idDraft')
               idDraft=varid
+            CASE ('idIvol')
+              idIvol=varid
             CASE ('idssflxSOF')
               idssflxSOF=varid
             CASE ('idshflxSOF')
@@ -1589,6 +1597,12 @@
             CASE ('idRtrc(isalt)')
               idRtrc(isalt)=varid
 #endif
+            CASE ('idItrc(itemp)')
+              idItrc(itemp)=varid
+#ifdef SALINITY
+            CASE ('idItrc(isalt)')
+              idItrc(isalt)=varid
+#endif
             CASE ('idHsbl')
               idHsbl=varid
             CASE ('idHbbl')
@@ -1757,6 +1771,8 @@
             CASE ('idTbry(inorth,inert(i))')
               load=.TRUE.
             CASE ('idRtrc(inert(i))')
+              load=.TRUE.
+            CASE ('idItrc(inert(i))')
               load=.TRUE.
 #endif
             CASE ('id2dPV')
@@ -2199,6 +2215,28 @@
                   DO i=1,NPT
                     varid=varid+1
                     idRtrc(inert(i))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2)')                   &
+     &                    TRIM(ADJUSTL(Vinfo(1))), i
+                    WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
+     &                    TRIM(ADJUSTL(Vinfo(2))), ', type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+     &                    TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+     &                    TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+     &                    TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END IF
+              CASE ('idItrc(inert(i))')
+                IF (NPT.gt.0) THEN
+                  varid=varid-1
+                  DO i=1,NPT
+                    varid=varid+1
+                    idItrc(inert(i))=varid
                     DO ng=1,Ngrids
                       Fscale(varid,ng)=scale
                       Iinfo(1,varid,ng)=gtype

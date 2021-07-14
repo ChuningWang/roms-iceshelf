@@ -73,6 +73,9 @@
       logical, allocatable :: Linert(:,:)
 #endif
       logical, allocatable :: Ltracer(:,:)
+#if defined ICESHELF && defined T_PASSIVE && defined ICESHELF_TRACER
+      logical, allocatable :: LtracerI(:,:)
+#endif
 #if defined AD_SENSITIVITY    || defined I4DVAR_ANA_SENSITIVITY || \
     defined FORCING_SV        || defined OPT_OBSERVATIONS       || \
     defined SENSITIVITY_4DVAR || defined SO_SEMI                || \
@@ -385,6 +388,11 @@
               IF (.not.allocated(Ltracer)) THEN
                 allocate (Ltracer(NAT+NPT,Ngrids))
               END IF
+#if defined ICESHELF && defined T_PASSIVE && defined ICESHELF_TRACER
+              IF (.not.allocated(LtracerI)) THEN
+                allocate (LtracerI(NPT,Ngrids))
+              END IF
+#endif
 #if defined SOLVE3D && defined T_PASSIVE
               IF (.not.allocated(Linert)) THEN
                 allocate (Linert(NPT,Ngrids))
@@ -1051,6 +1059,16 @@
                   LtracerSrc(itrc,ng)=Ltracer(NAT+i,ng)
                 END DO
 # endif
+              END DO
+#endif
+#if defined ICESHELF && defined T_PASSIVE && defined ICESHELF_TRACER
+            CASE ('LtracerIce')
+              Npts=load_l(Nval, Cval, NPT, Ngrids, LtracerI)
+              DO ng=1,Ngrids
+                DO i=1,NPT
+                  itrc=inert(i)
+                  LtracerIce(itrc,ng)=LtracerI(i,ng)
+                END DO
               END DO
 #endif
             CASE ('LsshCLM')
@@ -4992,6 +5010,20 @@
             END IF
           END DO
 # endif
+#endif
+#if defined ICESHELF && defined T_PASSIVE && defined ICESHELF_TRACER
+          DO i=1,NPT
+            itrc=inert(i)
+            IF (LtracerIce(itrc,ng)) THEN
+              WRITE (out,185) LtracerIce(itrc,ng), 'LtracerIce', itrc,  &
+     &            'Turning ON  point Sources/Sinks on iceshelf tracer ',&
+     &            itrc, TRIM(Vname(1,idTvar(itrc)))
+            ELSE
+              WRITE (out,185) LtracerIce(itrc,ng), 'LtracerIce', itrc,  &
+     &            'Turning OFF point Sources/Sinks on iceshelf tracer ',&
+     &            itrc, TRIM(Vname(1,idTvar(itrc)))
+            END IF
+          END DO
 #endif
           IF (LsshCLM(ng)) THEN
             WRITE (out,170) LsshCLM(ng), 'LsshCLM',                     &
