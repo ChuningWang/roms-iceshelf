@@ -605,7 +605,7 @@
 !
             Sb(i,j) = -1.0_r8*(cff2 + SQRT(cff2**2-4.0*cff1*cff3)) /    &
      &                (2.0_r8*cff1)
-            Tb(i,j) = a*Sb(i,j) + b + c*zice(i,j)
+            Tb(i,j) = a*Sb(i,j) + b - c*zice(i,j)
             m(i,j) = gammaS(i,j)*(Sm-Sb(i,j))/Sb(i,j)
 !
             IF (m(i,j).lt.0.0_r8) THEN
@@ -620,7 +620,7 @@
 !
               Sb(i,j) = -1.0_r8*(cff2 + SQRT(cff2**2-4.0*cff1*cff3)) /  &
      &                  (2.0_r8*cff1)
-              Tb(i,j) = a*Sb(i,j) + b + c*zice(i,j)
+              Tb(i,j) = a*Sb(i,j) + b - c*zice(i,j)
               m(i,j) = gammaS(i,j)*(Sm-Sb(i,j))/Sb(i,j)
             END IF
 !

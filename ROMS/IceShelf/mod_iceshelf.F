@@ -35,7 +35,7 @@
 !
       real(r8), parameter :: a = -0.057_r8
       real(r8), parameter :: b = 0.0939_r8
-      real(r8), parameter :: c = 7.61e-4
+      real(r8), parameter :: c = 7.61e-4_r8
 !
 # if defined ICESHELF_2EQN_VBC
       real(r8), parameter :: L = 3.34e5_r8
@@ -49,7 +49,7 @@
       real(r8), parameter :: L = 3.33e5_r8
       real(r8), parameter :: small = 1.0e-3_r8
 !      real(r8), parameter :: small = 8.0e-6_r8 ! Diffusion only
-      real(r8), parameter :: dt_i = 1.54e-6
+      real(r8), parameter :: dt_i = 1.54e-6_r8
       real(r8), parameter :: cp_w = 3947.0_r8
       real(r8), parameter :: rho_i = 920.0_r8
 !
