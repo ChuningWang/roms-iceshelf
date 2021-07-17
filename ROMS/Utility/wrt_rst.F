@@ -1388,7 +1388,7 @@
 #   ifdef MASKING
      &                   GRID(ng) % rmask,                              &
 #   endif
-     &                   ICESHELF(ng) % iceshelf_vol)
+     &                   ICESHELFVAR(ng) % iceshelf_vol)
       IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idIvol)), RST(ng)%Rindex
@@ -1399,12 +1399,12 @@
       END IF
 !
       scale=1.0_dp
-      IF (RST(ng)%pioVar(idItrc)%dkind.eq.PIO_double) THEN
-        ioDesc => ioDesc_dp_r2dvar(ng)
-      ELSE
-        ioDesc => ioDesc_sp_r2dvar(ng)
-      END IF
       DO itrc=NAT+1,NT(ng)
+        IF (RST(ng)%pioVar(idItrc(itrc))%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
         status=nf_fwrite2d(ng, iNLM, RST(ng)%pioFile,                   &
      &                     RST(ng)%pioVar(idItrc(itrc)),                &
      &                     RST(ng)%Rindex,                              &
@@ -1413,7 +1413,7 @@
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     ICESHELF(ng) % iceshelf_tint(:,:,itrc))
+     &                     ICESHELFVAR(ng) % iceshelf_tint(:,:,itrc))
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idItrc(itrc))),              &
