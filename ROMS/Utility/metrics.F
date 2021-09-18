@@ -2,7 +2,7 @@
       MODULE metrics_mod
 !
 !git $Id$
-!svn $Id: metrics.F 1066 2021-05-14 21:47:45Z arango $
+!svn $Id: metrics.F 1087 2021-09-10 01:11:17Z arango $
 !=======================================================================
 !  Copyright (c) 2002-2021 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -61,6 +61,11 @@
      &                   GRID(ng) % angler,                             &
      &                   GRID(ng) % CosAngler,                          &
      &                   GRID(ng) % SinAngler,                          &
+#if defined TIDE_GENERATING_FORCES
+     &                   GRID(ng) % Cos2Lat,                            &
+     &                   GRID(ng) % SinLat2,                            &
+     &                   GRID(ng) % latr,                               &
+#endif
 #ifdef SOLVE3D
 # ifdef ICESHELF
      &                   GRID(ng) % zice,                               &
@@ -116,6 +121,9 @@
      &                         pmask, rmask,                            &
 #endif
      &                         angler, CosAngler, SinAngler,            &
+#if defined TIDE_GENERATING_FORCES
+     &                         Cos2Lat, SinLat2, latr,                  &
+#endif
 #ifdef SOLVE3D
 # ifdef ICESHELF
      &                         zice,                                    &
@@ -181,7 +189,9 @@
       real(r8), intent(in) :: f(LBi:,LBj:)
       real(r8), intent(in) :: pm(LBi:,LBj:)
       real(r8), intent(in) :: pn(LBi:,LBj:)
-
+# if defined TIDE_GENERATING_FORCES
+      real(r8), intent(in) :: latr(LBi:,LBj:)
+# endif
       real(r8), intent(inout) :: h(LBi:,LBj:)
 # ifdef MASKING
       real(r8), intent(inout) :: pmask(LBi:,LBj:)
@@ -229,6 +239,10 @@
       real(r8), intent(out) :: pmon_v(LBi:,LBj:)
       real(r8), intent(out) :: CosAngler(LBi:,LBj:)
       real(r8), intent(out) :: SinAngler(LBi:,LBj:)
+# if defined TIDE_GENERATING_FORCES
+      real(r8), intent(out) :: Cos2Lat(LBi:,LBj:)
+      real(r8), intent(out) :: SinLat2(LBi:,LBj:)
+# endif
 # ifdef SOLVE3D
       real(r8), intent(out) :: Hz(LBi:,LBj:,:)
       real(r8), intent(out) :: z_r(LBi:,LBj:,:)
@@ -238,7 +252,9 @@
       real(r8), intent(in) :: f(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: pm(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: pn(LBi:UBi,LBj:UBj)
-
+# if defined TIDE_GENERATING_FORCES
+      real(r8), intent(in) :: latr(LBi:UBi,LBj:UBj)
+# endif
       real(r8), intent(inout) :: h(LBi:UBi,LBj:UBj)
 # ifdef MASKING
       real(r8), intent(inout) :: pmask(LBi:UBi,LBj:UBj)
@@ -286,6 +302,10 @@
       real(r8), intent(out) :: pmon_v(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: CosAngler(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: SinAngler(LBi:UBi,LBj:UBj)
+# if defined TIDE_GENERATING_FORCES
+      real(r8), intent(out) :: Cos2Lat(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: SinLat2(LBi:UBi,LBj:UBj)
+# endif
 # ifdef SOLVE3D
       real(r8), intent(out) :: Hz(LBi:UBi,LBj:UBj,N(ng))
       real(r8), intent(out) :: z_r(LBi:UBi,LBj:UBj,N(ng))
@@ -304,6 +324,9 @@
       real(r8), parameter :: Uscale = 0.1_r8
 #endif
       real(r8) :: cff, cff1, cff2
+#if defined TIDE_GENERATING_FORCES
+      real(r8) :: cosphi, phi
+#endif
 #ifdef NESTING
       real(r8) :: SecScale
 #endif
@@ -634,6 +657,40 @@
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
      &                    CosAngler, SinAngler)
+#endif
+
+#if defined TIDE_GENERATING_FORCES
+!
+!-----------------------------------------------------------------------
+! Compute squared cosine of latitude and sine of twice latitude.
+!-----------------------------------------------------------------------
+!
+      DO j=JstrT,JendT
+        DO i=IstrT,IendT
+          phi=latr(i,j)*deg2rad
+          cosphi=COS(phi)
+          Cos2Lat(i,j)=cosphi*cosphi                     ! COS2(latr)
+          SinLat2(i,j)=SIN(2.0_r8*phi)                   ! SIN(2*latr)
+        END DO
+      END DO
+!
+!  Exchange boundary information.
+!
+      IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+        CALL exchange_r2d_tile (ng, tile,                               &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          Cos2Lat)
+        CALL exchange_r2d_tile (ng, tile,                               &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          SinLat2)
+      END IF
+
+# ifdef DISTRIBUTE
+      CALL mp_exchange2d (ng, tile, model, 2,                           &
+     &                    LBi, UBi, LBj, UBj,                           &
+     &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
+     &                    Cos2Lat, SinLat2)
+# endif
 #endif
 
 #if defined DIFF_GRID || defined DIFF_3DCOEF || \
