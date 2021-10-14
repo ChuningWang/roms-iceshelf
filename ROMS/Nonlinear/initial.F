@@ -75,6 +75,9 @@
     (defined MASKING    && (defined READ_WATER || defined WRITE_WATER))
       USE wpoints_mod,       ONLY : wpoints
 #endif
+#ifdef ICE_STRENGTH_QUAD
+      USE ini_strengthcoef_mod, ONLY : ini_strengthcoef
+#endif
 !
       implicit none
 !
@@ -276,6 +279,19 @@
           SetGridConfig(ng)=.FALSE.
         END IF
       END DO
+#ifdef ICE_STRENGTH_QUAD
+!
+!-----------------------------------------------------------------------
+!  Compute ice strength as a function of grid size.
+!-----------------------------------------------------------------------
+!
+      DO ng=1,Ngrids
+        DO tile=first_tile(ng),last_tile(ng),+1
+          CALL ini_strengthcoef (ng, tile, iNLM)
+        END DO
+!$OMP BARRIER
+      END DO
+#endif
 !
 !-----------------------------------------------------------------------
 !  Initialize horizontal mixing coefficients. If applicable, scale
@@ -354,6 +370,20 @@
         IF (nrrec(ng).eq.0) THEN
           DO tile=first_tile(ng),last_tile(ng),+1
             CALL ana_initial (ng, tile, iNLM)
+          END DO
+!$OMP BARRIER
+        END IF
+      END DO
+#endif
+
+#if defined ICE_MODEL && defined ANA_ICE
+!
+!  Analytical initial conditions for sea ice.
+!
+      DO ng=1,Ngrids
+        IF (nrrec(ng).eq.0) THEN
+          DO tile=first_tile(ng),last_tile(ng),+1
+            CALL ana_ice (ng, TILE, iNLM)
           END DO
 !$OMP BARRIER
         END IF

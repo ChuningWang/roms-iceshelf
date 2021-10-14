@@ -33,6 +33,9 @@
       USE mod_forces
       USE mod_ocean
       USE mod_stepping
+# ifdef ICE_MODEL
+      USE mod_ice
+# endif
 !
 !  Imported variable declarations.
 !
@@ -52,6 +55,9 @@
      &                   LBi, UBi, LBj, UBj,                            &
      &                   IminS, ImaxS, JminS, JmaxS,                    &
      &                   nrhs(ng),                                      &
+#  ifdef ICE_NO_SCORRECTION
+     &                   liold(ng),                                     &
+#  endif
      &                   GRID(ng) % Hz,                                 &
 #  if defined UV_LOGDRAG
      &                   GRID(ng) % ZoBot,                              &
@@ -80,6 +86,12 @@
      &                   FORCES(ng) % bustr,                            &
      &                   FORCES(ng) % bvstr,                            &
 #  endif
+#  ifdef ICE_MODEL
+#   ifdef ICE_NO_SCORRECTION
+     &                   ICE(ng) % ai,                                  &
+#   endif
+     &                   FORCES(ng) % qao_n,                            &
+#  endif
      &                   FORCES(ng) % stflux,                           &
      &                   FORCES(ng) % btflux,                           &
      &                   FORCES(ng) % stflx,                            &
@@ -96,6 +108,9 @@
      &                         LBi, UBi, LBj, UBj,                      &
      &                         IminS, ImaxS, JminS, JmaxS,              &
      &                         nrhs,                                    &
+#  ifdef ICE_NO_SCORRECTION
+     &                         liold,                                   &
+#  endif
      &                         Hz,                                      &
 #  if defined UV_LOGDRAG
      &                         ZoBot,                                   &
@@ -120,6 +135,12 @@
 #  ifndef BBL_MODEL
      &                         bustr, bvstr,                            &
 #  endif
+#  ifdef ICE_MODEL
+#   ifdef ICE_NO_SCORRECTION
+     &                         ai,                                      &
+#   endif
+     &                         qao_n,                                   &
+#  endif
      &                         stflux, btflux,                          &
      &                         stflx, btflx)
 !***********************************************************************
@@ -138,6 +159,9 @@
       integer, intent(in) :: LBi, UBi, LBj, UBj
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
       integer, intent(in) :: nrhs
+# ifdef ICE_NO_SCORRECTION
+      integer, intent(in) :: liold
+# endif
 !
 #  ifdef ASSUMED_SHAPE
       real(r8), intent(in) :: Hz(LBi:,LBj:,:)
@@ -169,6 +193,12 @@
 #   ifndef BBL_MODEL
       real(r8), intent(inout) :: bustr(LBi:,LBj:)
       real(r8), intent(inout) :: bvstr(LBi:,LBj:)
+#   endif
+#   ifdef ICE_MODEL
+#    ifdef ICE_NO_SCORRECTION
+      real(r8), intent(in) :: ai(LBi:,LBj:,:)
+#    endif
+      real(r8), intent(inout) :: qao_n(LBi:,LBj:)
 #   endif
       real(r8), intent(inout) :: stflx(LBi:,LBj:,:)
       real(r8), intent(inout) :: btflx(LBi:,LBj:,:)
@@ -202,6 +232,12 @@
 #   ifndef BBL_MODEL
       real(r8), intent(inout) :: bustr(LBi:UBi,LBj:UBj)
       real(r8), intent(inout) :: bvstr(LBi:UBi,LBj:UBj)
+#   endif
+#   ifdef ICE_MODEL
+#    ifdef ICE_NO_SCORRECTION
+      real(r8), intent(in) :: ai(LBi:UBi,LBj:UBj,2)
+#    endif
+      real(r8), intent(inout) :: qao_n(LBi:UBi,LBj:UBj)
 #   endif
       real(r8), intent(inout) :: stflx(LBi:UBi,LBj:UBj,NT(ng))
       real(r8), intent(inout) :: btflx(LBi:UBi,LBj:UBj,NT(ng))
@@ -255,6 +291,9 @@
         DO i=IstrR,IendR
           stflx(i,j,itemp)=stflx(i,j,itemp)+                            &
      &                     dqdt(i,j)*(t(i,j,N(ng),nrhs,itemp)-sst(i,j))
+#  ifdef ICE_MODEL
+          qao_n(i,j) = -stflx(i,j,itemp) * rho0 * Cp
+#  endif
         END DO
       END DO
 #  endif
@@ -302,9 +341,19 @@
         DO i=IstrR,IendR
           EmP=stflux(i,j,isalt)
 #   if defined SCORRECTION
+#    ifdef ICE_MODEL
+          fac_ice = 1.0_r8
+#     ifdef ICE_NO_SCORRECTION
+          IF(ai(i,j,liold).GE.0.1_r8) fac_ice = 0.0_r8
+#     endif
+          stflx(i,j,isalt)=EmP*t(i,j,N(ng),nrhs,isalt)-                 &
+     &                     fac_ice*Tnudg(isalt,ng)*Hz(i,j,N(ng))*       &
+     &                     (t(i,j,N(ng),nrhs,isalt)-sss(i,j))
+#    else
           stflx(i,j,isalt)=EmP*t(i,j,N(ng),nrhs,isalt)-                 &
      &                     Tnudg(isalt,ng)*Hz(i,j,N(ng))*               &
      &                     (t(i,j,N(ng),nrhs,isalt)-sss(i,j))
+#    endif
 #   elif defined SRELAXATION
           stflx(i,j,isalt)=-Tnudg(isalt,ng)*Hz(i,j,N(ng))*              &
      &                     (t(i,j,N(ng),nrhs,isalt)-sss(i,j))

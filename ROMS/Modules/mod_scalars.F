@@ -391,6 +391,9 @@
         logical, allocatable :: Lfloats(:)
         logical, allocatable :: Lsediment(:)
         logical, allocatable :: Lstations(:)
+#ifdef ICE_MODEL
+        logical, allocatable :: Lice(:)
+#endif
 !
 !  If equilibrium tides, switch to apply the 18.6-year lunar nodal
 !  cycle correction.
@@ -416,7 +419,11 @@
         real(dp) :: Csolar = 1353.0_dp          ! 1360-1380 W/m2
         real(dp) :: Infinity                    ! Infinity = 1.0/0.0
         real(dp) :: Eradius = 6371315.0_dp      ! m
+#if defined ICE_MODEL && defined ICE_BOX
+        real(dp) :: StefBo = 5.78E-8_r8         ! Watts/m2/K4 (Match MU)
+#else
         real(dp) :: StefBo = 5.67E-8_dp         ! Watts/m2/K4
+#endif
         real(dp) :: emmiss = 0.97_dp            ! non_dimensional
         real(dp) :: rhow = 1000.0_dp            ! kg/m3
 #ifdef SOLITON
@@ -492,6 +499,17 @@
         logical, allocatable :: LnudgeM2CLM(:)       ! 2D momentum
         logical, allocatable :: LnudgeM3CLM(:)       ! 3D momentum
         logical, allocatable :: LnudgeTCLM(:,:)      ! tracers
+#ifdef ICE_MODEL
+!
+!  Switches to read and process ice-related climatology fields.
+!
+        logical, allocatable :: LmiCLM(:)            ! ice momentum
+        logical, allocatable :: LaiCLM(:)            ! ice tracers
+        logical, allocatable :: LsiCLM(:)            ! ice tracers
+        logical, allocatable :: LnudgeMICLM(:)       ! ice momentum
+        logical, allocatable :: LnudgeAICLM(:)       ! ice tracers
+        logical, allocatable :: LnudgeSICLM(:)       ! ice tracers
+#endif
 !
 !  Switches to activate point Source/Sinks in an application:
 !    * Horizontal momentum transport (u or v)
@@ -517,6 +535,9 @@
 !    exit_flag = 7   Illegal input parameter
 !    exit_flag = 8   Fatal algorithm result
 !    exit_flag = 9   coupling error
+#ifdef ICE_MODEL
+!    exit_flag = 10  Ice frazil error
+#endif
 !
         integer :: exit_flag = 0
         integer :: blowup = 0
@@ -1790,6 +1811,51 @@
         logical :: TLmodel = .FALSE.
         logical :: ADmodel = .FALSE.
 !
+#ifdef ICE_MODEL
+!
+!-----------------------------------------------------------------------
+!  Other sea ice related model parameters.
+!-----------------------------------------------------------------------
+!
+        integer, allocatable :: nstrs(:)
+        integer, allocatable :: nevp(:)
+        integer, allocatable :: ievp(:)
+!
+        real(r8) :: tol = 1.0E-16
+        real(r8) :: ice_emiss = 0.97_r8
+        real(r8) :: spec_heat_air = 1004._r8
+        real(r8) :: trans_coeff = 1.75E-3
+        real(r8) :: sublim_latent_heat = 2.834E+6
+        real(r8) :: t0deg = 273.15_r8                     ! [Kelvin]
+!       real(r8), parameter :: sice_ref = 3.2_r8          ! [psu]
+        real(r8), parameter :: sice_ref = 7.0_r8          ! [psu]
+!
+        real(r8), allocatable :: dtice(:)
+        real(r8), allocatable :: dte(:)
+        real(r8), allocatable :: rhoice(:)
+        real(r8), allocatable :: cdiw(:)
+        real(r8), allocatable :: cdai(:)
+        real(r8), allocatable :: rho_air(:)
+        real(r8), allocatable :: rhosnow_dry(:)
+        real(r8), allocatable :: rhosnow_wet(:)
+        real(r8), allocatable :: pstar(:)
+        real(r8), allocatable :: pstar_e(:)
+        real(r8), allocatable :: zetamax(:)
+        real(r8), allocatable :: zetamin(:)
+        real(r8), allocatable :: ellip_sq(:)
+        real(r8), allocatable :: astren(:)
+        real(r8), allocatable :: alphai(:)
+        real(r8), allocatable :: min_h(:)
+        real(r8), allocatable :: min_a(:)
+        real(r8), allocatable :: max_a(:)
+        real(r8), allocatable :: stressang(:)
+# ifdef ICE_LANDFAST
+        real(r8), allocatable :: lf_k1(:)
+        real(r8), allocatable :: lf_k2(:)
+        real(r8), allocatable :: lf_u0(:)
+# endif
+#endif
+
       CONTAINS
 !
       SUBROUTINE allocate_scalars
@@ -2042,6 +2108,12 @@
         allocate ( Lfloats(Ngrids) )
         Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
       END IF
+#ifdef ICE_MODEL
+      IF (.not. allocated(Lice)) THEN
+        allocate ( Lice(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+#endif
       IF (.not.allocated(Lsediment)) THEN
         allocate ( Lsediment(Ngrids) )
         Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
@@ -2146,6 +2218,33 @@
         allocate ( LnudgeTCLM(MT,Ngrids) )
         Dmem(1)=Dmem(1)+REAL(MT*Ngrids,r8)
       END IF
+
+#ifdef ICE_MODEL
+      IF (.not. allocated(LmiCLM)) THEN
+        allocate ( LmiCLM(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(LaiCLM)) THEN
+        allocate ( LaiCLM(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(LsiCLM)) THEN
+        allocate ( LsiCLM(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(LnudgeMICLM)) THEN
+        allocate ( LnudgeMICLM(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(LnudgeAICLM)) THEN
+        allocate ( LnudgeAICLM(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(LnudgeSICLM)) THEN
+        allocate ( LnudgeSICLM(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+#endif
 
       IF (.not.allocated(LuvSrc)) THEN
         allocate ( LuvSrc(Ngrids) )
@@ -3227,6 +3326,112 @@
         Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
       END IF
 
+#ifdef ICE_MODEL
+      IF (.not. allocated(nstrs)) THEN
+        allocate ( nstrs(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(nevp)) THEN
+        allocate ( nevp(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(ievp)) THEN
+        allocate ( ievp(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+
+      IF (.not. allocated(dtice)) THEN
+        allocate ( dtice(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(dte)) THEN
+        allocate ( dte(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(rhoice)) THEN
+        allocate ( rhoice(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(cdiw)) THEN
+        allocate ( cdiw(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(cdai)) THEN
+        allocate ( cdai(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(rho_air)) THEN
+        allocate ( rho_air(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(rhosnow_dry)) THEN
+        allocate ( rhosnow_dry(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(rhosnow_wet)) THEN
+        allocate ( rhosnow_wet(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(pstar)) THEN
+        allocate ( pstar(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(pstar_e)) THEN
+        allocate ( pstar_e(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(zetamax)) THEN
+        allocate ( zetamax(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(zetamin)) THEN
+        allocate ( zetamin(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(ellip_sq)) THEN
+        allocate ( ellip_sq(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(astren)) THEN
+        allocate ( astren(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(alphai)) THEN
+        allocate ( alphai(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(min_h)) THEN
+        allocate ( min_h(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(min_a)) THEN
+        allocate ( min_a(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(max_a)) THEN
+        allocate ( max_a(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(stressang)) THEN
+        allocate ( stressang(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+# ifdef ICE_LANDFAST
+      IF (.not. allocated(lf_k1)) THEN
+        allocate ( lf_k1(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(lf_k2)) THEN
+        allocate ( lf_k2(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(lf_u0)) THEN
+        allocate ( lf_u0(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+# endif
+#endif
+
       RETURN
       END SUBROUTINE allocate_scalars
 
@@ -3376,6 +3581,9 @@
         LcycleRST(ng)=.FALSE.
         LcycleTLM(ng)=.FALSE.
         Lfloats(ng)=.TRUE.
+#ifdef ICE_MODEL
+        Lice(ng)=.TRUE.
+#endif
         Lsediment(ng)=.TRUE.
         Lstations(ng)=.TRUE.
 #if defined FOUR_DVAR || defined VERIFICATION
@@ -3493,6 +3701,14 @@
         LnudgeM2CLM(ng)=.FALSE.
         LnudgeM3CLM(ng)=.FALSE.
         Lclimatology(ng)=.FALSE.
+#ifdef ICE_MODEL
+        LmiCLM(ng)=.FALSE.
+        LaiCLM(ng)=.FALSE.
+        LsiCLM(ng)=.FALSE.
+        LnudgeMICLM(ng)=.FALSE.
+        LnudgeAICLM(ng)=.FALSE.
+        LnudgeSICLM(ng)=.FALSE.
+#endif
         Lm2CLM(ng)=.FALSE.
         Lm3CLM(ng)=.FALSE.
         LsshCLM(ng)=.FALSE.

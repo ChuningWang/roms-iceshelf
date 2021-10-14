@@ -112,6 +112,8 @@
 ** EMINUSP                 if computing E-P                                  **
 ** WIND_MINUS_CURRENT      if compute effective wind by removing current     **
 **                                                                           **
+** CCSM_FLUXES             if CCSM version of bulk fluxes computation        **
+**                                                                           **
 ** OPTIONS for wave roughness formulation in bulk fluxes:                    **
 **                                                                           **
 ** COARE_TAYLOR_YELLAND    if Taylor and Yelland (2001) relation             **
@@ -592,6 +594,34 @@
 ** problems on nodes with limited memory.                                    **
 **                                                                           **
 ** INLINE_2DIO             if processing 3D IO level by level                **
+**                                                                           **
+** Sea ice options                                                           **
+**                                                                           **
+** ICE_MODEL           use for sea-ice model                                 **
+** ICE_ADVECT          use for advection of ice tracers                      **
+** ICE_ALBEDO          use for albedo calculation in bulk flux computation   **
+** ICE_ALB_EC92        use for albedo computation from Ebert and Curry       **
+** ICE_BULK_FLUXES     use for ice part of bulk flux computation             **
+** ICE_CCSM_SHORTWAVE  use for CCSM SW formula in bulk flux computation      **
+** ICE_CONVSNOW        use for conversion of flooded snow to ice             **
+** ICE_DIAGS           use for ice thermodynamic diagnostics                 **
+** ICE_EVP             use for elastic-viscous-plastic rheology              **
+** ICE_I_O             use for shortwave going to heat ice                   **
+** ICE_LANDFAST        use for a shorefast-ice algorithm (Lemieux et al)     **
+** ICE_MK              use for Mellor-Kantha thermodynamics (only choice)    **
+** ICE_MOMENTUM        use for momentum component                            **
+** ICE_MOM_BULK        some option for ice-water stress computation          **
+** ICE_NO_SCORRECTION  use for no scorrection under the ice                  **
+** ICE_NO_SNOW         use to remove snow layer in ice model                 **
+** ICE_OUTFLOW_MASK    use for Hibler style outflow cells                    **
+** ICE_SHALLOW_LIMIT   use for grounded sea ice                              **
+** ICE_SHOREFAST       use for a simple shorefast-ice algorithm (Budgell)    **
+** ICE_SHORTWAVE_R     use for ice impact on shortwave spectral quality      **
+** ICE_SMOLAR          use for MPDATA advection scheme                       **
+** ICE_SNOWFALL        use for snow fall on sea ice                          **
+** ICE_STRENGTH_QUAD   use for ice strength quadratic function of thickness  **
+** ICE_THERMO          use for thermodynamic component                       **
+** ICE_UPWIND          use for upwind advection scheme                       **
 **                                                                           **
 ** OPTION to avoid writing current date and CPP options to NetCDF file       **
 ** headers. This is used to compare serial and parallel solutions where      **

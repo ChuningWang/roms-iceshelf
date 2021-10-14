@@ -53,6 +53,9 @@
 #ifdef BBL_MODEL
       USE mod_bbl, ONLY : allocate_bbl, initialize_bbl
 #endif
+#ifdef ICE_MODEL
+      USE mod_ice, ONLY : allocate_ice, initialize_ice
+#endif
 !
       implicit none
 !
@@ -124,6 +127,9 @@
 #ifdef BBL_MODEL
           CALL allocate_bbl (ng, LBi, UBi, LBj, UBj)
 #endif
+#ifdef ICE_MODEL
+          CALL allocate_ice (ng, LBi, UBi, LBj, UBj)
+#endif
           IF (LallocateClima.or.Lclimatology(ng)) THEN
             CALL allocate_clima (ng, LBi, UBi, LBj, UBj)
           END IF
@@ -185,6 +191,9 @@
 #endif
 #ifdef BBL_MODEL
           CALL initialize_bbl (ng, tile)
+#endif
+#ifdef ICE_MODEL
+          CALL initialize_ice (ng, tile)
 #endif
           CALL initialize_boundary (ng, tile, model)
 

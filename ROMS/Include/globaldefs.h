@@ -1034,6 +1034,61 @@
 #endif
 
 /*
+** Check for calling ice model
+*/
+
+#if defined ICE_ADVECT        || defined ICE_ALB_EC92       || \
+    defined ICE_BULK_FLUXES   || defined ICE_CCSM_SHORTWAVE || \
+    defined ICE_CONVSNOW      || defined ICE_DIAGS          || \
+    defined ICE_EVP           || defined ICE_I_O            || \
+    defined ICE_LANDFAST      || defined ICE_LANDFAST_CLIM  || \
+    defined ICE_MK            || defined ICE_MOMENTUM       || \
+    defined ICE_NO_SNOW       || defined ICE_OUTFLOW_MASK   || \
+    defined ICE_SHALLOW_LIMIT || defined ICE_SHOREFAST      || \
+    defined ICE_SHORTWAVE_R   || defined ICE_SMOLAR         || \
+    defined ICE_STRENGTH_QUAD || defined ICE_THERMO         || \
+    defined ICE_ALBEDO        || defined ICE_UPWIND
+# define ICE_MODEL
+#endif
+
+#ifdef ICE_MODEL
+# define IOUT linew(ng)
+# define IUOUT liunw(ng)
+# define IEOUT lienw(ng)
+#endif
+
+/*
+** Activate CCSM albedo is using CCSM treatment of shortwave
+** interactions with ice/snow
+*/
+
+#ifdef ICE_CCSM_SHORTWAVE
+# define ICE_ALB_CSIM
+#endif
+
+/*
+** Check for calling albedo function
+*/
+
+#if defined ICE_ALB_CSIM    || defined ICE_ALB_CURVE || \
+    defined ICE_ALB_DIRDIFF || defined ICE_ALB_FILE
+# define ICE_ALBEDO
+#endif
+
+#if defined ANA_ICE         || \
+    defined ANA_AIOBC       || \
+    defined ANA_HIOBC       || \
+    defined ANA_HSNOBC      || \
+    defined ANA_TIOBC       || \
+    defined ANA_SIGOBC      || \
+    defined ANA_MIOBC       || \
+    defined ANA_AICLIMA     || \
+    defined ANA_SICLIMA     || \
+    defined ANA_MICLIMA
+# define ANALYTICAL
+#endif
+
+/*
 ** Define internal clouds option.  Undefine analytical
 ** shortwave option if not needed.
 */

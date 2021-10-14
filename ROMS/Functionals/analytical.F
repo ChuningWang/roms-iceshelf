@@ -83,6 +83,49 @@
       CONTAINS
 !
 #ifdef ANALYTICAL
+
+# ifdef ICE_MODEL
+#  if defined ANA_ICE
+#   include <ana_ice.h>
+#  endif
+
+#  ifdef ANA_AIOBC
+#   include <ana_aiobc.h>
+#  endif
+
+#  ifdef ANA_HIOBC
+#   include <ana_hiobc.h>
+#  endif
+
+#  ifdef ANA_HSNOBC
+#   include <ana_hsnobc.h>
+#  endif
+
+#  ifdef ANA_TIOBC
+#   include <ana_tiobc.h>
+#  endif
+
+#  ifdef ANA_SIGOBC
+#   include <ana_sigobc.h>
+#  endif
+
+#  ifdef ANA_MIOBC
+#   include <ana_miobc.h>
+#  endif
+
+#  ifdef ANA_AICLIMA
+#   include <ana_aiclima.h>
+#  endif
+
+#  ifdef ANA_SICLIMA
+#   include <ana_siclima.h>
+#  endif
+
+#  ifdef ANA_MICLIMA
+#   include <ana_miclima.h>
+#  endif
+# endif
+
 # ifdef SOLVE3D
 #  if defined ANA_BIOLOGY && defined BIOLOGY
 #   include <ana_biology.h>

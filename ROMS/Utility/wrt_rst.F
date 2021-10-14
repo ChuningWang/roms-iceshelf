@@ -28,6 +28,12 @@
       USE mod_netcdf
       USE mod_ocean
       USE mod_scalars
+#ifdef ICE_MODEL
+      USE mod_ice
+#ifdef PERFECT_RESTART
+      USE mod_forces
+#endif
+#endif
 #if defined SEDIMENT || defined BBL_MODEL
       USE mod_sedbed
       USE mod_sediment
@@ -193,6 +199,37 @@
      &                      knew(ng:), (/RST(ng)%Rindex/), (/1/),       &
      &                      ncid = RST(ng)%ncid)
       IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+# ifdef ICE_MODEL
+      CALL netcdf_put_ivar (ng, iNLM, RST(ng)%name, 'linew',            &
+     &                      linew(ng:), (/RST(ng)%Rindex/), (/1/),      &
+     &                      ncid = RST(ng)%ncid)
+      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+
+      CALL netcdf_put_ivar (ng, iNLM, RST(ng)%name, 'liold',            &
+     &                      liold(ng:), (/RST(ng)%Rindex/), (/1/),      &
+     &                      ncid = RST(ng)%ncid)
+      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+
+      CALL netcdf_put_ivar (ng, iNLM, RST(ng)%name, 'liunw',            &
+     &                      liunw(ng:), (/RST(ng)%Rindex/), (/1/),      &
+     &                      ncid = RST(ng)%ncid)
+      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+
+      CALL netcdf_put_ivar (ng, iNLM, RST(ng)%name, 'liuol',            &
+     &                      liuol(ng:), (/RST(ng)%Rindex/), (/1/),      &
+     &                      ncid = RST(ng)%ncid)
+      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+
+      CALL netcdf_put_ivar (ng, iNLM, RST(ng)%name, 'lienw',            &
+     &                      lienw(ng:), (/RST(ng)%Rindex/), (/1/),      &
+     &                      ncid = RST(ng)%ncid)
+      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+
+      CALL netcdf_put_ivar (ng, iNLM, RST(ng)%name, 'lieol',            &
+     &                      lieol(ng:), (/RST(ng)%Rindex/), (/1/),      &
+     &                      ncid = RST(ng)%ncid)
+      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+# endif
 #endif
 !
 !  Write out model time (s).
@@ -203,6 +240,419 @@
      &                      ncid = RST(ng)%ncid,                        &
      &                      varid = RST(ng)%Vid(idtime))
       IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+
+#ifdef ICE_MODEL
+      scale=1.0_r8
+!
+!  Write out ice 2D momentum component (m/s) in the XI-direction.
+!
+# ifdef PERFECT_RESTART
+      gtype=gfactor*u3dvar
+      status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idUice),   &
+     &                   RST(ng)%Rindex, gtype,                         &
+     &                   LBi, UBi, LBj, UBj, 1, 2, scale,               &
+#  ifdef MASKING
+     &                   GRID(ng) % umask,                              &
+#  endif
+     &                 ICE (ng) % ui)
+# else
+      gtype=gfactor*u2dvar
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idUice),   &
+     &                 RST(ng)%Rindex, gtype,                           &
+     &                 LBi, UBi, LBj, UBj, scale,                       &
+#  ifdef MASKING
+     &                 GRID(ng) % umask,                                &
+#  endif
+     &                 ICE (ng) % ui(:,:,IUOUT))
+# endif
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idUice)), RST(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+!
+!  Write out ice 2D momentum component (m/s) in the ETA-direction.
+!
+      scale=1.0_r8
+# ifdef PERFECT_RESTART
+      gtype=gfactor*v3dvar
+      status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idVice),   &
+     &                   RST(ng)%Rindex, gtype,                         &
+     &                   LBi, UBi, LBj, UBj, 1, 2, scale,               &
+#  ifdef MASKING
+     &                   GRID(ng) % vmask,                              &
+#  endif
+     &                   ICE (ng) % vi)
+# else
+      gtype=gfactor*v2dvar
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idVice),   &
+     &                 RST(ng)%Rindex, gtype,                           &
+     &                 LBi, UBi, LBj, UBj, scale,                       &
+#  ifdef MASKING
+     &                 GRID(ng) % vmask,                                &
+#  endif
+     &                 ICE (ng) % vi(:,:,IUOUT))
+# endif
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idVice)), RST(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+!
+!  Write out ice concentration
+!
+      scale=1.0_r8
+# ifdef PERFECT_RESTART
+      gtype=gfactor*r3dvar
+      status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idAice),   &
+     &                   RST(ng)%Rindex, gtype,                         &
+     &                   LBi, UBi, LBj, UBj, 1, 2, scale,               &
+#  ifdef MASKING
+     &                   GRID(ng) % rmask,                              &
+#  endif
+     &                 ICE (ng) % ai)
+# else
+      gtype=gfactor*r2dvar
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idAice),   &
+     &                 RST(ng)%Rindex, gtype,                           &
+     &                 LBi, UBi, LBj, UBj, scale,                       &
+#  ifdef MASKING
+     &                 GRID(ng) % rmask,                                &
+#  endif
+     &                 ICE (ng) % ai(:,:,IOUT))
+# endif
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idAice)), RST(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+!
+!  Write out ice average thickness
+!
+      scale=1.0_r8
+# ifdef PERFECT_RESTART
+      gtype=gfactor*r3dvar
+      status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idHice),   &
+     &                   RST(ng)%Rindex, gtype,                         &
+     &                   LBi, UBi, LBj, UBj, 1, 2, scale,               &
+#  ifdef MASKING
+     &                   GRID(ng) % rmask,                              &
+#  endif
+     &                 ICE (ng) % hi)
+# else
+      gtype=gfactor*r2dvar
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idHice),   &
+     &                 RST(ng)%Rindex, gtype,                           &
+     &                 LBi, UBi, LBj, UBj, scale,                       &
+#  ifdef MASKING
+     &                 GRID(ng) % rmask,                                &
+#  endif
+     &                 ICE (ng) % hi(:,:,IOUT))
+# endif
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idHice)), RST(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+!
+!  Write out snow average thickness
+!
+      scale=1.0_r8
+# ifdef PERFECT_RESTART
+      gtype=gfactor*r3dvar
+      status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idHsno),   &
+     &                   RST(ng)%Rindex, gtype,                         &
+     &                   LBi, UBi, LBj, UBj, 1, 2, scale,               &
+#  ifdef MASKING
+     &                   GRID(ng) % rmask,                              &
+#  endif
+     &                   ICE (ng) % hsn)
+# else
+      gtype=gfactor*r2dvar
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idHsno),   &
+     &                 RST(ng)%Rindex, gtype,                           &
+     &                 LBi, UBi, LBj, UBj, scale,                       &
+#  ifdef MASKING
+     &                 GRID(ng) % rmask,                                &
+#  endif
+     &                 ICE (ng) % hsn(:,:,IOUT))
+# endif
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idHsno)), RST(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+!
+!  Write out ice age
+!
+      scale=1.0_r8
+# ifdef PERFECT_RESTART
+      gtype=gfactor*r3dvar
+      status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idAgeice), &
+     &                   RST(ng)%Rindex, gtype,                         &
+     &                   LBi, UBi, LBj, UBj, 1, 2, scale,               &
+#  ifdef MASKING
+     &                   GRID(ng) % rmask,                              &
+#  endif
+     &                   ICE (ng) % ageice)
+# else
+      gtype=gfactor*r2dvar
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idAgeice), &
+     &                 RST(ng)%Rindex, gtype,                           &
+     &                 LBi, UBi, LBj, UBj, scale,                       &
+#  ifdef MASKING
+     &                 GRID(ng) % rmask,                                &
+#  endif
+     &                 ICE (ng) % ageice(:,:,IOUT))
+# endif
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idAgeice)), RST(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+!
+!  Write out ice/snow surface temperature
+!
+      scale=1.0_r8
+      gtype=gfactor*r2dvar
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idTice),   &
+     &                 RST(ng)%Rindex, gtype,                           &
+     &                 LBi, UBi, LBj, UBj, scale,                       &
+# ifdef MASKING
+     &                 GRID(ng) % rmask,                                &
+# endif
+     &                 ICE (ng) % tis)
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idTice)), RST(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+!
+!  Write out ice interior temperature
+!
+      scale=1.0_r8
+# ifdef PERFECT_RESTART
+      gtype=gfactor*r3dvar
+      status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idTimid),  &
+     &                   RST(ng)%Rindex, gtype,                         &
+     &                   LBi, UBi, LBj, UBj, 1, 2, scale,               &
+#  ifdef MASKING
+     &                   GRID(ng) % rmask,                              &
+#  endif
+     &                   ICE (ng) % ti)
+# else
+      gtype=gfactor*r2dvar
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idTimid),  &
+     &                 RST(ng)%Rindex, gtype,                           &
+     &                 LBi, UBi, LBj, UBj, scale,                       &
+#  ifdef MASKING
+     &                 GRID(ng) % rmask,                                &
+#  endif
+     &                 ICE (ng) % ti(:,:,IOUT))
+# endif
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idTimid)), RST(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+!
+!  Write out internal ice stress component 11
+!
+      scale=1.0_r8
+# ifdef PERFECT_RESTART
+      gtype=gfactor*r3dvar
+      status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idSig11),  &
+     &                   RST(ng)%Rindex, gtype,                         &
+     &                   LBi, UBi, LBj, UBj, 1, 2, scale,               &
+#  ifdef MASKING
+     &                   GRID(ng) % rmask,                              &
+#  endif
+     &                   ICE (ng) % sig11)
+# else
+      gtype=gfactor*r2dvar
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idSig11),  &
+     &                 RST(ng)%Rindex, gtype,                           &
+     &                 LBi, UBi, LBj, UBj, scale,                       &
+#  ifdef MASKING
+     &                 GRID(ng) % rmask,                                &
+#  endif
+     &                 ICE (ng) % sig11(:,:,IEOUT))
+# endif
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idSig11)), RST(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+!
+!  Write out internal ice stress component 22
+!
+      scale=1.0_r8
+# ifdef PERFECT_RESTART
+      gtype=gfactor*r3dvar
+      status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idSig22),  &
+     &                   RST(ng)%Rindex, gtype,                         &
+     &                   LBi, UBi, LBj, UBj, 1, 2, scale,               &
+#  ifdef MASKING
+     &                   GRID(ng) % rmask,                              &
+#  endif
+     &                   ICE (ng) % sig22)
+# else
+      gtype=gfactor*r2dvar
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idSig22),  &
+     &                 RST(ng)%Rindex, gtype,                           &
+     &                 LBi, UBi, LBj, UBj, scale,                       &
+#  ifdef MASKING
+     &                 GRID(ng) % rmask,                                &
+#  endif
+     &                 ICE (ng) % sig22(:,:,IEOUT))
+# endif
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idSig22)), RST(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+!
+!  Write out internal ice stress component 12
+!
+      scale=1.0_r8
+# ifdef PERFECT_RESTART
+      gtype=gfactor*r3dvar
+      status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idSig12),  &
+     &                   RST(ng)%Rindex, gtype,                         &
+     &                   LBi, UBi, LBj, UBj, 1, 2, scale,               &
+#  ifdef MASKING
+     &                   GRID(ng) % rmask,                              &
+#  endif
+     &                   ICE (ng) % sig12)
+# else
+      gtype=gfactor*r2dvar
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idSig12),  &
+     &                 RST(ng)%Rindex, gtype,                           &
+     &                 LBi, UBi, LBj, UBj, scale,                       &
+#  ifdef MASKING
+     &                 GRID(ng) % rmask,                                &
+#  endif
+     &                 ICE (ng) % sig12(:,:,IEOUT))
+# endif
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idSig12)), RST(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+!
+!  Write out ice-ocean friction velocity
+!
+      scale=1.0_r8
+      gtype=gfactor*r2dvar
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idTauiw),  &
+     &                 RST(ng)%Rindex, gtype,                           &
+     &                 LBi, UBi, LBj, UBj, scale,                       &
+# ifdef MASKING
+     &                 GRID(ng) % rmask_full,                           &
+# endif
+     &                 ICE (ng) % utau_iw)
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idTauiw)), RST(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+!
+!  Write out ice-ocean momentum transfer coefficient
+!
+      scale=1.0_r8
+      gtype=gfactor*r2dvar
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idChuiw),  &
+     &                 RST(ng)%Rindex, gtype,                           &
+     &                 LBi, UBi, LBj, UBj, scale,                       &
+# ifdef MASKING
+     &                 GRID(ng) % rmask_full,                           &
+# endif
+     &                 ICE (ng) % chu_iw)
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idChuiw)), RST(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+!
+!  Write out salinity in molecular sub-layer under ice
+!
+      scale=1.0_r8
+      gtype=gfactor*r2dvar
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idS0mk),   &
+     &                 RST(ng)%Rindex, gtype,                           &
+     &                 LBi, UBi, LBj, UBj, scale,                       &
+# ifdef MASKING
+     &                 GRID(ng) % rmask,                                &
+# endif
+     &                 ICE (ng) % s0mk)
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idS0mk)), RST(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+!
+!  Write out temperature in molecular sub-layer under ice
+!
+      scale=1.0_r8
+      gtype=gfactor*r2dvar
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idT0mk),   &
+     &                 RST(ng)%Rindex, gtype,                           &
+     &                 LBi, UBi, LBj, UBj, scale,                       &
+# ifdef MASKING
+     &                 GRID(ng) % rmask,                                &
+# endif
+     &                 ICE (ng) % t0mk)
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idT0mk)), RST(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+#endif
 
 #ifdef ICESHELF
 # ifdef ICESHELF_MORPH
@@ -558,6 +1008,76 @@
         RETURN
       END IF
 #endif
+
+#if defined PERFECT_RESTART && defined ICE_MODEL
+!
+!  Write out surface active traces fluxes.
+!
+      DO itrc=1,NAT
+        scale=1.0_r8
+        gtype=gfactor*r2dvar
+        status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid,                      &
+     &                     RST(ng)%Vid(idTsur(itrc)),                   &
+     &                     RST(ng)%Rindex, gtype,                       &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+# ifdef MASKING
+     &                     GRID(ng) % rmask_full,                       &
+# endif
+     &                     FORCES(ng) % stflx(:,:,itrc))
+        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idTsur(itrc))),              &
+     &                        RST(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END DO
+!
+!  Write out surface U-momentum stress.
+!
+      scale=1.0_r8
+      gtype=gfactor*u2dvar
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idUsms),   &
+     &                   RST(ng)%Rindex, gtype,                         &
+     &                   LBi, UBi, LBj, UBj, scale,                     &
+# ifdef MASKING
+     &                   GRID(ng) % umask_full,                         &
+# endif
+     &                   FORCES(ng) % sustr,                            &
+     &                   SetFillVal = .FALSE.)
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idUsms)), RST(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+!
+!  Write out surface V-momentum stress.
+!
+      scale=1.0_r8
+      gtype=gfactor*v2dvar
+      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idVsms),   &
+     &                   RST(ng)%Rindex, gtype,                         &
+     &                   LBi, UBi, LBj, UBj, scale,                     &
+# ifdef MASKING
+     &                   GRID(ng) % vmask_full,                         &
+# endif
+     &                   FORCES(ng) % svstr,                            &
+     &                   SetFillVal = .FALSE.)
+      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idVsms)), RST(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
+#endif
+
 #ifdef SOLVE3D
 !
 !  Write out 3D momentum component (m/s) in the XI-direction.

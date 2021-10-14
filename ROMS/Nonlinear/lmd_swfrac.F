@@ -6,6 +6,9 @@
       SUBROUTINE lmd_swfrac_tile (ng, tile,                             &
      &                            LBi, UBi, LBj, UBj,                   &
      &                            IminS, ImaxS, JminS, JmaxS,           &
+# ifdef ICE_SHORTWAVE_R
+     &                            rfaci,                                &
+# endif
      &                            Zscale, Z, swdk)
 !
 !git $Id$
@@ -51,6 +54,14 @@
       integer, intent(in) :: LBi, UBi, LBj, UBj
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
 
+# ifdef ICE_SHORTWAVE_R
+#  ifdef ASSUMED_SHAPE
+      real(r8), intent(in) :: rfaci(LBi:,LBj:)
+#  else
+      real(r8), intent(in) :: rfaci(LBi:UBi,LBj:UBj)
+#  endif
+# endif
+
       real(r8), intent(in) :: Zscale
 
       real(r8), intent(in) :: Z(IminS:ImaxS,JminS:JmaxS)
@@ -74,7 +85,11 @@
           Jindex=INT(MIXING(ng)%Jwtype(i,j))
           fac1(i)=Zscale/lmd_mu1(Jindex)
           fac2(i)=Zscale/lmd_mu2(Jindex)
+# ifdef ICE_SHORTWAVE_R
+          fac3(i)=lmd_r1(Jindex)*rfaci(i,j)
+# else
           fac3(i)=lmd_r1(Jindex)
+# endif
         END DO
 !!DIR$ VECTOR ALWAYS
         DO i=Istr,Iend

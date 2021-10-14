@@ -709,6 +709,13 @@
       is=LEN_TRIM(Coptions)+1
       Coptions(is:is+8)=' CARBON,'
 #endif
+#ifdef CCSM_FLUXES
+!
+      IF (Master) WRITE (stdout,20) 'CCSM_FLUXES',                      &
+     &   'Surface bulk fluxes parameterization'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+13)=' CCSM_FLUXES,'
+#endif
 #if defined CELERITY_READ && defined FORWARD_READ
 !
       IF (Master) WRITE (stdout,20) 'CELERITY_READ',                    &
@@ -1206,6 +1213,167 @@
       is=LEN_TRIM(Coptions)+1
       Coptions(is:is+13)=' HYPOXIA_SRM,'
       ibiology=ibiology+1
+#endif
+#ifdef ICE_MODEL
+!
+      IF (Master) WRITE (stdout,20) 'ICE_MODEL',                        &
+     &   'Include sea ice model'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+11)=' ICE_MODEL,'
+# ifdef ICE_ADVECT
+!
+      IF (Master) WRITE (stdout,20) 'ICE_ADVECT',                       &
+     &   'Advection of ice tracers'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+12)=' ICE_ADVECT,'
+# endif
+# ifdef ICE_ALBEDO
+!
+      IF (Master) WRITE (stdout,20) 'ICE_ALBEDO',                       &
+     &   'Albedo calculation of ice'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+12)=' ICE_ALBEDO,'
+# endif
+# ifdef ICE_ALB_EC92
+!
+      IF (Master) WRITE (stdout,20) 'ICE_ALB_EC92',                     &
+     &   'Ebert and Curry albedo formula'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+14)=' ICE_ALB_EC92,'
+# endif
+# ifdef ICE_BULK_FLUXES
+!
+      IF (Master) WRITE (stdout,20) 'ICE_BULK_FLUXES',                  &
+     &   'Ice bulk fluxes from the atmosphere'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+17)=' ICE_BULK_FLUXES,'
+# endif
+# ifdef ICE_CCSM_SHORTWAVE
+!
+      IF (Master) WRITE (stdout,20) 'ICE_CCSM_SHORTWAVE',               &
+     &   'Surface bulk fluxes parameterization for ice'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+20)=' ICE_CCSM_SHORTWAVE,'
+# endif
+# ifdef ICE_CONVSNOW
+!
+      IF (Master) WRITE (stdout,20) 'ICE_CONVSNOW',                     &
+     &   'Conversion of flooded snow to ice'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+14)=' ICE_CONVSNOW,'
+# endif
+# ifdef ICE_DIAGS
+!
+      IF (Master) WRITE (stdout,20) 'ICE_DIAGS',                        &
+     &   'Include extra diagnostic output from sea ice'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+11)=' ICE_DIAGS,'
+# endif
+# ifdef ICE_EVP
+!
+      IF (Master) WRITE (stdout,20) 'ICE_EVP',                          &
+     &   'Elastic-viscous-plastic ice rheology'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+9)=' ICE_EVP,'
+# endif
+# ifdef ICE_I_O
+!
+      IF (Master) WRITE (stdout,20) 'ICE_I_O',                          &
+     &   'Put shortwave heat into ice interior'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+9)=' ICE_I_O,'
+# endif
+# ifdef ICE_LANDFAST
+!
+      IF (Master) WRITE (stdout,20) 'ICE_LANDFAST',                    &
+     &   'Lemieux shorefast ice'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+14)=' ICE_LANDFAST,'
+# endif
+# ifdef ICE_LANDFAST_CLM
+!
+      IF (Master) WRITE(stdout,20) 'ICE_LANDFAST_CLM',                  &
+     &   'Climatology of landfast ice'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+18)=' ICE_LANDFAST_CLM,'
+# endif
+# ifdef ICE_MK
+!
+      IF (Master) WRITE (stdout,20) 'ICE_MK',                           &
+     &   'Mellor-Kantha ice thermodynamics'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+8)=' ICE_MK,'
+# endif
+# ifdef ICE_MOMENTUM
+!
+      IF (Master) WRITE (stdout,20) 'ICE_MOMENTUM',                     &
+     &   'Compute ice momentum equations'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+14)=' ICE_MOMENTUM,'
+# endif
+# ifdef ICE_NO_SNOW
+!
+      IF (Master) WRITE (stdout,20) 'ICE_NO_SNOW',                      &
+     &   'Zero out snowfall on ice'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+13)=' ICE_NO_SNOW,'
+# endif
+# ifdef ICE_OUTFLOW_MASK
+!
+      IF (Master) WRITE (stdout,20) 'ICE_OUTFLOW_MASK',                 &
+     &   'Hibler-style outflow ice cells'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+18)=' ICE_OUTFLOW_MASK,'
+# endif
+# ifdef ICE_SHALLOW_LIMIT
+!
+      IF (Master) WRITE (stdout,20) 'ICE_SHALLOW_LIMIT',                &
+     &   "Grounded ice doesn't grow thermodynamically."
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+19)=' ICE_SHALLOW_LIMIT,'
+# endif
+# ifdef ICE_SHOREFAST
+!
+      IF (Master) WRITE (stdout,20) 'ICE_SHOREFAST',                    &
+     &   'Motionless shorefast ice'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+15)=' ICE_SHOREFAST,'
+# endif
+# ifdef ICE_SHORTWAVE_R
+!
+      IF (Master) WRITE (stdout,20) 'ICE_SHORTWAVE_R',                  &
+     &   'Ice impact on shortwave spectral quality'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+17)=' ICE_SHORTWAVE_R,'
+# endif
+# ifdef ICE_SMOLAR
+!
+      IF (Master) WRITE (stdout,20) 'ICE_SMOLAR',                       &
+     &   'Advect ice tracers with MPDATA scheme'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+12)=' ICE_SMOLAR,'
+# endif
+# ifdef ICE_SNOWFALL
+!
+      IF (Master) WRITE (stdout,20) 'ICE_SNOWFALL',                     &
+     &   'Separate snow fall from total precip'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+14)=' ICE_SNOWFALL,'
+# endif
+# ifdef ICE_STRENGTH_QUAD
+!
+      IF (Master) WRITE (stdout,20) 'ICE_STRENGTH_QUAD',                &
+     &   'Ice strength a quadratic function of thickness'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+19)=' ICE_STRENGTH_QUAD,'
+# endif
+# ifdef ICE_THERMO
+!
+      IF (Master) WRITE (stdout,20) 'ICE_THERMO',                       &
+     &   'Include ice thermodynamics'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+12)=' ICE_THERMO,'
+# endif
 #endif
 #ifdef ICESHELF
 !

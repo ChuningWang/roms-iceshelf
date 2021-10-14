@@ -32,6 +32,9 @@
       CALL ana_rain_tile (ng, tile, model,                              &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    IminS, ImaxS, JminS, JmaxS,                   &
+#ifdef ICE_SNOWFALL
+     &                    FORCES(ng) % snow,                            &
+#endif
      &                    FORCES(ng) % rain)
 !
 ! Set analytical header file name used.
@@ -51,6 +54,9 @@
       SUBROUTINE ana_rain_tile (ng, tile, model,                        &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          IminS, ImaxS, JminS, JmaxS,             &
+#ifdef ICE_SNOWFALL
+     &                          snow,                                   &
+#endif
      &                          rain)
 !***********************************************************************
 !
@@ -70,8 +76,14 @@
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
 !
 #ifdef ASSUMED_SHAPE
+# ifdef ICE_SNOWFALL
+      real(r8), intent(out) :: snow(LBi:,LBj:)
+# endif
       real(r8), intent(out) :: rain(LBi:,LBj:)
 #else
+# ifdef ICE_SNOWFALL
+      real(r8), intent(out) :: snow(LBi:UBi,LBj:UBj)
+# endif
       real(r8), intent(out) :: rain(LBi:UBi,LBj:UBj)
 #endif
 !
@@ -88,6 +100,9 @@
       DO j=JstrT,JendT
         DO i=IstrT,IendT
           rain(i,j)=0.0_r8
+#ifdef ICE_SNOWFALL
+          snow(i,j)=0.0_r8
+#endif
         END DO
       END DO
 !

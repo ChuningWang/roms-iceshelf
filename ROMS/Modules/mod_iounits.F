@@ -90,7 +90,7 @@
 !  fbionam     Input floats biological behavior parameters filename.   !
 !  fposnam     Input initial floats positions filename.                !
 !  sparnam     Input sediment transport parameters filename.           !
-!  iparnam     Input iceshelf parameters filename.                     !
+!  iparnam     Input ice model parameters filename.                    !
 !  sposnam     Input station positions file name.                      !
 !  varname     Input IO variables information file name.               !
 !                                                                      !
@@ -219,7 +219,11 @@
 !
 !  Error messages.
 !
+#ifdef ICE_MODEL
+      character (len=50), dimension(10) :: Rerror =                     &
+#else
       character (len=50), dimension(9) :: Rerror =                      &
+#endif
      &       (/ ' ROMS/TOMS - Blows up ................ exit_flag: ',   &
      &          ' ROMS/TOMS - Input error ............. exit_flag: ',   &
      &          ' ROMS/TOMS - Output error ............ exit_flag: ',   &
@@ -228,7 +232,12 @@
      &          ' ROMS/TOMS - Partition error ......... exit_flag: ',   &
      &          ' ROMS/TOMS - Illegal input parameter . exit_flag: ',   &
      &          ' ROMS/TOMS - Fatal algorithm result .. exit_flag: ',   &
+#ifdef ICE_MODEL
+     &          ' ROMS/TOMS - Coupling error .......... exit_flag: ',   &
+     &          ' ROMS/TOMS - Ice frazil error ........ exit_flag: ' /)
+#else
      &          ' ROMS/TOMS - Coupling error .......... exit_flag: ' /)
+#endif
 !
 !  Standard input scripts file names.
 !

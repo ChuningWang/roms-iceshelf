@@ -138,6 +138,9 @@
       USE mod_nesting
 # endif
       USE mod_scalars
+#  ifdef ICE_THERMO
+      USE ice_frazil_mod,  ONLY : ice_frazil
+# endif
       USE mod_sources
 !
       USE exchange_3d_mod, ONLY : exchange_r3d_tile
@@ -1600,6 +1603,13 @@
           END DO
         END DO
 # endif
+
+#  ifdef ICE_THERMO
+        IF (itrc == isalt) THEN
+          CALL ice_frazil (ng, tile)
+        END IF
+#  endif
+
 !
 !  Apply periodic boundary conditions.
 !

@@ -401,9 +401,6 @@ ifdef USE_REPRESENTER
  modules  +=	ROMS/Representer \
 		ROMS/Representer/Biology
 endif
-ifdef USE_SEAICE
- modules  +=	ROMS/Nonlinear/SeaIce
-endif
 ifdef USE_TANGENT
  modules  +=	ROMS/Tangent \
 		ROMS/Tangent/Biology
@@ -415,10 +412,13 @@ endif
 		ROMS/Utility \
 		ROMS/Drivers \
 		ROMS/Modules
- modules  +=  ROMS/IceShelf
+
+ modules  +=	ROMS/IceShelf
+ifdef USE_SEAICE
+ modules  +=	ROMS/SeaIce
+endif
 
  includes :=	ROMS/Include
- includes +=	ROMS/IceShelf
 ifdef MY_ANALYTICAL
  includes +=	$(MY_ANALYTICAL_DIR)
 endif
@@ -430,9 +430,6 @@ ifdef USE_REPRESENTER
  includes +=	ROMS/Representer \
 		ROMS/Representer/Biology
 endif
-ifdef USE_SEAICE
- includes +=	ROMS/Nonlinear/SeaIce
-endif
 ifdef USE_TANGENT
  includes +=	ROMS/Tangent \
 		ROMS/Tangent/Biology
@@ -442,7 +439,13 @@ endif
 		ROMS/Nonlinear/Sediment \
 		ROMS/Utility \
 		ROMS/Drivers \
-                ROMS/Functionals
+		ROMS/Functionals
+
+ includes +=	ROMS/IceShelf
+ifdef USE_SEAICE
+ includes +=	ROMS/SeaIce
+endif
+
 ifdef MY_HEADER_DIR
  includes +=	$(MY_HEADER_DIR)
 endif

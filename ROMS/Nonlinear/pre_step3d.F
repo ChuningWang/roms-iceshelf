@@ -49,6 +49,9 @@
       USE mod_mixing
       USE mod_ocean
       USE mod_stepping
+# ifdef ICE_MODEL
+      USE mod_ice
+# endif
 !
 !  Imported variable declarations.
 !
@@ -101,6 +104,9 @@
      &                      OCEAN(ng) % W,                              &
      &                      OCEAN(ng) % ru,                             &
      &                      OCEAN(ng) % rv,                             &
+# ifdef ICE_SHORTWAVE_R
+     &                      ICE(ng) % rfaci,                            &
+# endif
 # ifdef DIAGNOSTICS_TS
      &                      DIAGS(ng) % DiaTwrk,                        &
 # endif
@@ -145,6 +151,9 @@
 # endif
      &                            W,                                    &
      &                            ru, rv,                               &
+# ifdef ICE_SHORTWAVE_R
+     &                            rfaci,                                &
+# endif
 # ifdef DIAGNOSTICS_TS
      &                            DiaTwrk,                              &
 # endif
@@ -209,6 +218,9 @@
       real(r8), intent(in) :: W(LBi:,LBj:,0:)
       real(r8), intent(in) :: ru(LBi:,LBj:,0:,:)
       real(r8), intent(in) :: rv(LBi:,LBj:,0:,:)
+#  ifdef ICE_SHORTWAVE_R
+      real(r8), intent(in) :: rfaci(LBi:,LBj:)
+#  endif
 #  ifdef DIAGNOSTICS_TS
       real(r8), intent(inout) :: DiaTwrk(LBi:,LBj:,:,:,:)
 #  endif
@@ -260,6 +272,9 @@
       real(r8), intent(in) :: W(LBi:UBi,LBj:UBj,0:N(ng))
       real(r8), intent(in) :: ru(LBi:UBi,LBj:UBj,0:N(ng),2)
       real(r8), intent(in) :: rv(LBi:UBi,LBj:UBj,0:N(ng),2)
+#  ifdef ICE_SHORTWAVE_R
+      real(r8), intent(in) :: rfaci(LBi:UBi,LBj:UBj)
+#  endif
 #  ifdef DIAGNOSTICS_TS
       real(r8), intent(inout) :: DiaTwrk(LBi:UBi,LBj:UBj,N(ng),NT(ng),  &
      &                                   NDT)
@@ -324,6 +339,9 @@
         CALL lmd_swfrac_tile (ng, tile,                                 &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        IminS, ImaxS, JminS, JmaxS,               &
+# ifdef ICE_SHORTWAVE_R
+     &                        rfaci,                                    &
+# endif
      &                        -1.0_r8, FX, FE)
         DO j=Jstr,Jend
           DO i=Istr,Iend

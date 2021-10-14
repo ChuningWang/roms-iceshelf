@@ -409,6 +409,9 @@
         logical :: radiation
         logical :: reduced
         logical :: Shchepetkin
+#ifdef ICE_MODEL
+        logical :: mixed
+#endif
       END TYPE T_LBC
 
       TYPE (T_LBC), allocatable :: LBC(:,:,:)
@@ -1134,6 +1137,9 @@
 #else
       nLBCvar=3
 #endif
+#ifdef ICE_MODEL
+      nLBCvar=nLBCvar+9
+#endif
 !
       IF (.not.allocated(LBC)) THEN
         allocate ( LBC(4,nLBCvar,Ngrids) )
@@ -1153,6 +1159,9 @@
               LBC(ibry,ivar,ng)%radiation = .FALSE.
               LBC(ibry,ivar,ng)%reduced = .FALSE.
               LBC(ibry,ivar,ng)%Shchepetkin = .FALSE.
+#ifdef ICE_MODEL
+              LBC(ibry,ivar,ng)%mixed = .FALSE.
+#endif
             END DO
           END DO
         END DO

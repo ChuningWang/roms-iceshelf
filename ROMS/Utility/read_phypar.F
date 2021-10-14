@@ -3720,11 +3720,13 @@
                 sparnam(i:i)=blank
               END DO
               sparnam=TRIM(ADJUSTL(Cval(Nval)))
-            !CASE ('IPARNAM')
-            !  DO i=1,LEN(iparnam)
-            !    iparnam(i:i)=blank
-            !  END DO
-            !  iparnam=TRIM(ADJUSTL(Cval(Nval)))
+# ifdef ICE_MODEL
+            CASE ('IPARNAM')
+              DO i=1,LEN(iparnam)
+                iparnam(i:i)=blank
+              END DO
+              iparnam=TRIM(ADJUSTL(Cval(Nval)))
+# endif
             CASE ('USRNAME')
               DO i=1,LEN(USRname)
                 USRname(i:i)=blank
@@ -6953,6 +6955,15 @@
      &      '         Biology Parameters File:  ', TRIM(fname)
         END IF
 # endif
+#endif
+#ifdef ICE_MODEL
+        fname=iparnam
+        IF (.not.find_file(ng, out, fname, 'IPARNAM')) THEN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        ELSE
+          IF (Master.and.Lwrite) WRITE (out,230)                        &
+     &      '       Ice Model Parameters File:  ', TRIM(fname)
+        END IF
 #endif
         fname=varname
         IF (.not.find_file(ng, out, fname, 'VARNAME')) THEN

@@ -138,7 +138,12 @@
 !
         integer, parameter :: Fregion = 80      ! start of 4D-Var region
         integer, parameter :: Mregion = 60      ! start of mpi-region
+#ifdef ICE_MODEL
+        integer, parameter :: Iceregion = 91    ! ice model
+        integer, parameter :: Nregion = 96
+#else
         integer, parameter :: Nregion = 88
+#endif
 !
         character (len=48), dimension(18) :: StateMsg =                 &
      &    (/'state initial conditions,                       ',         & !01
@@ -248,7 +253,19 @@
      &      '4D-Var: minimization solver ......................',       & !85
      &      '4D-Var: background phase .........................',       & !86
      &      '4D-Var: increment phase ..........................',       & !87
+#ifdef ICE_MODEL
+     &      '4D-Var: analysis phase ...........................',       & !88
+     &      'Unused 01 ........................................',       & !89
+     &      'Unused 02 ........................................',       & !90
+     &      'Unused 03 ........................................',       & !91
+     &      'Ice thermodynamics................................',       & !92
+     &      'Ice rheology coefficients.........................',       & !93
+     &      'Iterative solver of ice dynamics..................',       & !94
+     &      'Advection of ice tracers..........................',       & !95
+     &      'Ice frazil........................................'/)        !96
+#else
      &      '4D-Var: analysis phase ...........................'/)        !88
+#endif
 !
 !  The following variables are assigned during C-preprocessing.  They
 !  have information about operating sytem, CPU hardware, compiling

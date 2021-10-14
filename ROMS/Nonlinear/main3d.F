@@ -39,7 +39,11 @@
       USE bbl_mod,              ONLY : bblm
 # endif
 # ifdef BULK_FLUXES
+#  ifdef CCSM_FLUXES
+      USE ccsm_flux_mod,        ONLY : ccsm_flux
+#  else
       USE bulk_flux_mod,        ONLY : bulk_flux
+#  endif
 # endif
 # ifdef BVF_MIXING
       USE bvf_mix_mod,          ONLY : bvf_mix
@@ -102,6 +106,15 @@
       USE rhs3d_mod,            ONLY : rhs3d
 # ifdef SEDIMENT
       USE sediment_mod,         ONLY : sediment
+# endif
+# ifdef ICE_MODEL
+      USE ice_flux_mod
+#  ifdef ICE_ALBEDO
+      USE albedo_mod,           ONLY : albedo_eval
+#   ifdef ICE_ALB_DIRDIFF
+      USE cawdir_eval_mod,      ONLY : cawdir_eval
+#   endif
+#  endif
 # endif
 # ifdef AVERAGES
       USE set_avg_mod,          ONLY : set_avg
@@ -385,8 +398,16 @@
               ng=GridNumber(ig,nl)
               DO tile=first_tile(ng),last_tile(ng),+1
 # ifdef BULK_FLUXES
+#  ifdef ICE_ALBEDO
+#   ifdef ICE_ALB_DIRDIFF
+                CALL cawdir_eval (ng, tile)
+#   endif
+                CALL albedo_eval (ng, tile)
+#  endif
 #  if defined FOUR_DVAR && defined PRIOR_BULK_FLUXES
                 IF (Nrun.eq.1) CALL bulk_flux (ng, tile)
+#  elif defined CCSM_FLUXES
+                CALL ccsm_flux (ng, tile)
 #  else
                 CALL bulk_flux (ng, tile)
 #  endif
@@ -416,6 +437,24 @@
                 CALL nesting (ng, iNLM, nbstr)
               END IF
             END DO
+# endif
+
+# if defined ICE_MODEL
+!
+!-----------------------------------------------------------------------
+!  Run ice model for one step
+!-----------------------------------------------------------------------
+!
+            IF (PerfectRST(1).and.iic(1).eq.ntstart(1)) THEN
+              DO ig=1,GridsInLayer(nl)
+                ng=GridNumber(ig,nl)
+                DO tile=first_tile(ng),last_tile(ng),+1
+                  CALL ice_flux_rst(ng, tile)
+                END DO
+              END DO
+            ELSE
+              CALL seaice
+            END IF
 # endif
 
 # ifdef ADJUST_BOUNDARY

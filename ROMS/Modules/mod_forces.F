@@ -256,12 +256,67 @@
 # endif
 #endif
 
+#ifdef ICE_DIAGS
+          real(r8), pointer :: LW_down(:,:)
+          real(r8), pointer :: SW_down(:,:)
+          real(r8), pointer :: lat_ice(:,:)
+          real(r8), pointer :: sens_ice(:,:)
+          real(r8), pointer :: LW_up_ice(:,:)
+          real(r8), pointer :: SW_up_ice(:,:)
+          real(r8), pointer :: ssflx_ai(:,:)
+          real(r8), pointer :: ssflx_ao(:,:)
+          real(r8), pointer :: snoice(:,:)
+#endif
+
 #ifdef SOLVE3D
 
 # ifdef SHORTWAVE
           real(r8), pointer :: srflx(:,:)
 #  ifndef ANA_SRFLUX
           real(r8), pointer :: srflxG(:,:,:)
+#  endif
+
+!#  ifdef ICE_ALBEDO
+          real(r8), pointer :: albedo(:,:)
+          real(r8), pointer :: albedo_ice(:,:)
+!#   ifdef ICE_ALB_CSIM
+          real(r8), pointer :: frswpen(:,:)
+!#   endif
+!#   ifdef ICE_ALB_DIRDIFF
+          real(r8), pointer :: cawdir(:,:)
+!#   endif
+!#   ifdef ICE_ALB_FILE
+          real(r8), pointer :: albedoG(:,:,:)
+!#   endif
+!#  endif
+
+# endif
+
+# ifdef ICE_MODEL
+          real(r8), pointer :: qai_n(:,:)
+          real(r8), pointer :: qi_o_n(:,:)
+          real(r8), pointer :: qao_n(:,:)
+          real(r8), pointer :: qio_n(:,:)
+          real(r8), pointer :: qi2_n(:,:)
+          real(r8), pointer :: snow_n(:,:)
+          real(r8), pointer :: sr_thru_ice(:,:)
+#  ifdef ICE_BULK_FLUXES
+          real(r8), pointer :: sustr_aw(:,:)
+          real(r8), pointer :: svstr_aw(:,:)
+          real(r8), pointer :: tau_aix_n(:,:)
+          real(r8), pointer :: tau_aiy_n(:,:)
+          real(r8), pointer :: qswi_n(:,:)
+#  endif
+#  ifdef PERFECT_RESTART
+          real(r8), pointer :: stflx_save(:,:,:)
+          real(r8), pointer :: sustr_save(:,:)
+          real(r8), pointer :: svstr_save(:,:)
+#  endif
+#  ifdef ICE_LANDFAST_CLM
+          real(r8), pointer :: fastice_clm(:,:)
+#   ifndef ANA_ICE
+          real(r8), pointer :: fastice_clmG(:,:,:)
+#   endif
 #  endif
 # endif
 
@@ -310,6 +365,12 @@
           real(r8), pointer :: rain(:,:)
 #  ifndef ANA_RAIN
           real(r8), pointer :: rainG(:,:,:)
+#  endif
+#  ifdef ICE_SNOWFALL
+          real(r8), pointer :: snow(:,:)
+#   ifndef ANA_RAIN
+          real(r8), pointer :: snowG(:,:,:)
+#   endif
 #  endif
 #  ifdef EMINUSP
           real(r8), pointer :: evap(:,:)
@@ -603,6 +664,27 @@
 # endif
 #endif
 
+#ifdef ICE_DIAGS
+      allocate ( FORCES(ng) % LW_down(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % SW_down(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % lat_ice(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % sens_ice(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % LW_up_ice(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % SW_up_ice(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % ssflx_ai(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % ssflx_ao(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % snoice(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+#endif
+
 #ifdef SOLVE3D
 
 # ifdef SHORTWAVE
@@ -612,6 +694,72 @@
 #  ifndef ANA_SRFLUX
       allocate ( FORCES(ng) % srflxG(LBi:UBi,LBj:UBj,2) )
       Dmem(ng)=Dmem(ng)+size2d
+#  endif
+
+!#  ifdef ICE_ALBEDO
+      allocate ( FORCES(ng) % albedo(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % albedo_ice(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+!#   ifdef ICE_ALB_CSIM
+      allocate ( FORCES(ng) % frswpen(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+!#   endif
+!#   ifdef ICE_ALB_DIRDIFF
+      allocate ( FORCES(ng) % cawdir(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+!#   endif
+!#   ifdef ICE_ALB_FILE
+      allocate ( FORCES(ng) % albedoG(LBi:UBi,LBj:UBj,2) )
+      Dmem(ng)=Dmem(ng)+2.0_r8*size2d
+!#   endif
+!#  endif
+
+# endif
+
+# ifdef ICE_MODEL
+      allocate ( FORCES(ng) % qai_n(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % qi_o_n(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % qao_n(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % qio_n(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % qi2_n(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % snow_n(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % sr_thru_ice(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+#  ifdef ICE_BULK_FLUXES
+      allocate ( FORCES(ng) % sustr_aw(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % svstr_aw(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % tau_aix_n(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % tau_aiy_n(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % qswi_n(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+#  endif
+#  ifdef PERFECT_RESTART
+      allocate ( FORCES(ng) % stflx_save(LBi:UBi,LBj:UBj,NAT) )
+      Dmem(ng)=Dmem(ng)+REAL(NAT,r8)*size2d
+      allocate ( FORCES(ng) % sustr_save(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % svstr_save(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+#  endif
+#  if defined ICE_LANDFAST_CLM
+      allocate ( FORCES(ng) % fastice_clm(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+
+#   ifndef ANA_ICE
+      allocate ( FORCES(ng) % fastice_clmG(LBi:UBi,LBj:UBj,2) )
+      Dmem(ng)=Dmem(ng)+2.0_r8*size2d
+#   endif
 #  endif
 # endif
 
@@ -692,6 +840,16 @@
       allocate ( FORCES(ng) % rainG(LBi:UBi,LBj:UBj,2) )
       Dmem(ng)=Dmem(ng)+2.0_r8*size2d
 
+#  endif
+#  ifdef ICE_SNOWFALL
+      allocate ( FORCES(ng) % snow(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+
+#   ifndef ANA_RAIN
+      allocate ( FORCES(ng) % snowG(LBi:UBi,LBj:UBj,2) )
+      Dmem(ng)=Dmem(ng)+2.0_r8*size2d
+
+#   endif
 #  endif
 #  ifdef EMINUSP
       allocate ( FORCES(ng) % evap(LBi:UBi,LBj:UBj) )
@@ -1091,6 +1249,18 @@
 # endif
 #endif
 
+#ifdef ICE_DIAGS
+            FORCES(ng) % LW_down(i,j) = IniVal
+            FORCES(ng) % SW_down(i,j) = IniVal
+            FORCES(ng) % lat_ice(i,j) = IniVal
+            FORCES(ng) % sens_ice(i,j) = IniVal
+            FORCES(ng) % LW_up_ice(i,j) = IniVal
+            FORCES(ng) % SW_up_ice(i,j) = IniVal
+            FORCES(ng) % ssflx_ai(i,j) = IniVal
+            FORCES(ng) % ssflx_ao(i,j) = IniVal
+            FORCES(ng) % snoice(i,j) = IniVal
+#endif
+
 #ifdef SOLVE3D
 # ifdef SHORTWAVE
             FORCES(ng) % srflx(i,j) = IniVal
@@ -1098,7 +1268,54 @@
             FORCES(ng) % srflxG(i,j,1) = IniVal
             FORCES(ng) % srflxG(i,j,2) = IniVal
 #  endif
+
+!#  ifdef ICE_ALBEDO
+            FORCES(ng) % albedo(i,j) = IniVal
+            FORCES(ng) % albedo_ice(i,j) = IniVal
+!#   ifdef ICE_ALB_CSIM
+            FORCES(ng) % frswpen(i,j) = IniVal
+!#   endif
+!#   ifdef ICE_ALB_DIRDIFF
+            FORCES(ng) % cawdir(i,j) = IniVal
+!#   endif
+!#   ifdef ICE_ALB_FILE
+            FORCES(ng) % albedoG(i,j,1) = IniVal
+            FORCES(ng) % albedoG(i,j,2) = IniVal
+!#   endif
+!#  endif
+
 # endif
+
+# ifdef ICE_MODEL
+            FORCES(ng) % qai_n(i,j) = IniVal
+            FORCES(ng) % qi_o_n(i,j) = IniVal
+            FORCES(ng) % qao_n(i,j) = IniVal
+            FORCES(ng) % qio_n(i,j) = IniVal
+            FORCES(ng) % qi2_n(i,j) = IniVal
+            FORCES(ng) % snow_n(i,j) = IniVal
+            FORCES(ng) % sr_thru_ice(i,j) = IniVal
+#  ifdef ICE_BULK_FLUXES
+            FORCES(ng) % sustr_aw(i,j) = IniVal
+            FORCES(ng) % svstr_aw(i,j) = IniVal
+            FORCES(ng) % tau_aix_n(i,j) = IniVal
+            FORCES(ng) % tau_aiy_n(i,j) = IniVal
+            FORCES(ng) % qswi_n(i,j) = IniVal
+#  endif
+#  ifdef PERFECT_RESTART
+            FORCES(ng) % stflx_save(i,j,1) = IniVal
+            FORCES(ng) % stflx_save(i,j,2) = IniVal
+            FORCES(ng) % sustr_save(i,j) = IniVal
+            FORCES(ng) % svstr_save(i,j) = IniVal
+#  endif
+#  if defined ICE_LANDFAST_CLM
+            FORCES(ng) % fastice_clm(i,j) = IniVal
+#   ifndef ANA_ICE
+            FORCES(ng) % fastice_clmG(i,j,1) = IniVal
+            FORCES(ng) % fastice_clmG(i,j,2) = IniVal
+#   endif
+#  endif
+# endif
+
 # if defined RED_TIDE && defined DAILY_SHORTWAVE
             FORCES(ng) % srflx_avg(i,j) = IniVal
             FORCES(ng) % srflxG_avg(i,j,1) = IniVal
@@ -1127,6 +1344,9 @@
 # endif
 # ifdef BULK_FLUXES
             FORCES(ng) % rain(i,j) = IniVal
+#  ifdef ICE_SNOWFALL
+            FORCES(ng) % snow(i,j) = IniVal
+#  endif
 #  ifdef EMINUSP
             FORCES(ng) % evap(i,j) = IniVal
 #  endif
@@ -1156,6 +1376,10 @@
 # if !defined ANA_RAIN && defined BULK_FLUXES
             FORCES(ng) % rainG(i,j,1) = IniVal
             FORCES(ng) % rainG(i,j,2) = IniVal
+#  ifdef ICE_SNOWFALL
+            FORCES(ng) % snowG(i,j,1) = IniVal
+            FORCES(ng) % snowG(i,j,2) = IniVal
+#  endif
 # endif
 # ifdef QCORRECTION
             FORCES(ng) % dqdt(i,j) = IniVal

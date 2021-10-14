@@ -68,6 +68,9 @@
      &                     GRID(ng) % rmask,                            &
      &                     GRID(ng) % umask,                            &
      &                     GRID(ng) % vmask,                            &
+# ifdef ICE_OUTFLOW_MASK
+     &                     GRID(ng) % mask_outflow,                     &
+# endif
 # if defined AVERAGES    || \
     (defined AD_AVERAGES && defined ADJOINT) || \
     (defined RP_AVERAGES && defined TL_IOMS) || \
@@ -100,6 +103,9 @@
      &                           IminS, ImaxS, JminS, JmaxS,            &
      &                           pmask, rmask,                          &
      &                           umask, vmask,                          &
+# ifdef ICE_OUTFLOW_MASK
+     &                           mask_outflow,                          &
+# endif
 # if defined AVERAGES    || \
     (defined AD_AVERAGES && defined ADJOINT) || \
     (defined RP_AVERAGES && defined TL_IOMS) || \
@@ -118,6 +124,9 @@
       USE mod_param
       USE mod_scalars
       USE mod_sources
+# ifdef ICE_OUTFLOW_MASK
+      USE strings_mod,     ONLY : FoundError
+# endif
 !
       USE exchange_2d_mod
 # ifdef DISTRIBUTE
@@ -135,6 +144,9 @@
       real(r8), intent(in) :: rmask(LBi:,LBj:)
       real(r8), intent(in) :: umask(LBi:,LBj:)
       real(r8), intent(in) :: vmask(LBi:,LBj:)
+#  ifdef ICE_OUTFLOW_MASK
+      real(r8), intent(out) :: mask_outflow(LBi:,LBj:)
+#  endif
 #  if defined AVERAGES    || \
      (defined AD_AVERAGES && defined ADJOINT) || \
      (defined RP_AVERAGES && defined TL_IOMS) || \
@@ -159,6 +171,9 @@
       real(r8), intent(in) :: rmask(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: umask(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: vmask(LBi:UBi,LBj:UBj)
+#  ifdef ICE_OUTFLOW_MASK
+      real(r8), intent(out) :: mask_outflow(LBi:UBi,LBj:UBj)
+#  endif
 #  if defined AVERAGES    || \
      (defined AD_AVERAGES && defined ADJOINT) || \
      (defined RP_AVERAGES && defined TL_IOMS) || \
@@ -183,6 +198,9 @@
 !  Local variable declarations.
 !
       integer :: i, is, j
+# ifdef ICE_OUTFLOW_MASK
+      real(r8) :: cff
+# endif
 
 # include "set_bounds.h"
 !
@@ -214,6 +232,100 @@
           vmask_full(i,j)=vmask(i,j)
         END DO
       END DO
+
+# ifdef ICE_OUTFLOW_MASK
+!
+!  Set outflow mask for the ice model. The ice strength, etc. get
+!  multiplied by this mask.
+!
+      DO j=JstrR,JendR
+        DO i=IstrR,IendR
+          mask_outflow(i,j)=1.0_r8
+        END DO
+      END DO
+
+#  ifdef CHUKCHI
+
+      cff = 0.95_r8
+      IF (DOMAIN(ng)%Western_Edge(tile)) THEN
+        DO j=JstrR,JendR
+          mask_outflow(0,j) = cff
+          mask_outflow(1,j) = cff
+        END DO
+      END IF
+      IF (DOMAIN(ng)%Eastern_Edge(tile)) THEN
+        DO j=JstrR,JendR
+          mask_outflow(Lm(ng),j) = cff
+          mask_outflow(Lm(ng)+1,j) = cff
+        END DO
+      END IF
+      IF (DOMAIN(ng)%Southern_Edge(tile)) THEN
+        DO i=IstrR,IendR
+          mask_outflow(i,0) = cff
+          mask_outflow(i,1) = cff
+        END DO
+      END IF
+      IF (DOMAIN(ng)%Northern_Edge(tile)) THEN
+        DO i=IstrR,IendR
+          mask_outflow(i,Mm(ng)) = cff
+          mask_outflow(i,Mm(ng)+1) = cff
+        END DO
+      END IF
+
+#  elif defined ARCTIC
+
+!
+!  Just off Greenland
+!
+      cff = 0.05_r8
+!
+! Old ARCTIC domain
+!
+!     IF (DOMAIN(ng)%Eastern_Edge(tile)) THEN
+!       DO j=MAX(JstrR,Mm(ng)/2),JendR
+!         mask_outflow(Lm(ng),j) = cff
+!         mask_outflow(Lm(ng)+1,j) = cff
+!       END DO
+!     END IF
+!
+! New ARCTIC domain
+!
+      IF (DOMAIN(ng)%Northern_Edge(tile)) THEN
+        DO i=IstrR,IendR
+          mask_outflow(i,Mm(ng)) = cff
+          mask_outflow(i,Mm(ng)+1) = cff
+        END DO
+      END IF
+
+#  elif defined SVALBARD
+
+      cff = 0.5_r8
+!
+! We want outflow south of Greenland but not north of it.
+!
+      IF (DOMAIN(ng)%Northern_Edge(tile)) THEN
+        DO i=IstrR,MIN(IendR,65)
+          mask_outflow(i,Mm(ng)) = cff
+          mask_outflow(i,Mm(ng)+1) = cff
+        END DO
+      END IF
+      IF (DOMAIN(ng)%Western_Edge(tile)) THEN
+        DO j=JstrR,JendR
+          mask_outflow(0,j) = cff
+          mask_outflow(1,j) = cff
+        END DO
+      END IF
+
+#  else
+
+      exit_flag = 5
+      WRITE (stdout,*)                                                  &
+     &  'Need to set outflow mask in set_masks.F for your application.'
+      IF (FoundError(exit_flag, NoError, __LINE__, __FILE__)) RETURN
+
+#  endif
+# endif
+
 !
 !  Insure that masks at mass point source locations are set to water
 !  to avoid masking with _FillValue at those locations.

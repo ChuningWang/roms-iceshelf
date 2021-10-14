@@ -75,6 +75,15 @@
 !$OMP THREADPRIVATE (nf, nfp1, nfm3, nfm2, nfm1)
 #endif
 !
+#ifdef ICE_MODEL
+        integer, allocatable :: linew(:)
+        integer, allocatable :: liold(:)
+        integer, allocatable :: liunw(:)
+        integer, allocatable :: liuol(:)
+        integer, allocatable :: lienw(:)
+        integer, allocatable :: lieol(:)
+#endif
+!
 #ifdef ADJUST_BOUNDARY
         integer, allocatable :: Lbinp(:)
         integer, allocatable :: Lbout(:)
@@ -166,6 +175,21 @@
       nfm1(1:Ngrids)=4
 #endif
 !$OMP END PARALLEL
+
+#ifdef ICE_MODEL
+      allocate ( linew(Ngrids) )
+      linew(1:Ngrids) = 1
+      allocate ( liold(Ngrids) )
+      liold(1:Ngrids) = 1
+      allocate ( liunw(Ngrids) )
+      liunw(1:Ngrids) = 1
+      allocate ( liuol(Ngrids) )
+      liuol(1:Ngrids) = 1
+      allocate ( lienw(Ngrids) )
+      lienw(1:Ngrids) = 1
+      allocate ( lieol(Ngrids) )
+      lieol(1:Ngrids) = 1
+#endif
 
 #ifdef ADJUST_BOUNDARY
       IF (.not.allocated(Lbinp)) THEN
