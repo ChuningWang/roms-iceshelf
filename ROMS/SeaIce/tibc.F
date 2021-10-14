@@ -1,10 +1,18 @@
 #include "cppdefs.h"
       MODULE tibc_mod
 #ifdef ICE_MODEL
-!***********************************************************************
-!  Compute the lateral boundary conditions on the internal ice
-!  temperature.
-!***********************************************************************
+! 
+!=======================================================================
+!  Copyright (c) 2002-2021 The ROMS/TOMS Group                         !
+!    Licensed under a MIT/X style license                              !
+!    See License_ROMS.txt                           Hernan G. Arango   !
+!========================================== Alexander F. Shchepetkin ===
+!                                                                      !
+!  This subroutine computes lateral boundary conditions for internal   !
+!  ice temperature.                                                    !
+!                                                                      !
+!=======================================================================
+!
 
       implicit none
 
@@ -52,7 +60,6 @@
       USE mod_grid
 
       implicit none
-
 !
 !  Imported variable declarations.
 !

@@ -1,9 +1,17 @@
 #include "cppdefs.h"
       MODULE vibc_mod
 #ifdef ICE_MODEL
-!***********************************************************************
-!  Compute the lateral boundary conditions on the ice V-velocity.
-!***********************************************************************
+! 
+!=======================================================================
+!  Copyright (c) 2002-2021 The ROMS/TOMS Group                         !
+!    Licensed under a MIT/X style license                              !
+!    See License_ROMS.txt                           Hernan G. Arango   !
+!========================================== Alexander F. Shchepetkin ===
+!                                                                      !
+!  This subroutine computes lateral boundary conditions for V-velocity.!
+!                                                                      !
+!=======================================================================
+!
 
       implicit none
 
@@ -64,7 +72,7 @@
 !  Local variable declarations.
 !
       integer :: i, Jmax, Jmin, j, know
-      real(r8), parameter :: eps =1.0E-20_r8
+      real(r8), parameter :: eps = 1.0E-20_r8
       real(r8) :: Ce, Cx
       real(r8):: cff, dVde, dVdt, dVdx, tau
 

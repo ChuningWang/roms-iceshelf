@@ -1,9 +1,17 @@
 #include "cppdefs.h"
       MODULE uibc_mod
 #ifdef ICE_MODEL
-!***********************************************************************
-!  Compute the lateral boundary conditions on the ice U-velocity.
-!***********************************************************************
+! 
+!=======================================================================
+!  Copyright (c) 2002-2021 The ROMS/TOMS Group                         !
+!    Licensed under a MIT/X style license                              !
+!    See License_ROMS.txt                           Hernan G. Arango   !
+!========================================== Alexander F. Shchepetkin ===
+!                                                                      !
+!  This subroutine computes lateral boundary conditions for U-velocity.!
+!                                                                      !
+!=======================================================================
+!
 
       implicit none
 
@@ -47,7 +55,6 @@
       USE mod_scalars
 
       implicit none
-
 !
 !  Imported variable declarations.
 !
@@ -65,7 +72,7 @@
 !  Local variable declarations.
 !
       integer :: i, Imax, Imin, j, know
-      real(r8), parameter :: eps =1.0E-20_r8
+      real(r8), parameter :: eps = 1.0E-20_r8
       real(r8) :: Ce, Cx
       real(r8) :: cff, dUde, dUdt, dUdx, tau
 

@@ -20,31 +20,6 @@
       PUBLIC i2d_bc_tile
 
       CONTAINS
-!!
-!!***********************************************************************
-!      SUBROUTINE i2d_bc (ng, tile, liold, linew)
-!!***********************************************************************
-!!
-!      USE mod_param
-!      USE mod_ocean
-!      USE mod_stepping
-!!
-!!  Imported variable declarations.
-!!
-!      integer, intent(in) :: ng, tile, liold, linew
-!!
-!!  Local variable declarations.
-!!
-!# include "tile.h"
-!!
-!      CALL id_bc_tile (ng, tile,                                        &
-!     &                 LBi, UBi, LBj, UBj,                              &
-!     &                 IminS, ImaxS, JminS, JmaxS,                      &
-!     &                 liold, linew,                                    &
-!     &                 OCEAN(ng)% t)
-!
-!      RETURN
-!      END SUBROUTINE i2d_bc
 !
 !***********************************************************************
       SUBROUTINE i2d_bc_tile (ng, tile, model,                          &
@@ -72,28 +47,27 @@
       TYPE(T_LBC), intent(in) :: S(4)
 
 # ifdef ASSUMED_SHAPE
-      real(r8), intent(in)    :: ui(LBi:,LBj:,:)
-      real(r8), intent(in)    :: vi(LBi:,LBj:,:)
+      real(r8), intent(in) :: ui(LBi:,LBj:,:)
+      real(r8), intent(in) :: vi(LBi:,LBj:,:)
       real(r8), intent(inout) :: ai(LBi:,LBj:,:)
-      real(r8), intent(in)    :: ai_west(LBj:)
-      real(r8), intent(in)    :: ai_east(LBj:)
-      real(r8), intent(in)    :: ai_north(LBi:)
-      real(r8), intent(in)    :: ai_south(LBi:)
+      real(r8), intent(in) :: ai_west(LBj:)
+      real(r8), intent(in) :: ai_east(LBj:)
+      real(r8), intent(in) :: ai_north(LBi:)
+      real(r8), intent(in) :: ai_south(LBi:)
 # else
-      real(r8), intent(in)    :: ui(LBi:UBi,LBj:UBj,2)
-      real(r8), intent(in)    :: vi(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(in) :: ui(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(in) :: vi(LBi:UBi,LBj:UBj,2)
       real(r8), intent(inout) :: ai(LBi:UBi,LBj:UBj,2)
-      real(r8), intent(in)    :: ai_west(LBj:UBj)
-      real(r8), intent(in)    :: ai_east(LBj:UBj)
-      real(r8), intent(in)    :: ai_north(LBi:UBi)
-      real(r8), intent(in)    :: ai_south(LBi:UBi)
+      real(r8), intent(in) :: ai_west(LBj:UBj)
+      real(r8), intent(in) :: ai_east(LBj:UBj)
+      real(r8), intent(in) :: ai_north(LBi:UBi)
+      real(r8), intent(in) :: ai_south(LBi:UBi)
 # endif
-
 !
 !  Local variable declarations.
 !
       integer :: i, j, know
-      real(r8), parameter :: eps =1.0E-20_r8
+      real(r8), parameter :: eps = 1.0E-20_r8
       real(r8) :: Ce, Cx, cff, dTde, dTdt, dTdx, tau 
 
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: grad
