@@ -26,8 +26,8 @@
 !  Advect the ice concentration.
 ! ---------------------------------------------------------------------
 !
-      CALL ice_advect_all_tile (ng, tile,                               &
-     &                      LBi, UBi, LBj, UBj,                         &
+      CALL ice_advect_tile (ng, tile,                               &
+     &                      LBi, UBi, LBj, UBj,                     &
      &                      IminS, ImaxS, JminS, JmaxS)
 #ifdef PROFILE
       CALL wclock_off (ng, iNLM, 95, __LINE__, __FILE__)
@@ -36,9 +36,9 @@
       RETURN
       END SUBROUTINE ice_advect
 !
-      SUBROUTINE ice_advect_all_tile (ng, tile,                         &
-     &                      LBi, UBi, LBj, UBj,                         &
-     &                      IminS, ImaxS, JminS, JmaxS)
+      SUBROUTINE ice_advect_tile (ng, tile,                         &
+     &                            LBi, UBi, LBj, UBj,               &
+     &                            IminS, ImaxS, JminS, JmaxS)
 
       USE mod_param
       USE mod_ncparam
@@ -71,29 +71,29 @@
 !
 #include "set_bounds.h"
 !
-      CALL ice_advect_tile (ng, tile,                                   &
-     &                      LBi, UBi, LBj, UBj,                         &
-     &                      IminS, ImaxS, JminS, JmaxS,                 &
-     &                      nrhs(ng), linew(ng), liold(ng), liunw(ng),  &
+      CALL ice_adv_var_tile (ng, tile,                                  &
+     &                       LBi, UBi, LBj, UBj,                        &
+     &                       IminS, ImaxS, JminS, JmaxS,                &
+     &                       nrhs(ng), linew(ng), liold(ng), liunw(ng), &
 #ifdef MASKING
-     &                      GRID(ng) % rmask,                           &
+     &                       GRID(ng) % rmask,                          &
 #endif
 #ifdef WET_DRY
-     &                      GRID(ng) % rmask_wet,                       &
+     &                       GRID(ng) % rmask_wet,                      &
 #endif
 #ifdef ICESHELF
-     &                      GRID(ng) % zice,                            &
+     &                       GRID(ng) % zice,                           &
 #endif
 #ifndef ICE_UPWIND
-     &                      GRID(ng) % pm,                              &
-     &                      GRID(ng) % pn,                              &
+     &                       GRID(ng) % pm,                             &
+     &                       GRID(ng) % pn,                             &
 #endif
-     &                      GRID(ng) % on_u,                            &
-     &                      GRID(ng) % om_v,                            &
-     &                      GRID(ng) % omn,                             &
-     &                      ICE(ng) % ui,                               &
-     &                      ICE(ng) % vi,                               &
-     &                      ICE(ng) % ai)
+     &                       GRID(ng) % on_u,                           &
+     &                       GRID(ng) % om_v,                           &
+     &                       GRID(ng) % omn,                            &
+     &                       ICE(ng) % ui,                              &
+     &                       ICE(ng) % vi,                              &
+     &                       ICE(ng) % ai)
 !
 !  Set lateral boundary conditions.
 !
@@ -113,29 +113,29 @@
 !  Advect the ice thickness.
 ! ---------------------------------------------------------------------
 !
-      CALL ice_advect_tile (ng, tile,                                   &
-     &                      LBi, UBi, LBj, UBj,                         &
-     &                      IminS, ImaxS, JminS, JmaxS,                 &
-     &                      nrhs(ng), linew(ng), liold(ng), liunw(ng),  &
+      CALL ice_adv_var_tile (ng, tile,                                  &
+     &                       LBi, UBi, LBj, UBj,                        &
+     &                       IminS, ImaxS, JminS, JmaxS,                &
+     &                       nrhs(ng), linew(ng), liold(ng), liunw(ng), &
 #ifdef MASKING
-     &                      GRID(ng) % rmask,                           &
+     &                       GRID(ng) % rmask,                          &
 #endif
 #ifdef WET_DRY
-     &                      GRID(ng) % rmask_wet,                       &
+     &                       GRID(ng) % rmask_wet,                      &
 #endif
 #ifdef ICESHELF
-     &                      GRID(ng) % zice,                            &
+     &                       GRID(ng) % zice,                           &
 #endif
 #ifndef ICE_UPWIND
-     &                      GRID(ng) % pm,                              &
-     &                      GRID(ng) % pn,                              &
+     &                       GRID(ng) % pm,                             &
+     &                       GRID(ng) % pn,                             &
 #endif
-     &                      GRID(ng) % on_u,                            &
-     &                      GRID(ng) % om_v,                            &
-     &                      GRID(ng) % omn,                             &
-     &                      ICE(ng) % ui,                               &
-     &                      ICE(ng) % vi,                               &
-     &                      ICE(ng) % hi)
+     &                       GRID(ng) % on_u,                           &
+     &                       GRID(ng) % om_v,                           &
+     &                       GRID(ng) % omn,                            &
+     &                       ICE(ng) % ui,                              &
+     &                       ICE(ng) % vi,                              &
+     &                       ICE(ng) % hi)
 !
 !  Set lateral boundary conditions.
 !
@@ -165,29 +165,29 @@
 ! ---------------------------------------------------------------------
 !
 #ifdef ICE_THERMO
-      CALL ice_advect_tile (ng, tile,                                   &
-     &                      LBi, UBi, LBj, UBj,                         &
-     &                      IminS, ImaxS, JminS, JmaxS,                 &
-     &                      nrhs(ng), linew(ng), liold(ng), liunw(ng),  &
+      CALL ice_adv_var_tile (ng, tile,                                  &
+     &                       LBi, UBi, LBj, UBj,                        &
+     &                       IminS, ImaxS, JminS, JmaxS,                &
+     &                       nrhs(ng), linew(ng), liold(ng), liunw(ng), &
 # ifdef MASKING
-     &                      GRID(ng) % rmask,                           &
+     &                       GRID(ng) % rmask,                          &
 # endif
 # ifdef WET_DRY
-     &                      GRID(ng) % rmask_wet,                       &
+     &                       GRID(ng) % rmask_wet,                      &
 # endif
 # ifdef ICESHELF
-     &                      GRID(ng) % zice,                            &
+     &                       GRID(ng) % zice,                           &
 # endif
 # ifndef ICE_UPWIND
-     &                      GRID(ng) % pm,                              &
-     &                      GRID(ng) % pn,                              &
+     &                       GRID(ng) % pm,                             &
+     &                       GRID(ng) % pn,                             &
 # endif
-     &                      GRID(ng) % on_u,                            &
-     &                      GRID(ng) % om_v,                            &
-     &                      GRID(ng) % omn,                             &
-     &                      ICE(ng) % ui,                               &
-     &                      ICE(ng) % vi,                               &
-     &                      ICE(ng) % hsn)
+     &                       GRID(ng) % on_u,                           &
+     &                       GRID(ng) % om_v,                           &
+     &                       GRID(ng) % omn,                            &
+     &                       ICE(ng) % ui,                              &
+     &                       ICE(ng) % vi,                              &
+     &                       ICE(ng) % hsn)
 !
 !  Set lateral boundary conditions.
 !
@@ -207,29 +207,29 @@
 !  Advect the interior ice temperature.
 ! ---------------------------------------------------------------------
 !
-      CALL ice_advect_tile (ng, tile,                                   &
-     &                      LBi, UBi, LBj, UBj,                         &
-     &                      IminS, ImaxS, JminS, JmaxS,                 &
-     &                      nrhs(ng), linew(ng), liold(ng), liunw(ng),  &
+      CALL ice_adv_var_tile (ng, tile,                                  &
+     &                       LBi, UBi, LBj, UBj,                        &
+     &                       IminS, ImaxS, JminS, JmaxS,                &
+     &                       nrhs(ng), linew(ng), liold(ng), liunw(ng), &
 # ifdef MASKING
-     &                      GRID(ng) % rmask,                           &
+     &                       GRID(ng) % rmask,                          &
 # endif
 # ifdef WET_DRY
-     &                      GRID(ng) % rmask_wet,                       &
+     &                       GRID(ng) % rmask_wet,                      &
 # endif
 # ifdef ICESHELF
-     &                      GRID(ng) % zice,                            &
+     &                       GRID(ng) % zice,                           &
 # endif
 # ifndef ICE_UPWIND
-     &                      GRID(ng) % pm,                              &
-     &                      GRID(ng) % pn,                              &
+     &                       GRID(ng) % pm,                             &
+     &                       GRID(ng) % pn,                             &
 # endif
-     &                      GRID(ng) % on_u,                            &
-     &                      GRID(ng) % om_v,                            &
-     &                      GRID(ng) % omn,                             &
-     &                      ICE(ng) % ui,                               &
-     &                      ICE(ng) % vi,                               &
-     &                      ICE(ng) % enthalpi)
+     &                       GRID(ng) % on_u,                           &
+     &                       GRID(ng) % om_v,                           &
+     &                       GRID(ng) % omn,                            &
+     &                       ICE(ng) % ui,                              &
+     &                       ICE(ng) % vi,                              &
+     &                       ICE(ng) % enthalpi)
 
       DO j=JstrT,JendT
         DO i=IstrT,IendT
@@ -257,29 +257,29 @@
 !  Advect the ice age.
 ! ---------------------------------------------------------------------
 !
-      CALL ice_advect_tile (ng, tile,                                   &
-     &                      LBi, UBi, LBj, UBj,                         &
-     &                      IminS, ImaxS, JminS, JmaxS,                 &
-     &                      nrhs(ng), linew(ng), liold(ng), liunw(ng),  &
+      CALL ice_adv_var_tile (ng, tile,                                  &
+     &                       LBi, UBi, LBj, UBj,                        &
+     &                       IminS, ImaxS, JminS, JmaxS,                &
+     &                       nrhs(ng), linew(ng), liold(ng), liunw(ng), &
 # ifdef MASKING
-     &                      GRID(ng) % rmask,                           &
+     &                       GRID(ng) % rmask,                          &
 # endif
 # ifdef WET_DRY
-     &                      GRID(ng) % rmask_wet,                       &
+     &                       GRID(ng) % rmask_wet,                      &
 # endif
 # ifdef ICESHELF
-     &                      GRID(ng) % zice,                            &
+     &                       GRID(ng) % zice,                           &
 # endif
 # ifndef ICE_UPWIND
-     &                      GRID(ng) % pm,                              &
-     &                      GRID(ng) % pn,                              &
+     &                       GRID(ng) % pm,                             &
+     &                       GRID(ng) % pn,                             &
 # endif
-     &                      GRID(ng) % on_u,                            &
-     &                      GRID(ng) % om_v,                            &
-     &                      GRID(ng) % omn,                             &
-     &                      ICE(ng) % ui,                               &
-     &                      ICE(ng) % vi,                               &
-     &                      ICE(ng) % hage)
+     &                       GRID(ng) % on_u,                           &
+     &                       GRID(ng) % om_v,                           &
+     &                       GRID(ng) % omn,                            &
+     &                       ICE(ng) % ui,                              &
+     &                       ICE(ng) % vi,                              &
+     &                       ICE(ng) % hage)
 
       DO j=JstrT,JendT
         DO i=IstrT,IendT
@@ -347,27 +347,27 @@
 # endif
 #endif
       RETURN
-      END SUBROUTINE ice_advect_all_tile
+      END SUBROUTINE ice_advect_tile
 !
 !=======================================================================!
-      SUBROUTINE ice_advect_tile (ng, tile,                             &
-     &                            LBi, UBi, LBj, UBj,                   &
-     &                            IminS, ImaxS, JminS, JmaxS,           &
-     &                            nrhs, linew, liold, liunw,            &
+      SUBROUTINE ice_adv_var_tile (ng, tile,                            &
+     &                             LBi, UBi, LBj, UBj,                  &
+     &                             IminS, ImaxS, JminS, JmaxS,          &
+     &                             nrhs, linew, liold, liunw,           &
 #ifdef MASKING
-     &                            rmask,                                &
+     &                             rmask,                               &
 #endif
 #ifdef WET_DRY
-     &                            rmask_wet,                            &
+     &                             rmask_wet,                           &
 #endif
 #ifdef ICESHELF
-     &                            zice,                                 &
+     &                             zice,                                &
 #endif
 #ifndef ICE_UPWIND
-     &                            pm, pn,                               &
+     &                             pm, pn,                              &
 #endif
-     &                            on_u, om_v, omn,                      &
-     &                            ui, vi, scr)
+     &                             on_u, om_v, omn,                     &
+     &                             ui, vi, scr)
 !=======================================================================!
 
       USE mod_param
@@ -551,7 +551,7 @@
         END IF
       END IF
 !
-! Mask ???
+! Set masks
 !
 #ifdef MASKING
       DO j=Jmin,Jmax
@@ -580,7 +580,7 @@
 #ifndef ICE_UPWIND
 !
 ! Antidiffusive corrector step:
-!-------------- --------- -----
+! ------------- --------- -----
 ! This is needed to avoid touching "aif" under land mask. Note that only
 ! aif(i,j) and aif(i-1,j) are allowed to appear explicitly in the code
 ! segment below. This is OK because if either of them masked, then "ui"
@@ -678,4 +678,4 @@
       END DO
 !
       RETURN
-      END SUBROUTINE ice_advect_tile
+      END SUBROUTINE ice_adv_var_tile

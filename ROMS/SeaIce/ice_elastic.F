@@ -862,28 +862,20 @@
           vi(Lm(ng)+1,Mm(ng)+1,liunw) = vie(Lm(ng)+1,Mm(ng)+1,lienw)
         END IF
 
-!      CALL uibc_tile (ng, tile,                                        &
-!     &                LBi, UBi, LBj, UBj,                              &
-!     &                IminS, ImaxS, JminS, JmaxS,                      &
-!     &                liuol, liunw, ui)
-!      CALL vibc_tile (ng, tile,                                        &
-!     &                LBi, UBi, LBj, UBj,                              &
-!     &                IminS, ImaxS, JminS, JmaxS,                      &
-!     &                liuol, liunw, vi)
-
-      IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
-        CALL exchange_u2d_tile (ng, tile,                               &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          ui(:,:,liunw))
-        CALL exchange_v2d_tile (ng, tile,                               &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          vi(:,:,liunw))
-      END IF
+        IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+          CALL exchange_u2d_tile (ng, tile,                             &
+     &                            LBi, UBi, LBj, UBj,                   &
+     &                            ui(:,:,liunw))
+          CALL exchange_v2d_tile (ng, tile,                             &
+     &                            LBi, UBi, LBj, UBj,                   &
+     &                            vi(:,:,liunw))
+        END IF
 # ifdef DISTRIBUTE
-      CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
-     &                    LBi, UBi, LBj, UBj,                           &
-     &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
-     &                    ui(:,:,liunw), vi(:,:,liunw))
+        CALL mp_exchange2d (ng, tile, iNLM, 2,                          &
+     &                      LBi, UBi, LBj, UBj,                         &
+     &                      NghostPoints,                               &
+     &                      EWperiodic(ng), NSperiodic(ng),             &
+     &                      ui(:,:,liunw), vi(:,:,liunw))
 # endif
       ENDIF
 !
