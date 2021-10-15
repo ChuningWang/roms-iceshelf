@@ -941,25 +941,17 @@
           ELSE
             ageice(i,j,linew) = 0.0_r8
           ENDIF
+          hage(i,j,linew) = hi(i,j,linew)*ageice(i,j,linew)
 
 #ifdef ICE_BOX
-!     IF (i.eq.1.and.j.eq.1) THEN
-!        write(*,*) tdays,enthal(i,j,1),enthal(i,j,2),                  &
-!    &              hi(i,j,linew),hsn(i,j,linew),tis(i,j),              &
-!    &              ti(i,j,linew), t2(i,j),                             &
-!    &              qio(i,j), qi2(i,j), qi_o_n(i,j),                    &
-!    &              (qio(i,j) - qi2(i,j) + qi_o_n(i,j))*dtice(ng)/      &
-!    &              (ice_thick(i,j)*rhoice(ng))
-!       print *
-!     END IF
-      IF (i.eq.1.and.j.eq.1.and.iday==15.and.int(hour)==0) THEN
-         write(*,*) tdays,wio(i,j),wai(i,j),wro(i,j),                   &
-     &              hi(i,j,linew),hsn(i,j,linew),tis(i,j),              &
-     &              ti(i,j,linew), t2(i,j),                             &
-     &              qio(i,j), qi2(i,j), qai_n(i,j),                     &
-     &              alph(i,j), coa(i,j), qi_o_n(i,j), cot, t0mk(i,j)
-        print *
-      END IF
+        IF (i.eq.1.and.j.eq.1.and.iday==15.and.int(hour)==0) THEN
+           write(*,*) tdays,wio(i,j),wai(i,j),wro(i,j),                 &
+     &                hi(i,j,linew),hsn(i,j,linew),tis(i,j),            &
+     &                ti(i,j,linew), t2(i,j),                           &
+     &                qio(i,j), qi2(i,j), qai_n(i,j),                   &
+     &                alph(i,j), coa(i,j), qi_o_n(i,j), cot, t0mk(i,j)
+          print *
+        END IF
 #endif
 
         ENDDO
@@ -969,13 +961,14 @@
 
       DO j=Jstr,Jend
         DO i=Istr,Iend
-          ai(i,j,linew) = MIN(ai(i,j,linew),max_a(ng))
-          ai(i,j,linew) = MAX(ai(i,j,linew),0.0_r8)
+          ai(i,j,linew) = MAX(MIN(ai(i,j,linew),max_a(ng)),0.0_r8)
           hi(i,j,linew) = MAX(hi(i,j,linew),0.0_r8)
           hsn(i,j,linew) = MAX(hsn(i,j,linew),0.0_r8)
           ti(i,j,linew) = MAX(ti(i,j,linew),-70.0_r8)
-          if (hi(i,j,linew) .le. 0.0_r8) ai(i,j,linew) = 0.0_r8
-          if (ai(i,j,linew) .le. 0.0_r8) hi(i,j,linew) = 0.0_r8
+          IF (hi(i,j,linew) .le. 0.0_r8) ai(i,j,linew) = 0.0_r8
+          IF (ai(i,j,linew) .le. 0.0_r8) hi(i,j,linew) = 0.0_r8
+          IF (ageice(i,j,linew) .le. 0.0_r8) ageice(i,j,linew) = 0.0_r8
+          IF (hage(i,j,linew) .le. 0.0_r8) hage(i,j,linew) = 0.0_r8
         ENDDO
       ENDDO
 
@@ -1025,18 +1018,9 @@
       CALL tibc_tile (ng, tile, iNLM,                                   &
      &                LBi, UBi, LBj, UBj, liold, linew,                 &
      &                ui, vi, hi, ti, enthalpi)
-!     CALL i2d_bc_tile (ng, tile, iNLM,                                 &
-!    &                  LBi, UBi, LBj, UBj,                             &
-!    &                  IminS, ImaxS, JminS, JmaxS,                     &
-!    &                  liold, linew,                                   &
-!    &                  BOUNDARY(ng)%ageice_west,                       &
-!    &                  BOUNDARY(ng)%ageice_east,                       &
-!    &                  BOUNDARY(ng)%ageice_north,                      &
-!    &                  BOUNDARY(ng)%ageice_south,                      &
-!    &                  ui, vi, ageice, LBC(:,isAgeice,ng))
-!     CALL ageicebc_tile (ng, tile,                                     &
-!    &                    LBi, UBi, LBj, UBj, liold, linew,             &
-!    &                    min_h(ng), ui, vi, hi, ageice, hage)
+      CALL ageice_bc_tile (ng, tile, iNLM,                              &
+     &                     LBi, UBi, LBj, UBj,                          &
+     &                     linew, ageice, hage)
 
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
         CALL exchange_r2d_tile (ng, tile,                               &
@@ -1062,15 +1046,14 @@
      &                          hage(:,:,linew))
       END IF
 #ifdef DISTRIBUTE
-      CALL mp_exchange2d (ng, tile, iNLM, 4,                            &
-     &                    LBi, UBi, LBj, UBj,                           &
-     &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
-     &                    ai(:,:,linew), hi(:,:,linew),                 &
-     &                    hsn(:,:,linew), ti(:,:,linew))
       CALL mp_exchange2d (ng, tile, iNLM, 3,                            &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
-     &                    enthalpi(:,:,linew),                          &
+     &                    ai(:,:,linew), hi(:,:,linew), hsn(:,:,linew))
+      CALL mp_exchange2d (ng, tile, iNLM, 4,                            &
+     &                    LBi, UBi, LBj, UBj,                           &
+     &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
+     &                    ti(:,:,linew), enthalpi(:,:,linew),           &
      &                    ageice(:,:,linew), hage(:,:,linew))
 #endif
 

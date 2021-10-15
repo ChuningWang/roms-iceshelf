@@ -18,6 +18,7 @@
 
       PRIVATE
       PUBLIC i2d_bc_tile
+      PUBLIC ageice_bc_tile
 
       CONTAINS
 !
@@ -47,21 +48,21 @@
       TYPE(T_LBC), intent(in) :: S(4)
 
 # ifdef ASSUMED_SHAPE
-      real(r8), intent(in) :: ui(LBi:,LBj:,:)
-      real(r8), intent(in) :: vi(LBi:,LBj:,:)
-      real(r8), intent(inout) :: ai(LBi:,LBj:,:)
       real(r8), intent(in) :: ai_west(LBj:)
       real(r8), intent(in) :: ai_east(LBj:)
       real(r8), intent(in) :: ai_north(LBi:)
       real(r8), intent(in) :: ai_south(LBi:)
+      real(r8), intent(in) :: ui(LBi:,LBj:,:)
+      real(r8), intent(in) :: vi(LBi:,LBj:,:)
+      real(r8), intent(inout) :: ai(LBi:,LBj:,:)
 # else
-      real(r8), intent(in) :: ui(LBi:UBi,LBj:UBj,2)
-      real(r8), intent(in) :: vi(LBi:UBi,LBj:UBj,2)
-      real(r8), intent(inout) :: ai(LBi:UBi,LBj:UBj,2)
       real(r8), intent(in) :: ai_west(LBj:UBj)
       real(r8), intent(in) :: ai_east(LBj:UBj)
       real(r8), intent(in) :: ai_north(LBi:UBi)
       real(r8), intent(in) :: ai_south(LBi:UBi)
+      real(r8), intent(in) :: ui(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(in) :: vi(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: ai(LBi:UBi,LBj:UBj,2)
 # endif
 !
 !  Local variable declarations.
@@ -561,6 +562,173 @@
       END IF
       RETURN
       END SUBROUTINE i2d_bc_tile
+!
+!***********************************************************************
+      SUBROUTINE ageice_bc_tile (ng, tile, model,                       &
+     &                           LBi, UBi, LBj, UBj,                    &
+     &                           linew, ai, ha)
+!***********************************************************************
+!
+      USE mod_param
+      USE mod_boundary
+      USE mod_grid
+      USE mod_scalars
+
+      implicit none
+!
+!  Imported variable declarations.
+!
+      integer, intent(in) :: ng, tile, model
+      integer, intent(in) :: LBi, UBi, LBj, UBj
+      integer, intent(in) :: linew
+
+# ifdef ASSUMED_SHAPE
+      real(r8), intent(inout) :: ai(LBi:,LBj:,:)
+      real(r8), intent(inout) :: ha(LBi:,LBj:,:)
+# else
+      real(r8), intent(inout) :: ai(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: ha(LBi:UBi,LBj:UBj,2)
+# endif
+!
+!  Local variable declarations.
+!
+      integer :: i, j
+      real(r8), parameter :: eps = 1.0E-20_r8
+      real(r8) :: Ce, Cx, cff, dTde, dTdt, dTdx, tau 
+
+#include "set_bounds.h"
+!
+!-----------------------------------------------------------------------
+!  Apply gradient boundary condition to ageice.
+!-----------------------------------------------------------------------
+!
+      IF (.not.EWperiodic(ng)) THEN
+!
+!-----------------------------------------------------------------------
+!  Lateral boundary conditions at the western edge.
+!-----------------------------------------------------------------------
+!
+        IF (DOMAIN(ng)%Western_Edge(tile)) THEN
+!
+!  Western edge, gradient boundary condition.
+!
+          DO j=Jstr,Jend
+            IF (LBC_apply(ng)%west(j)) THEN
+              ai(Istr-1,j,linew)=ai(Istr,j,linew)
+              ha(Istr-1,j,linew)=ha(Istr,j,linew)
+# ifdef MASKING
+              ai(Istr-1,j,linew)=ai(Istr-1,j,linew)*                    &
+     &                           GRID(ng)%rmask(Istr-1,j)
+              ha(Istr-1,j,linew)=ha(Istr-1,j,linew)*                    &
+     &                           GRID(ng)%rmask(Istr-1,j)
+# endif
+            END IF
+          END DO
+        END IF
+!
+!-----------------------------------------------------------------------
+!  Lateral boundary conditions at the eastern edge.
+!-----------------------------------------------------------------------
+!
+        IF (DOMAIN(ng)%Eastern_Edge(tile)) THEN
+!
+!  Eastern edge, gradient boundary condition.
+!
+          DO j=Jstr,Jend
+            IF (LBC_apply(ng)%east(j)) THEN
+              ai(Iend+1,j,linew)=ai(Iend,j,linew)
+              ha(Iend+1,j,linew)=ha(Iend,j,linew)
+# ifdef MASKING
+              ai(Iend+1,j,linew)=ai(Iend+1,j,linew)*                    &
+     &                           GRID(ng)%rmask(Iend+1,j)
+              ha(Iend+1,j,linew)=ha(Iend+1,j,linew)*                    &
+     &                           GRID(ng)%rmask(Iend+1,j)
+# endif
+            END IF
+          END DO
+        END IF
+      END IF
+      IF (.not.NSperiodic(ng)) THEN
+!
+!-----------------------------------------------------------------------
+!  Lateral boundary conditions at the southern edge.
+!-----------------------------------------------------------------------
+!
+        IF (DOMAIN(ng)%Southern_Edge(tile)) THEN
+!
+!  Southern edge, gradient boundary condition.
+!
+          DO i=Istr,Iend
+            IF (LBC_apply(ng)%south(i)) THEN
+              ai(i,Jstr-1,linew)=ai(i,Jstr,linew)
+              ha(i,Jstr-1,linew)=ha(i,Jstr,linew)
+# ifdef MASKING
+              ai(i,Jstr-1,linew)=ai(i,Jstr-1,linew)*                    &
+     &                           GRID(ng)%rmask(i,Jstr-1)
+              ha(i,Jstr-1,linew)=ha(i,Jstr-1,linew)*                    &
+     &                           GRID(ng)%rmask(i,Jstr-1)
+# endif
+            END IF
+          END DO
+        END IF
+!
+!-----------------------------------------------------------------------
+!  Lateral boundary conditions at the northern edge.
+!-----------------------------------------------------------------------
+!
+        IF (DOMAIN(ng)%Northern_Edge(tile)) THEN
+!
+!  Northern edge, implicit upstream radiation condition.
+!
+          DO i=Istr,Iend
+            IF (LBC_apply(ng)%north(i)) THEN
+              ai(i,Jend+1,linew)=ai(i,Jend,linew)
+              ha(i,Jend+1,linew)=ha(i,Jend,linew)
+# ifdef MASKING
+              ai(i,Jend+1,linew)=ai(i,Jend+1,linew)*                    &
+     &                           GRID(ng)%rmask(i,Jend+1)
+              ha(i,Jend+1,linew)=ha(i,Jend+1,linew)*                    &
+     &                           GRID(ng)%rmask(i,Jend+1)
+# endif
+            END IF
+          END DO
+        END IF
+      END IF
+!
+!-----------------------------------------------------------------------
+!  Boundary corners.
+!-----------------------------------------------------------------------
+!
+      IF (.not.EWperiodic(ng).and. .not.NSperiodic(ng)) THEN
+        IF (DOMAIN(ng)%SouthWest_Corner(tile)) THEN
+          ai(0,0,linew)=0.5_r8*(ai(1,0,linew)+                          &
+     &                          ai(0,1,linew))
+          ha(0,0,linew)=0.5_r8*(ha(1,0,linew)+                          &
+     &                          ha(0,1,linew))
+        END IF
+        IF (DOMAIN(ng)%SouthEast_Corner(tile)) THEN
+          ai(Lm(ng)+1,0,linew)=0.5_r8*(ai(Lm(ng)+1,1,linew)+            &
+     &                                 ai(Lm(ng)  ,0,linew))
+          ha(Lm(ng)+1,0,linew)=0.5_r8*(ha(Lm(ng)+1,1,linew)+            &
+     &                                 ha(Lm(ng)  ,0,linew))
+        END IF
+        IF (DOMAIN(ng)%NorthWest_Corner(tile)) THEN
+          ai(0,Mm(ng)+1,linew)=0.5_r8*(ai(0,Mm(ng)  ,linew)+            &
+     &                                 ai(1,Mm(ng)+1,linew))
+          ha(0,Mm(ng)+1,linew)=0.5_r8*(ha(0,Mm(ng)  ,linew)+            &
+     &                                 ha(1,Mm(ng)+1,linew))
+        END IF
+        IF (DOMAIN(ng)%NorthEast_Corner(tile)) THEN
+          ai(Lm(ng)+1,Mm(ng)+1,linew)=0.5_r8*                           &
+     &             (ai(Lm(ng)+1,Mm(ng)  ,linew)+                        &
+     &              ai(Lm(ng)  ,Mm(ng)+1,linew))
+          ha(Lm(ng)+1,Mm(ng)+1,linew)=0.5_r8*                           &
+     &             (ha(Lm(ng)+1,Mm(ng)  ,linew)+                        &
+     &              ha(Lm(ng)  ,Mm(ng)+1,linew))
+        END IF
+      END IF
+      RETURN
+      END SUBROUTINE ageice_bc_tile
 #endif
 
       END MODULE i2d_bc_mod

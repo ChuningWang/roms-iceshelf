@@ -15,9 +15,9 @@
       implicit none
 
       integer, intent(in) :: ng, tile
-
+!
 #include "tile.h"
-
+!
 #ifdef PROFILE
       CALL wclock_on (ng, iNLM, 95, __LINE__, __FILE__)
 #endif
@@ -32,9 +32,10 @@
 #ifdef PROFILE
       CALL wclock_off (ng, iNLM, 95, __LINE__, __FILE__)
 #endif
+!
       RETURN
       END SUBROUTINE ice_advect
-
+!
       SUBROUTINE ice_advect_all_tile (ng, tile,                         &
      &                      LBi, UBi, LBj, UBj,                         &
      &                      IminS, ImaxS, JminS, JmaxS)
@@ -67,9 +68,9 @@
 !
       integer :: i, j
       real(r8) :: wrk(LBi:UBi, LBj:UBj, 2)
-
+!
 #include "set_bounds.h"
-
+!
       CALL ice_advect_tile (ng, tile,                                   &
      &                      LBi, UBi, LBj, UBj,                         &
      &                      IminS, ImaxS, JminS, JmaxS,                 &
@@ -134,8 +135,7 @@
      &                      GRID(ng) % omn,                             &
      &                      ICE(ng) % ui,                               &
      &                      ICE(ng) % vi,                               &
-     &                      ICE(ng) % hi                                &
-     &                      )
+     &                      ICE(ng) % hi)
 !
 !  Set lateral boundary conditions.
 !
@@ -187,8 +187,7 @@
      &                      GRID(ng) % omn,                             &
      &                      ICE(ng) % ui,                               &
      &                      ICE(ng) % vi,                               &
-     &                      ICE(ng) % hsn                               &
-     &                      )
+     &                      ICE(ng) % hsn)
 !
 !  Set lateral boundary conditions.
 !
@@ -230,8 +229,7 @@
      &                      GRID(ng) % omn,                             &
      &                      ICE(ng) % ui,                               &
      &                      ICE(ng) % vi,                               &
-     &                      ICE(ng) % enthalpi                          &
-     &                      )
+     &                      ICE(ng) % enthalpi)
 
       DO j=JstrT,JendT
         DO i=IstrT,IendT
@@ -259,18 +257,6 @@
 !  Advect the ice age.
 ! ---------------------------------------------------------------------
 !
-      DO j=JstrT,JendT
-        DO i=IstrT,IendT
-          ICE(ng)%hage(i,j,liold(ng)) = ICE(ng)%hi(i,j,liold(ng))*      &
-     &                                  ICE(ng)%ageice(i,j,liold(ng))
-          ICE(ng)%hage(i,j,linew(ng)) = ICE(ng)%hi(i,j,linew(ng))*      &
-     &                                  ICE(ng)%ageice(i,j,linew(ng))
-          IF (ICE(ng)%hi(i,j,liold(ng)).LE.min_h(ng)) THEN
-            ICE(ng)%hage(i,j,liold(ng)) = 0.0_r8
-            ICE(ng)%ageice(i,j,liold(ng)) = 0.0_r8
-          END IF
-        ENDDO
-      ENDDO
       CALL ice_advect_tile (ng, tile,                                   &
      &                      LBi, UBi, LBj, UBj,                         &
      &                      IminS, ImaxS, JminS, JmaxS,                 &
@@ -293,8 +279,7 @@
      &                      GRID(ng) % omn,                             &
      &                      ICE(ng) % ui,                               &
      &                      ICE(ng) % vi,                               &
-     &                      ICE(ng) % hage                              &
-     &                      )
+     &                      ICE(ng) % hage)
 
       DO j=JstrT,JendT
         DO i=IstrT,IendT
@@ -309,27 +294,13 @@
 !
 !  Set lateral boundary conditions.
 !
-!       CALL i2d_bc_tile (ng, tile, iNLM,                               &
-!    &                    LBi, UBi, LBj, UBj,                           &
-!    &                    IminS, ImaxS, JminS, JmaxS,                   &
-!    &                    liold(ng), linew(ng),                         &
-!    &                    BOUNDARY(ng)%ageice_west(LBj:UBj),            &
-!    &                    BOUNDARY(ng)%ageice_east(LBj:UBj),            &
-!    &                    BOUNDARY(ng)%ageice_north(LBi:UBi),           &
-!    &                    BOUNDARY(ng)%ageice_south(LBi:UBi),           &
-!    &                    ICE(ng)%ui,                                   &
-!    &                    ICE(ng)%vi,                                   &
-!    &                    ICE(ng)%ageice, LBC(:,isHice,ng))
+      CALL ageice_bc_tile (ng, tile, iNLM,                              &
+     &                     LBi, UBi, LBj, UBj,                          &
+     &                     linew(ng), ICE(ng)%ageice, ICE(ng)%hage)
 !
-!     CALL ageicebc_tile (ng, tile,                                     &
-!    &                    LBi, UBi, LBj, UBj,                           &
-!    &                    liold(ng), linew(ng),                         &
-!    &                    ICE(ng)%ui,                                   &
-!    &                    ICE(ng)%vi,                                   &
-!    &                    ICE(ng)%hi,                                   &
-!    &                    ICE(ng)%ageice,                               &
-!    &                    ICE(ng)%hage)
-
+! ---------------------------------------------------------------------
+!  Tile and boundary data exchange.
+! ---------------------------------------------------------------------
 !
 !  Apply periodic boundary conditions.
 !
@@ -564,19 +535,19 @@
              aif(i,Jend+1)=aif(i,Jend)  !? scr(i,Jend+1,liold)
           END DO
         END IF
-        IF (.not.EWperiodic(ng)) THEN
-          IF (DOMAIN(ng)%SouthWest_Corner(tile)) THEN
-            aif(Istr-1,Jstr-1)=aif(Istr,Jstr)
-          END IF
-          IF (DOMAIN(ng)%NorthWest_Corner(tile)) THEN
-            aif(Istr-1,Jend+1)=aif(Istr,Jend)
-          END IF
-          IF (DOMAIN(ng)%SouthEast_Corner(tile)) THEN
-            aif(Iend+1,Jstr-1)=aif(Iend,Jstr)
-          END IF
-          IF (DOMAIN(ng)%NorthEast_Corner(tile)) THEN
-            aif(Iend+1,Jend+1)=aif(Iend,Jend)
-          END IF
+      END IF
+      IF (.not.(EWperiodic(ng).or.NSperiodic(ng))) THEN
+        IF (DOMAIN(ng)%SouthWest_Corner(tile)) THEN
+          aif(Istr-1,Jstr-1)=aif(Istr,Jstr)
+        END IF
+        IF (DOMAIN(ng)%NorthWest_Corner(tile)) THEN
+          aif(Istr-1,Jend+1)=aif(Istr,Jend)
+        END IF
+        IF (DOMAIN(ng)%SouthEast_Corner(tile)) THEN
+          aif(Iend+1,Jstr-1)=aif(Iend,Jstr)
+        END IF
+        IF (DOMAIN(ng)%NorthEast_Corner(tile)) THEN
+          aif(Iend+1,Jend+1)=aif(Iend,Jend)
         END IF
       END IF
 !
