@@ -284,8 +284,8 @@
       DO j=JstrT,JendT
         DO i=IstrT,IendT
           ICE(ng)%ageice(i,j,linew(ng)) = ICE(ng)%hage(i,j,linew(ng)) / &
-     &      MAX(ICE(ng)%hi(i,j,linew(ng)),1.0E-6_r8)
-          IF (ICE(ng)%hi(i,j,linew(ng)).LE.min_h(ng)) THEN
+     &        MAX(ICE(ng)%hi(i,j,linew(ng)),1.0E-6_r8)
+          IF (ICE(ng)%hi(i,j,linew(ng)).le.min_h(ng)) THEN
             ICE(ng)%hage(i,j,linew(ng)) = 0.0_r8
             ICE(ng)%ageice(i,j,linew(ng)) = 0.0_r8
           END IF
@@ -581,6 +581,7 @@
 !
 ! Antidiffusive corrector step:
 ! ------------- --------- -----
+!
 ! This is needed to avoid touching "aif" under land mask. Note that only
 ! aif(i,j) and aif(i-1,j) are allowed to appear explicitly in the code
 ! segment below. This is OK because if either of them masked, then "ui"

@@ -281,14 +281,14 @@
       ENDDO
 
       CALL bc_r2d_tile (ng, tile,                                       &
-     &                    LBi, UBi, LBj, UBj,                           &
-     &                    pice)
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  pice)
       CALL bc_r2d_tile (ng, tile,                                       &
-     &                    LBi, UBi, LBj, UBj,                           &
-     &                    zetai)
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  zetai)
       CALL bc_r2d_tile (ng, tile,                                       &
-     &                    LBi, UBi, LBj, UBj,                           &
-     &                    eta)
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  eta)
 # ifdef DISTRIBUTE
       CALL mp_exchange2d (ng, tile, iNLM, 3,                            &
      &                    LBi, UBi, LBj, UBj,                           &

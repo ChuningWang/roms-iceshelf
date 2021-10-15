@@ -513,8 +513,7 @@
 !
 !  Solving the momentum equation for u
 !
-          uie(i,j,lienw) = (masu*uie(i,j,lieol) +                       &
-     &                       dte(ng)*uforce)/alfa
+          uie(i,j,lienw) = (masu*uie(i,j,lieol) + dte(ng)*uforce)/alfa
 !
           IF (LnudgeMICLM(ng)) THEN
             cff2 = 0.5*(CLIMA(ng)%MInudgcof(i,j)+                       &
@@ -744,8 +743,7 @@
 !
 !  Solving the momentum equation for v
 !
-          vie(i,j,lienw) = (masv*vie(i,j,lieol) +                       &
-     &                       dte(ng)*vforce)/alfa
+          vie(i,j,lienw) = (masv*vie(i,j,lieol) + dte(ng)*vforce)/alfa
 !
           IF (LnudgeMICLM(ng)) THEN
             cff = 0.5*(CLIMA(ng)%MInudgcof(i,j)+                        &

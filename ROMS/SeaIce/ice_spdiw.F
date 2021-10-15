@@ -1,4 +1,4 @@
-#include "cppdefs.h"
+include "cppdefs.h"
       MODULE ice_spdiw_mod
 #ifdef ICE_MODEL
 !
@@ -60,8 +60,7 @@
      &                     ICE(ng) % vi,                                &
      &                     ICE(ng) % uwater,                            &
      &                     ICE(ng) % vwater,                            &
-     &                     ICE(ng) % spd_iw                             &
-     &                     )
+     &                     ICE(ng) % spd_iw)
 # ifdef PROFILE
       CALL wclock_off (ng, iNLM, 6, __LINE__, __FILE__)
 # endif

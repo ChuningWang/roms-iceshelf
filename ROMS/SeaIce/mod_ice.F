@@ -291,17 +291,10 @@
           ICE(ng) % rhs_ice_heat(i,j) = IniVal
           ICE(ng) % pice(i,j) = IniVal
           ICE(ng) % rfaci(i,j) = 1.0_r8
-# ifdef ICE_STRENGTH_QUAD
-          ICE(ng) % pstar_grid(i,j) = IniVal
-# endif
           ICE(ng) % zetai(i,j) = IniVal
           ICE(ng) % eta(i,j) = IniVal
           ICE(ng) % tauaiu(i,j) = IniVal
           ICE(ng) % tauaiv(i,j) = IniVal
-# ifdef ICE_LANDFAST
-          ICE(ng) % h_loadu(i,j) = IniVal
-          ICE(ng) % h_loadv(i,j) = IniVal
-# endif
           ICE(ng) % uwater(i,j) = IniVal
           ICE(ng) % vwater(i,j) = IniVal
           ICE(ng) % sealev(i,j) = IniVal
@@ -313,6 +306,13 @@
           ICE(ng) % sig22(i,j,2) = IniVal
           ICE(ng) % sig12(i,j,1) = IniVal
           ICE(ng) % sig12(i,j,2) = IniVal
+# ifdef ICE_STRENGTH_QUAD
+          ICE(ng) % pstar_grid(i,j) = IniVal
+# endif
+# ifdef ICE_LANDFAST
+          ICE(ng) % h_loadu(i,j) = IniVal
+          ICE(ng) % h_loadv(i,j) = IniVal
+# endif
 
         END DO
       END DO

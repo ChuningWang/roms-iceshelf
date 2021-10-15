@@ -499,33 +499,33 @@
 !  Apply boundary conditions.
 !
       CALL bc_r2d_tile (ng, tile,                                       &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          sealev)
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  sealev)
       CALL bc_r2d_tile (ng, tile,                                       &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          utau_iw)
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  utau_iw)
       CALL bc_r2d_tile (ng, tile,                                       &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          chu_iw)
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  chu_iw)
       CALL bc_u2d_tile (ng, tile,                                       &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          sustr)
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  sustr)
       CALL bc_v2d_tile (ng, tile,                                       &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          svstr)
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  svstr)
       CALL bc_u2d_tile (ng, tile,                                       &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          tauaiu)
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  tauaiu)
       CALL bc_v2d_tile (ng, tile,                                       &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          tauaiv)
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  tauaiv)
 # ifdef ICE_LANDFAST
       CALL bc_u2d_tile (ng, tile,                                       &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          h_loadu)
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  h_loadu)
       CALL bc_v2d_tile (ng, tile,                                       &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          h_loadv)
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  h_loadv)
 # endif
 # ifdef DISTRIBUTE
       CALL mp_exchange2d (ng, tile, iNLM, 4,                            &
