@@ -927,13 +927,13 @@
 !  Case 1 - new ice
 !
           IF (ageice(i,j,linew).le.0.0_r8                               &
-     &                .and.hi(i,j,linew).gt.min_h(ng)) THEN
+     &        .and.hi(i,j,linew).gt.min_h(ng)) THEN
             ageice(i,j,linew)=dtice(ng)/86400._r8
 !
 !  Case 2 - existing ice gets older
 !
           ELSEIF(ageice(i,j,linew).gt.0.0_r8                            &
-     &                .and.hi(i,j,linew).gt.min_h(ng)) THEN
+     &           .and.hi(i,j,linew).gt.min_h(ng)) THEN
             ageice(i,j,linew) = ageice(i,j,linew)+dtice(ng)/86400._r8
 !
 !  Case 3 - all ice in cell melted or is open water and stays open water

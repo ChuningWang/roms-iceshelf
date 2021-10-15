@@ -233,8 +233,8 @@
 
       DO j=JstrT,JendT
         DO i=IstrT,IendT
-          ICE(ng)%ti(i,j,linew(ng)) = ICE(ng)%enthalpi(i,j,linew(ng))/  &
-       &                  MAX(ICE(ng)%hi(i,j,linew(ng)),1.0E-6_r8)
+          ICE(ng)%ti(i,j,linew(ng)) = ICE(ng)%enthalpi(i,j,linew(ng)) / &
+       &    MAX(ICE(ng)%hi(i,j,linew(ng)),1.0E-6_r8)
           IF (ICE(ng)%hi(i,j,linew(ng)).LE.min_h(ng)) THEN
             ICE(ng)%enthalpi(i,j,linew(ng)) = 0.0_r8
             ICE(ng)%ti(i,j,linew(ng)) = 0.0_r8
@@ -284,7 +284,7 @@
       DO j=JstrT,JendT
         DO i=IstrT,IendT
           ICE(ng)%ageice(i,j,linew(ng)) = ICE(ng)%hage(i,j,linew(ng)) / &
-     &        MAX(ICE(ng)%hi(i,j,linew(ng)),1.0E-6_r8)
+     &      MAX(ICE(ng)%hi(i,j,linew(ng)),1.0E-6_r8)
           IF (ICE(ng)%hi(i,j,linew(ng)).le.min_h(ng)) THEN
             ICE(ng)%hage(i,j,linew(ng)) = 0.0_r8
             ICE(ng)%ageice(i,j,linew(ng)) = 0.0_r8
@@ -473,18 +473,20 @@
 !
 ! Upstream advection scheme
 !
+      here
+
       DO j=Jmin,Jmax
         DO i=Imin,Imax+1
           aflxu(i,j)=on_u(i,j)*                                         &
-     &          (max(0.0_r8,ui(i,j,liunw))*scr(i-1,j,liold)             &
-     &          +min(0.0_r8,ui(i,j,liunw))*scr(i,j,liold))
+     &          (MAX(0.0_r8,ui(i,j,liunw))*scr(i-1,j,liold)             &
+     &          +MIN(0.0_r8,ui(i,j,liunw))*scr(i,j,liold))
         END DO
       END DO
       DO j=Jmin,Jmax+1
         DO i=Imin,Imax
           aflxv(i,j)=om_v(i,j)*                                         &
-     &          (max(0.0_r8,vi(i,j,liunw))*scr(i,j-1,liold)             &
-     &          +min(0.0_r8,vi(i,j,liunw))*scr(i,j,liold))
+     &          (MAX(0.0_r8,vi(i,j,liunw))*scr(i,j-1,liold)             &
+     &          +MIN(0.0_r8,vi(i,j,liunw))*scr(i,j,liold))
 !
         END DO
       END DO
@@ -633,7 +635,7 @@
 !
       DO j=Jstr,Jend+1
         DO i=Istr,Iend
-          ratev=(aif(i,j)-aif(i,j-1))/max(epsil, aif(i,j)+aif(i,j-1))
+          ratev=(aif(i,j)-aif(i,j-1))/MAX(epsil, aif(i,j)+aif(i,j-1))
 !
           ratexiv=(FX(i+1,j) + FX(i,j) + FX(i+1,j-1) + FX(i,j-1)) /     &
      &      (MAX(epsil,aif(i,j) + FX(i+1,j) - FX(i,j) +                 &
