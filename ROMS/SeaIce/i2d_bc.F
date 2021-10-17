@@ -92,11 +92,9 @@
         IF (S(iwest)%radiation) THEN
           DO j=Jstr,Jend+1
             grad(Istr-1,j)=ai(Istr-1,j,know)-ai(Istr-1,j-1,know)
-# ifdef MASKING
-            grad(Istr-1,j)=grad(Istr-1,j)*GRID(ng)%vmask(Istr-1,j)
-# endif
             grad(Istr,j)=ai(Istr,j,know)-ai(Istr,j-1,know)
 # ifdef MASKING
+            grad(Istr-1,j)=grad(Istr-1,j)*GRID(ng)%vmask(Istr-1,j)
             grad(Istr,j)=grad(Istr,j)*GRID(ng)%vmask(Istr,j)
 # endif
           END DO
@@ -382,14 +380,14 @@
         ELSE IF (S(isouth)%clamped) THEN
           DO i=Istr,Iend
             IF (LBC_apply(ng)%south(i)) THEN
-              ai(i,0,linew)=ai_south(i)
+              ai(i,Jstr-1,linew)=ai_south(i)
 # ifdef MASKING
-              ai(i,0,linew)=ai(i,0,linew)*                              &
-     &                      GRID(ng)%rmask(i,0)
+              ai(i,Jstr-1,linew)=ai(i,Jstr-1,linew)*                    &
+     &                           GRID(ng)%rmask(i,Jstr-1)
 # endif
 # ifdef WET_DRY
-              ai(i,0,linew)=ai(i,0,linew)*                              &
-     &                      GRID(ng)%rmask_wet(i,0)
+              ai(i,Jstr-1,linew)=ai(i,Jstr-1,linew)*                    &
+     &                           GRID(ng)%rmask_wet(i,Jstr-1)
 # endif
             END IF
           END DO
@@ -765,5 +763,4 @@
       RETURN
       END SUBROUTINE ageice_bc_tile
 #endif
-
       END MODULE i2d_bc_mod

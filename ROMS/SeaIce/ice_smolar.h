@@ -299,7 +299,7 @@
      &                     linew(ng), ICE(ng)%ageice, ICE(ng)%hage)
 !
 ! ---------------------------------------------------------------------
-!  Tile and boundary data exchange.
+!  Tile boundary data exchange.
 ! ---------------------------------------------------------------------
 !
 !  Apply periodic boundary conditions.
@@ -468,8 +468,8 @@
 !
 ! Step number 1 in mpdata:
 !
-      DO j=JstrV,Jend
-        DO i=IstrU,Iend
+      DO j=Jstr,Jend
+        DO i=Istr,Iend
 !
           ar(i,j)=1.0_r8/omn(i,j)
           aif(i,j)=scr(i,j,liold) -                                     &
