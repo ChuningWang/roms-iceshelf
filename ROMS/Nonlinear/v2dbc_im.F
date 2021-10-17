@@ -1094,7 +1094,11 @@
                 ELSE
                   tau=obc_out
                 END IF
+#ifdef IMPLICIT_NUDGING
+                IF (tau.gt.0.0_r8) tau=1.0_r8/tau
+#else
                 tau=tau*dt2d
+#endif
               END IF
 
               IF ((dVdt*dVdx).lt.0.0_r8) dVdt=0.0_r8
@@ -1123,9 +1127,15 @@
      &                            (cff+Cx)
 
               IF (LBC(ieast,isVbar,ng)%nudging) THEN
+#ifdef IMPLICIT_NUDGING
+                phi=dt(ng)/(tau+dt(ng))
+                vbar(Iend+1,j,kout)=(1.0_r8-phi)*vbar(Iend+1,j,kout)+   &
+     &                              phi*BOUNDARY(ng)%vbar_west(j)
+#else
                 vbar(Iend+1,j,kout)=vbar(Iend+1,j,kout)+                &
      &                              tau*(BOUNDARY(ng)%vbar_east(j)-     &
      &                                   vbar(Iend+1,j,know))
+#endif
               END IF
 #ifdef MASKING
               vbar(Iend+1,j,kout)=vbar(Iend+1,j,kout)*                  &
@@ -1244,7 +1254,7 @@
           IF (LBC_apply(ng)%north(Iend+1).and.                          &
      &        LBC_apply(ng)%east (Jend+1)) THEN
             vbar(Iend+1,Jend+1,kout)=0.5_r8*(vbar(Iend+1,Jend  ,kout)+  &
-     &                                      vbar(Iend  ,Jend+1,kout))
+     &                                       vbar(Iend  ,Jend+1,kout))
           END IF
         END IF
       END IF
