@@ -426,7 +426,6 @@
 !
 ! Local variable definitions
 !
-      integer :: Imin, Imax, Jmin, Jmax
       integer :: i, j
 
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: ar
@@ -446,60 +445,36 @@
       real(r8) :: ratexiv
       real(r8) :: uspeed
       real(r8) :: vspeed
-
+!
 #include "set_bounds.h"
-
-#ifndef ICE_UPWIND
-      IF (EWperiodic(ng)) THEN
-        Imin=Istr-1
-        Imax=Iend+1
-      ELSE
-        Imin=MAX(Istr-1,1)
-        Imax=MIN(Iend+1,Lm(ng))
-      END IF
-      IF (NSperiodic(ng)) THEN
-        Jmin=Jstr-1
-        Jmax=Jend+1
-      ELSE
-        Jmin=MAX(Jstr-1,1)
-        Jmax=MIN(Jend+1,Mm(ng))
-      END IF
-#else
-      Imin=Istr
-      Imax=Iend
-      Jmin=Jstr
-      Jmax=Jend
-#endif
 !
 ! Upstream advection scheme
 !
-      here
-
-      DO j=Jmin,Jmax
-        DO i=Imin,Imax+1
+      DO j=Jstr,Jend
+        DO i=IstrU,Iend+1
           aflxu(i,j)=on_u(i,j)*                                         &
-     &          (MAX(0.0_r8,ui(i,j,liunw))*scr(i-1,j,liold)             &
-     &          +MIN(0.0_r8,ui(i,j,liunw))*scr(i,j,liold))
+     &               (MAX(0.0_r8,ui(i,j,liunw))*scr(i-1,j,liold) +      &
+     &                MIN(0.0_r8,ui(i,j,liunw))*scr(i  ,j,liold))
         END DO
       END DO
-      DO j=Jmin,Jmax+1
-        DO i=Imin,Imax
+      DO j=JstrV,Jend+1
+        DO i=Istr,Iend
           aflxv(i,j)=om_v(i,j)*                                         &
-     &          (MAX(0.0_r8,vi(i,j,liunw))*scr(i,j-1,liold)             &
-     &          +MIN(0.0_r8,vi(i,j,liunw))*scr(i,j,liold))
+     &               (MAX(0.0_r8,vi(i,j,liunw))*scr(i,j-1,liold) +      &
+     &                MIN(0.0_r8,vi(i,j,liunw))*scr(i,j  ,liold))
 !
         END DO
       END DO
 !
 ! Step number 1 in mpdata:
 !
-      DO j=Jmin,Jmax
-        DO i=Imin,Imax
+      DO j=JstrV,Jend
+        DO i=IstrU,Iend
 !
           ar(i,j)=1.0_r8/omn(i,j)
           aif(i,j)=scr(i,j,liold) -                                     &
-     &      dtice(ng)*(aflxu(i+1,j) - aflxu(i,j)+aflxv(i,j+1) -         &
-     &                 aflxv(i,j))*ar(i,j)
+     &      dtice(ng)*(aflxu(i+1,j) - aflxu(i,j) +                      &
+     &                 aflxv(i,j+1) - aflxv(i,j))*ar(i,j)
 #ifdef MASKING
           aif(i,j) = aif(i,j)*rmask(i,j)
 #endif
@@ -516,28 +491,31 @@
 !
       IF (.not.EWperiodic(ng)) THEN
         IF (DOMAIN(ng)%Western_Edge(tile)) THEN
-          DO j=Jmin,Jmax
+          DO j=Jstr,Jend
             aif(Istr-1,j)=aif(Istr,j)  !? scr(Istr-1,j,liold)
           END DO
         END IF
         IF (DOMAIN(ng)%Eastern_Edge(tile)) THEN
-          DO j=Jmin,Jmax
+          DO j=Jstr,Jend
             aif(Iend+1,j)=aif(Iend,j)  !? scr(Iend+1,j,liold)
           END DO
         END IF
       END IF
       IF (.not.NSperiodic(ng)) THEN
         IF (DOMAIN(ng)%Southern_Edge(tile)) THEN
-          DO i=Imin,Imax
+          DO i=Istr,Iend
              aif(i,Jstr-1)=aif(i,Jstr)  !? scr(i,Jstr-1,liold)
           END DO
         END IF
         IF (DOMAIN(ng)%Northern_Edge(tile)) THEN
-          DO i=Imin,Imax
+          DO i=Istr,Iend
              aif(i,Jend+1)=aif(i,Jend)  !? scr(i,Jend+1,liold)
           END DO
         END IF
       END IF
+!
+! Boundary corners.
+!
       IF (.not.(EWperiodic(ng).or.NSperiodic(ng))) THEN
         IF (DOMAIN(ng)%SouthWest_Corner(tile)) THEN
           aif(Istr-1,Jstr-1)=aif(Istr,Jstr)
@@ -556,22 +534,22 @@
 ! Set masks
 !
 #ifdef MASKING
-      DO j=Jmin,Jmax
-        DO i=Imin,Imax
+      DO j=Jstr,Jend
+        DO i=Istr,Iend
           aif(i,j)=aif(i,j)*rmask(i,j)
         END DO
       END DO
 #endif
 #ifdef WET_DRY
-      DO j=Jmin,Jmax
-        DO i=Imin,Imax
+      DO j=Jstr,Jend
+        DO i=Istr,Iend
           aif(i,j)=aif(i,j)*rmask_wet(i,j)
         END DO
       END DO
 #endif
 #ifdef ICESHELF
-      DO j=Jmin,Jmax
-        DO i=Imin,Imax
+      DO j=Jstr,Jend
+        DO i=Istr,Iend
           IF (zice(i,j).ne.0.0_r8) THEN
             aif(i,j) = 0.0_r8
           END IF
@@ -580,6 +558,21 @@
 #endif
 
 #ifndef ICE_UPWIND
+!
+!  Exchange boundary data.
+!
+      IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+        CALL exchange_r2d_tile (ng, tile,                               &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          aif)
+      END IF
+# ifdef DISTRIBUTE
+      CALL mp_exchange2d (ng, tile, iNLM, 1,                            &
+     &                    LBi, UBi, LBj, UBj,                           &
+     &                    NghostPoints,                                 &
+     &                    EWperiodic(ng), NSperiodic(ng),               &
+     &                    aif)
+# endif
 !
 ! Antidiffusive corrector step:
 ! ------------- --------- -----
