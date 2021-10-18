@@ -6,8 +6,7 @@
 !  Copyright (c) 2002-2021 The ROMS/TOMS Group                         !
 !================================================== Hernan G. Arango ===
 !                                                                      !
-!  This routine time steps the EVP stresses                            !
-!  term.                                                               !
+!  This routine time steps the EVP stresses term.                      !
 !                                                                      !
 !=======================================================================
 !
@@ -202,7 +201,7 @@
           END IF
         END DO
       END DO
-
+!
       CALL i2d_bc_tile (ng, tile, iNLM,                                 &
      &                  LBi, UBi, LBj, UBj,                             &
      &                  IminS, ImaxS, JminS, JmaxS,                     &
@@ -230,6 +229,7 @@
      &                  BOUNDARY(ng)%sig12_north(LBi:UBi),              &
      &                  BOUNDARY(ng)%sig12_south(LBi:UBi),              &
      &                  uie, vie, sig12, LBC(:,isSig12,ng))
+!
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &

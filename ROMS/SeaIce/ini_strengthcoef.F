@@ -47,11 +47,12 @@
       CALL ini_strengthcoef_tile (ng, tile, model,                      &
      &                            LBi, UBi, LBj, UBj,                   &
      &                            IminS, ImaxS, JminS, JmaxS,           &
-     &                            GRID(ng) % grdscl                     &
 #ifdef ICE_STRENGTH_QUAD
-     &                           ,ICE(ng) % pstar_grid                  &
+     &                            GRID(ng) % grdscl,                    &
+     &                            ICE(ng) % pstar_grid)
+#else
+     &                            GRID(ng) % grdscl)
 #endif
-     &                            )
 
       RETURN
       END SUBROUTINE ini_strengthcoef
@@ -60,11 +61,12 @@
       SUBROUTINE ini_strengthcoef_tile (ng, tile, model,                &
      &                                  LBi, UBi, LBj, UBj,             &
      &                                  IminS, ImaxS, JminS, JmaxS,     &
-     &                                  grdscl                          &
 #ifdef ICE_STRENGTH_QUAD
-     &                                  ,pstar_grid                     &
+     &                                  grdscl,                         &
+     &                                  pstar_grid)
+#else
+     &                                  grdscl)
 #endif
-     &                              )
 !***********************************************************************
 !
       USE mod_param

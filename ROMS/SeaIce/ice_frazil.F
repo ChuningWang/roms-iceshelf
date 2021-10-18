@@ -15,20 +15,20 @@
 !=======================================================================
 !
       implicit none
-
+!
       PRIVATE
       PUBLIC ice_frazil
-
+!
       CONTAINS
-
+!
       SUBROUTINE ice_frazil (ng, tile)
-
+!
       USE mod_param
       USE mod_grid
       USE mod_ocean
       USE mod_ice
       USE mod_stepping
-
+!
       integer, intent(in) :: ng, tile
 !
 # include "tile.h"
@@ -81,7 +81,6 @@
       USE exchange_3d_mod, ONLY : exchange_r3d_tile
 # ifdef DISTRIBUTE
       USE mp_exchange_mod
-      USE distribute_mod, ONLY : mp_reduce
 # endif
 !
       implicit none
@@ -135,12 +134,6 @@
       real(r8) :: ice_dens
       real(r8) :: delta_wfr
       real(r8), parameter :: depressT = -0.0543_r8
-
-# ifdef DISTRIBUTE
-      real(r8), allocatable           :: buffer(:)
-      character (len=3), allocatable  :: op_handle(:)
-# endif
-
 !
 !  Inline functions
 !
@@ -154,13 +147,9 @@
 !  Another simple formula - temperature or potential temperature??
 !
 !     t_freeze(s1,z1) = depressT*s1
-
+!
 # include "set_bounds.h"
-
-# ifdef DISTRIBUTE
-      IF (.not. allocated(buffer))    allocate (buffer(1))
-      IF (.not. allocated(op_handle)) allocate (op_handle(1))
-# endif
+!
       ice_dens = rhoice(ng)
       DO j=Jstr,Jend
         DO i=Istr,Iend
@@ -239,10 +228,6 @@
      &                  LBi, UBi, LBj, UBj,                             &
      &                  wfr)
 # ifdef DISTRIBUTE
-      buffer(1) = exit_flag
-      op_handle(1) = 'MAX'
-      CALL mp_reduce (ng, iNLM, 1, buffer, op_handle)
-      exit_flag = int(buffer(1))
       CALL mp_exchange2d (ng, tile, iNLM, 1,                            &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &

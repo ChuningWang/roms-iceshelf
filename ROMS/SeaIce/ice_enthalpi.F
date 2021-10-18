@@ -55,6 +55,7 @@
 
       USE mod_scalars
       USE mod_stepping
+      USE mod_boundary
 
       USE exchange_2d_mod, ONLY : exchange_r2d_tile
 # ifdef DISTRIBUTE
@@ -95,6 +96,9 @@
           END IF
         ENDDO
       ENDDO
+!
+!  Apply periodic boundary conditions.
+!
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
@@ -104,6 +108,9 @@
      &                          enthalpi(:,:,linew(ng)))
       END IF
 # ifdef DISTRIBUTE
+!
+!  Exchange boundary data.
+!
       CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
      &                      LBi, UBi, LBj, UBj,                         &
      &                      NghostPoints,                               &

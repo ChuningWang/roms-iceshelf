@@ -113,9 +113,11 @@
 # endif
 
 # ifdef ICE_ADVECT
+!
 ! ----------------------------------------------------------------------
 !  Compute the ice enthalpi before advection.
 ! ----------------------------------------------------------------------
+!
         DO ig=1,GridsInLayer(nl)
           ng=GridNumber(ig,nl)
           DO tile=first_tile(ng),last_tile(ng),+1
@@ -123,9 +125,11 @@
           END DO
 !$OMP BARRIER
         END DO
+!
 ! ----------------------------------------------------------------------
 !  Compute the advection of the ice tracer fields.
 ! ----------------------------------------------------------------------
+!
         DO ig=1,GridsInLayer(nl)
           ng=GridNumber(ig,nl)
           DO tile=first_tile(ng),last_tile(ng),+1
@@ -137,9 +141,11 @@
 # endif
 
 # ifdef ICE_THERMO
+!
 ! ----------------------------------------------------------------------
 !  Compute the ice thermodynamics.
 ! ----------------------------------------------------------------------
+!
         DO ig=1,GridsInLayer(nl)
           ng=GridNumber(ig,nl)
           DO tile=first_tile(ng),last_tile(ng),+1

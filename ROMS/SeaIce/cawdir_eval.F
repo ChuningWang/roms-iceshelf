@@ -163,24 +163,24 @@
 ! --- compute 24 hrs mean albedo at the marine surface layer
 ! --- ------------------------------------------------------------------
 !
-      call caldate (tdays(ng), yd_dp=yday, dd_dp=day)
+      CALL caldate (tdays(ng), yd_dp=yday, dd_dp=day)
 !
-!0 < day < 364
+! 0 < day < 364
 !
-      day=mod(yday-1._r8,365._r8)
+      day=MOD(yday-1._r8,365._r8)
 !
-!day-number-angle, in radians
+! day-number-angle, in radians
 !
       dangle=pi2*day/365._r8
 !
 ! --- compute astronomic quantities
 !
-      decli=.006918_r8+.070257_r8*sin(dangle)   -.399912_r8*cos(dangle) &
-     &     +.000907_r8*sin(2._r8*dangle)-.006758_r8*cos(2._r8*dangle)   &
-     &     +.001480_r8*sin(3._r8*dangle)-.002697_r8*cos(3._r8*dangle)
+      decli=.006918_r8+.070257_r8*SIN(dangle)   -.399912_r8*COS(dangle) &
+     &     +.000907_r8*SIN(2._r8*dangle)-.006758_r8*COS(2._r8*dangle)   &
+     &     +.001480_r8*SIN(3._r8*dangle)-.002697_r8*COS(3._r8*dangle)
 !
-      sundv=1.00011_r8+.001280_r8*sin(dangle)   +.034221_r8*cos(dangle) &
-     &      +.000077_r8*sin(2._r8*dangle)+.000719_r8*cos(2._r8*dangle)
+      sundv=1.00011_r8+.001280_r8*SIN(dangle)   +.034221_r8*COS(dangle) &
+     &      +.000077_r8*SIN(2._r8*dangle)+.000719_r8*COS(2._r8*dangle)
 !
 ! --- scan through each of the grid cells
 !
@@ -198,8 +198,8 @@
 ! --- compute astronomic quantities
 !
           rlat = latr(i,j)*deg2rad
-          sin2=sin(rlat)*sin(decli)
-          cos2=cos(rlat)*cos(decli)
+          sin2=SIN(rlat)*SIN(decli)
+          cos2=COS(rlat)*COS(decli)
 !
 ! --- split each day into ifrac parts, and compute the solar radiance for
 ! --- each part. by assuming symmetry of the irradiance about noon, it
@@ -219,12 +219,12 @@
 ! hour angle, in radians
 !
             biohr=bioday*86400._r8
-            biohr=mod(biohr+43200._r8,86400._r8)
+            biohr=MOD(biohr+43200._r8,86400._r8)
             hangle=pi2*biohr/86400._r8
 !
 ! cosine of the zenith angle
 !
-            cosz=min(1._r8,max(0._r8,sin2+cos2*cos(hangle)))
+            cosz=MIN(1._r8,MAX(0._r8,sin2+cos2*COS(hangle)))
 !
 ! extraterrestrial radiation
 !
@@ -232,7 +232,7 @@
 !
 ! direct radiation component
 !
-            sdir=srad*0.7_r8**min(100._r8,1._r8/(cosz+eepsil))
+            sdir=srad*0.7_r8**MIN(100._r8,1._r8/(cosz+eepsil))
 !
 ! diffusive radiation component
 !
@@ -240,7 +240,7 @@
 !
 ! solar noon altitude in degrees
 !
-            altdeg=max(0._r8,asin(sin2+cos2))*deg
+            altdeg=MAX(0._r8,ASIN(sin2+cos2))*deg
 !
 ! cloudiness correction
 !
@@ -252,7 +252,7 @@
 !
 ! albedo for direct light
 !
-            albdir=0.03_r8*exp(0.742_r8*acos(cosz)**2.866_r8)
+            albdir=0.03_r8*EXP(0.742_r8*ACOS(cosz)**2.866_r8)
 !
 ! radiation weighted sum of direct albedo
 !
@@ -271,9 +271,11 @@
         ENDDO
       ENDDO
 !
-      CALL bc_r2d_tile (ng, tile,                                       &
-     &                    LBi, UBi, LBj, UBj,                           &
-     &                    cawdir)
+      IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+        CALL exchange_r2d_tile (ng, tile,                               &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          cawdir)
+      END IF
 #ifdef DISTRIBUTE
       CALL mp_exchange2d (ng, tile, iNLM, 1,                            &
      &                    LBi, UBi, LBj, UBj,                           &

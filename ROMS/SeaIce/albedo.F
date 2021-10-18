@@ -454,8 +454,7 @@
 ! Compute ocean albedo
 !
 # ifdef ICE_ALB_CURVE
-          albedo(i,j) = (0.069_r8 - 0.011_r8*                           &
-     &                        cos(2*deg2rad*latr(i,j)))
+          albedo(i,j) = (0.069_r8 - 0.011_r8*COS(2*deg2rad*latr(i,j)))
 # else
           albedo(i,j)=alb_w
 # endif
@@ -482,7 +481,13 @@
 # endif
       END IF
 # ifdef DISTRIBUTE
-#  ifdef ICE_MODEL
+#  ifndef ICE_MODEL
+      CALL mp_exchange2d (ng, tile, iNLM, 1,                            &
+     &                    LBi, UBi, LBj, UBj,                           &
+     &                    NghostPoints,                                 &
+     &                    EWperiodic(ng), NSperiodic(ng),               &
+     &                    albedo)
+#  else
       CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints,                                 &
@@ -495,12 +500,6 @@
      &                    EWperiodic(ng), NSperiodic(ng),               &
      &                    frswpen)
 #   endif
-#  else
-      CALL mp_exchange2d (ng, tile, iNLM, 1,                            &
-     &                    LBi, UBi, LBj, UBj,                           &
-     &                    NghostPoints,                                 &
-     &                    EWperiodic(ng), NSperiodic(ng),               &
-     &                    albedo)
 #  endif
 # endif
 

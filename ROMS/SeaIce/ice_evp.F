@@ -234,17 +234,19 @@
           vie(Lm(ng)+1,Mm(ng)+1,2) = vi(Lm(ng)+1,Mm(ng)+1,liuol)
         END IF
 # ifdef DISTRIBUTE
-      CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
-     &                    LBi, UBi, LBj, UBj,                           &
-     &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
-     &                    uie(:,:,1), vie(:,:,1))
-      CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
-     &                    LBi, UBi, LBj, UBj,                           &
-     &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
-     &                    uie(:,:,2), vie(:,:,2))
+        CALL mp_exchange2d (ng, tile, iNLM, 2,                          &
+     &                      LBi, UBi, LBj, UBj,                         &
+     &                      NghostPoints, EWperiodic(ng),               &
+     &                      NSperiodic(ng),                             &
+     &                      uie(:,:,1), vie(:,:,1))
+        CALL mp_exchange2d (ng, tile, iNLM, 2,                          &
+     &                      LBi, UBi, LBj, UBj,                         &
+     &                      NghostPoints, EWperiodic(ng),               &
+     &                      NSperiodic(ng),                             &
+     &                      uie(:,:,2), vie(:,:,2))
 # endif
       ENDIF
-
+!
       e2r = 1.0_r8/(ellip_sq(ng))
 !
 ! *** Compute strain rates
@@ -253,29 +255,29 @@
         DO i=Istr,Iend
           eps11(i,j) = (uie(i+1,j,lieol)-uie(i,j,lieol))*pm(i,j)
           eps22(i,j) = (vie(i,j+1,lieol)-vie(i,j,lieol))*pn(i,j)
-          epx = 0.25_r8*( vie(i+1,j+1,lieol)+vie(i+1,j,lieol)           &
-     &             - vie(i-1,j+1,lieol)-vie(i-1,j,lieol) )*pm(i,j)
-          epy = 0.25_r8*( uie(i+1,j+1,lieol)+uie(i,j+1,lieol)           &
-     &             - uie(i+1,j-1,lieol)-uie(i,j-1,lieol) )*pn(i,j)
+          epx = 0.25_r8*(vie(i+1,j+1,lieol)+vie(i+1,j,lieol) -          &
+     &                   vie(i-1,j+1,lieol)-vie(i-1,j,lieol))*pm(i,j)
+          epy = 0.25_r8*(uie(i+1,j+1,lieol)+uie(i,j+1,lieol) -          &
+     &                   uie(i+1,j-1,lieol)-uie(i,j-1,lieol))*pn(i,j)
           eps12(i,j) = 0.5_r8*(epx + epy)
 !
           eone=eps11(i,j)+eps22(i,j) 
-          etwos=(eps11(i,j)-eps22(i,j))*(eps11(i,j)-eps22(i,j))+        &
-     &         4.0_r8*eps12(i,j)*eps12(i,j)
+          etwos=(eps11(i,j)-eps22(i,j))*(eps11(i,j)-eps22(i,j)) +       &
+     &          4.0_r8*eps12(i,j)*eps12(i,j)
 ! 
-          delta=abs(eone**2+e2r*etwos)
-          delta=max(sqrt(delta),epso)
+          delta=ABS(eone**2+e2r*etwos)
+          delta=MAX(SQRT(delta),epso)
 # ifdef ICE_STRENGTH_QUAD
-          pice(i,j)=pstar_grid(i,j)*hi(i,j,liold)**2                    &
-     &                *exp(-astren(ng)*(1.0_r8-ai(i,j,liold)))
+          pice(i,j)=pstar_grid(i,j)*hi(i,j,liold)**2 *                  &
+     &              EXP(-astren(ng)*(1.0_r8-ai(i,j,liold)))
 # else
-          pice(i,j)=pstar(ng)*hi(i,j,liold)                             &
-     &                *exp(-astren(ng)*(1.0_r8-ai(i,j,liold)))
+          pice(i,j)=pstar(ng)*hi(i,j,liold) *                           &
+     &              EXP(-astren(ng)*(1.0_r8-ai(i,j,liold)))
 # endif
           zetai(i,j)=pice(i,j)/(2.0_r8*delta)
           zmax = 2.5E+8_r8*pice(i,j)
-          zetai(i,j)= min(zetai(i,j),zetamax(ng))
-          zetai(i,j)= max(zetai(i,j),zetamin(ng))
+          zetai(i,j)= MIN(zetai(i,j),zetamax(ng))
+          zetai(i,j)= MAX(zetai(i,j),zetamin(ng))
           eta(i,j)=e2r*zetai(i,j)
         ENDDO
       ENDDO

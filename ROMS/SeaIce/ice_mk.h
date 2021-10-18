@@ -653,7 +653,7 @@
                 qi2(i,j) = b2d(i,j)*(ti(i,j,linew)-tis(i,j))
 !
 !  Compute ice production rate (negative here) from atmosphere-ice
-!  exchange means wai is positive for melt
+!   exchange means wai is positive for melt
 !
                 wai(i,j) = -(qai(i,j)-qi2(i,j))/(hfus1(i,j)*rhosw)
 !
@@ -972,7 +972,7 @@
           IF (hage(i,j,linew) .le. 0.0_r8) hage(i,j,linew) = 0.0_r8
         ENDDO
       ENDDO
-
+!
       CALL bc_r2d_tile (ng, tile,                                       &
      &                  LBi, UBi, LBj, UBj,                             &
      &                  tis)
@@ -988,7 +988,7 @@
       CALL bc_r2d_tile (ng, tile,                                       &
      &                  LBi, UBi, LBj, UBj,                             &
      &                  stflx(:,:,itemp))
-
+!
       CALL i2d_bc_tile (ng, tile, iNLM,                                 &
      &                  LBi, UBi, LBj, UBj,                             &
      &                  IminS, ImaxS, JminS, JmaxS,                     &
@@ -1016,13 +1016,18 @@
      &                  BOUNDARY(ng)%hsn_north(LBi:UBi),                &
      &                  BOUNDARY(ng)%hsn_south(LBi:UBi),                &
      &                  ui, vi, hsn, LBC(:,isHsno,ng))
+!
       CALL tibc_tile (ng, tile, iNLM,                                   &
      &                LBi, UBi, LBj, UBj, liold, linew,                 &
      &                ui, vi, hi, ti, enthalpi)
-      CALL ageice_bc_tile (ng, tile, iNLM,                              &
-     &                     LBi, UBi, LBj, UBj,                          &
-     &                     linew, ageice, hage)
-
+!
+      CALL bc_r2d_tile (ng, tile,                                       &
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  ageice(:,:,linew))
+      CALL bc_r2d_tile (ng, tile,                                       &
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  hage(:,:,linew))
+!
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
@@ -1047,6 +1052,7 @@
      &                          hage(:,:,linew))
       END IF
 #ifdef DISTRIBUTE
+!
       CALL mp_exchange2d (ng, tile, iNLM, 3,                            &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &

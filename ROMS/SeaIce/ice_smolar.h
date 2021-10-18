@@ -55,6 +55,7 @@
 #endif
       USE i2d_bc_mod
       USE tibc_mod, ONLY : tibc_tile
+      USE bc_2d_mod, ONLY : bc_r2d_tile
 !
       implicit none
 !
@@ -70,6 +71,10 @@
       real(r8) :: wrk(LBi:UBi, LBj:UBj, 2)
 !
 #include "set_bounds.h"
+!
+! ---------------------------------------------------------------------
+!  Advect the ice coverage.
+! ---------------------------------------------------------------------
 !
       CALL ice_adv_var_tile (ng, tile,                                  &
      &                       LBi, UBi, LBj, UBj,                        &
@@ -94,20 +99,6 @@
      &                       ICE(ng) % ui,                              &
      &                       ICE(ng) % vi,                              &
      &                       ICE(ng) % ai)
-!
-!  Set lateral boundary conditions.
-!
-      CALL i2d_bc_tile (ng, tile, iNLM,                                 &
-     &                  LBi, UBi, LBj, UBj,                             &
-     &                  IminS, ImaxS, JminS, JmaxS,                     &
-     &                  liold(ng), linew(ng),                           &
-     &                  BOUNDARY(ng)%ai_west(LBj:UBj),                  &
-     &                  BOUNDARY(ng)%ai_east(LBj:UBj),                  &
-     &                  BOUNDARY(ng)%ai_north(LBi:UBi),                 &
-     &                  BOUNDARY(ng)%ai_south(LBi:UBi),                 &
-     &                  ICE(ng)%ui,                                     &
-     &                  ICE(ng)%vi,                                     &
-     &                  ICE(ng)%ai, LBC(:,isAice,ng))
 !
 ! ---------------------------------------------------------------------
 !  Advect the ice thickness.
@@ -136,29 +127,6 @@
      &                       ICE(ng) % ui,                              &
      &                       ICE(ng) % vi,                              &
      &                       ICE(ng) % hi)
-!
-!  Set lateral boundary conditions.
-!
-      CALL i2d_bc_tile (ng, tile, iNLM,                                 &
-     &                  LBi, UBi, LBj, UBj,                             &
-     &                  IminS, ImaxS, JminS, JmaxS,                     &
-     &                  liold(ng), linew(ng),                           &
-     &                  BOUNDARY(ng)%hi_west(LBj:UBj),                  &
-     &                  BOUNDARY(ng)%hi_east(LBj:UBj),                  &
-     &                  BOUNDARY(ng)%hi_north(LBi:UBi),                 &
-     &                  BOUNDARY(ng)%hi_south(LBi:UBi),                 &
-     &                  ICE(ng)%ui,                                     &
-     &                  ICE(ng)%vi,                                     &
-     &                  ICE(ng)%hi, LBC(:,isHice,ng))
-!
-! Store ice divergence rate
-!
-      DO j=JstrT,JendT
-        DO i=IstrT,IendT
-          ICE(ng)%wdiv(i,j) = (ICE(ng)%hi(i,j,linew(ng))-               &
-       &                       ICE(ng)%hi(i,j,liold(ng)))/dt(ng)
-        END DO
-      END DO
 !
 ! ---------------------------------------------------------------------
 !  Advect the snow thickness.
@@ -189,20 +157,6 @@
      &                       ICE(ng) % vi,                              &
      &                       ICE(ng) % hsn)
 !
-!  Set lateral boundary conditions.
-!
-      CALL i2d_bc_tile (ng, tile, iNLM,                                 &
-     &                  LBi, UBi, LBj, UBj,                             &
-     &                  IminS, ImaxS, JminS, JmaxS,                     &
-     &                  liold(ng), linew(ng),                           &
-     &                  BOUNDARY(ng)%hsn_west(LBj:UBj),                 &
-     &                  BOUNDARY(ng)%hsn_east(LBj:UBj),                 &
-     &                  BOUNDARY(ng)%hsn_north(LBi:UBi),                &
-     &                  BOUNDARY(ng)%hsn_south(LBi:UBi),                &
-     &                  ICE(ng)%ui,                                     &
-     &                  ICE(ng)%vi,                                     &
-     &                  ICE(ng)%hsn, LBC(:,isHsno,ng))
-!
 ! ---------------------------------------------------------------------
 !  Advect the interior ice temperature.
 ! ---------------------------------------------------------------------
@@ -230,28 +184,6 @@
      &                       ICE(ng) % ui,                              &
      &                       ICE(ng) % vi,                              &
      &                       ICE(ng) % enthalpi)
-
-      DO j=JstrT,JendT
-        DO i=IstrT,IendT
-          ICE(ng)%ti(i,j,linew(ng)) = ICE(ng)%enthalpi(i,j,linew(ng))/  &
-       &    MAX(ICE(ng)%hi(i,j,linew(ng)),1.0E-6_r8)
-          IF (ICE(ng)%hi(i,j,linew(ng)).le.min_h(ng)) THEN
-            ICE(ng)%enthalpi(i,j,linew(ng)) = 0.0_r8
-            ICE(ng)%ti(i,j,linew(ng)) = 0.0_r8
-          END IF
-        END DO
-      END DO
-!
-!  Set lateral boundary conditions.
-!
-      CALL tibc_tile (ng, tile, iNLM,                                   &
-     &                LBi, UBi, LBj, UBj,                               &
-     &                liold(ng), linew(ng),                             &
-     &                ICE(ng)%ui,                                       &
-     &                ICE(ng)%vi,                                       &
-     &                ICE(ng)%hi,                                       &
-     &                ICE(ng)%ti,                                       &
-     &                ICE(ng)%enthalpi)
 !
 ! ---------------------------------------------------------------------
 !  Advect the ice age.
@@ -281,8 +213,30 @@
      &                       ICE(ng) % vi,                              &
      &                       ICE(ng) % hage)
 
+!
+! ---------------------------------------------------------------------
+!  Compute other variables.
+! ---------------------------------------------------------------------
+!
       DO j=JstrT,JendT
         DO i=IstrT,IendT
+!
+!  Ice divergence.
+!
+          ICE(ng)%wdiv(i,j) = (ICE(ng)%hi(i,j,linew(ng))-               &
+       &                       ICE(ng)%hi(i,j,liold(ng)))/dt(ng)
+!
+!  Ice interior temperature.
+!
+          ICE(ng)%ti(i,j,linew(ng)) = ICE(ng)%enthalpi(i,j,linew(ng)) / &
+       &    MAX(ICE(ng)%hi(i,j,linew(ng)),1.0E-6_r8)
+          IF (ICE(ng)%hi(i,j,linew(ng)).le.min_h(ng)) THEN
+            ICE(ng)%enthalpi(i,j,linew(ng)) = 0.0_r8
+            ICE(ng)%ti(i,j,linew(ng)) = 0.0_r8
+          END IF
+!
+!  Ice age.
+!
           ICE(ng)%ageice(i,j,linew(ng)) = ICE(ng)%hage(i,j,linew(ng)) / &
      &      MAX(ICE(ng)%hi(i,j,linew(ng)),1.0E-6_r8)
           IF (ICE(ng)%hi(i,j,linew(ng)).le.min_h(ng)) THEN
@@ -292,15 +246,61 @@
         END DO
       END DO
 !
+! ---------------------------------------------------------------------
+!  Boundary data exchange.
+! ---------------------------------------------------------------------
+!
 !  Set lateral boundary conditions.
 !
-      CALL ageice_bc_tile (ng, tile, iNLM,                              &
-     &                     LBi, UBi, LBj, UBj,                          &
-     &                     linew(ng), ICE(ng)%ageice, ICE(ng)%hage)
+      CALL i2d_bc_tile (ng, tile, iNLM,                                 &
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  IminS, ImaxS, JminS, JmaxS,                     &
+     &                  liold(ng), linew(ng),                           &
+     &                  BOUNDARY(ng)%ai_west(LBj:UBj),                  &
+     &                  BOUNDARY(ng)%ai_east(LBj:UBj),                  &
+     &                  BOUNDARY(ng)%ai_north(LBi:UBi),                 &
+     &                  BOUNDARY(ng)%ai_south(LBi:UBi),                 &
+     &                  ICE(ng)%ui,                                     &
+     &                  ICE(ng)%vi,                                     &
+     &                  ICE(ng)%ai, LBC(:,isAice,ng))
+      CALL i2d_bc_tile (ng, tile, iNLM,                                 &
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  IminS, ImaxS, JminS, JmaxS,                     &
+     &                  liold(ng), linew(ng),                           &
+     &                  BOUNDARY(ng)%hi_west(LBj:UBj),                  &
+     &                  BOUNDARY(ng)%hi_east(LBj:UBj),                  &
+     &                  BOUNDARY(ng)%hi_north(LBi:UBi),                 &
+     &                  BOUNDARY(ng)%hi_south(LBi:UBi),                 &
+     &                  ICE(ng)%ui,                                     &
+     &                  ICE(ng)%vi,                                     &
+     &                  ICE(ng)%hi, LBC(:,isHice,ng))
+      CALL i2d_bc_tile (ng, tile, iNLM,                                 &
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  IminS, ImaxS, JminS, JmaxS,                     &
+     &                  liold(ng), linew(ng),                           &
+     &                  BOUNDARY(ng)%hsn_west(LBj:UBj),                 &
+     &                  BOUNDARY(ng)%hsn_east(LBj:UBj),                 &
+     &                  BOUNDARY(ng)%hsn_north(LBi:UBi),                &
+     &                  BOUNDARY(ng)%hsn_south(LBi:UBi),                &
+     &                  ICE(ng)%ui,                                     &
+     &                  ICE(ng)%vi,                                     &
+     &                  ICE(ng)%hsn, LBC(:,isHsno,ng))
 !
-! ---------------------------------------------------------------------
-!  Tile boundary data exchange.
-! ---------------------------------------------------------------------
+      CALL tibc_tile (ng, tile, iNLM,                                   &
+     &                LBi, UBi, LBj, UBj,                               &
+     &                liold(ng), linew(ng),                             &
+     &                ICE(ng)%ui,                                       &
+     &                ICE(ng)%vi,                                       &
+     &                ICE(ng)%hi,                                       &
+     &                ICE(ng)%ti,                                       &
+     &                ICE(ng)%enthalpi)
+!
+      CALL bc_r2d_tile (ng, tile,                                       &
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  ICE(ng)%ageice(:,:,linew(ng)))
+      CALL bc_r2d_tile (ng, tile,                                       &
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  ICE(ng)%hage(:,:,linew(ng)))
 !
 !  Apply periodic boundary conditions.
 !

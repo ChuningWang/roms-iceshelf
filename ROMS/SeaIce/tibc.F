@@ -107,16 +107,19 @@
             IF (LBC_apply(ng)%west(j)) THEN
               enthalpi(Istr-1,j,linew)=BOUNDARY(ng)%hi_west(j)*         &
      &                                 BOUNDARY(ng)%ti_west(j)
+              ti(Istr-1,j,linew)=BOUNDARY(ng)%ti_west(j)
 # ifdef MASKING
               enthalpi(Istr-1,j,linew)=enthalpi(Istr-1,j,linew)*        &
      &                                 GRID(ng)%rmask(Istr-1,j)
+              ti(Istr-1,j,linew)=ti(Istr-1,j,linew)*                    &
+     &                           GRID(ng)%rmask(Istr-1,j)
 # endif
 # ifdef WET_DRY
               enthalpi(Istr-1,j,linew)=enthalpi(Istr-1,j,linew)*        &
      &                                 GRID(ng)%rmask_wet(Istr-1,j)
+              ti(Istr-1,j,linew)=ti(Istr-1,j,linew)*                    &
+     &                           GRID(ng)%rmask_wet(Istr-1,j)
 # endif
-              ti(Istr-1,j,linew) = enthalpi(Istr-1,j,linew)/            &
-     &                             MAX(hi(Istr-1,j,linew),1.0E-6_r8)
             END IF
           END DO
 !
@@ -128,19 +131,24 @@
               IF (ui(Istr,j,linew).ge.0._r8) THEN
                 enthalpi(Istr-1,j,linew)=BOUNDARY(ng)%hi_west(j)*       &
      &                                   BOUNDARY(ng)%ti_west(j)
+                ti(Istr-1,j,linew)=BOUNDARY(ng)%ti_west(j)
               ELSE
                 enthalpi(Istr-1,j,linew)=enthalpi(Istr,j,linew)
+                ti(Istr-1,j,linew)=enthalpi(Istr-1,j,linew)/            &
+     &                             MAX(hi(Istr-1,j,linew),1.0E-6_r8)
               END IF
 # ifdef MASKING
               enthalpi(Istr-1,j,linew)=enthalpi(Istr-1,j,linew)*        &
      &                                 GRID(ng)%rmask(Istr-1,j)
+              ti(Istr-1,j,linew)=ti(Istr-1,j,linew)*                    &
+     &                           GRID(ng)%rmask(Istr-1,j)
 # endif
 # ifdef WET_DRY
               enthalpi(Istr-1,j,linew)=enthalpi(Istr-1,j,linew)*        &
      &                                 GRID(ng)%rmask_wet(Istr-1,j)
+              ti(Istr-1,j,linew)=ti(Istr-1,j,linew)*                    &
+     &                           GRID(ng)%rmask_wet(Istr-1,j)
 # endif
-              ti(Istr-1,j,linew) = enthalpi(Istr-1,j,linew)/            &
-     &                             MAX(hi(Istr-1,j,linew),1.0E-6_r8)
             END IF
           END DO
 !
@@ -158,8 +166,8 @@
               enthalpi(Istr-1,j,linew)=enthalpi(Istr-1,j,linew)*        &
      &                                 GRID(ng)%rmask_wet(Istr-1,j)
 # endif
-              ti(Istr-1,j,linew) = enthalpi(Istr-1,j,linew)/            &
-     &                             MAX(hi(Istr-1,j,linew),1.0E-6_r8)
+              ti(Istr-1,j,linew)=enthalpi(Istr-1,j,linew)/              &
+     &                           MAX(hi(Istr-1,j,linew),1.0E-6_r8)
             END IF
           END DO
 !
@@ -177,8 +185,8 @@
               enthalpi(Istr-1,j,linew)=enthalpi(Istr-1,j,linew)*        &
      &                                 GRID(ng)%rmask_wet(Istr-1,j)
 # endif
-              ti(Istr-1,j,linew) = enthalpi(Istr-1,j,linew)/            &
-     &                             MAX(hi(Istr-1,j,linew),1.0E-6_r8)
+              ti(Istr-1,j,linew)=enthalpi(Istr-1,j,linew)/              &
+     &                           MAX(hi(Istr-1,j,linew),1.0E-6_r8)
             END IF
           END DO
         END IF
@@ -197,16 +205,19 @@
             IF (LBC_apply(ng)%east(j)) THEN
               enthalpi(Iend+1,j,linew)=BOUNDARY(ng)%hi_east(j)*         &
      &                                 BOUNDARY(ng)%ti_east(j)
+              ti(Iend+1,j,linew)=BOUNDARY(ng)%ti_east(j)
 # ifdef MASKING
               enthalpi(Iend+1,j,linew)=enthalpi(Iend+1,j,linew)*        &
      &                                 GRID(ng)%rmask(Iend+1,j)
+              ti(Iend+1,j,linew)=ti(Iend+1,j,linew)*                    &
+     &                           GRID(ng)%rmask(Iend+1,j)
 # endif
 # ifdef WET_DRY
               enthalpi(Iend+1,j,linew)=enthalpi(Iend+1,j,linew)*        &
      &                                 GRID(ng)%rmask_wet(Iend+1,j)
+              ti(Iend+1,j,linew)=ti(Iend+1,j,linew)*                    &
+     &                           GRID(ng)%rmask_wet(Iend+1,j)
 # endif
-              ti(Iend+1,j,linew) = enthalpi(Iend+1,j,linew)/            &
-     &                             MAX(hi(Iend+1,j,linew),1.0E-6_r8)
             END IF
           END DO
 !
@@ -218,19 +229,24 @@
               IF (ui(Iend+1,j,linew).le.0._r8) THEN
                 enthalpi(Iend+1,j,linew)=BOUNDARY(ng)%hi_east(j)*       &
      &                                   BOUNDARY(ng)%ti_east(j)
+                ti(Iend+1,j,linew)=BOUNDARY(ng)%ti_east(j)
               ELSE
                 enthalpi(Iend+1,j,linew)=enthalpi(Iend,j,linew)
+                ti(Iend+1,j,linew)=enthalpi(Iend+1,j,linew)/            &
+     &                             MAX(hi(Iend+1,j,linew),1.0E-6_r8)
               END IF
 # ifdef MASKING
               enthalpi(Iend+1,j,linew)=enthalpi(Iend+1,j,linew)*        &
      &                                 GRID(ng)%rmask(Iend+1,j)
+              ti(Iend+1,j,linew)=ti(Iend+1,j,linew)*                    &
+     &                           GRID(ng)%rmask(Iend+1,j)
 # endif
 # ifdef WET_DRY
               enthalpi(Iend+1,j,linew)=enthalpi(Iend+1,j,linew)*        &
      &                                 GRID(ng)%rmask_wet(Iend+1,j)
+              ti(Iend+1,j,linew)=ti(Iend+1,j,linew)*                    &
+     &                           GRID(ng)%rmask_wet(Iend+1,j)
 # endif
-              ti(Iend+1,j,linew) = enthalpi(Iend+1,j,linew)/            &
-     &                             MAX(hi(Iend+1,j,linew),1.0E-6_r8)
             END IF
           END DO
 !
@@ -248,8 +264,8 @@
               enthalpi(Iend+1,j,linew)=enthalpi(Iend+1,j,linew)*        &
      &                                 GRID(ng)%rmask_wet(Iend+1,j)
 # endif
-              ti(Iend+1,j,linew) = enthalpi(Iend+1,j,linew)/            &
-     &                             MAX(hi(Iend+1,j,linew),1.0E-6_r8)
+              ti(Iend+1,j,linew)=enthalpi(Iend+1,j,linew)/              &
+     &                           MAX(hi(Iend+1,j,linew),1.0E-6_r8)
             END IF
           END DO
 !
@@ -267,8 +283,8 @@
               enthalpi(Iend+1,j,linew)=enthalpi(Iend+1,j,linew)*        &
      &                                 GRID(ng)%rmask_wet(Iend+1,j)
 # endif
-              ti(Iend+1,j,linew) = enthalpi(Iend+1,j,linew)/            &
-     &                             MAX(hi(Iend+1,j,linew),1.0E-6_r8)
+              ti(Iend+1,j,linew)=enthalpi(Iend+1,j,linew)/              &
+     &                           MAX(hi(Iend+1,j,linew),1.0E-6_r8)
             END IF
           END DO
         END IF
@@ -287,16 +303,19 @@
             IF (LBC_apply(ng)%south(i)) THEN
               enthalpi(i,Jstr-1,linew)=BOUNDARY(ng)%hi_south(i)*        &
      &                                 BOUNDARY(ng)%ti_south(i)
+              ti(i,Jstr-1,linew)=BOUNDARY(ng)%ti_south(i)
 # ifdef MASKING
               enthalpi(i,Jstr-1,linew)=enthalpi(i,Jstr-1,linew)*        &
      &                                 GRID(ng)%rmask(i,Jstr-1)
+              ti(i,Jstr-1,linew)=ti(i,Jstr-1,linew)*                    &
+     &                           GRID(ng)%rmask(i,Jstr-1)
 # endif
 # ifdef WET_DRY
               enthalpi(i,Jstr-1,linew)=enthalpi(i,Jstr-1,linew)*        &
      &                                 GRID(ng)%rmask_wet(i,Jstr-1)
+              ti(i,Jstr-1,linew)=ti(i,Jstr-1,linew)*                    &
+     &                           GRID(ng)%rmask_wet(i,Jstr-1)
 # endif
-              ti(i,Jstr-1,linew) = enthalpi(i,Jstr-1,linew)/            &
-     &                       MAX(hi(i,Jstr-1,linew),1.0E-6_r8)
             END IF
           END DO
 !
@@ -308,19 +327,24 @@
               IF (vi(i,Jstr,linew).ge.0._r8) THEN
                 enthalpi(i,Jstr-1,linew)=BOUNDARY(ng)%hi_south(i)*      &
      &                                   BOUNDARY(ng)%ti_south(i)
+                ti(i,Jstr-1,linew)=BOUNDARY(ng)%ti_south(i)
               ELSE
                 enthalpi(i,Jstr-1,linew)=enthalpi(i,Jstr,linew)
+                ti(i,Jstr-1,linew)=enthalpi(i,Jstr-1,linew)/            &
+     &                             MAX(hi(i,Jstr-1,linew),1.0E-6_r8)
               END IF
 # ifdef MASKING
               enthalpi(i,Jstr-1,linew)=enthalpi(i,Jstr-1,linew)*        &
      &                                 GRID(ng)%rmask(i,Jstr-1)
+              ti(i,Jstr-1,linew)=ti(i,Jstr-1,linew)*                    &
+     &                           GRID(ng)%rmask(i,Jstr-1)
 # endif
 # ifdef WET_DRY
               enthalpi(i,Jstr-1,linew)=enthalpi(i,Jstr-1,linew)*        &
      &                                 GRID(ng)%rmask_wet(i,Jstr-1)
+              ti(i,Jstr-1,linew)=ti(i,Jstr-1,linew)*                    &
+     &                           GRID(ng)%rmask_wet(i,Jstr-1)
 # endif
-              ti(i,Jstr-1,linew) = enthalpi(i,Jstr-1,linew)/            &
-     &                       MAX(hi(i,Jstr-1,linew),1.0E-6_r8)
             END IF
           END DO
 !
@@ -338,8 +362,8 @@
               enthalpi(i,Jstr-1,linew)=enthalpi(i,Jstr-1,linew)*        &
      &                                 GRID(ng)%rmask_wet(i,Jstr-1)
 # endif
-              ti(i,Jstr-1,linew) = enthalpi(i,Jstr-1,linew)/            &
-     &                       MAX(hi(i,Jstr-1,linew),1.0E-6_r8)
+              ti(i,Jstr-1,linew)=enthalpi(i,Jstr-1,linew)/              &
+     &                           MAX(hi(i,Jstr-1,linew),1.0E-6_r8)
             END IF
           END DO
 !
@@ -357,8 +381,8 @@
               enthalpi(i,Jstr-1,linew)=enthalpi(i,Jstr-1,linew)*        &
      &                                 GRID(ng)%rmask_wet(i,Jstr-1)
 # endif
-              ti(i,Jstr-1,linew) = enthalpi(i,Jstr-1,linew)/            &
-     &                       MAX(hi(i,Jstr-1,linew),1.0E-6_r8)
+              ti(i,Jstr-1,linew)=enthalpi(i,Jstr-1,linew)/              &
+     &                           MAX(hi(i,Jstr-1,linew),1.0E-6_r8)
             END IF
           END DO
         END IF
@@ -377,16 +401,19 @@
             IF (LBC_apply(ng)%north(i)) THEN
               enthalpi(i,Jend+1,linew)=BOUNDARY(ng)%hi_north(i)*        &
      &                                 BOUNDARY(ng)%ti_north(i)
+              ti(i,Jend+1,linew)=BOUNDARY(ng)%ti_north(i)
 # ifdef MASKING
               enthalpi(i,Jend+1,linew)=enthalpi(i,Jend+1,linew)*        &
      &                                 GRID(ng)%rmask(i,Jend+1)
+              ti(i,Jend+1,linew)=ti(i,Jend+1,linew)*                    &
+     &                           GRID(ng)%rmask(i,Jend+1)
 # endif
 # ifdef WET_DRY
               enthalpi(i,Jend+1,linew)=enthalpi(i,Jend+1,linew)*        &
      &                                 GRID(ng)%rmask_wet(i,Jend+1)
+              ti(i,Jend+1,linew)=ti(i,Jend+1,linew)*                    &
+     &                           GRID(ng)%rmask_wet(i,Jend+1)
 # endif
-              ti(i,Jend+1,linew) = enthalpi(i,Jend+1,linew)/            &
-     &                             MAX(hi(i,Jend+1,linew),1.0E-6_r8)
             END IF
           END DO
 !
@@ -398,19 +425,24 @@
               IF (vi(i,Jend+1,linew).le.0._r8) THEN
                 enthalpi(i,Jend+1,linew)=BOUNDARY(ng)%hi_north(i)*      &
      &                                   BOUNDARY(ng)%ti_north(i)
+                ti(i,Jend+1,linew)=BOUNDARY(ng)%ti_north(i)
               ELSE
                 enthalpi(i,Jend+1,linew)=enthalpi(i,Jend,linew)
+                ti(i,Jend+1,linew)=enthalpi(i,Jend+1,linew)/            &
+     &                             MAX(hi(i,Jend+1,linew),1.0E-6_r8)
               END IF
 # ifdef MASKING
               enthalpi(i,Jend+1,linew)=enthalpi(i,Jend+1,linew)*        &
      &                                 GRID(ng)%rmask(i,Jend+1)
+              ti(i,Jend+1,linew)=ti(i,Jend+1,linew)*                    &
+     &                           GRID(ng)%rmask(i,Jend+1)
 # endif
 # ifdef WET_DRY
               enthalpi(i,Jend+1,linew)=enthalpi(i,Jend+1,linew)*        &
      &                                 GRID(ng)%rmask_wet(i,Jend+1)
+              ti(i,Jend+1,linew)=ti(i,Jend+1,linew)*                    &
+     &                           GRID(ng)%rmask_wet(i,Jend+1)
 # endif
-              ti(i,Jend+1,linew) = enthalpi(i,Jend+1,linew)/            &
-     &                             MAX(hi(i,Jend+1,linew),1.0E-6_r8)
             END IF
           END DO
 !
@@ -428,8 +460,8 @@
               enthalpi(i,Jend+1,linew)=enthalpi(i,Jend+1,linew)*        &
      &                                 GRID(ng)%rmask_wet(i,Jend+1)
 # endif
-              ti(i,Jend+1,linew) = enthalpi(i,Jend+1,linew)/            &
-     &                             MAX(hi(i,Jend+1,linew),1.0E-6_r8)
+              ti(i,Jend+1,linew)=enthalpi(i,Jend+1,linew)/              &
+     &                           MAX(hi(i,Jend+1,linew),1.0E-6_r8)
             END IF
           END DO
 !
@@ -447,8 +479,8 @@
               enthalpi(i,Jend+1,linew)=enthalpi(i,Jend+1,linew)*        &
      &                                 GRID(ng)%rmask_wet(i,Jend+1)
 # endif
-              ti(i,Jend+1,linew) = enthalpi(i,Jend+1,linew)/            &
-     &                             MAX(hi(i,Jend+1,linew),1.0E-6_r8)
+              ti(i,Jend+1,linew)=enthalpi(i,Jend+1,linew)/              &
+     &                           MAX(hi(i,Jend+1,linew),1.0E-6_r8)
             END IF
           END DO
         END IF
@@ -458,24 +490,17 @@
 !  Boundary corners.
 !-----------------------------------------------------------------------
 !
-      IF (.not.EWperiodic(ng).and. .not.NSperiodic(ng)) THEN
+      IF (.not.(EWperiodic(ng).or.NSperiodic(ng))) THEN
         IF (DOMAIN(ng)%SouthWest_Corner(tile)) THEN
           IF (LBC_apply(ng)%south(Istr-1).and.                          &
      &        LBC_apply(ng)%west (Jstr-1)) THEN
             enthalpi(Istr-1,Jstr-1,linew)=                              &
      &        0.5_r8*(enthalpi(Istr  ,Jstr-1,linew)+                    &
      &                enthalpi(Istr-1,Jstr  ,linew))
+            ti(Istr-1,Jstr-1,linew)=                                    &
+     &        0.5_r8*(ti(Istr  ,Jstr-1,linew)+                          &
+     &                ti(Istr-1,Jstr  ,linew))
           END IF
-# ifdef MASKING
-          enthalpi(Istr-1,Jstr-1,linew)=enthalpi(Istr-1,Jstr-1,linew)*  &
-     &                                  GRID(ng)%rmask(Istr-1,Jstr-1)
-# endif
-# ifdef WET_DRY
-          enthalpi(Istr-1,Jstr-1,linew)=enthalpi(Istr-1,Jstr-1,linew)*  &
-     &                                 GRID(ng)%rmask_wet(Istr-1,Jstr-1)
-# endif
-          ti(Istr-1,Jstr-1,linew) = enthalpi(Istr-1,Jstr-1,linew)/      &
-     &      MAX(hi(Istr-1,Jstr-1,linew),1.0E-6_r8)
         END IF
         IF (DOMAIN(ng)%SouthEast_Corner(tile)) THEN
           IF (LBC_apply(ng)%south(Iend+1).and.                          &
@@ -483,17 +508,10 @@
             enthalpi(Iend+1,Jstr-1,linew)=                              &
      &        0.5_r8*(enthalpi(Iend+1,Jstr  ,linew)+                    &
      &                enthalpi(Iend  ,Jstr-1,linew))
+            ti(Iend+1,Jstr-1,linew)=                                    &
+     &        0.5_r8*(ti(Iend+1,Jstr  ,linew)+                          &
+     &                ti(Iend  ,Jstr-1,linew))
           END IF
-# ifdef MASKING
-          enthalpi(Iend+1,Jstr-1,linew)=enthalpi(Iend+1,Jstr-1,linew)*  &
-     &                                  GRID(ng)%rmask(Iend+1,Jstr-1)
-# endif
-# ifdef WET_DRY
-          enthalpi(Iend+1,Jstr-1,linew)=enthalpi(Iend+1,Jstr-1,linew)*  &
-     &                                 GRID(ng)%rmask_wet(Iend+1,Jstr-1)
-# endif
-          ti(Iend+1,Jstr-1,linew) = enthalpi(Iend+1,Jstr-1,linew)/      &
-     &      MAX(hi(Iend+1,Jstr-1,linew),1.0E-6_r8)
         END IF
         IF (DOMAIN(ng)%NorthWest_Corner(tile)) THEN
           IF (LBC_apply(ng)%north(Istr-1).and.                          &
@@ -501,17 +519,10 @@
             enthalpi(Istr-1,Jend+1,linew)=                              &
      &        0.5_r8*(enthalpi(Istr-1,Jend  ,linew)+                    &
      &                enthalpi(Istr  ,Jend+1,linew))
+            ti(Istr-1,Jend+1,linew)=                                    &
+     &        0.5_r8*(ti(Istr-1,Jend  ,linew)+                          &
+     &                ti(Istr  ,Jend+1,linew))
           END IF
-# ifdef MASKING
-          enthalpi(Istr-1,Jend+1,linew)=enthalpi(Istr-1,Jend+1,linew)*  &
-     &                                  GRID(ng)%rmask(Istr-1,Jend+1)
-# endif
-# ifdef WET_DRY
-          enthalpi(Istr-1,Jend+1,linew)=enthalpi(Istr-1,Jend+1,linew)*  &
-     &                                 GRID(ng)%rmask_wet(Istr-1,Jend+1)
-# endif
-          ti(Istr-1,Jend+1,linew) = enthalpi(Istr-1,Jend+1,linew)/      &
-     &      MAX(hi(Istr-1,Jend+1,linew),1.0E-6_r8)
         END IF
         IF (DOMAIN(ng)%NorthEast_Corner(tile)) THEN
           IF (LBC_apply(ng)%north(Iend+1).and.                          &
@@ -519,17 +530,10 @@
             enthalpi(Iend+1,Jend+1,linew)=                              &
      &        0.5_r8*(enthalpi(Iend+1,Jend  ,linew)+                    &
      &                enthalpi(Iend  ,Jend+1,linew))
+            ti(Iend+1,Jend+1,linew)=                                    &
+     &        0.5_r8*(ti(Iend+1,Jend  ,linew)+                          &
+     &                ti(Iend  ,Jend+1,linew))
           END IF
-# ifdef MASKING
-          enthalpi(Iend+1,Jend+1,linew)=enthalpi(Iend+1,Jend+1,linew)*  &
-     &                                  GRID(ng)%rmask(Iend+1,Jend+1)
-# endif
-# ifdef WET_DRY
-          enthalpi(Iend+1,Jend+1,linew)=enthalpi(Iend+1,Jend+1,linew)*  &
-     &                                 GRID(ng)%rmask_wet(Iend+1,Jend+1)
-# endif
-          ti(Iend+1,Jend+1,linew) = enthalpi(Iend+1,Jend+1,linew)/      &
-     &      MAX(hi(Iend+1,Jend+1,linew),1.0E-6_r8)
         END IF
       END IF
       RETURN

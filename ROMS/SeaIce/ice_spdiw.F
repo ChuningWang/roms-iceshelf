@@ -234,14 +234,14 @@
 !  Apply boundary conditions.
 !
         CALL bc_r2d_tile (ng, tile,                                     &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          spd_iw)
+     &                    LBi, UBi, LBj, UBj,                           &
+     &                    spd_iw)
         CALL bc_u2d_tile (ng, tile,                                     &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          uwater)
+     &                    LBi, UBi, LBj, UBj,                           &
+     &                    uwater)
         CALL bc_v2d_tile (ng, tile,                                     &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          vwater)
+     &                    LBi, UBi, LBj, UBj,                           &
+     &                    vwater)
 # ifdef DISTRIBUTE
       CALL mp_exchange2d (ng, tile, iNLM, 3,                            &
      &                    LBi, UBi, LBj, UBj,                           &

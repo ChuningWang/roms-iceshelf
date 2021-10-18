@@ -12,18 +12,18 @@
 !======================================================================!
 !
       implicit none
-
+!
       PRIVATE
       PUBLIC ice_limit
-
+!
       CONTAINS
-
+!
       SUBROUTINE ice_limit (ng, tile)
-
+!
       USE mod_param
       USE mod_ice
       USE mod_stepping
-
+!
       integer, intent(in) :: ng, tile
 !
 # include "tile.h"
@@ -43,8 +43,7 @@
      &                     ICE(ng) % hi,                                &
      &                     ICE(ng) % hsn,                               &
      &                     ICE(ng) % ti,                                &
-     &                     ICE(ng) % enthalpi                           &
-     &                     )
+     &                     ICE(ng) % enthalpi)
 !
       RETURN
       END SUBROUTINE ice_limit
@@ -100,7 +99,7 @@
 ! Local variable definitions
 !
       integer :: i, j
-
+!
 # include "set_bounds.h"
 !
       DO j=Jstr,Jend
@@ -150,7 +149,7 @@
      &                LBi, UBi, LBj, UBj,                               &
      &                liold, linew,                                     &
      &                ui, vi, hi, ti, enthalpi)
-
+!
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
         CALL exchange_r2d_tile (ng, tile,                                 &
      &                            LBi, UBi, LBj, UBj,                     &
@@ -164,6 +163,7 @@
         CALL exchange_r2d_tile (ng, tile,                                 &
      &                            LBi, UBi, LBj, UBj,                     &
      &                            ti(:,:,linew))
+!
       END IF
 # ifdef DISTRIBUTE
       CALL mp_exchange2d (ng, tile, iNLM, 4,                            &
