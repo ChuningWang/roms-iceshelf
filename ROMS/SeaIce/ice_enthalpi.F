@@ -97,7 +97,9 @@
         ENDDO
       ENDDO
 !
-!  Apply periodic boundary conditions.
+!-----------------------------------------------------------------------
+!  Exchange boundary information.
+!-----------------------------------------------------------------------
 !
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
         CALL exchange_r2d_tile (ng, tile,                               &
@@ -108,9 +110,6 @@
      &                          enthalpi(:,:,linew(ng)))
       END IF
 # ifdef DISTRIBUTE
-!
-!  Exchange boundary data.
-!
       CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
      &                      LBi, UBi, LBj, UBj,                         &
      &                      NghostPoints,                               &

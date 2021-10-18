@@ -419,11 +419,7 @@
         real(dp) :: Csolar = 1353.0_dp          ! 1360-1380 W/m2
         real(dp) :: Infinity                    ! Infinity = 1.0/0.0
         real(dp) :: Eradius = 6371315.0_dp      ! m
-#if defined ICE_MODEL && defined ICE_BOX
-        real(dp) :: StefBo = 5.78E-8_r8         ! Watts/m2/K4 (Match MU)
-#else
         real(dp) :: StefBo = 5.67E-8_dp         ! Watts/m2/K4
-#endif
         real(dp) :: emmiss = 0.97_dp            ! non_dimensional
         real(dp) :: rhow = 1000.0_dp            ! kg/m3
 #ifdef SOLITON

@@ -495,10 +495,8 @@
 ! *** alph - thermal conductivity of ice
 !
           alph(i,j) = alphic*(1._r8-1.2_r8*brnfr(i,j))
-#ifndef ICE_BOX
           corfac = 1._r8/(0.5_r8*(1._r8+EXP(-(hi(i,j,linew)/1._r8)**2)))
           alph(i,j) = alph(i,j)*corfac
-#endif
           coa(i,j) = 2.0_r8*alph(i,j)*snow_thick(i,j)/                  &
      &               (alphsn*ice_thick(i,j))
         END DO
@@ -743,17 +741,8 @@
 !
 !  MK89 version
 !
-#ifdef ICE_BOX
-!
-!  F_t set to 2 W/m^2
-!
-            wio(i,j) = (qio(i,j) - 2.0_r8)/(rhosw*hfus1(i,j))
-!
-            xtot = ai(i,j,linew)*wio(i,j)+(1._r8-ai(i,j,linew))*wao(i,j)
-#else
             wio(i,j) = (qio(i,j)/rhosw + cpw*cht(i,j)*(t0mk(i,j) -      &
      &                  temp_top(i,j)))/hfus1(i,j)
-!
             xtot = ai(i,j,linew)*wio(i,j)+(1._r8-ai(i,j,linew))*wao(i,j)
 !
             s0mk(i,j) =                                                 &
@@ -763,9 +752,7 @@
      &         (1._r8-ai(i,j,linew))*stflx(i,j,isalt))
             IF (s0mk(i,j) < 0.0) s0mk(i,j) = salt_top(i,j)
               s0mk(i,j) = MIN(MAX(s0mk(i,j),0._r8),40._r8)
-!
               t0mk(i,j) = frln*s0mk(i,j)
-#endif
           END IF
 
 #ifdef ICESHELF
@@ -943,23 +930,13 @@
             ageice(i,j,linew) = 0.0_r8
           ENDIF
           hage(i,j,linew) = hi(i,j,linew)*ageice(i,j,linew)
-
-#ifdef ICE_BOX
-        IF (i.eq.1.and.j.eq.1.and.iday==15.and.int(hour)==0) THEN
-           write(*,*) tdays,wio(i,j),wai(i,j),wro(i,j),                 &
-     &                hi(i,j,linew),hsn(i,j,linew),tis(i,j),            &
-     &                ti(i,j,linew), t2(i,j),                           &
-     &                qio(i,j), qi2(i,j), qai_n(i,j),                   &
-     &                alph(i,j), coa(i,j), qi_o_n(i,j), cot, t0mk(i,j)
-          print *
-        END IF
-#endif
-
         ENDDO
       ENDDO
-
-!***********************************************************************
-
+!
+!-----------------------------------------------------------------------
+!  Limit variable values.
+!-----------------------------------------------------------------------
+!
       DO j=Jstr,Jend
         DO i=Istr,Iend
           ai(i,j,linew) = MAX(MIN(ai(i,j,linew),max_a(ng)),0.0_r8)
@@ -972,6 +949,10 @@
           IF (hage(i,j,linew) .le. 0.0_r8) hage(i,j,linew) = 0.0_r8
         ENDDO
       ENDDO
+!
+!-----------------------------------------------------------------------
+!  Exchange boundary information.
+!-----------------------------------------------------------------------
 !
       CALL bc_r2d_tile (ng, tile,                                       &
      &                  LBi, UBi, LBj, UBj,                             &

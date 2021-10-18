@@ -262,9 +262,6 @@
       USE mod_scalars
 # ifdef ICE_MODEL
       USE mod_ice
-#  ifdef ICE_BOX
-      USE dateclock_mod,   ONLY : caldate
-#  endif
 # endif
 !
       USE exchange_2d_mod
@@ -536,16 +533,6 @@
       real(r8) :: vap_p_i
       real(r8), parameter :: Io_frac = 0.17_r8   ! from MU
 #  endif
-
-#  ifdef ICE_BOX
-      integer :: month
-      real(r8), parameter :: sensible_MU(12) =                          &
-     &         (/ 19.1, 12.3, 11.6, 4.7, -7.3, -6.3,                    &
-     &            -4.8, -6.5, -2.7, 1.6, 9.0, 12.8     /)
-      real(r8), parameter :: latent_MU(12) =                            &
-     &         (/ 0.0, -0.32, -0.48, -1.45, -7.4, -11.3,                &
-     &            -10.3, -10.7, -6.3, -3.1, -.16, -.16   /)
-#  endif
 # endif
 
       real(r8), dimension(IminS:ImaxS) :: CC
@@ -674,9 +661,6 @@
       ELSE
         listp = linew
       END IF
-# ifdef ICE_BOX
-      CALL caldate(tdays(ng), mmi=month)
-# endif
 #endif
 
       DO j=Jstr-1,JendR
@@ -1203,10 +1187,6 @@
           ELSE
             sfc_temp = t(i,j,N(ng),nrhs,itemp) + 273.16_r8
           ENDIF
-#   ifdef ICE_BOX
-          qsh_i = sensible_MU(month)
-          RHS_Ice(i,j) = RHS_Ice(i,j) + qsh_i
-#   else
           qsh_i = rhoAir(i)*blk_Cpa*Ch_i*delW(i)*                       &
      &            (TairK(i)+0.0098*blk_ZT(ng)-sfc_temp)
           Coef_Ice(i,j) = Coef_Ice(i,j) +                               &
@@ -1214,8 +1194,6 @@
           RHS_Ice(i,j) = RHS_Ice(i,j) +                                 &
      &          rhoAir(i)*blk_Cpa*Ch_i*delW(i)*                         &
      &                   (TairK(i)+0.0098*blk_ZT(ng))
-#   endif
-!
 #   ifdef ICE_DIAGS
           sens_ice(i,j) = qsh_i
 #   endif
@@ -1223,9 +1201,6 @@
 ! Latent heat of sublimation
 !
           le_i=2.834E+6_r8
-#   ifdef ICE_BOX
-          qlh_i = latent_MU(month)
-#   else
 !
 ! Qsati is saturation specific humidity over the ice from
 ! Parkinson and Washington (1979)
@@ -1240,7 +1215,6 @@
           dq_i=Q(i)-Qsati
           fqlat1=rhoAir(i)*Ce_i*delW(i)
           qlh_i = fqlat1*le_i*dq_i
-#   endif
 !
 #   ifdef ICE_DIAGS
           lat_ice(i,j) = qlh_i
@@ -1286,15 +1260,12 @@
 ! SW absorbed in surface layer (W/m2 ice)
 !
             qswi = qswi - qi_o_n(i,j)
-#    elif !defined ICE_BOX
             IF (hsn(i,j,listp) > 1.e-3_r8) THEN
               qi_o_n(i,j) = 0._r8
             ELSE
               qi_o_n(i,j) = qswi * Io_frac
               qswi = qswi - qi_o_n(i,j)
             END IF
-#    else
-            sr_thru_ice(i,j) = 0.0_r8
 #    endif
           ELSE
 !
@@ -1347,15 +1318,10 @@
 !
 ! heat flux
 !
-#  ifdef ICE_BOX
-          SHeat(i,j) = sensible_MU(month)
-          LHeat(i,j) = latent_MU(month)
-#  else
           SHeat(i,j) = SHeat(i,j)*(1-ai(i,j,listp)) +                   &
      &                    ai(i,j,listp)*qsh_i
           LHeat(i,j) = LHeat(i,j)*(1-ai(i,j,listp)) +                   &
      &                    ai(i,j,listp)*qlh_i
-#  endif
 # endif
 
         END DO
@@ -1450,12 +1416,8 @@
 !
 !          cff1= cff1+snow_thick(i,j)*20._r8
 !
-!#  ifdef ICE_BOX
-!          sr_thru_ice(i,j) = 0.0_r8
-!#  else
 !          sr_thru_ice(i,j) = qi_o_n(i,j)*exp(-cff1)
 !          qi_o_n(i,j) = qi_o_n(i,j)*(1.0_r8 - exp(-cff1))
-!#  endif
 !
           qao_n(i,j) = -stflux(i,j,itemp)/Hscale
 !

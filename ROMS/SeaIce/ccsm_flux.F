@@ -228,10 +228,7 @@
 !
       USE mod_param
       USE mod_scalars
-# ifdef ICE_BOX
-      USE dateclock_mod,   ONLY : caldate
-# endif
-
+!
       USE exchange_2d_mod
 # ifdef DISTRIBUTE
       USE mp_exchange_mod, ONLY : mp_exchange2d
@@ -487,14 +484,6 @@
       real(r8), parameter :: albw_d=0.065_r8
       real(r8) :: cawdif
 #  endif
-#  ifdef ICE_BOX
-      real(r8), parameter :: sensible_MU(12) =                          &
-     &        (/ 19.1, 12.3, 11.6, 4.7, -7.3, -6.3,                     &
-     &           -4.8, -6.5, -2.7, 1.6, 9.0, 12.8     /)
-      real(r8), parameter :: latent_MU(12) =                            &
-     &        (/ 0.0, -0.32, -0.48, -1.45, -7.4, -11.3,                 &
-     &           -10.3, -10.7, -6.3, -3.1, -.16, -.16   /)
-#  endif
 # endif
 # ifdef EVAP_SHALLOW
       real(r8), parameter :: coef_shallow = 5.28_r8
@@ -736,10 +725,6 @@
       END IF
 # endif
 
-# ifdef ICE_BOX
-      CALL caldate(tdays(ng), mmi=month)
-# endif
-
 # ifdef WIND_MINUS_CURRENT
 !
 !  Modify near-surface (2m or 10m) effective winds by subtracting the
@@ -933,17 +918,12 @@
           ELSE
             sfc_temp = t(i,j,N(ng),nrhs,itemp) + 273.16_r8
           ENDIF
-#   ifdef ICE_BOX
-          qsh_i = sensible_MU(month)
-          RHS_Ice(i,j) = RHS_Ice(i,j) + qsh_i
-#   else
           qsh_i = rhoAir(i)*blk_Cpa*Ch*vmag*                            &
      &            (TairK(i)+0.0098*blk_ZT(ng)-sfc_temp)
           Coef_Ice(i,j) = Coef_Ice(i,j) +                               &
      &          rhoAir(i)*blk_Cpa*Ch*vmag
           RHS_Ice(i,j) = RHS_Ice(i,j) +                                 &
      &        rhoAir(i)*blk_Cpa*Ch*vmag*(TairK(i)+0.0098*blk_ZT(ng))
-#   endif
 #   ifdef ICE_DIAGS
           sens_ice(i,j) = qsh_i
 #   endif
@@ -951,13 +931,6 @@
 !  Latent heat of sublimation
 !
           le_i = 2.834E+6_r8
-
-#   ifdef ICE_BOX
-          qlh_i = latent_MU(month)
-#    ifdef ICE_I_O
-          sr_thru_ice(i,j) = 0.0_r8
-#    endif
-#   else
 !
 !  Qsati is saturation specific humidity over the ice from
 !  Parkinson and Washington (1979)
@@ -1018,15 +991,12 @@
 !  SW absorbed in surface layer (W/m2 ice)
 !
             qswi = qswi - qi_o_n(i,j)
-#    elif !defined ICE_BOX
             IF (hsn(i,j,listp) > 1.e-3_r8) THEN
               qi_o_n(i,j) = 0._r8
             ELSE
               qi_o_n(i,j) = qswi * Io_frac
               qswi = qswi - qi_o_n(i,j)
             END IF
-#    else
-            sr_thru_ice(i,j) = 0.0_r8
 #    endif
           ELSE
 !
@@ -1079,17 +1049,12 @@
 !
 !--- heat flux ---
 !
-#  ifdef ICE_BOX
-          SHeat(i,j) = sensible_MU(month)
-          LHeat(i,j) = latent_MU(month)
-#  else
           SHeat(i,j) = cpair * tau * tstar / ustar
           LHeat(i,j) = shr_const_latvap * tau * qstar / ustar
           SHeat(i,j) = SHeat(i,j)*(1-ai(i,j,listp)) +                   &
      &                    ai(i,j,listp)*qsh_i
           LHeat(i,j) = LHeat(i,j)*(1-ai(i,j,listp)) +                   &
      &                    ai(i,j,listp)*qlh_i
-#  endif
 # else
           SHeat(i,j) = cpair * tau * tstar / ustar
           LHeat(i,j) = shr_const_latvap * tau * qstar / ustar
@@ -1224,12 +1189,8 @@
 !
 !          cff1= cff1+snow_thick(i,j)*20._r8
 !
-!# if !defined ICE_BOX
 !          sr_thru_ice(i,j) = qi_o_n(i,j)*exp(-cff1)
 !          qi_o_n(i,j) = qi_o_n(i,j)*(1.0_r8 - exp(-cff1))
-!# else
-!          sr_thru_ice(i,j) = 0.0_r8
-!# endif
 
 # ifdef ICE_MODEL
           qao_n(i,j) = -stflux(i,j,itemp)*Hscale
