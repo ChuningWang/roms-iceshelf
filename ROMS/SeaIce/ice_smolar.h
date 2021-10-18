@@ -157,8 +157,8 @@
         DO i=IstrT,IendT
           ICE(ng)%wdiv(i,j) = (ICE(ng)%hi(i,j,linew(ng))-               &
        &                       ICE(ng)%hi(i,j,liold(ng)))/dt(ng)
-        ENDDO
-      ENDDO
+        END DO
+      END DO
 !
 ! ---------------------------------------------------------------------
 !  Advect the snow thickness.
@@ -233,14 +233,14 @@
 
       DO j=JstrT,JendT
         DO i=IstrT,IendT
-          ICE(ng)%ti(i,j,linew(ng)) = ICE(ng)%enthalpi(i,j,linew(ng)) / &
+          ICE(ng)%ti(i,j,linew(ng)) = ICE(ng)%enthalpi(i,j,linew(ng))/  &
        &    MAX(ICE(ng)%hi(i,j,linew(ng)),1.0E-6_r8)
-          IF (ICE(ng)%hi(i,j,linew(ng)).LE.min_h(ng)) THEN
+          IF (ICE(ng)%hi(i,j,linew(ng)).le.min_h(ng)) THEN
             ICE(ng)%enthalpi(i,j,linew(ng)) = 0.0_r8
             ICE(ng)%ti(i,j,linew(ng)) = 0.0_r8
           END IF
-        ENDDO
-      ENDDO
+        END DO
+      END DO
 !
 !  Set lateral boundary conditions.
 !
@@ -289,8 +289,8 @@
             ICE(ng)%hage(i,j,linew(ng)) = 0.0_r8
             ICE(ng)%ageice(i,j,linew(ng)) = 0.0_r8
           END IF
-        ENDDO
-      ENDDO
+        END DO
+      END DO
 !
 !  Set lateral boundary conditions.
 !
@@ -372,10 +372,6 @@
 
       USE mod_param
       USE mod_scalars
-      USE exchange_2d_mod, ONLY : exchange_r2d_tile
-#ifdef DISTRIBUTE
-      USE mp_exchange_mod, ONLY : mp_exchange2d
-#endif
 !
       implicit none
 !
@@ -430,6 +426,7 @@
 !
 ! Local variable definitions
 !
+      integer :: Imin, Imax, Jmin, Jmax
       integer :: i, j
 
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: ar
@@ -443,37 +440,54 @@
       real(r8), parameter :: add = 3.0E+3_r8
 
       real(r8) :: Cu_crss, Cu
-      real(r8) :: rateu
-      real(r8) :: ratev
-      real(r8) :: rateyiu
-      real(r8) :: ratexiv
-      real(r8) :: uspeed
-      real(r8) :: vspeed
-!
+      real(r8) :: rateu, ratev, rateyiu, ratexiv, uspeed, vspeed
+      real(r8) :: cff
+
 #include "set_bounds.h"
+
+#ifndef ICE_UPWIND
+      IF (EWperiodic(ng)) THEN
+        Imin=Istr-1
+        Imax=Iend+1
+      ELSE
+        Imin=MAX(Istr-1,1)
+        Imax=MIN(Iend+1,Lm(ng))
+      END IF
+      IF (NSperiodic(ng)) THEN
+        Jmin=Jstr-1
+        Jmax=Jend+1
+      ELSE
+        Jmin=MAX(Jstr-1,1)
+        Jmax=MIN(Jend+1,Mm(ng))
+      END IF
+#else
+      Imin=Istr
+      Imax=Iend
+      Jmin=Jstr
+      Jmax=Jend
+#endif
 !
 ! Upstream advection scheme
 !
-      DO j=Jstr,Jend
-        DO i=IstrU,Iend+1
+      DO j=Jmin,Jmax
+        DO i=Imin,Imax+1
           aflxu(i,j)=on_u(i,j)*                                         &
      &               (MAX(0.0_r8,ui(i,j,liunw))*scr(i-1,j,liold) +      &
      &                MIN(0.0_r8,ui(i,j,liunw))*scr(i  ,j,liold))
         END DO
       END DO
-      DO j=JstrV,Jend+1
-        DO i=Istr,Iend
+      DO j=Jmin,Jmax+1
+        DO i=Imin,Imax
           aflxv(i,j)=om_v(i,j)*                                         &
      &               (MAX(0.0_r8,vi(i,j,liunw))*scr(i,j-1,liold) +      &
      &                MIN(0.0_r8,vi(i,j,liunw))*scr(i,j  ,liold))
-!
         END DO
       END DO
 !
-! Step number 1 in mpdata:
+! Compute new tracer concentration
 !
-      DO j=Jstr,Jend
-        DO i=Istr,Iend
+      DO j=Jmin,Jmax
+        DO i=Imin,Imax
 !
           ar(i,j)=1.0_r8/omn(i,j)
           aif(i,j)=scr(i,j,liold) -                                     &
@@ -495,88 +509,43 @@
 !
       IF (.not.EWperiodic(ng)) THEN
         IF (DOMAIN(ng)%Western_Edge(tile)) THEN
-          DO j=Jstr,Jend
-            aif(Istr-1,j)=aif(Istr,j)  !? scr(Istr-1,j,liold)
+          DO j=Jmin,Jmax
+            aif(Istr-1,j)=aif(Istr,j)
           END DO
         END IF
         IF (DOMAIN(ng)%Eastern_Edge(tile)) THEN
-          DO j=Jstr,Jend
-            aif(Iend+1,j)=aif(Iend,j)  !? scr(Iend+1,j,liold)
+          DO j=Jmin,Jmax
+            aif(Iend+1,j)=aif(Iend,j)
           END DO
         END IF
       END IF
       IF (.not.NSperiodic(ng)) THEN
         IF (DOMAIN(ng)%Southern_Edge(tile)) THEN
-          DO i=Istr,Iend
-             aif(i,Jstr-1)=aif(i,Jstr)  !? scr(i,Jstr-1,liold)
+          DO i=Imin,Imax
+             aif(i,Jstr-1)=aif(i,Jstr)
           END DO
         END IF
         IF (DOMAIN(ng)%Northern_Edge(tile)) THEN
-          DO i=Istr,Iend
-             aif(i,Jend+1)=aif(i,Jend)  !? scr(i,Jend+1,liold)
+          DO i=Imin,Imax
+             aif(i,Jend+1)=aif(i,Jend)
           END DO
         END IF
       END IF
-!
-! Boundary corners.
-!
       IF (.not.(EWperiodic(ng).or.NSperiodic(ng))) THEN
         IF (DOMAIN(ng)%SouthWest_Corner(tile)) THEN
-          aif(Istr-1,Jstr-1)=aif(Istr,Jstr)
+          aif(Istr-1,Jstr-1)=0.5_r8*(aif(Istr-1,Jstr)+aif(Istr,Jstr-1))
         END IF
         IF (DOMAIN(ng)%NorthWest_Corner(tile)) THEN
-          aif(Istr-1,Jend+1)=aif(Istr,Jend)
+          aif(Istr-1,Jend+1)=0.5_r8*(aif(Istr-1,Jend)+aif(Istr,Jend+1))
         END IF
         IF (DOMAIN(ng)%SouthEast_Corner(tile)) THEN
-          aif(Iend+1,Jstr-1)=aif(Iend,Jstr)
+          aif(Iend+1,Jstr-1)=0.5_r8*(aif(Iend+1,Jstr)+aif(Iend,Jstr-1))
         END IF
         IF (DOMAIN(ng)%NorthEast_Corner(tile)) THEN
-          aif(Iend+1,Jend+1)=aif(Iend,Jend)
+          aif(Iend+1,Jend+1)=0.5_r8*(aif(Iend+1,Jend)+aif(Iend,Jend+1))
         END IF
       END IF
-!
-! Set masks
-!
-#ifdef MASKING
-      DO j=Jstr,Jend
-        DO i=Istr,Iend
-          aif(i,j)=aif(i,j)*rmask(i,j)
-        END DO
-      END DO
-#endif
-#ifdef WET_DRY
-      DO j=Jstr,Jend
-        DO i=Istr,Iend
-          aif(i,j)=aif(i,j)*rmask_wet(i,j)
-        END DO
-      END DO
-#endif
-#ifdef ICESHELF
-      DO j=Jstr,Jend
-        DO i=Istr,Iend
-          IF (zice(i,j).ne.0.0_r8) THEN
-            aif(i,j) = 0.0_r8
-          END IF
-        END DO
-      END DO
-#endif
-
 #ifndef ICE_UPWIND
-!
-!  Exchange boundary data.
-!
-      IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
-        CALL exchange_r2d_tile (ng, tile,                               &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          aif)
-      END IF
-# ifdef DISTRIBUTE
-      CALL mp_exchange2d (ng, tile, iNLM, 1,                            &
-     &                    LBi, UBi, LBj, UBj,                           &
-     &                    NghostPoints,                                 &
-     &                    EWperiodic(ng), NSperiodic(ng),               &
-     &                    aif)
-# endif
 !
 ! Antidiffusive corrector step:
 ! ------------- --------- -----
@@ -609,11 +578,14 @@
 
       DO j=Jstr,Jend
         DO i=Istr,Iend+1
-          rateu=(aif(i,j)-aif(i-1,j)) / MAX(epsil,aif(i,j)+aif(i-1,j))
+          cff = aif(i,j)+aif(i-1,j)
+          rateu=(aif(i,j)-aif(i-1,j)) /                                 &
+     &          (SIGN(1._r8, cff)*MAX(epsil, ABS(cff)))
 !
-          rateyiu=(FE(i,j+1)+FE(i,j) + FE(i-1,j+1) + FE(i-1,j)) /       &
-     &      (MAX(epsil,aif(i,j) + FE(i,j+1) - FE(i,j)+                  &
-     &                 aif(i-1,j) + FE(i-1,j+1) - FE(i-1,j)))
+          cff = aif(i  ,j) + FE(i  ,j+1) - FE(i  ,j) +                  &
+     &          aif(i-1,j) + FE(i-1,j+1) - FE(i-1,j)
+          rateyiu=(FE(i,j+1) + FE(i,j) + FE(i-1,j+1) + FE(i-1,j)) /     &
+     &            (SIGN(1._r8, cff)*MAX(epsil, ABS(cff)))
 
           Cu=0.5*dtice(ng)*(pm(i,j)+pm(i-1,j))*ui(i,j,liunw)
 
@@ -622,21 +594,24 @@
      &      (vi(i-1,j+1,liunw)+vi(i,j+1,liunw)+                         &
      &       vi(i-1,j,liunw)+vi(i,j,liunw))
 
-          uspeed=rateu*(abs(ui(i,j,liunw))-Cu*ui(i,j,liunw)) -          &
+          uspeed=rateu*(ABS(ui(i,j,liunw))-Cu*ui(i,j,liunw)) -          &
      &           rateyiu*Cu_crss*ui(i,j,liunw)
 
           aflxu(i,j)=on_u(i,j)*(MAX(0.,uspeed)*aif(i-1,j) +             &
-     &                          MIN(0.,uspeed)*aif(i,j))
+     &                          MIN(0.,uspeed)*aif(i  ,j))
         END DO
       END DO
 !
       DO j=Jstr,Jend+1
         DO i=Istr,Iend
-          ratev=(aif(i,j)-aif(i,j-1))/MAX(epsil, aif(i,j)+aif(i,j-1))
+          cff = aif(i,j)+aif(i,j-1)
+          ratev=(aif(i,j)-aif(i,j-1)) /                                 &
+     &          (SIGN(1._r8, cff)*MAX(epsil, ABS(cff)))
 !
+          cff = aif(i,j  ) + FX(i+1,j  ) - FX(i,j  ) +                  &
+     &          aif(i,j-1) + FX(i+1,j-1) - FX(i,j-1)
           ratexiv=(FX(i+1,j) + FX(i,j) + FX(i+1,j-1) + FX(i,j-1)) /     &
-     &      (MAX(epsil,aif(i,j) + FX(i+1,j) - FX(i,j) +                 &
-     &                 aif(i,j-1) + FX(i+1,j-1) - FX(i,j-1)))
+     &            (SIGN(1._r8, cff)*MAX(epsil, ABS(cff)))
 
           Cu=0.5*dtice(ng)*(pn(i,j)+pn(i,j-1))*vi(i,j,liunw)
 
@@ -645,11 +620,11 @@
      &      (ui(i,j,liunw)+ui(i+1,j,liunw)+                             &
      &       ui(i,j-1,liunw)+ui(i+1,j-1,liunw))
 
-          vspeed=ratev*(abs(vi(i,j,liunw))-Cu*vi(i,j,liunw)) -          &
+          vspeed=ratev*(ABS(vi(i,j,liunw))-Cu*vi(i,j,liunw)) -          &
      &           ratexiv*Cu_crss*vi(i,j,liunw)
 
           aflxv(i,j)=om_v(i,j)*(MAX(0.,vspeed)*aif(i,j-1) +             &
-     &                          MIN(0.,vspeed)*aif(i,j))
+     &                          MIN(0.,vspeed)*aif(i,j  ))
         END DO
       END DO
 !

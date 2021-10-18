@@ -408,16 +408,16 @@
 #  ifdef CLOUDS
       real(r8), intent(in) :: cloud(LBi:UBi,LBj:UBj)
 #  endif
-# ifdef COARE_TAYLOR_YELLAND
+#  ifdef COARE_TAYLOR_YELLAND
       real(r8), intent(in) :: Hwave(LBi:UBi,LBj:UBj)
-# endif
-# if defined COARE_TAYLOR_YELLAND || defined COARE_OOST
+#  endif
+#  if defined COARE_TAYLOR_YELLAND || defined COARE_OOST
       real(r8), intent(in) :: Pwave_top(LBi:UBi,LBj:UBj)
-# endif
-# if !defined DEEPWATER_WAVES      && \
-     (defined COARE_TAYLOR_YELLAND || defined COARE_OOST)
+#  endif
+#  if !defined DEEPWATER_WAVES      && \
+      (defined COARE_TAYLOR_YELLAND || defined COARE_OOST)
       real(r8), intent(in) :: Lwave(LBi:UBi,LBj:UBj)
-# endif
+#  endif
       real(r8), intent(in) :: rain(LBi:UBi,LBj:UBj)
 
       real(r8), intent(inout) :: lhflx(LBi:UBi,LBj:UBj)
@@ -698,10 +698,10 @@
 
 #ifdef ICE_MODEL
 !
-! Modified PWA 25/09/2019 to allow correction of SRad for ice and
-! correction of srflx for ice/snow albedo. This code has been moved to
-! earlier in the file to allow ice correction of SRad. Note that qswi
-! is corrected separately for ice albedo below.
+!  Modified PWA 25/09/2019 to allow correction of SRad for ice and
+!  correction of srflx for ice/snow albedo. This code has been moved to
+!  earlier in the file to allow ice correction of SRad. Note that qswi
+!  is corrected separately for ice albedo below.
 !
 # ifdef ICE_THERMO
           qswi_n(i,j)=srflx(i,j)*Hscale
@@ -710,23 +710,23 @@
             ice_thick(i,j)=hi(i,j,listp)/(ai(i,j,listp)+0.001_r8)
             snow_thick(i,j)=hsn(i,j,listp)/(ai(i,j,listp)+0.001_r8)
 !
-! Note: This is necessary because hi, hsn are average thickness over the
-! full cell
+!  Note: This is necessary because hi, hsn are average thickness over
+!        the full cell
 !
 # ifdef ICE_CCSM_SHORTWAVE
 !
-! Note: ICE_ALB_CSIM option is activated if ICE_CCSM_SHORTWAVE is (see
-! globaldefs.h, albedo.F)
+!  Note: ICE_ALB_CSIM option is activated if ICE_CCSM_SHORTWAVE is (see
+!        globaldefs.h, albedo.F)
 !
             i0frac(i,j)=frswpen(i,j)
 !
-! Note: The attenuation due to snow is here accounted for in
-! i0frac=frswpen, which uses asnow (see albedo.F)
+!  Note: The attenuation due to snow is here accounted for in
+!        i0frac=frswpen, which uses asnow (see albedo.F)
 !
             cff1=kappav*ice_thick(i,j)
 # else
 !
-! Assume only visual part penetrates (Briegleb et al., 2004)
+!  Assume only visual part penetrates (Briegleb et al., 2004)
 !
 #  ifdef ICE_ALBEDO
             i0frac(i,j)=(1.0_r8-albedo_ice(i,j))*fv
@@ -762,7 +762,7 @@
      &                 ai(i,j,listp)*rtransi)
 # endif
 !
-! Correction factor for lmd_r1 (near IR fraction of total SW)
+!  Correction factor for lmd_r1 (near IR fraction of total SW)
 !
             rfaci(i,j)=(1.0_r8-ai(i,j,listp))/                          &
      &        ((1.0_r8-ai(i,j,listp))+ai(i,j,listp)*MAX(eps,rtransi))
@@ -780,7 +780,7 @@
             rfaci(i,j)=1.0_r8
           ENDIF
 !
-! End modification PWA 25/09/2019
+!  End modification PWA 25/09/2019
 !
 #endif
 

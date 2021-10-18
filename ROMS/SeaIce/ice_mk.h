@@ -194,10 +194,10 @@
 !            ai(i,j,linew)       -  ice concentration
 !            hsn(i,j,linew)      -  mass snow (pr. area) ai*snow_thick
 !            ti(i,j,linew)       -  temperature in middle of ice
-!                                   (t1 in mellor ...)
+!                                   (t1 in Mellor ...)
 !            enthalpi(i,j,linew) -  scaled perturbation ice heat content
 !            tis(i,j)            -  temperature at snow/atmos. interface
-!                                   (t3 in Mellor..)
+!                                   (t3 in Mellor ...)
 !            brnfr(i,j)          -  brine fraction
 !            wsm(i,j)            -  snow melting rate
 !            wai(i,j)            -  melt rate at atmos./ice
@@ -475,6 +475,7 @@
 !  calculate those parts of the energy balance which do not depend
 !  on the surface temperature.
 !-----------------------------------------------------------------------
+!
 ! *** ignore snow effects except change albi to albsn value
 !
 !     beregner sno- og is-tykkelse
@@ -484,14 +485,14 @@
         DO i = Istr,Iend
           sice(i,j) = MIN(sice_ref,salt_top(i,j))
           ice_thick(i,j) = MAX(0.05_r8,                                 &
-     &                hi(i,j,linew)/MAX(ai(i,j,linew),eps))
+     &                         hi(i,j,linew)/MAX(ai(i,j,linew),eps))
           snow_thick(i,j) = hsn(i,j,linew)/MAX(ai(i,j,linew),eps)
           ai_old(i,j) = ai(i,j,linew)
           brnfr(i,j) = frln*sice(i,j)/MIN(ti(i,j,linew),-eps)
           brnfr(i,j) = MIN(brnfr(i,j),0.2_r8)
           brnfr(i,j) = MAX(brnfr(i,j),0.0_r8)
 !
-!  alph - thermal conductivity of ice
+! *** alph - thermal conductivity of ice
 !
           alph(i,j) = alphic*(1._r8-1.2_r8*brnfr(i,j))
 #ifndef ICE_BOX
@@ -499,7 +500,7 @@
           alph(i,j) = alph(i,j)*corfac
 #endif
           coa(i,j) = 2.0_r8*alph(i,j)*snow_thick(i,j)/                  &
-     &                   (alphsn*ice_thick(i,j))
+     &               (alphsn*ice_thick(i,j))
         END DO
       END DO
 
@@ -526,7 +527,7 @@
 !  Downward conductivity term, assuming the ocean at the freezing point
 !
             rhs_ice_heat(i,j) = rhs_ice_heat(i,j) +                     &
-     &              b2d(i,j)*ti(i,j,linew)
+     &                          b2d(i,j)*ti(i,j,linew)
             tis(i,j) = rhs_ice_heat(i,j)/coef_ice_heat(i,j)
             tis(i,j) = MAX(tis(i,j),-45._r8)
             qai(i,j) = qai_n(i,j)
@@ -559,11 +560,11 @@
      &        (t0mk(i,j) + (tis(i,j) - (2._r8+coa(i,j))*ti(i,j,linew))/ &
      &                     (1._r8+coa(i,j))))
 #endif
-            ti(i,j,linew) = max(ti(i,j,linew),-35._r8)
-            ti(i,j,linew) = min(ti(i,j,linew),-eps)
+            ti(i,j,linew) = MAX(ti(i,j,linew),-35._r8)
+            ti(i,j,linew) = MIN(ti(i,j,linew),-eps)
 !           brnfr(i,j) = frln*sice(i,j)/MIN(ti(i,j,linew),-eps)
 !           enthal(i,j,2) = brnfr(i,j) * (hfus + cpw*ti(i,j,linew)) +   &
-!    &                (1 - brnfr(i,j)) * cpi * ti(i,j,linew)
+!    &                      (1 - brnfr(i,j)) * cpi * ti(i,j,linew)
           ELSE
             ti(i,j,linew) = temp_top(i,j)
           END IF
@@ -621,7 +622,7 @@
 !
       DO j = Jstr,Jend
         DO i = Istr,Iend
-          snow(i,j) = max(snow_n(i,j),0._r8)
+          snow(i,j) = MAX(snow_n(i,j),0._r8)
           ws(i,j) = snow(i,j)
         END DO
       END DO
