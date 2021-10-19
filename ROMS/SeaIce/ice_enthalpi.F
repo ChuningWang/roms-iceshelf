@@ -11,23 +11,23 @@
 !=======================================================================
 !
       implicit none
-
+!
       PRIVATE
       PUBLIC ice_enthalpi
-
+!
       CONTAINS
-
+!
       SUBROUTINE ice_enthalpi (ng, tile)
-
+!
       USE mod_param
       USE mod_ice
-
+!
       implicit none
-
+!
       integer, intent(in) :: ng, tile
-
+!
 # include "tile.h"
-
+!
 #ifdef PROFILE
       CALL wclock_on (ng, iNLM, 95, __LINE__, __FILE__)
 #endif
@@ -52,11 +52,12 @@
      &                              LBi, UBi, LBj, UBj,                 &
      &                              IminS, ImaxS, JminS, JmaxS,         &
      &                              hi, ti, enthalpi)
-
+!
+      USE mod_param
       USE mod_scalars
       USE mod_stepping
       USE mod_boundary
-
+!
       USE exchange_2d_mod, ONLY : exchange_r2d_tile
 # ifdef DISTRIBUTE
       USE mp_exchange_mod, ONLY : mp_exchange2d

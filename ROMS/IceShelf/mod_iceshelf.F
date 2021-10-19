@@ -196,6 +196,107 @@
       RETURN
       END SUBROUTINE allocate_iceshelfvar
 !
+      SUBROUTINE deallocate_iceshelfvar (ng)
+!
+!=======================================================================
+!                                                                      !
+!  This routine deallocates all variables in the module for all nested !
+!  grids.                                                              !
+!                                                                      !
+!=======================================================================
+!
+      USE mod_param,   ONLY : Ngrids
+# ifdef SUBOBJECT_DEALLOCATION
+      USE destroy_mod, ONLY : destroy
+# endif
+!
+!  Imported variable declarations.
+!
+      integer, intent(in) :: ng
+!
+!  Local variable declarations.
+!
+      character (len=*), parameter :: MyFile =                          &
+     &  __FILE__//", deallocate_forces"
+# ifdef SUBOBJECT_DEALLOCATION
+!
+!-----------------------------------------------------------------------
+!  Deallocate each variable in the derived-type ICESHELFVAR structure
+!  separately.
+!-----------------------------------------------------------------------
+!
+!  Iceshelf model state
+!
+      IF (.not.destroy(ng, ICESHELFVAR(ng)%m, MyFile,                   &
+     &                 __LINE__, 'ICESHELFVAR(ng)%m')) RETURN
+#  ifdef ICESHELF_3EQN_VBC
+
+      IF (.not.destroy(ng, ICESHELFVAR(ng)%gammaT, MyFile,              &
+     &                 __LINE__, 'ICESHELFVAR(ng)%gammaT')) RETURN
+
+      IF (.not.destroy(ng, ICESHELFVAR(ng)%gammaS, MyFile,              &
+     &                 __LINE__, 'ICESHELFVAR(ng)%gammaS')) RETURN
+
+      IF (.not.destroy(ng, ICESHELFVAR(ng)%Tstar, MyFile,               &
+     &                 __LINE__, 'ICESHELFVAR(ng)%Tstar')) RETURN
+
+      IF (.not.destroy(ng, ICESHELFVAR(ng)%Ustar, MyFile,               &
+     &                 __LINE__, 'ICESHELFVAR(ng)%Ustar')) RETURN
+
+      IF (.not.destroy(ng, ICESHELFVAR(ng)%Tb, MyFile,                  &
+     &                 __LINE__, 'ICESHELFVAR(ng)%Tb')) RETURN
+
+      IF (.not.destroy(ng, ICESHELFVAR(ng)%Sb, MyFile,                  &
+     &                 __LINE__, 'ICESHELFVAR(ng)%Sb')) RETURN
+#  endif
+#  ifdef SURFACE_OVERFLUX_FIX
+
+      IF (.not.destroy(ng, ICESHELFVAR(ng)%ssflxSOF, MyFile,            &
+     &                 __LINE__, 'ICESHELFVAR(ng)%ssflxSOF')) RETURN
+
+      IF (.not.destroy(ng, ICESHELFVAR(ng)%shflxSOF, MyFile,            &
+     &                 __LINE__, 'ICESHELFVAR(ng)%shflxSOF')) RETURN
+#  endif
+#  ifdef ICESHELF_MORPH
+
+      IF (.not.destroy(ng, ICESHELFVAR(ng)%iceshelf_draft0, MyFile,     &
+     &                 __LINE__, 'ICESHELFVAR(ng)%iceshelf_draft0'))    &
+     &  RETURN
+
+      IF (.not.destroy(ng, ICESHELFVAR(ng)%iceshelf_draft, MyFile,      &
+     &                 __LINE__, 'ICESHELFVAR(ng)%iceshelf_draft'))     &
+     &  RETURN
+#   ifdef FISOC_DDDT
+
+      IF (.not.destroy(ng, ICESHELFVAR(ng)%iceshelf_dddt, MyFile,       &
+     &                 __LINE__, 'ICESHELFVAR(ng)%iceshelf_dddt'))      &
+     &  RETURN
+#   endif
+#  endif
+#  ifdef ICESHELF_TRACER
+
+      IF (.not.destroy(ng, ICESHELFVAR(ng)%iceshelf_tint, MyFile,       &
+     &                 __LINE__, 'ICESHELFVAR(ng)%iceshelf_tint'))      &
+     &  RETURN
+
+      IF (.not.destroy(ng, ICESHELFVAR(ng)%iceshelf_vol, MyFile,        &
+     &                 __LINE__, 'ICESHELFVAR(ng)%iceshelf_vol'))       &
+     &  RETURN
+#  endif
+# endif
+!
+!-----------------------------------------------------------------------
+!  Deallocate derived-type ICESHELFVAR structure.
+!-----------------------------------------------------------------------
+!
+      IF (ng.eq.Ngrids) THEN
+        IF (allocated(ICESHELFVAR)) deallocate ( ICESHELFVAR )
+      END IF
+!
+      RETURN
+      END SUBROUTINE deallocate_iceshelfvar
+!
+!
       SUBROUTINE initialize_iceshelfvar (ng, tile, model)
 !
 !=======================================================================

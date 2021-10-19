@@ -626,36 +626,18 @@
           END DO
         END IF
 #  ifdef ICE_DIAGS
-        IF (Aout(idfrswp,ng)) THEN
-          DO j=JstrR,JendR
-            DO i=IstrR,IendR
-              AVERAGE(ng)%avgfrswp(i,j)=FORCES(ng)%frswpen(i,j)
-#   ifdef WET_DRY
-              AVERAGE(ng)%avgfrswp(i,j)=AVERAGE(ng)%avgfrswp(i,j)*      &
-     &                                   GRID(ng)%rmask_full(i,j)
-#   endif
-            END DO
-          END DO
-        END IF
-        IF (Aout(idrfaci,ng)) THEN
-          DO j=JstrR,JendR
-            DO i=IstrR,IendR
-              AVERAGE(ng)%avgrfaci(i,j)=ICE(ng)%rfaci(i,j)
-#   ifdef WET_DRY
-              AVERAGE(ng)%avgrfaci(i,j)=AVERAGE(ng)%avgrfaci(i,j)*      &
-     &                                   GRID(ng)%rmask_full(i,j)
-#   endif
-            END DO
-          END DO
-        END IF
+!
+!  Initialize ice model diagnostics.
+!
+#   if defined SHORTWAVE && defined ICE_ALBEDO
         IF (Aout(idAlbe,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
               AVERAGE(ng)%avgAlbe(i,j)=FORCES(ng)%albedo(i,j)
-#   ifdef WET_DRY
+#    ifdef WET_DRY
               AVERAGE(ng)%avgAlbe(i,j)=AVERAGE(ng)%avgAlbe(i,j)*        &
      &                                 GRID(ng)%rmask_full(i,j)
-#   endif
+#    endif
             END DO
           END DO
         END IF
@@ -663,9 +645,34 @@
           DO j=JstrR,JendR
             DO i=IstrR,IendR
               AVERAGE(ng)%avgAlbI(i,j)=FORCES(ng)%albedo_ice(i,j)
-#   ifdef WET_DRY
+#    ifdef WET_DRY
               AVERAGE(ng)%avgAlbI(i,j)=AVERAGE(ng)%avgAlbI(i,j)*        &
      &                                 GRID(ng)%rmask_full(i,j)
+#    endif
+            END DO
+          END DO
+        END IF
+#    ifdef ICE_ALB_CSIM
+        IF (Aout(idfrswp,ng)) THEN
+          DO j=JstrR,JendR
+            DO i=IstrR,IendR
+              AVERAGE(ng)%avgfrswp(i,j)=FORCES(ng)%frswpen(i,j)
+#     ifdef WET_DRY
+              AVERAGE(ng)%avgfrswp(i,j)=AVERAGE(ng)%avgfrswp(i,j)*      &
+     &                                   GRID(ng)%rmask_full(i,j)
+#     endif
+            END DO
+          END DO
+        END IF
+#    endif
+#   endif
+        IF (Aout(idrfaci,ng)) THEN
+          DO j=JstrR,JendR
+            DO i=IstrR,IendR
+              AVERAGE(ng)%avgrfaci(i,j)=ICE(ng)%rfaci(i,j)
+#   ifdef WET_DRY
+              AVERAGE(ng)%avgrfaci(i,j)=AVERAGE(ng)%avgrfaci(i,j)*      &
+     &                                   GRID(ng)%rmask_full(i,j)
 #   endif
             END DO
           END DO
@@ -2178,35 +2185,17 @@
           END DO
         END IF
 #  ifdef ICE_DIAGS
-        IF (Aout(idfrswp,ng)) THEN
-          DO j=JstrR,JendR
-            DO i=Istr,IendR
-              AVERAGE(ng)%avgfrswp(i,j)=AVERAGE(ng)%avgfrswp(i,j)+      &
-#   ifdef WET_DRY
-     &                                 GRID(ng)%rmask_full(i,j)*        &
-#   endif
-     &                                 FORCES(ng)%frswpen(i,j)
-            END DO
-          END DO
-        END IF
-        IF (Aout(idrfaci,ng)) THEN
-          DO j=JstrR,JendR
-            DO i=Istr,IendR
-              AVERAGE(ng)%avgrfaci(i,j)=AVERAGE(ng)%avgrfaci(i,j)+      &
-#   ifdef WET_DRY
-     &                                 GRID(ng)%rmask_full(i,j)*        &
-#   endif
-     &                                 ICE(ng)%rfaci(i,j)
-            END DO
-          END DO
-        END IF
+!
+!  Accumulate ice model diagnostics.
+!
+#   if defined SHORTWAVE && defined ICE_ALBEDO
         IF (Aout(idAlbe,ng)) THEN
           DO j=JstrR,JendR
             DO i=Istr,IendR
               AVERAGE(ng)%avgAlbe(i,j)=AVERAGE(ng)%avgAlbe(i,j)+        &
-#   ifdef WET_DRY
+#    ifdef WET_DRY
      &                                 GRID(ng)%rmask_full(i,j)*        &
-#   endif
+#    endif
      &                                 FORCES(ng)%albedo(i,j)
             END DO
           END DO
@@ -2215,10 +2204,35 @@
           DO j=JstrR,JendR
             DO i=Istr,IendR
               AVERAGE(ng)%avgAlbI(i,j)=AVERAGE(ng)%avgAlbI(i,j)+        &
+#    ifdef WET_DRY
+     &                                 GRID(ng)%rmask_full(i,j)*        &
+#    endif
+     &                                 FORCES(ng)%albedo_ice(i,j)
+            END DO
+          END DO
+        END IF
+#    ifdef ICE_ALB_CSIM
+        IF (Aout(idfrswp,ng)) THEN
+          DO j=JstrR,JendR
+            DO i=Istr,IendR
+              AVERAGE(ng)%avgfrswp(i,j)=AVERAGE(ng)%avgfrswp(i,j)+      &
+#     ifdef WET_DRY
+     &                                 GRID(ng)%rmask_full(i,j)*        &
+#     endif
+     &                                 FORCES(ng)%frswpen(i,j)
+            END DO
+          END DO
+        END IF
+#    endif
+#   endif
+        IF (Aout(idrfaci,ng)) THEN
+          DO j=JstrR,JendR
+            DO i=Istr,IendR
+              AVERAGE(ng)%avgrfaci(i,j)=AVERAGE(ng)%avgrfaci(i,j)+      &
 #   ifdef WET_DRY
      &                                 GRID(ng)%rmask_full(i,j)*        &
 #   endif
-     &                                 FORCES(ng)%albedo_ice(i,j)
+     &                                 ICE(ng)%rfaci(i,j)
             END DO
           END DO
         END IF

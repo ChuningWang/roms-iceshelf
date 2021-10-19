@@ -1,11 +1,25 @@
 #include "cppdefs.h"
       MODULE mod_ice
-
+!
+!================================================== Hernan G. Arango ===
+!  Copyright (c) 2002-2021 The ROMS/TOMS Group                         !
+!    Licensed under a MIT/X style license                              !
+!    See License_ROMS.txt                                              !
+!=======================================================================
+!
 #if defined ICE_MODEL
         USE mod_kinds
-
+!
         implicit none
-
+!
+        PUBLIC :: allocate_ice
+        PUBLIC :: deallocate_ice
+        PUBLIC :: initialize_ice
+!
+!-----------------------------------------------------------------------
+!  Define ICE structure.
+!-----------------------------------------------------------------------
+!
         TYPE T_ICE
 !
 !  Ice model state.
@@ -187,7 +201,178 @@
 
       RETURN
       END SUBROUTINE allocate_ice
+!
+      SUBROUTINE deallocate_ice (ng)
+!
+!=======================================================================
+!                                                                      !
+!  This routine deallocates all variables in the module for all nested !
+!  grids.                                                              !
+!                                                                      !
+!=======================================================================
+!
+      USE mod_param,   ONLY : Ngrids
+# ifdef SUBOBJECT_DEALLOCATION
+      USE destroy_mod, ONLY : destroy
+# endif
+!
+!  Imported variable declarations.
+!
+      integer, intent(in) :: ng
+!
+!  Local variable declarations.
+!
+      character (len=*), parameter :: MyFile =                          &
+     &  __FILE__//", deallocate_forces"
+# ifdef SUBOBJECT_DEALLOCATION
+!
+!-----------------------------------------------------------------------
+!  Deallocate each variable in the derived-type ICE structure
+!  separately.
+!-----------------------------------------------------------------------
+!
+!  Ice model state
+!
+      IF (.not.destroy(ng, ICE(ng)%ui, MyFile,                          &
+     &                 __LINE__, 'ICE(ng)%ui')) RETURN
 
+      IF (.not.destroy(ng, ICE(ng)%vi, MyFile,                          &
+     &                 __LINE__, 'ICE(ng)%vi')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%uie, MyFile,                         &
+     &                 __LINE__, 'ICE(ng)%uie')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%vie, MyFile,                         &
+     &                 __LINE__, 'ICE(ng)%vie')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%ai, MyFile,                          &
+     &                 __LINE__, 'ICE(ng)%ai')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%hi, MyFile,                          &
+     &                 __LINE__, 'ICE(ng)%yi')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%hsn, MyFile,                         &
+     &                 __LINE__, 'ICE(ng)%hsn')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%ageice, MyFile,                      &
+     &                 __LINE__, 'ICE(ng)%ageice')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%io_mflux, MyFile,                    &
+     &                 __LINE__, 'ICE(ng)%io_mflux')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%wfr, MyFile,                         &
+     &                 __LINE__, 'ICE(ng)%wfr')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%wai, MyFile,                         &
+     &                 __LINE__, 'ICE(ng)%wai')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%wao, MyFile,                         &
+     &                 __LINE__, 'ICE(ng)%wao')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%wio, MyFile,                         &
+     &                 __LINE__, 'ICE(ng)%wio')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%wro, MyFile,                         &
+     &                 __LINE__, 'ICE(ng)%wro')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%wdiv, MyFile,                        &
+     &                 __LINE__, 'ICE(ng)%wdiv')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%tis, MyFile,                         &
+     &                 __LINE__, 'ICE(ng)%tis')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%ti, MyFile,                          &
+     &                 __LINE__, 'ICE(ng)%ti')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%t2, MyFile,                          &
+     &                 __LINE__, 'ICE(ng)%t2')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%enthalpi, MyFile,                    &
+     &                 __LINE__, 'ICE(ng)%enthalpi')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%hage, MyFile,                        &
+     &                 __LINE__, 'ICE(ng)%hage')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%utau_iw, MyFile,                     &
+     &                 __LINE__, 'ICE(ng)%utau_iw')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%chu_iw, MyFile,                      &
+     &                 __LINE__, 'ICE(ng)%chu_iw')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%spd_iw, MyFile,                      &
+     &                 __LINE__, 'ICE(ng)%spd_iw')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%coef_ice_heat, MyFile,               &
+     &                 __LINE__, 'ICE(ng)%coef_ice_heat')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%rhs_ice_heat, MyFile,                &
+     &                 __LINE__, 'ICE(ng)%rhs_ice_heat')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%pice, MyFile,                        &
+     &                 __LINE__, 'ICE(ng)%pice')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%rfaci, MyFile,                       &
+     &                 __LINE__, 'ICE(ng)%rfaci')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%zetai, MyFile,                       &
+     &                 __LINE__, 'ICE(ng)%zetai')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%eta, MyFile,                         &
+     &                 __LINE__, 'ICE(ng)%eta')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%tauaiu, MyFile,                      &
+     &                 __LINE__, 'ICE(ng)%tauaiu')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%tauaiv, MyFile,                      &
+     &                 __LINE__, 'ICE(ng)%tauaiv')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%uwater, MyFile,                      &
+     &                 __LINE__, 'ICE(ng)%uwater')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%vwater, MyFile,                      &
+     &                 __LINE__, 'ICE(ng)%vwater')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%sealev, MyFile,                      &
+     &                 __LINE__, 'ICE(ng)%sealev')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%s0mk, MyFile,                        &
+     &                 __LINE__, 'ICE(ng)%s0mk')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%t0mk, MyFile,                        &
+     &                 __LINE__, 'ICE(ng)%t0mk')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%sig11, MyFile,                       &
+     &                 __LINE__, 'ICE(ng)%sig11')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%sig22, MyFile,                       &
+     &                 __LINE__, 'ICE(ng)%sig22')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%sig12, MyFile,                       &
+     &                 __LINE__, 'ICE(ng)%sig12')) RETURN
+#  ifdef ICE_STRENGTH_QUAD
+
+      IF (.not.destroy(ng, ICE(ng)%pstar_grid, MyFile,                  &
+     &                 __LINE__, 'ICE(ng)%pstar_grid')) RETURN
+#  endif
+
+      IF (.not.destroy(ng, ICE(ng)%h_loadu, MyFile,                     &
+     &                 __LINE__, 'ICE(ng)%h_loadu')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%h_loadv, MyFile,                     &
+     &                 __LINE__, 'ICE(ng)%h_loadv')) RETURN
+# endif
+!
+!-----------------------------------------------------------------------
+!  Deallocate derived-type ICE structure.
+!-----------------------------------------------------------------------
+!
+      IF (ng.eq.Ngrids) THEN
+        IF (allocated(ICE)) deallocate ( ICE )
+      END IF
+!
+      RETURN
+      END SUBROUTINE deallocate_ice
+!
       SUBROUTINE initialize_ice (ng, tile)
 !
 !=======================================================================

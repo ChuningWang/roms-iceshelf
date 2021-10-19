@@ -2,7 +2,7 @@
       MODULE mod_clima
 !
 !git $Id$
-!svn $Id: mod_clima.F 1054 2021-03-06 19:47:12Z arango $
+!svn $Id: mod_clima.F 1090 2021-09-29 03:19:30Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2021 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -72,9 +72,17 @@
 !=======================================================================
 !
         USE mod_kinds
-
+!
         implicit none
-
+!
+        PUBLIC :: allocate_clima
+        PUBLIC :: deallocate_clima
+        PUBLIC :: initialize_clima
+!
+!-----------------------------------------------------------------------
+!  Define T_CLIMA structure.
+!-----------------------------------------------------------------------
+!
         TYPE T_CLIMA
 !
 !  Climatology/Nudging arrays.
@@ -108,31 +116,25 @@
 #ifdef ICE_MODEL
           real(r8), pointer :: uiclm(:,:)
           real(r8), pointer :: viclm(:,:)
-
           real(r8), pointer :: aiclm(:,:)
           real(r8), pointer :: hiclm(:,:)
           real(r8), pointer :: hsnclm(:,:)
-
           real(r8), pointer :: sig11clm(:,:)
           real(r8), pointer :: sig12clm(:,:)
           real(r8), pointer :: sig22clm(:,:)
-
 # ifndef ANA_AICLIMA
           real(r8), pointer :: aiclmG(:,:,:)
           real(r8), pointer :: hiclmG(:,:,:)
           real(r8), pointer :: hsnclmG(:,:,:)
-
 # endif
 # ifndef ANA_SICLIMA
           real(r8), pointer :: sig11clmG(:,:,:)
           real(r8), pointer :: sig12clmG(:,:,:)
           real(r8), pointer :: sig22clmG(:,:,:)
-
 # endif
 # ifndef ANA_MICLIMA
           real(r8), pointer :: uiclmG(:,:,:)
           real(r8), pointer :: viclmG(:,:,:)
-
 # endif
           real(r8), pointer :: MInudgcof(:,:)
           real(r8), pointer :: AInudgcof(:,:)
@@ -176,11 +178,11 @@
 #endif
 
         END TYPE T_CLIMA
-
+!
         TYPE (T_CLIMA), allocatable :: CLIMA(:)
-
+!
       CONTAINS
-
+!
       SUBROUTINE allocate_clima (ng, LBi, UBi, LBj, UBj)
 !
 !=======================================================================
@@ -193,7 +195,7 @@
       USE mod_param
       USE mod_scalars
 !
-!  Local variable declarations.
+!  Imported variable declarations.
 !
       integer, intent(in) :: ng, LBi, UBi, LBj, UBj
 !
@@ -403,10 +405,248 @@
       Dmem(ng)=Dmem(ng)+2.0_r8*REAL(N(ng)*NT(ng),r8)*size2d
 # endif
 #endif
-
+!
       RETURN
       END SUBROUTINE allocate_clima
+!
+      SUBROUTINE deallocate_clima (ng)
+!
+!=======================================================================
+!                                                                      !
+!  This routine deallocates all variables in the module for all nested !
+!  grids.                                                              !
+!                                                                      !
+!=======================================================================
+!
+      USE mod_param
+      USE mod_scalars
 
+#ifdef SUBOBJECT_DEALLOCATION
+!
+      USE destroy_mod, ONLY : destroy
+#endif
+!
+!  Imported variable declarations.
+!
+      integer, intent(in) :: ng
+!
+!  Local variable declarations.
+!
+      character (len=*), parameter :: MyFile =                          &
+     &  __FILE__//", deallocate_clima"
+
+# ifdef SUBOBJECT_DEALLOCATION
+!
+!-----------------------------------------------------------------------
+!  Deallocate each variable in the derived-type T_CLIMA structure
+!  separately.
+!-----------------------------------------------------------------------
+!
+!  Climatology/Nudging arrays.
+!
+      IF (LsshCLM(ng)) THEN
+        IF (.not.destroy(ng, CLIMA(ng)%ssh, MyFile,                     &
+     &                 __LINE__, 'CLIMA(ng)%ssh')) RETURN
+
+# ifndef ANA_SSH
+        IF (.not.destroy(ng, CLIMA(ng)%sshG, MyFile,                    &
+     &                   __LINE__, 'CLIMA(ng)%sshG')) RETURN
+# endif
+      END IF
+!
+      IF (Lm2CLM(ng)) THEN
+        IF (.not.destroy(ng, CLIMA(ng)%ubarclm, MyFile,                 &
+     &                   __LINE__, 'CLIMA(ng)%ubarclm')) RETURN
+
+        IF (.not.destroy(ng, CLIMA(ng)%vbarclm, MyFile,                 &
+     &                   __LINE__, 'CLIMA(ng)%vbarclm')) RETURN
+
+# ifndef ANA_M2CLIMA
+        IF (.not.destroy(ng, CLIMA(ng)%ubarclmG, MyFile,                &
+     &                   __LINE__, 'CLIMA(ng)%ubarclmG')) RETURN
+
+        IF (.not.destroy(ng, CLIMA(ng)%vbarclmG, MyFile,                &
+     &                   __LINE__, 'CLIMA(ng)%vbarclmG')) RETURN
+# endif
+      END IF
+
+# ifdef SOLVE3D
+!
+      IF (Lm3CLM(ng)) THEN
+        IF (.not.destroy(ng, CLIMA(ng)%uclm, MyFile,                    &
+     &                   __LINE__, 'CLIMA(ng)%uclm')) RETURN
+
+        IF (.not.destroy(ng, CLIMA(ng)%vclm, MyFile,                    &
+     &                   __LINE__, 'CLIMA(ng)%vclm')) RETURN
+
+#  ifndef ANA_M3CLIMA
+        IF (.not.destroy(ng, CLIMA(ng)%uclmG, MyFile,                   &
+     &                   __LINE__, 'CLIMA(ng)%uclmG')) RETURN
+
+        IF (.not.destroy(ng, CLIMA(ng)%vclmG, MyFile,                   &
+     &                   __LINE__, 'CLIMA(ng)%vclmG')) RETURN
+#  endif
+      END IF
+!
+      IF (ANY(LtracerCLM(:,ng)).or.ANY(LnudgeTCLM(:,ng))) THEN
+        IF (.not.destroy(ng, CLIMA(ng)%tclm, MyFile,                    &
+     &                   __LINE__, 'CLIMA(ng)%tclm')) RETURN
+
+#  ifndef ANA_TCLIMA
+        IF (.not.destroy(ng, CLIMA(ng)%tclmG, MyFile,                   &
+     &                   __LINE__, 'CLIMA(ng)%tclmG')) RETURN
+#  endif
+      END IF
+# endif
+
+#ifdef ICE_MODEL
+
+        IF (.not.destroy(ng, CLIMA(ng)%uiclm, MyFile,                   &
+     &                   __LINE__, 'CLIMA(ng)%uiclm')) RETURN
+
+        IF (.not.destroy(ng, CLIMA(ng)%viclm, MyFile,                   &
+     &                   __LINE__, 'CLIMA(ng)%viclm')) RETURN
+
+        IF (.not.destroy(ng, CLIMA(ng)%aiclm, MyFile,                   &
+     &                   __LINE__, 'CLIMA(ng)%aiclm')) RETURN
+
+        IF (.not.destroy(ng, CLIMA(ng)%hiclm, MyFile,                   &
+     &                   __LINE__, 'CLIMA(ng)%hiclm')) RETURN
+
+        IF (.not.destroy(ng, CLIMA(ng)%hsnclm, MyFile,                  &
+     &                   __LINE__, 'CLIMA(ng)%hsnclm')) RETURN
+
+        IF (.not.destroy(ng, CLIMA(ng)%sig11clm, MyFile,                &
+     &                   __LINE__, 'CLIMA(ng)%sig11clm')) RETURN
+
+        IF (.not.destroy(ng, CLIMA(ng)%sig12clm, MyFile,                &
+     &                   __LINE__, 'CLIMA(ng)%sig12clm')) RETURN
+
+        IF (.not.destroy(ng, CLIMA(ng)%sig22clm, MyFile,                &
+     &                   __LINE__, 'CLIMA(ng)%sig22clm')) RETURN
+# ifndef ANA_AICLIMA
+
+        IF (.not.destroy(ng, CLIMA(ng)%aiclmG, MyFile,                  &
+     &                   __LINE__, 'CLIMA(ng)%aiclmG')) RETURN
+
+        IF (.not.destroy(ng, CLIMA(ng)%hiclmG, MyFile,                  &
+     &                   __LINE__, 'CLIMA(ng)%hiclmG')) RETURN
+
+        IF (.not.destroy(ng, CLIMA(ng)%hsnclmG, MyFile,                 &
+     &                   __LINE__, 'CLIMA(ng)%hsnclmG')) RETURN
+# endif
+# ifndef ANA_SICLIMA
+
+        IF (.not.destroy(ng, CLIMA(ng)%sig11clmG, MyFile,               &
+     &                   __LINE__, 'CLIMA(ng)%sig11clmG')) RETURN
+
+        IF (.not.destroy(ng, CLIMA(ng)%sig12clmG, MyFile,               &
+     &                   __LINE__, 'CLIMA(ng)%sig12clmG')) RETURN
+
+        IF (.not.destroy(ng, CLIMA(ng)%sig22clmG, MyFile,               &
+     &                   __LINE__, 'CLIMA(ng)%sig22clmG')) RETURN
+# endif
+# ifndef ANA_MICLIMA
+
+        IF (.not.destroy(ng, CLIMA(ng)%uiclmG, MyFile,                  &
+     &                   __LINE__, 'CLIMA(ng)%uiclmG')) RETURN
+
+        IF (.not.destroy(ng, CLIMA(ng)%viclmG, MyFile,                  &
+     &                   __LINE__, 'CLIMA(ng)%viclmG')) RETURN
+# endif
+
+        IF (.not.destroy(ng, CLIMA(ng)%MInudgecof, MyFile,              &
+     &                   __LINE__, 'CLIMA(ng)%MInudgecof')) RETURN
+
+        IF (.not.destroy(ng, CLIMA(ng)%AInudgecof, MyFile,              &
+     &                   __LINE__, 'CLIMA(ng)%AInudgecof')) RETURN
+
+        IF (.not.destroy(ng, CLIMA(ng)%SInudgecof, MyFile,              &
+     &                   __LINE__, 'CLIMA(ng)%SInudgecof')) RETURN
+#endif
+!
+!  Nudging coefficient arrays.
+!
+      IF (LnudgeM2CLM(ng)) THEN
+        IF (.not.destroy(ng, CLIMA(ng)%M2nudgcof, MyFile,               &
+     &                   __LINE__, 'CLIMA(ng)%M2nudgcof')) RETURN
+      END IF
+
+# ifdef SOLVE3D
+      IF (LnudgeM3CLM(ng)) THEN
+        IF (.not.destroy(ng, CLIMA(ng)%M3nudgcof, MyFile,               &
+     &                   __LINE__, 'CLIMA(ng)%M3nudgcof')) RETURN
+      END IF
+
+      IF (ANY(LnudgeTCLM(:,ng))) THEN
+        IF (.not.destroy(ng, CLIMA(ng)%Tnudgcof, MyFile,                &
+     &                   __LINE__, 'CLIMA(ng)%Tnudgcof')) RETURN
+      END IF
+# endif
+
+# if defined AD_SENSITIVITY   || defined I4DVAR_ANA_SENSITIVITY || \
+     defined OPT_OBSERVATIONS || defined SENSITIVITY_4DVAR      || \
+     defined SO_SEMI
+!
+!  Adjoint-based algorithms arrays.
+!
+      IF (.not.destroy(ng, CLIMA(ng)%zeta_ads, MyFile,                  &
+     &                 __LINE__, 'CLIMA(ng)%zeta_ads')) RETURN
+
+      IF (.not.destroy(ng, CLIMA(ng)%zeta_adsG, MyFile,                 &
+     &                 __LINE__, 'CLIMA(ng)%zeta_adsG')) RETURN
+
+      IF (.not.destroy(ng, CLIMA(ng)%ubar_ads, MyFile,                  &
+     &                 __LINE__, 'CLIMA(ng)%ubar_ads')) RETURN
+
+      IF (.not.destroy(ng, CLIMA(ng)%vbar_ads, MyFile,                  &
+     &                 __LINE__, 'CLIMA(ng)%vbar_ads')) RETURN
+
+      IF (.not.destroy(ng, CLIMA(ng)%ubar_adsG, MyFile,                 &
+     &                 __LINE__, 'CLIMA(ng)%ubar_adsG')) RETURN
+
+      IF (.not.destroy(ng, CLIMA(ng)%vbar_adsG, MyFile,                 &
+     &                 __LINE__, 'CLIMA(ng)%vbar_adsG')) RETURN
+
+#  ifdef SOLVE3D
+      IF (.not.destroy(ng, CLIMA(ng)%u_ads, MyFile,                     &
+     &                 __LINE__, 'CLIMA(ng)%u_ads')) RETURN
+
+      IF (.not.destroy(ng, CLIMA(ng)%v_ads, MyFile,                     &
+     &                 __LINE__, 'CLIMA(ng)%v_ads')) RETURN
+
+      IF (.not.destroy(ng, CLIMA(ng)%u_adsG, MyFile,                    &
+     &                 __LINE__, 'CLIMA(ng)%u_adsG')) RETURN
+
+      IF (.not.destroy(ng, CLIMA(ng)%v_adsG, MyFile,                    &
+     &                 __LINE__, 'CLIMA(ng)%v_adsG')) RETURN
+
+      IF (.not.destroy(ng, CLIMA(ng)%wvel_ads, MyFile,                  &
+     &                 __LINE__, 'CLIMA(ng)%wvel_ads')) RETURN
+
+      IF (.not.destroy(ng, CLIMA(ng)%wvel_adsG, MyFile,                 &
+     &                 __LINE__, 'CLIMA(ng)%wvel_adsG')) RETURN
+
+      IF (.not.destroy(ng, CLIMA(ng)%t_ads, MyFile,                     &
+     &                 __LINE__, 'CLIMA(ng)%t_ads')) RETURN
+
+      IF (.not.destroy(ng, CLIMA(ng)%t_adsG, MyFile,                    &
+     &                 __LINE__, 'CLIMA(ng)%t_adsG')) RETURN
+#  endif
+# endif
+#endif
+!
+!-----------------------------------------------------------------------
+!  Deallocate derived-type CLIMA structure.
+!-----------------------------------------------------------------------
+!
+      IF (ng.eq.Ngrids) THEN
+        IF (allocated(CLIMA)) deallocate ( CLIMA )
+      END IF
+!
+      RETURN
+      END SUBROUTINE deallocate_clima
+!
       SUBROUTINE initialize_clima (ng, tile)
 !
 !=======================================================================
@@ -702,7 +942,7 @@
 # endif
       END DO
 #endif
-
+!
       RETURN
       END SUBROUTINE initialize_clima
       END MODULE mod_clima
