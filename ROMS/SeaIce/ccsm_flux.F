@@ -944,7 +944,6 @@
           dq_i=Hair(i,j)-Qsati
           fqlat1=rhoAir(i)*Ce*vmag
           qlh_i = fqlat1*le_i*dq_i
-#   endif
 #   ifdef ICE_DIAGS
           lat_ice(i,j) = qlh_i
 #   endif

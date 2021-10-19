@@ -751,14 +751,14 @@
      &        (chs(i,j) + ai(i,j,linew)*wro(i,j) - xtot -               &
      &         (1._r8-ai(i,j,linew))*stflx(i,j,isalt))
             IF (s0mk(i,j) < 0.0) s0mk(i,j) = salt_top(i,j)
-              s0mk(i,j) = MIN(MAX(s0mk(i,j),0._r8),40._r8)
-              t0mk(i,j) = frln*s0mk(i,j)
+            s0mk(i,j) = MIN(MAX(s0mk(i,j),0._r8),40._r8)
+            t0mk(i,j) = frln*s0mk(i,j)
           END IF
 
 #ifdef ICESHELF
           IF (zice(i,j).eq.0.0_r8) THEN
 #endif
-            IF (ai(i,j,linew).LE.min_a(ng)) THEN
+            IF (ai(i,j,linew).le.min_a(ng)) THEN
               stflx(i,j,itemp) = qao_n(i,j)
               fac_sf = 1.0_r8
             ELSE
