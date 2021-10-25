@@ -278,10 +278,6 @@
 #  else
           spd = max(spd,0.15_r8)
 #  endif
-#  ifdef ICE_MOM_BULK
-          utauiw(i,j) = spd
-          chuiw(i,j) = cdiw(ng)*spd
-#  else
           thic = hi(i,j,liold)/MAX(ai(i,j,liold),MAX(min_a(ng),eps))
           z0 = MAX(z0ii*thic,0.01_r8)
           z0 = MIN(z0,0.1_r8)
@@ -291,7 +287,6 @@
           utauiw(i,j) = SQRT(chu_iw(i,j)*spd)
           utauiw(i,j) = MAX(utauiw(i,j),1.E-04_r8)
           chuiw(i,j) = kappa*utauiw(i,j)/LOG(zdz0)
-#  endif
 #  ifdef ICE_SHOREFAST
           hh = h(i,j)+MIN(Zt_avg1(i,j),0.0_r8)
           clear = hh-0.9_r8*hi(i,j,liold)

@@ -1414,73 +1414,73 @@
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Hout(idFsur,1:Ngrids)=Lswitch(1:Ngrids)
 #ifdef ICESHELF
-            CASE ('Hout(idismr)')
-              IF (idismr.eq.0) THEN
-                IF (Master) WRITE (out,280) 'idismr'
+            CASE ('Hout(idIsMr)')
+              IF (idIsMr.eq.0) THEN
+                IF (Master) WRITE (out,280) 'idIsMr'
                 exit_flag=5
                 RETURN
               END IF
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idismr,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Hout(idisTstar)')
-              IF (idisTstar.eq.0) THEN
-                IF (Master) WRITE (out,280) 'idisTstar'
+              Hout(idIsMr,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Hout(idIsTs)')
+              IF (idIsTs.eq.0) THEN
+                IF (Master) WRITE (out,280) 'idIsTs'
                 exit_flag=5
                 RETURN
               END IF
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idisTstar,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Hout(idisUstar)')
-              IF (idisUstar.eq.0) THEN
-                IF (Master) WRITE (out,280) 'idisUstar'
+              Hout(idIsTs,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Hout(idIsUs)')
+              IF (idIsUs.eq.0) THEN
+                IF (Master) WRITE (out,280) 'idIsUs'
                 exit_flag=5
                 RETURN
               END IF
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idisUstar,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Hout(idisTb)')
-              IF (idisTb.eq.0) THEN
-                IF (Master) WRITE (out,280) 'idisTb'
+              Hout(idIsUs,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Hout(idIsTb)')
+              IF (idIsTb.eq.0) THEN
+                IF (Master) WRITE (out,280) 'idIsTb'
                 exit_flag=5
                 RETURN
               END IF
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idisTb,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Hout(idisSb)')
-              IF (idisSb.eq.0) THEN
-                IF (Master) WRITE (out,280) 'idisSb'
+              Hout(idIsTb,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Hout(idIsSb)')
+              IF (idIsSb.eq.0) THEN
+                IF (Master) WRITE (out,280) 'idIsSb'
                 exit_flag=5
                 RETURN
               END IF
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idisSb,1:Ngrids)=Lswitch(1:Ngrids)
+              Hout(idIsSb,1:Ngrids)=Lswitch(1:Ngrids)
 # if defined ICESHELF_MORPH
-            CASE ('Hout(idDraft)')
-              IF (idDraft.eq.0) THEN
-                IF (Master) WRITE (out,280) 'idDraft'
+            CASE ('Hout(idIsDrft)')
+              IF (idIsDrft.eq.0) THEN
+                IF (Master) WRITE (out,280) 'idIsDrft'
                 exit_flag=5
                 RETURN
               END IF
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idDraft,1:Ngrids)=Lswitch(1:Ngrids)
+              Hout(idIsDrft,1:Ngrids)=Lswitch(1:Ngrids)
 # endif
-# if defined SURFACE_OVERFLUX_FIX
-            CASE ('Hout(idssflxSOF)')
-              IF (idssflxSOF.eq.0) THEN
-                IF (Master) WRITE (out,280) 'idssflxSOF'
+# if defined ICESHELF_SOF 
+            CASE ('Hout(idIsSOFs)')
+              IF (idIsSOFs.eq.0) THEN
+                IF (Master) WRITE (out,280) 'idIsSOFs'
                 exit_flag=5
                 RETURN
               END IF
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idssflxSOF,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Hout(idshflxSOF)')
-              IF (idshflxSOF.eq.0) THEN
-                IF (Master) WRITE (out,280) 'idshflxSOF'
+              Hout(idIsSOFs,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Hout(idIsSOFh)')
+              IF (idIsSOFh.eq.0) THEN
+                IF (Master) WRITE (out,280) 'idIsSOFh'
                 exit_flag=5
                 RETURN
               END IF
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idshflxSOF,1:Ngrids)=Lswitch(1:Ngrids)
+              Hout(idIsSOFh,1:Ngrids)=Lswitch(1:Ngrids)
 # endif
 #endif
 #if defined SEDIMENT && defined SED_MORPH
@@ -2403,17 +2403,34 @@
             CASE ('Aout(idFsur)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Aout(idFsur,1:Ngrids)=Lswitch(1:Ngrids)
-# if defined ICESHELF
-            CASE ('Aout(idismr)')
+# ifdef ICESHELF
+            CASE ('Aout(idIsMr)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Aout(idismr,1:Ngrids)=Lswitch(1:Ngrids)
-#  if defined SURFACE_OVERFLUX_FIX
-            CASE ('Aout(idssflxSOF)')
+              Aout(idIsMr,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Aout(idIsTs)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Aout(idssflxSOF,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Aout(idshflxSOF)')
+              Aout(idIsTs,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Aout(idIsUs)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Aout(idshflxSOF,1:Ngrids)=Lswitch(1:Ngrids)
+              Aout(idIsUs,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Aout(idIsTb)')
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Aout(idIsTb,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Aout(idIsSb)')
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Aout(idIsSb,1:Ngrids)=Lswitch(1:Ngrids)
+#  if defined ICESHELF_MORPH
+            CASE ('Aout(idIsDrft)')
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Aout(idIsDrft,1:Ngrids)=Lswitch(1:Ngrids)
+#  endif
+#  if defined ICESHELF_SOF 
+            CASE ('Aout(idIsSOFs)')
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Aout(idIsSOFs,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Aout(idIsSOFh)')
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Aout(idIsSOFh,1:Ngrids)=Lswitch(1:Ngrids)
 #  endif
 # endif
             CASE ('Aout(idu2dE)')
@@ -3720,7 +3737,7 @@
                 sparnam(i:i)=blank
               END DO
               sparnam=TRIM(ADJUSTL(Cval(Nval)))
-# ifdef ICE_MODEL
+# if defined ICE_MODEL || defined ICESHELF
             CASE ('IPARNAM')
               DO i=1,LEN(iparnam)
                 iparnam(i:i)=blank
@@ -5329,35 +5346,33 @@
           IF ((nHIS(ng).gt.0).and.ANY(Hout(:,ng))) THEN
             WRITE (out,'(1x)')
 #if defined ICESHELF
-            IF (Hout(idismr,ng)) WRITE (out,170) Hout(idismr,ng),       &
-     &         'Hout(idismr)',                                          &
+            IF (Hout(idIsMr,ng)) WRITE (out,170) Hout(idIsMr,ng),       &
+     &         'Hout(idIsMr)',                                          &
      &         'Write out ice shelf melt rate.'
-            IF (Hout(idisTb,ng)) WRITE (out,170) Hout(idisTb,ng),       &
-     &         'Hout(idisTb)',                                          &
-     &         'Write out temperature at base of ice shelf.'
-            IF (Hout(idisTstar,ng)) WRITE (out,170) Hout(idisTstar,ng), &
-     &         'Hout(idisTstar)',                                       &
+            IF (Hout(idIsTs,ng)) WRITE (out,170) Hout(idIsTs,ng),       &
+     &         'Hout(idIsTs)',                                          &
      &         'Write out temperature drive force at base of iceshelf.'
-            IF (Hout(idisUstar,ng)) WRITE (out,170) Hout(idisUstar,ng), &
-     &         'Hout(idisUstar)',                                       &
+            IF (Hout(idIsUs,ng)) WRITE (out,170) Hout(idIsUs,ng),       &
+     &         'Hout(idIsUs)',                                          &
      &         'Write out Friction velocity at base of ice shelf.'
-            IF (Hout(idisSb,ng)) WRITE (out,170) Hout(idisSb,ng),       &
-     &         'Hout(idisSb)',                                          &
+            IF (Hout(idIsTb,ng)) WRITE (out,170) Hout(idIsTb,ng),       &
+     &         'Hout(idIsTb)',                                          &
+     &         'Write out temperature at base of ice shelf.'
+            IF (Hout(idIsSb,ng)) WRITE (out,170) Hout(idIsSb,ng),       &
+     &         'Hout(idIsSb)',                                          &
      &         'Write out temperature at base of ice shelf.'
 # if defined ICESHELF_MORPH
-            IF (Hout(idDraft,ng)) WRITE (out,170) Hout(idDraft,ng),     &
-     &         'Hout(idDraft)',                                         &
+            IF (Hout(idIsDrft,ng)) WRITE (out,170) Hout(idIsDrft,ng),   &
+     &         'Hout(idIsDrft)',                                        &
      &         'Write out time-dependent ice draft.'
 # endif
-# if defined SURFACE_OVERFLUX_FIX
-            IF (Hout(idssflxSOF,ng)) WRITE (out,170)                    &
-     &         Hout(idssflxSOF,ng),                                     &
-     &         'Hout(idssflxSOF)',                                      &
-     &         'Write out ice shelf melt rate.'
-            IF (Hout(idshflxSOF,ng)) WRITE (out,170)                    &
-     &         Hout(idshflxSOF,ng),                                     &
-     &         'Hout(idshflxSOF)',                                      &
-     &         'Write out ice shelf melt rate.'
+# if defined ICESHELF_SOF
+            IF (Hout(idIsSOFs,ng)) WRITE (out,170) Hout(idSIsOFs,ng),   &
+     &         'Hout(idIsSOFs)',                                        &
+     &         'Write out surface salt overflux.'
+            IF (Hout(idIsSOFh,ng)) WRITE (out,170) Hout(idIsSOFh,ng),   &
+     &         'Hout(idIsSOFh)',                                        &
+     &         'Write out surface heat overflux.'
 # endif
 #endif
 #if defined SEDIMENT && defined SED_MORPH
@@ -5973,18 +5988,33 @@
      &         'Aout(idFsur)',                                          &
      &         'Write out averaged free-surface.'
 # if defined ICESHELF
-            IF (Aout(idismr,ng)) WRITE (out,170) Aout(idismr,ng),       &
-     &         'Aout(idismr)',                                          &
-     &         'Write out averaged melt rate.'
-#  if defined SURFACE_OVERFLUX_FIX
-            IF (Aout(idssflxSOF,ng)) WRITE (out,170)                    &
-     &         Aout(idssflxSOF,ng),                                     &
-     &         'Aout(idssflxSOF)',                                      &
-     &         'Write out averaged melt rate.'
-            IF (Aout(idshflxSOF,ng)) WRITE (out,170)                    &
-     &         Aout(idshflxSOF,ng),                                     &
-     &         'Aout(idshflxSOF)',                                      &
-     &         'Write out averaged melt rate.'
+            IF (Aout(idIsMr,ng)) WRITE (out,170) Aout(idIsMr,ng),       &
+     &         'Aout(idIsMr)',                                          &
+     &         'Write out averaged ice shelf melt rate.'
+            IF (Aout(idIsTs,ng)) WRITE (out,170) Aout(idIsTs,ng),       &
+     &         'Aout(idIsTs)',                                          &
+     &         'Write out averaged T drive force at base of iceshelf.'
+            IF (Aout(idIsUs,ng)) WRITE (out,170) Aout(idIsUs,ng),       &
+     &         'Aout(idIsUs)',                                          &
+     &         'Write out averaged friction vel at base of ice shelf.'
+            IF (Aout(idIsTb,ng)) WRITE (out,170) Aout(idIsTb,ng),       &
+     &         'Aout(idIsTb)',                                          &
+     &         'Write out averaged temperature at base of ice shelf.'
+            IF (Aout(idIsSb,ng)) WRITE (out,170) Aout(idIsSb,ng),       &
+     &         'Aout(idIsSb)',                                          &
+     &         'Write out averaged salinity at base of ice shelf.'
+#  if defined ICESHELF_MORPH
+            IF (Aout(idIsDrft,ng)) WRITE (out,170) Aout(idIsDrft,ng),   &
+     &         'Aout(idIsDrft)',                                        &
+     &         'Write out averaged ice draft.'
+#  endif
+#  if defined ICESHELF_SOF
+            IF (Aout(idIsSOFs,ng)) WRITE (out,170) Aout(idSIsOFs,ng),   &
+     &         'Aout(idIsSOFs)',                                        &
+     &         'Write out averaged surface salt overflux.'
+            IF (Aout(idIsSOFh,ng)) WRITE (out,170) Aout(idIsSOFh,ng),   &
+     &         'Aout(idIsSOFh)',                                        &
+     &         'Write out averaged surface heat overflux.'
 #  endif
 # endif
             IF (Aout(idUbar,ng)) WRITE (out,170) Aout(idUbar,ng),       &
@@ -6966,7 +6996,7 @@
         END IF
 # endif
 #endif
-#ifdef ICE_MODEL
+#if defined ICE_MODEL || defined ICESHELF
         fname=iparnam
         IF (.not.find_file(ng, out, fname, 'IPARNAM')) THEN
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN

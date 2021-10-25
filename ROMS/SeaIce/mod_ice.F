@@ -32,7 +32,7 @@
           real(r8), pointer :: hi(:,:,:)
           real(r8), pointer :: hsn(:,:,:)
           real(r8), pointer :: ageice(:,:,:)
-          real(r8), pointer :: io_mflux(:,:)
+          real(r8), pointer :: iomflx(:,:)
           real(r8), pointer :: wfr(:,:)
           real(r8), pointer :: wai(:,:)
           real(r8), pointer :: wao(:,:)
@@ -126,7 +126,7 @@
       Dmem(ng)=Dmem(ng)+size2d*2
       allocate ( ICE(ng) % ageice(LBi:UBi,LBj:UBj,2) )
       Dmem(ng)=Dmem(ng)+size2d*2
-      allocate ( ICE(ng) % io_mflux(LBi:UBi,LBj:UBj) )
+      allocate ( ICE(ng) % iomflx(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( ICE(ng) % wfr(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
@@ -257,8 +257,8 @@
       IF (.not.destroy(ng, ICE(ng)%ageice, MyFile,                      &
      &                 __LINE__, 'ICE(ng)%ageice')) RETURN
 
-      IF (.not.destroy(ng, ICE(ng)%io_mflux, MyFile,                    &
-     &                 __LINE__, 'ICE(ng)%io_mflux')) RETURN
+      IF (.not.destroy(ng, ICE(ng)%iomflx, MyFile,                    &
+     &                 __LINE__, 'ICE(ng)%iomflx')) RETURN
 
       IF (.not.destroy(ng, ICE(ng)%wfr, MyFile,                         &
      &                 __LINE__, 'ICE(ng)%wfr')) RETURN
@@ -454,7 +454,7 @@
           ICE(ng) % hsn(i,j,2) = IniVal
           ICE(ng) % ageice(i,j,1) = IniVal
           ICE(ng) % ageice(i,j,2) = IniVal
-          ICE(ng) % io_mflux(i,j) = IniVal
+          ICE(ng) % iomflx(i,j) = IniVal
           ICE(ng) % wfr(i,j) = IniVal
           ICE(ng) % wai(i,j) = IniVal
           ICE(ng) % wao(i,j) = IniVal

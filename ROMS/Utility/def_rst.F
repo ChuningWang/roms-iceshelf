@@ -665,40 +665,35 @@
         status=def_var(ng, iNLM, RST(ng)%ncid, varid, nf90_int,         &
      &                 1, (/recdim/), Aval, Vinfo, ncname,              &
      &                 SetParAccess = .FALSE.)
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                   __FILE__)) RETURN
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 
         Vinfo( 1)='liunw'
         Vinfo( 2)='ice equations time level index, liunw'
         status=def_var(ng, iNLM, RST(ng)%ncid, varid, nf90_int,         &
      &                 1, (/recdim/), Aval, Vinfo, ncname,              &
      &                 SetParAccess = .FALSE.)
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                   __FILE__)) RETURN
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 
         Vinfo( 1)='liuol'
         Vinfo( 2)='ice equations time level index, liuol'
         status=def_var(ng, iNLM, RST(ng)%ncid, varid, nf90_int,         &
      &                 1, (/recdim/), Aval, Vinfo, ncname,              &
      &                 SetParAccess = .FALSE.)
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                   __FILE__)) RETURN
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 
         Vinfo( 1)='lienw'
         Vinfo( 2)='ice equations time level index, lienw'
         status=def_var(ng, iNLM, RST(ng)%ncid, varid, nf90_int,         &
      &                 1, (/recdim/), Aval, Vinfo, ncname,              &
      &                 SetParAccess = .FALSE.)
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                   __FILE__)) RETURN
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 
         Vinfo( 1)='lieol'
         Vinfo( 2)='ice equations time level index, lieol'
         status=def_var(ng, iNLM, RST(ng)%ncid, varid, nf90_int,         &
      &                 1, (/recdim/), Aval, Vinfo, ncname,              &
      &                 SetParAccess = .FALSE.)
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                 __FILE__)) RETURN
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 # endif
 #endif
 !
@@ -779,64 +774,6 @@
      &                 NF_FRST, nvd3, sv2dgrd, Aval, Vinfo, ncname,     &
      &                 SetFillVal = .FALSE.)
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-#endif
-#ifdef ICESHELF
-# ifdef ICESHELF_MORPH
-!
-!  Define time-varying ice draft.
-!
-        Vinfo( 1)=Vname(1,idDraft)
-        Vinfo( 2)=Vname(2,idDraft)
-        Vinfo( 3)=Vname(3,idDraft)
-        Vinfo(14)=Vname(4,idDraft)
-        Vinfo(16)=Vname(1,idtime)
-#  if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_rho'
-#  endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idDraft,ng),r8)
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idDraft),    &
-     &                 NF_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname,      &
-     &                 SetFillVal = .FALSE.)
-        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-# endif
-# ifdef ICESHELF_TRACER
-!
-!  Define iceshelf volume and integrated tracer.
-!
-        Vinfo( 1)=Vname(1,idIvol)
-        Vinfo( 2)=Vname(2,idIvol)
-        Vinfo( 3)=Vname(3,idIvol)
-        Vinfo(14)=Vname(4,idIvol)
-        Vinfo(16)=Vname(1,idtime)
-#  if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_rho'
-#  endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idIvol,ng),r8)
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIvol),     &
-     &                 NF_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname,      &
-     &                 SetFillVal = .FALSE.)
-        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-!
-        DO itrc=NAT+1,NT(ng)
-          Vinfo( 1)=Vname(1,idItrc(itrc))
-          Vinfo( 2)=Vname(2,idItrc(itrc))
-          Vinfo( 3)=Vname(3,idItrc(itrc))
-          Vinfo(14)=Vname(4,idItrc(itrc))
-          Vinfo(16)=Vname(1,idtime)
-#  if defined WRITE_WATER && defined MASKING
-          Vinfo(20)='mask_rho'
-#  endif
-          Vinfo(22)='coordinates'
-          Aval(5)=REAL(r3dvar,r8)
-          status=def_var(ng, iNLM, RST(ng)%ncid,                        &
-     &                   RST(ng)%Vid(idItrc(itrc)),                     &
-     &                   NF_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
-     &                   SetFillVal = .FALSE.)
-          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-        END DO
-# endif
 #endif
 #if defined SEDIMENT && defined SED_MORPH
 !
@@ -1157,69 +1094,6 @@
 # endif
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END DO
-# if defined PERFECT_RESTART && defined ICE_MODEL
-!
-!  Define surface active tracer fluxes.
-!
-        DO itrc=1,NAT
-          Vinfo( 1)=Vname(1,idTsur(itrc))
-          Vinfo( 2)=Vname(2,idTsur(itrc))
-          Vinfo( 3)=Vname(3,idTsur(itrc))
-          IF (itrc.eq.itemp) THEN
-            Vinfo(11)='upward flux, cooling'
-            Vinfo(12)='downward flux, heating'
-          ELSE IF (itrc.eq.isalt) THEN
-            Vinfo(11)='upward flux, freshening (net precipitation)'
-            Vinfo(12)='downward flux, salting (net evaporation)'
-          END IF
-          Vinfo(14)=Vname(4,idTsur(itrc))
-          Vinfo(16)=Vname(1,idtime)
-#  if defined WRITE_WATER && defined MASKING
-          Vinfo(20)='mask_rho'
-#  endif
-          Vinfo(22)='coordinates'
-          Aval(5)=REAL(Iinfo(1,idTsur(itrc),ng),r8)
-          status=def_var(ng, iNLM, RST(ng)%ncid,                        &
-     &                   RST(ng)%Vid(idTsur(itrc)), NF_FRST,            &
-     &                   nvd3, sr2dgrd, Aval, Vinfo, ncname)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &                   __FILE__)) RETURN
-        END DO
-!
-!  Define surface U-momentum stress.
-!
-        Vinfo( 1)=Vname(1,idUsms)
-        Vinfo( 2)=Vname(2,idUsms)
-        Vinfo( 3)=Vname(3,idUsms)
-        Vinfo(14)=Vname(4,idUsms)
-        Vinfo(16)=Vname(1,idtime)
-#  if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_u'
-#  endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idUsms,ng),r8)
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idUsms),     &
-     &                   NF_FRST, nvd3, su2dgrd, Aval, Vinfo, ncname)
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                   __FILE__)) RETURN
-!
-!  Define surface V-momentum stress.
-!
-        Vinfo( 1)=Vname(1,idVsms)
-        Vinfo( 2)=Vname(2,idVsms)
-        Vinfo( 3)=Vname(3,idVsms)
-        Vinfo(14)=Vname(4,idVsms)
-        Vinfo(16)=Vname(1,idtime)
-#  if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_v'
-#  endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idVsms,ng),r8)
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idVsms),     &
-     &                   NF_FRST, nvd3, sv2dgrd, Aval, Vinfo, ncname)
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                   __FILE__)) RETURN
-# endif
 !
 !  Define density anomaly.
 !
@@ -1610,314 +1484,6 @@
 # endif
 #endif
 
-#ifdef ICE_MODEL
-!
-!  Define 2D ice momentum in the XI-direction.
-!
-        Vinfo( 1)=Vname(1,idUice)
-        Vinfo( 2)=Vname(2,idUice)
-        Vinfo( 3)=Vname(3,idUice)
-        Vinfo(14)=Vname(4,idUice)
-        Vinfo(16)=Vname(1,idtime)
-# if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_u'
-# endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idUice,ng),r8)
-# ifdef PERFECT_RESTART
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idUice),     &
-     &                 NF_FRST, nvd4, ru2dgrd, Aval, Vinfo, ncname)
-# else
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idUice),     &
-     &                 NF_FRST, nvd3, u2dgrd, Aval, Vinfo, ncname)
-# endif
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                 __FILE__)) RETURN
-!
-!  Define 2D ice momentum in the ETA-direction.
-!
-        Vinfo( 1)=Vname(1,idVice)
-        Vinfo( 2)=Vname(2,idVice)
-        Vinfo( 3)=Vname(3,idVice)
-        Vinfo(14)=Vname(4,idVice)
-        Vinfo(16)=Vname(1,idtime)
-# if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_v'
-# endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idVice,ng),r8)
-# ifdef PERFECT_RESTART
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idVice),     &
-     &                 NF_FRST, nvd4, rv2dgrd, Aval, Vinfo, ncname)
-# else
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idVice),     &
-     &                 NF_FRST, nvd3, v2dgrd, Aval, Vinfo, ncname)
-# endif
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                 __FILE__)) RETURN
-!
-!  Define ice concentration.
-!
-        Vinfo( 1)=Vname(1,idAice)
-        Vinfo( 2)=Vname(2,idAice)
-        Vinfo( 3)=Vname(3,idAice)
-        Vinfo(14)=Vname(4,idAice)
-        Vinfo(16)=Vname(1,idtime)
-# if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_rho'
-# endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idAice,ng),r8)
-# ifdef PERFECT_RESTART
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idAice),     &
-     &                 NF_FRST, nvd4, r2dgrd, Aval, Vinfo, ncname)
-# else
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idAice),     &
-     &                 NF_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname)
-# endif
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                 __FILE__)) RETURN
-!
-!  Define ice average thickness.
-!
-        Vinfo( 1)=Vname(1,idHice)
-        Vinfo( 2)=Vname(2,idHice)
-        Vinfo( 3)=Vname(3,idHice)
-        Vinfo(14)=Vname(4,idHice)
-        Vinfo(16)=Vname(1,idtime)
-# if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_rho'
-# endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idHice,ng),r8)
-# ifdef PERFECT_RESTART
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idHice),     &
-     &                 NF_FRST, nvd4, r2dgrd, Aval, Vinfo, ncname)
-# else
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idHice),     &
-     &                 NF_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname)
-# endif
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                   __FILE__)) RETURN
-!
-!  Define ice/snow surface temperature.
-!
-        Vinfo( 1)=Vname(1,idTice)
-        Vinfo( 2)=Vname(2,idTice)
-        Vinfo( 3)=Vname(3,idTice)
-        Vinfo(14)=Vname(4,idTice)
-        Vinfo(16)=Vname(1,idtime)
-# if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_rho'
-# endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idTice,ng),r8)
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idTice),     &
-     &                 NF_FRST, nvd3, sr2dgrd, Aval, Vinfo, ncname)
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                   __FILE__)) RETURN
-!
-!  Define snow thickness.
-!
-        Vinfo( 1)=Vname(1,idHsno)
-        Vinfo( 2)=Vname(2,idHsno)
-        Vinfo( 3)=Vname(3,idHsno)
-        Vinfo(14)=Vname(4,idHsno)
-        Vinfo(16)=Vname(1,idtime)
-# if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_rho'
-# endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idHsno,ng),r8)
-# ifdef PERFECT_RESTART
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idHsno),     &
-     &                 NF_FRST, nvd4, r2dgrd, Aval, Vinfo, ncname)
-# else
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idHsno),     &
-     &                 NF_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname)
-# endif
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                   __FILE__)) RETURN
-!
-!  Define ice age.
-!
-        Vinfo( 1)=Vname(1,idAgeice)
-        Vinfo( 2)=Vname(2,idAgeice)
-        Vinfo( 3)=Vname(3,idAgeice)
-        Vinfo(14)=Vname(4,idAgeice)
-        Vinfo(16)=Vname(1,idtime)
-# if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_rho'
-# endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idAgeice,ng),r8)
-# ifdef PERFECT_RESTART
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idAgeice),   &
-     &                 NF_FRST, nvd4, r2dgrd, Aval, Vinfo, ncname)
-# else
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idAgeice),   &
-     &                 NF_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname)
-# endif
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                   __FILE__)) RETURN
-!
-!  Define ice internal temperature.
-!
-        Vinfo( 1)=Vname(1,idTimid)
-        Vinfo( 2)=Vname(2,idTimid)
-        Vinfo( 3)=Vname(3,idTimid)
-        Vinfo(14)=Vname(4,idTimid)
-        Vinfo(16)=Vname(1,idtime)
-# if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_rho'
-# endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idTimid,ng),r8)
-# ifdef PERFECT_RESTART
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idTimid),    &
-     &                 NF_FRST, nvd4, r2dgrd, Aval, Vinfo, ncname)
-# else
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idTimid),    &
-     &                 NF_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname)
-# endif
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                   __FILE__)) RETURN
-!
-!  Define internal ice stress component 11.
-!
-        Vinfo( 1)=Vname(1,idSig11)
-        Vinfo( 2)=Vname(2,idSig11)
-        Vinfo( 3)=Vname(3,idSig11)
-        Vinfo(14)=Vname(4,idSig11)
-        Vinfo(16)=Vname(1,idtime)
-# if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_rho'
-# endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idSig11,ng),r8)
-# ifdef PERFECT_RESTART
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idSig11),    &
-     &                 NF_FRST, nvd4, r2dgrd, Aval, Vinfo, ncname)
-# else
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idSig11),    &
-     &                 NF_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname)
-# endif
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                   __FILE__)) RETURN
-!
-!  Define internal ice stress component 22.
-!
-        Vinfo( 1)=Vname(1,idSig22)
-        Vinfo( 2)=Vname(2,idSig22)
-        Vinfo( 3)=Vname(3,idSig22)
-        Vinfo(14)=Vname(4,idSig22)
-        Vinfo(16)=Vname(1,idtime)
-# if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_rho'
-# endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idSig22,ng),r8)
-# ifdef PERFECT_RESTART
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idSig22),    &
-     &                 NF_FRST, nvd4, r2dgrd, Aval, Vinfo, ncname)
-# else
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idSig22),    &
-     &                 NF_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname)
-# endif
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                   __FILE__)) RETURN
-!
-!  Define internal ice stress component 12.
-!
-        Vinfo( 1)=Vname(1,idSig12)
-        Vinfo( 2)=Vname(2,idSig12)
-        Vinfo( 3)=Vname(3,idSig12)
-        Vinfo(14)=Vname(4,idSig12)
-        Vinfo(16)=Vname(1,idtime)
-# if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_rho'
-# endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idSig12,ng),r8)
-# ifdef PERFECT_RESTART
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idSig12),    &
-     &                 NF_FRST, nvd4, r2dgrd, Aval, Vinfo, ncname)
-# else
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idSig12),    &
-     &                 NF_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname)
-# endif
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                   __FILE__)) RETURN
-!
-!  Define ice-water friction velocity.
-!
-        Vinfo( 1)=Vname(1,idTauiw)
-        Vinfo( 2)=Vname(2,idTauiw)
-        Vinfo( 3)=Vname(3,idTauiw)
-        Vinfo(14)=Vname(4,idTauiw)
-        Vinfo(16)=Vname(1,idtime)
-# if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_rho'
-# endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idTauiw,ng),r8)
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idTauiw),    &
-     &                 NF_FRST, nvd3, sr2dgrd, Aval, Vinfo, ncname)
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                   __FILE__)) RETURN
-!
-!  Define ice-water momentum transfer coefficient.
-!
-        Vinfo( 1)=Vname(1,idChuiw)
-        Vinfo( 2)=Vname(2,idChuiw)
-        Vinfo( 3)=Vname(3,idChuiw)
-        Vinfo(14)=Vname(4,idChuiw)
-        Vinfo(16)=Vname(1,idtime)
-# if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_rho'
-# endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idChuiw,ng),r8)
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idChuiw),    &
-     &                 NF_FRST, nvd3, sr2dgrd, Aval, Vinfo, ncname)
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                   __FILE__)) RETURN
-!
-!  Define salinity of molecular sub-layer under ice.
-!
-        Vinfo( 1)=Vname(1,idS0mk)
-        Vinfo( 2)=Vname(2,idS0mk)
-        Vinfo( 3)=Vname(3,idS0mk)
-        Vinfo(14)=Vname(4,idS0mk)
-        Vinfo(16)=Vname(1,idtime)
-# if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_rho'
-# endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idS0mk,ng),r8)
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idS0mk),     &
-     &                 NF_FRST, nvd3, sr2dgrd, Aval, Vinfo, ncname)
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                   __FILE__)) RETURN
-!
-!  Define temperature of molecular sub-layer under ice.
-!
-        Vinfo( 1)=Vname(1,idT0mk)
-        Vinfo( 2)=Vname(2,idT0mk)
-        Vinfo( 3)=Vname(3,idT0mk)
-        Vinfo(14)=Vname(4,idT0mk)
-        Vinfo(16)=Vname(1,idtime)
-# if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_rho'
-# endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idT0mk,ng),r8)
-        status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idT0mk),     &
-     &                 NF_FRST, nvd3, sr2dgrd, Aval, Vinfo, ncname)
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &                   __FILE__)) RETURN
-#endif
-
 #ifdef NEARSHORE_MELLOR
 !
 !  Define 2D u-stokes velocity.
@@ -2007,6 +1573,8 @@
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 # endif
 #endif
+
+#include "def_rst_ice.h"
 !
 !-----------------------------------------------------------------------
 !  Leave definition mode.
@@ -2065,26 +1633,6 @@
           IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idtime))) THEN
             got_var(idtime)=.TRUE.
             RST(ng)%Vid(idtime)=var_id(i)
-#if defined PERFECT_RESTART && defined ICE_MODEL
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idUsms))) THEN
-            got_var(idUsms)=.TRUE.
-            RST(ng)%Vid(idUsms)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idVsms))) THEN
-            got_var(idVsms)=.TRUE.
-            RST(ng)%Vid(idVsms)=var_id(i)
-#endif
-#ifdef ICESHELF
-# ifdef ICESHELF_MORPH
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idDraft))) THEN
-            got_var(idDraft)=.TRUE.
-            RST(ng)%Vid(idDraft)=var_id(i)
-# endif
-# ifdef ICESHELF_TRACER
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIvol))) THEN
-            got_var(idIvol)=.TRUE.
-            RST(ng)%Vid(idIvol)=var_id(i)
-# endif
-#endif
 #if defined SEDIMENT && defined SED_MORPH
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idbath))) THEN
             got_var(idbath)=.TRUE.
@@ -2217,22 +1765,6 @@
 # endif
 #endif
           END IF
-#if defined PERFECT_RESTART && defined ICE_MODEL
-          DO itrc=1,NAT
-            IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idTsur(itrc)))) THEN
-              got_var(idTsur(itrc))=.TRUE.
-              RST(ng)%Vid(idTsur(itrc))=var_id(i)
-            END IF
-          END DO
-#endif
-#if defined ICESHELF && defined ICESHELF_TRACER
-          DO itrc=NAT+1,NT(ng)
-            IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idItrc(itrc)))) THEN
-              got_var(idItrc(itrc))=.TRUE.
-              RST(ng)%Vid(idItrc(itrc))=var_id(i)
-            END IF
-          END DO
-#endif
 #ifdef SOLVE3D
           DO itrc=1,NT(ng)
             IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idTvar(itrc)))) THEN
@@ -2278,54 +1810,6 @@
           END DO
 # endif
 #endif
-#ifdef ICE_MODEL
-          IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idUice))) THEN
-            got_var(idUice)=.TRUE.
-            RST(ng)%Vid(idUice)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idVice))) THEN
-            got_var(idVice)=.TRUE.
-            RST(ng)%Vid(idVice)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idAice))) THEN
-            got_var(idAice)=.TRUE.
-            RST(ng)%Vid(idAice)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idHice))) THEN
-            got_var(idHice)=.TRUE.
-            RST(ng)%Vid(idHice)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idTice))) THEN
-            got_var(idTice)=.TRUE.
-            RST(ng)%Vid(idTice)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idHsno))) THEN
-            got_var(idHsno)=.TRUE.
-            RST(ng)%Vid(idHsno)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idAgeice))) THEN
-            got_var(idAgeice)=.TRUE.
-            RST(ng)%Vid(idAgeice)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idTimid))) THEN
-            got_var(idTimid)=.TRUE.
-            RST(ng)%Vid(idTimid)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idSig11))) THEN
-            got_var(idSig11)=.TRUE.
-            RST(ng)%Vid(idSig11)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idSig22))) THEN
-            got_var(idSig22)=.TRUE.
-            RST(ng)%Vid(idSig22)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idSig12))) THEN
-            got_var(idSig12)=.TRUE.
-            RST(ng)%Vid(idSig12)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idTauiw))) THEN
-            got_var(idTauiw)=.TRUE.
-            RST(ng)%Vid(idTauiw)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idChuiw))) THEN
-            got_var(idChuiw)=.TRUE.
-            RST(ng)%Vid(idChuiw)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idS0mk))) THEN
-            got_var(idS0mk)=.TRUE.
-            RST(ng)%Vid(idS0mk)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idT0mk))) THEN
-            got_var(idT0mk)=.TRUE.
-            RST(ng)%Vid(idT0mk)=var_id(i)
-          END IF
-#endif
         END DO
 !
 !  Check if initialization variables are available in input NetCDF
@@ -2337,32 +1821,6 @@
           exit_flag=3
           RETURN
         END IF
-#ifdef ICESHELF
-# ifdef ICESHELF_MORPH
-        IF (.not.got_var(idDraft)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idDraft)),         &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
-# endif
-# ifdef ICESHELF_TRACER
-        IF (.not.got_var(idIvol)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idIvol)),          &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
-        DO itrc=NAT+1,NT(ng)
-          IF (.not.got_var(idItrc(itrc))) THEN
-            IF (Master) WRITE (stdout,60) TRIM(Vname(1,idItrc(itrc))),  &
-     &                                    TRIM(ncname)
-            exit_flag=3
-            RETURN
-          END IF
-        END DO
-# endif
-#endif
 #if defined SEDIMENT && defined SED_MORPH
         IF (.not.got_var(idbath)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idbath)),          &
@@ -2596,98 +2054,8 @@
         END DO
 # endif
 #endif
-#ifdef ICE_MODEL
-        IF (.not.got_var(idUice)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idUice)),          &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
-        IF (.not.got_var(idVice)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idVice)),          &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
-        IF (.not.got_var(idAice)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idAice)),          &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
-        IF (.not.got_var(idHice)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idHice)),          &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
-        IF (.not.got_var(idTice)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idTice)),          &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
-        IF (.not.got_var(idHsno)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idHsno)),          &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
-        IF (.not.got_var(idAgeice)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idAgeice)),        &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
-        IF (.not.got_var(idTimid)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idTimid)),         &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
-        IF (.not.got_var(idSig11)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idSig11)),         &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
-        IF (.not.got_var(idSig22)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idSig22)),         &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
-        IF (.not.got_var(idSig12)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idSig12)),         &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
-        IF (.not.got_var(idTauiw)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idTauiw)),         &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
-        IF (.not.got_var(idChuiw)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idChuiw)),         &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
-        IF (.not.got_var(idS0mk)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idS0mk)),          &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
-        IF (.not.got_var(idT0mk)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idT0mk)),          &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
-#endif
+
+#include "def_rst_check_ice.h"
 !
 !  Set unlimited time record dimension to current value.
 !
@@ -3281,6 +2649,49 @@
      &                 1, (/recdim/), Aval, Vinfo, ncname,              &
      &                 SetParAccess = .TRUE.)
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+# ifdef ICE_MODEL
+        Vinfo( 1)='linew'
+        Vinfo( 2)='ice equations time level index, linew'
+        status=def_var(ng, iNLM, RST(ng)%pioFile, varDesc, PIO_int,     &
+     &                 1, (/recdim/), Aval, Vinfo, ncname,              &
+     &                 SetParAccess = .FALSE.)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+
+        Vinfo( 1)='liold'
+        Vinfo( 2)='ice equations time level index, liold'
+        status=def_var(ng, iNLM, RST(ng)%pioFile, varDesc, PIO_int,     &
+     &                 1, (/recdim/), Aval, Vinfo, ncname,              &
+     &                 SetParAccess = .FALSE.)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+
+        Vinfo( 1)='liunw'
+        Vinfo( 2)='ice equations time level index, liunw'
+        status=def_var(ng, iNLM, RST(ng)%pioFile, varDesc, PIO_int,     &
+     &                 1, (/recdim/), Aval, Vinfo, ncname,              &
+     &                 SetParAccess = .FALSE.)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+
+        Vinfo( 1)='liuol'
+        Vinfo( 2)='ice equations time level index, liuol'
+        status=def_var(ng, iNLM, RST(ng)%pioFile, varDesc, PIO_int,     &
+     &                 1, (/recdim/), Aval, Vinfo, ncname,              &
+     &                 SetParAccess = .FALSE.)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+
+        Vinfo( 1)='lienw'
+        Vinfo( 2)='ice equations time level index, lienw'
+        status=def_var(ng, iNLM, RST(ng)%pioFile, varDesc, PIO_int,     &
+     &                 1, (/recdim/), Aval, Vinfo, ncname,              &
+     &                 SetParAccess = .FALSE.)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+
+        Vinfo( 1)='lieol'
+        Vinfo( 2)='ice equations time level index, lieol'
+        status=def_var(ng, iNLM, RST(ng)%pioFile, varDesc, PIO_int,     &
+     &                 1, (/recdim/), Aval, Vinfo, ncname,              &
+     &                 SetParAccess = .FALSE.)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+# endif
 #endif
 !
 !  Define model time.
@@ -3380,75 +2791,6 @@
      &                 PIO_FRST, nvd3, sv2dgrd, Aval, Vinfo, ncname,    &
      &                 SetFillVal = .FALSE.)
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-#endif
-#ifdef ICESHELF
-# ifdef ICESHELF_MORPH
-!
-!  Define time-varying ice draft.
-!
-        Vinfo( 1)=Vname(1,idDraft)
-        Vinfo( 2)=Vname(2,idDraft)
-        Vinfo( 3)=Vname(3,idDraft)
-        Vinfo(14)=Vname(4,idDraft)
-        Vinfo(16)=Vname(1,idtime)
-#  if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_rho'
-#  endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idDraft,ng),r8)
-        RST(ng)%pioVar(idDraft)%dkind=PIO_FRST
-        RST(ng)%pioVar(idDraft)%gtype=r2dvar
-!
-        status=def_var(ng, iNLM, RST(ng)%pioFile,                       &
-     &                 RST(ng)%pioVar(idDraft)%vd,                      &
-     &                 PIO_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname,     &
-     &                 SetFillVal = .FALSE.)
-        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-# endif
-# ifdef ICESHELF_TRACER
-!
-!  Define iceshelf volume and integrated tracer.
-!
-        Vinfo( 1)=Vname(1,idIvol)
-        Vinfo( 2)=Vname(2,idIvol)
-        Vinfo( 3)=Vname(3,idIvol)
-        Vinfo(14)=Vname(4,idIvol)
-        Vinfo(16)=Vname(1,idtime)
-#  if defined WRITE_WATER && defined MASKING
-        Vinfo(20)='mask_rho'
-#  endif
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(Iinfo(1,idIvol,ng),r8)
-        RST(ng)%pioVar(idIvol)%dkind=PIO_FRST
-        RST(ng)%pioVar(idIvol)%gtype=r2dvar
-!
-        status=def_var(ng, iNLM, RST(ng)%pioFile,                       &
-     &                 RST(ng)%pioVar(idIvol)%vd,                       &
-     &                 PIO_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname,     &
-     &                 SetFillVal = .FALSE.)
-        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-!
-        DO itrc=NAT+1,NT(ng)
-          Vinfo( 1)=Vname(1,idItrc(itrc))
-          Vinfo( 2)=Vname(2,idItrc(itrc))
-          Vinfo( 3)=Vname(3,idItrc(itrc))
-          Vinfo(14)=Vname(4,idItrc(itrc))
-          Vinfo(16)=Vname(1,idtime)
-#  if defined WRITE_WATER && defined MASKING
-          Vinfo(20)='mask_rho'
-#  endif
-          Vinfo(22)='coordinates'
-          Aval(5)=REAL(r2dvar,r8)
-          RST(ng)%pioVar(idItrc(itrc))%dkind=PIO_FRST
-          RST(ng)%pioVar(idItrc(itrc))%gtype=r2dvar
-!
-          status=def_var(ng, iNLM, RST(ng)%pioFile,                     &
-     &                   RST(ng)%pioVar(idItrc(itrc))%vd,               &
-     &                   PIO_FRST, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
-     &                   SetFillVal = .FALSE.)
-          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-        END DO
-# endif
 #endif
 #if defined SEDIMENT && defined SED_MORPH
 !
@@ -4382,6 +3724,8 @@
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 # endif
 #endif
+
+#include "pio_def_rst_ice.h"
 !
 !-----------------------------------------------------------------------
 !  Leave definition mode.
@@ -4442,22 +3786,6 @@
             RST(ng)%pioVar(idtime)%vd=var_desc(i)
             RST(ng)%pioVar(idtime)%dkind=PIO_TOUT
             RST(ng)%pioVar(idtime)%gtype=0
-#ifdef ICESHELF
-# ifdef ICESHELF_MORPH
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idDraft))) THEN
-            got_var(idDraft)=.TRUE.
-            RST(ng)%pioVar(idDraft)%vd=var_desc(i)
-            RST(ng)%pioVar(idDraft)%dkind=PIO_FRST
-            RST(ng)%pioVar(idDraft)%gtype=r2dvar
-# endif
-# ifdef ICESHELF_TRACER
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIvol))) THEN
-            got_var(idIvol)=.TRUE.
-            RST(ng)%pioVar(idIvol)%vd=var_desc(i)
-            RST(ng)%pioVar(idIvol)%dkind=PIO_FRST
-            RST(ng)%pioVar(idIvol)%gtype=r2dvar
-# endif
-#endif
 #if defined SEDIMENT && defined SED_MORPH
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idbath))) THEN
             got_var(idbath)=.TRUE.
@@ -4654,16 +3982,6 @@
 # endif
 #endif
           END IF
-#if defined ICESHELF && defined ICESHELF_TRACER
-          DO itrc=NAT+1,NT(ng)
-            IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idItrc(itrc)))) THEN
-              got_var(idItrc(itrc))=.TRUE.
-              RST(ng)%pioVar(idItrc(itrc))%vd=var_desc(i)
-              RST(ng)%pioVar(idItrc(itrc))%dkind=PIO_FRST
-              RST(ng)%pioVar(idItrc(itrc))%gtype=r2dvar
-            END IF
-          END DO
-#endif
 #ifdef SOLVE3D
           DO itrc=1,NT(ng)
             IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idTvar(itrc)))) THEN
@@ -4734,32 +4052,6 @@
           exit_flag=3
           RETURN
         END IF
-#ifdef ICESHELF
-# ifdef ICESHELF_MORPH
-        IF (.not.got_var(idDraft)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idDraft)),         &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
-# endif
-# ifdef ICESHELF_TRACER
-        IF (.not.got_var(idIvol)) THEN
-          IF (Master) WRITE (stdout,40) TRIM(Vname(1,idIvol)),          &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
-        DO itrc=NAT+1,NT(ng)
-          IF (.not.got_var(idItrc(itrc))) THEN
-            IF (Master) WRITE (stdout,60) TRIM(Vname(1,idItrc(itrc))),  &
-     &                                    TRIM(ncname)
-            exit_flag=3
-            RETURN
-          END IF
-        END DO
-# endif
-#endif
 #if defined SEDIMENT && defined SED_MORPH
         IF (.not.got_var(idbath)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idbath)),          &
@@ -4993,6 +4285,8 @@
         END DO
 # endif
 #endif
+
+#include "pio_def_rst_check_ice.h"
 !
 !  Set unlimited time record dimension to current value.
 !

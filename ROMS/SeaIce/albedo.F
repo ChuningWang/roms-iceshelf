@@ -1,6 +1,6 @@
 #include "cppdefs.h"
       MODULE albedo_mod
-#if defined ICE_ALBEDO && !defined ICE_ALB_FILE && !defined ANA_ALBEDO
+#if defined ICE_ALBEDO && !defined ICE_ALB_FILE
 !
 !svn $Id$
 !================================================== Hernan G. Arango ===
@@ -27,9 +27,7 @@
       USE mod_param
       USE mod_forces
       USE mod_grid
-# ifdef ICE_MODEL
       USE mod_ice
-# endif
       USE mod_stepping
 !
 !  Imported variable declarations.
@@ -46,26 +44,22 @@
       CALL albedo_tile (ng, tile,                                       &
      &                  LBi, UBi, LBj, UBj,                             &
      &                  IminS, ImaxS, JminS, JmaxS,                     &
-# ifdef ICE_MODEL
      &                  liold(ng),                                      &
      &                  linew(ng),                                      &
-# endif
 # ifdef ICE_ALB_CURVE
      &                  GRID(ng) % latr,                                &
 # endif
-# ifdef ICE_MODEL
      &                  ICE(ng) % ai,                                   &
      &                  ICE(ng) % hi,                                   &
-     &                  FORCES(ng) % albedo_ice,                        &
-#  ifdef ICE_THERMO
+     &                  FORCES(ng) % alb_i,                             &
+# ifdef ICE_THERMO
      &                  ICE(ng) % hsn,                                  &
      &                  ICE(ng) % tis,                                  &
-#  endif
-#  ifdef ICE_ALB_CSIM
-     &                  FORCES(ng) % frswpen,                           &
-#  endif
 # endif
-     &                  FORCES(ng) % albedo)
+# ifdef ICE_ALB_CSIM
+     &                  FORCES(ng) % frswpen,                           &
+# endif
+     &                  FORCES(ng) % alb)
 # ifdef PROFILE
       CALL wclock_off (ng, iNLM, 17, __LINE__, __FILE__)
 # endif
@@ -76,22 +70,18 @@
       SUBROUTINE albedo_tile (ng, tile,                                 &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        IminS, ImaxS, JminS, JmaxS,               &
-# ifdef ICE_MODEL
      &                        liold, linew,                             &
-# endif
 # ifdef ICE_ALB_CURVE
      &                        latr,                                     &
 # endif
-# ifdef ICE_MODEL
-     &                        ai, hi, albedo_ice,                       &
-#  ifdef ICE_THERMO
+     &                        ai, hi, alb_i,                            &
+# ifdef ICE_THERMO
      &                        hsn, tis,                                 &
-#  endif
-#  ifdef ICE_ALB_CSIM
-     &                        frswpen,                                  &
-#  endif
 # endif
-     &                        albedo)
+# ifdef ICE_ALB_CSIM
+     &                        frswpen,                                  &
+# endif
+     &                        alb)
 !***********************************************************************
 !
       USE mod_param
@@ -107,46 +97,40 @@
       integer, intent(in) :: ng, tile
       integer, intent(in) :: LBi, UBi, LBj, UBj
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
-# ifdef ICE_MODEL
       integer, intent(in) :: liold
       integer, intent(in) :: linew
-# endif
 !
 # ifdef ASSUMED_SHAPE
 #  ifdef ICE_ALB_CURVE
       real(r8), intent(in) :: latr(LBi:,LBj:)
 #  endif
-#  ifdef ICE_MODEL
       real(r8), intent(in) :: ai(LBi:,LBj:,:)
       real(r8), intent(in) :: hi(LBi:,LBj:,:)
-      real(r8), intent(out) :: albedo_ice(LBi:,LBj:)
-#   ifdef ICE_THERMO
+      real(r8), intent(out) :: alb_i(LBi:,LBj:)
+#  ifdef ICE_THERMO
       real(r8), intent(in) :: hsn(LBi:,LBj:,:)
       real(r8), intent(in) :: tis(LBi:,LBj:)
-#   endif
-#   ifdef ICE_ALB_CSIM
-      real(r8), intent(out) :: frswpen(LBi:,LBj:)
-#   endif
 #  endif
-      real(r8), intent(out) :: albedo(LBi:,LBj:)
+#  ifdef ICE_ALB_CSIM
+      real(r8), intent(out) :: frswpen(LBi:,LBj:)
+#  endif
+      real(r8), intent(out) :: alb(LBi:,LBj:)
 
 # else
 #  ifdef ICE_ALB_CURVE
       real(r8), intent(in) :: latr(LBi:UBi,LBj:UBj)
 #  endif
-#  ifdef ICE_MODEL
       real(r8), intent(in) :: ai(LBi:UBi,LBj:UBj,2)
       real(r8), intent(in) :: hi(LBi:UBi,LBj:UBj,2)
-      real(r8), intent(out) :: albedo_ice(LBi:UBi,LBj:UBj)
-#   ifdef ICE_THERMO
+      real(r8), intent(out) :: alb_i(LBi:UBi,LBj:UBj)
+#  ifdef ICE_THERMO
       real(r8), intent(in) :: hsn(LBi:UBi,LBj:UBj,2)
       real(r8), intent(in) :: tis(LBi:UBi,LBj:UBj)
-#   endif
-#   ifdef ICE_ALB_CSIM
-      real(r8), intent(out) :: frswpen(LBi:UBi,LBj:UBj)
-#   endif
 #  endif
-      real(r8), intent(out) :: albedo(LBi:UBi,LBj:UBj)
+#  ifdef ICE_ALB_CSIM
+      real(r8), intent(out) :: frswpen(LBi:UBi,LBj:UBj)
+#  endif
+      real(r8), intent(out) :: alb(LBi:UBi,LBj:UBj)
 # endif
 !
 !  Local variable declarations.
@@ -155,8 +139,7 @@
 
       real(r8) :: cff1, cff2
       real(r8) :: cff
-# ifdef ICE_BULK_FLUXES
-#  ifdef ICE_ALB_CSIM
+# ifdef ICE_ALB_CSIM
 !
 ! DuVivier et al., 2018
 !
@@ -248,24 +231,22 @@
 !     real(r8), parameter :: alb_i_thick=0.65_r8
 !     real(r8), parameter :: alb_s_dry=0.86_r8
 !     real(r8), parameter :: alb_s_wet=0.72_r8
-#  else
+# else
       real(r8), parameter :: alb_i_dry=0.65_r8
       real(r8), parameter :: alb_i_wet=0.60_r8
       real(r8), parameter :: alb_s_dry=0.85_r8
       real(r8), parameter :: alb_s_wet=0.72_r8
-#  endif
+# endif
       real(r8) :: albs, qlwi, qlh_i, qsh_i
       real(r8) :: le_i, dq_i,fqlat1, slp, Qsati
       real(r8) :: vap_p_i
-#  ifdef ICE_ALB_EC92
+# ifdef ICE_ALB_EC92
       real(r8) :: albi, albsn, thki_n, thksn_n
-#  endif
 # endif
       real(r8), parameter :: alb_w=0.06_r8
-# if defined ICE_MODEL
+!
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: ice_thick
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: snow_thick
-# endif
 
 # include "set_bounds.h"
 !
@@ -275,15 +256,13 @@
 !-----------------------------------------------------------------------
 !
 
-# if defined ICE_MODEL
       IF (PerfectRST(ng) .and. iic(ng).eq.ntstart(ng)) THEN
         listp = liold
       ELSE
         listp = linew
       END IF
-#  ifdef ICE_ALB_CSIM
+# ifdef ICE_ALB_CSIM
       fhtan = ATAN(ahmax*4.0_r8)
-#  endif
 # endif
 !
 ! Note that this loop needs to be cleaned of all global arrays for
@@ -291,18 +270,16 @@
 !
       DO j=Jstr-1,JendR
         DO i=Istr-1,IendR
-# if defined ICE_MODEL
 !
 ! Calculate the ice/snow albedo
 !
           ice_thick(i,j) = hi(i,j,listp)/(ai(i,j,listp)+0.001)
           snow_thick(i,j) = hsn(i,j,listp)/(ai(i,j,listp)+0.001)
-#  ifdef ICE_ALB_EC92
+# ifdef ICE_ALB_EC92
 !
 ! Ice and snow albedo is calculated from Ebert and Curry,1992b
 !
           albi=0.06_r8
-          albsn=0.06_r8
           IF (ai(i,j,listp) .ge. min_a(ng)) THEN
             thki_n = ice_thick(i,j)
             thki_n = MAX(thki_n,0.00001_r8)
@@ -311,20 +288,15 @@
             IF (thki_n.ge.1._r8) albi=0.07616_r8*thki_n+0.414492_r8
             IF (thki_n.ge.2._r8) albi=0.561632_r8
 !
-!approximated values for albsn(depends on COSZ, but small variation)
+! Approximated values for albsn(depends on COSZ, but small variation)
 !
             albsn=0.83_r8
-            albedo_ice(i,j)=albi
-            IF (hsn(i,j,listp).gt.0._r8) albedo_ice(i,j)=albsn
-!           IF (sfwat(i,j,listp).gt.0._r8) albs=0.10737_r8              &
-!    &         +0.518_r8*EXP(-8.1_r8 *sfwat(i,j,listp)-0.47_r8)         &
-!    &         +0.341_r8*EXP(-31.8_r8*sfwat(i,j,listp)-0.94_r8)         &
-!    &         +0.131_r8*EXP(-2.6_r8 *sfwat(i,j,listp)-3.82_r8)
-!           ENDIF
+            alb_i(i,j)=albi
+            IF (hsn(i,j,listp).gt.0._r8) alb_i(i,j)=albsn
           ELSE
-            albedo_ice(i,j)=alb_w
+            alb_i(i,j)=alb_w
           ENDIF
-#  elif defined ICE_ALB_CSIM
+# elif defined ICE_ALB_CSIM
 !
 ! We follow ice_shortwave.F90/compute_albedos subroutine (CESM2/CICE5.1)
 !
@@ -381,15 +353,14 @@
 !
               alin = alini
             ENDIF
-
 !
 ! Combined ice/snow albedo wrt total incident SW
-! (absorbed SW = (1-albedo_ice)*SW)
+! (absorbed SW = (1-albedo_i)*SW)
 !
-            albedo_ice(i,j) = fv*alvn + (1.0_r8-fv)*alin
+            alb_i(i,j) = fv*alvn + (1.0_r8-fv)*alin
 !
 ! Penetrating fraction of total incident SW
-! (penetrating SW qi_o_n = frswpen*SW)
+! (penetrating SW SW_in_ice = frswpen*SW)
 !
             frswpen(i,j) = (1.0_r8-alvni)*(1.0_r8-asnow)*i0vis*fv
 !
@@ -397,41 +368,40 @@
 !       ice can penetrate through the surface layer (if not reflected)
 !
           ELSE
-            albedo_ice(i,j) = alb_w
+            alb_i(i,j) = alb_w
 !
 ! This should be arbitrary
 !
             frswpen(i,j) = (1.0_r8-alb_w)*i0vis*fv
           ENDIF
-#  else
+# else
           cff1 = alb_s_wet - alb_s_dry
           cff2 = alb_i_wet - alb_i_dry
           IF (ai(i,j,listp) .gt. min_a(ng)) THEN
             IF (hsn(i,j,listp).gt.0._r8) THEN
               IF (tis(i,j) .gt. -1.0_r8) THEN
-                albedo_ice(i,j) = cff1*(tis(i,j)+1.0_r8)+alb_s_dry
+                alb_i(i,j) = cff1*(tis(i,j)+1.0_r8)+alb_s_dry
               ELSE
-                albedo_ice(i,j) = alb_s_dry
+                alb_i(i,j) = alb_s_dry
               ENDIF
             ELSE
               IF (tis(i,j) .gt. -1.0_r8) THEN
-                albedo_ice(i,j) = cff2*(tis(i,j)+1.0_r8)+alb_i_dry
+                alb_i(i,j) = cff2*(tis(i,j)+1.0_r8)+alb_i_dry
               ELSE
-                albedo_ice(i,j) = alb_i_dry
+                alb_i(i,j) = alb_i_dry
               ENDIF
             ENDIF
           ELSE
-            albedo_ice(i,j)=alb_w
+            alb_i(i,j)=alb_w
           ENDIF
-#  endif
 # endif
 !
 ! Compute ocean albedo
 !
 # ifdef ICE_ALB_CURVE
-          albedo(i,j) = (0.069_r8 - 0.011_r8*COS(2*deg2rad*latr(i,j)))
+          alb(i,j) = (0.069_r8 - 0.011_r8*COS(2*deg2rad*latr(i,j)))
 # else
-          albedo(i,j)=alb_w
+          alb(i,j)=alb_w
 # endif
         END DO
       END DO
@@ -443,38 +413,28 @@
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
-     &                          albedo)
-# ifdef ICE_MODEL
+     &                          alb)
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
-     &                          albedo_ice)
-#  ifdef ICE_ALB_CSIM
+     &                          alb_i)
+# ifdef ICE_ALB_CSIM
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          frswpen)
-#  endif
 # endif
       END IF
 # ifdef DISTRIBUTE
-#  ifndef ICE_MODEL
-      CALL mp_exchange2d (ng, tile, iNLM, 1,                            &
-     &                    LBi, UBi, LBj, UBj,                           &
-     &                    NghostPoints,                                 &
-     &                    EWperiodic(ng), NSperiodic(ng),               &
-     &                    albedo)
-#  else
       CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints,                                 &
      &                    EWperiodic(ng), NSperiodic(ng),               &
-     &                    albedo, albedo_ice)
-#   ifdef ICE_ALB_CSIM
+     &                    alb, alb_i)
+#  ifdef ICE_ALB_CSIM
       CALL mp_exchange2d (ng, tile, iNLM, 1,                            &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints,                                 &
      &                    EWperiodic(ng), NSperiodic(ng),               &
      &                    frswpen)
-#   endif
 #  endif
 # endif
 

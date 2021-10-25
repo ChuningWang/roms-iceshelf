@@ -81,15 +81,15 @@
      &                         deallocate_bbl,                          &
      &                         initialize_bbl
 #endif
-#if defined ICESHELF
-      USE mod_iceshelf, ONLY : allocate_iceshelfvar,                    &
-     &                         deallocate_iceshelfvar,                  &
-     &                         initialize_iceshelfvar
-#endif
 #ifdef ICE_MODEL
       USE mod_ice,      ONLY : allocate_ice,                            &
      &                         deallocate_ice,                          &
      &                         initialize_ice
+#endif
+#if defined ICESHELF
+      USE mod_iceshelf, ONLY : allocate_iceshelfvar,                    &
+     &                         deallocate_iceshelfvar,                  &
+     &                         initialize_iceshelfvar
 #endif
 !
       implicit none
@@ -193,11 +193,11 @@
           IF (LuvSrc(ng).or.LwSrc(ng).or.ANY(LtracerSrc(:,ng))) THEN
             CALL allocate_sources (ng)
           END IF
-#if defined ICESHELF
-          CALL allocate_iceshelfvar (ng, LBi, UBi, LBj, UBj)
-#endif
 #ifdef ICE_MODEL
           CALL allocate_ice (ng, LBi, UBi, LBj, UBj)
+#endif
+#if defined ICESHELF
+          CALL allocate_iceshelfvar (ng, LBi, UBi, LBj, UBj)
 #endif
 !$OMP END MASTER
 !$OMP BARRIER
@@ -289,11 +289,11 @@
         IF (LuvSrc(ng).or.LwSrc(ng).or.ANY(LtracerSrc(:,ng))) THEN
           CALL deallocate_sources (ng)
         END IF
-#if defined ICESHELF
-        CALL deallocate_iceshelfvar (ng)
-#endif
 #ifdef ICE_MODEL
         CALL deallocate_ice (ng)
+#endif
+#if defined ICESHELF
+        CALL deallocate_iceshelfvar (ng)
 #endif
 !$OMP END MASTER
 !$OMP BARRIER
@@ -400,11 +400,11 @@
 #if defined SSH_TIDES || defined UV_TIDES
           CALL initialize_tides (ng, tile)
 #endif
-#if defined ICESHELF
-          CALL initialize_iceshelfvar (ng, tile, model)
-#endif
 #ifdef ICE_MODEL
           CALL initialize_ice (ng, tile)
+#endif
+#if defined ICESHELF
+          CALL initialize_iceshelfvar (ng, tile, model)
 #endif
         END DO
 !$OMP BARRIER

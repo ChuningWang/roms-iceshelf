@@ -854,7 +854,7 @@
         END IF
       END DO
 #endif
-#ifdef ICE_MODEL
+#if defined ICE_MODEL || defined ICESHELF
 !
 !-----------------------------------------------------------------------
 !  Read in ice model input parameters.
@@ -865,17 +865,6 @@
       CALL read_IcePar (26, out, Lwrite)
       IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 #endif
-!#ifdef ICESHELF
-!!
-!!-----------------------------------------------------------------------
-!!  Read in iceshelf model input parameters.
-!!-----------------------------------------------------------------------
-!!
-!      OPEN (26, FILE=TRIM(iparnam), FORM='formatted', STATUS='old')
-!
-!      CALL read_IcePar (model, 26, out, Lwrite)
-!      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-!#endif
 
 #if defined FOUR_DVAR || defined VERIFICATION
 !

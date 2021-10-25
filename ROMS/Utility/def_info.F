@@ -3070,7 +3070,7 @@
 #else
       IF (ncid.ne.FLT(ng)%ncid) THEN
 #endif
-#if defined ICESHELF && !(defined ICESHELF_MORPH) 
+#if defined ICESHELF && !(defined ICESHELF_MORPH)
 !
 !  Ice draft.
 !
@@ -6508,7 +6508,7 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 # endif
-#if defined ICESHELF && !(defined ICESHELF_MORPH) 
+#if defined ICESHELF && !(defined ICESHELF_MORPH)
 !
 !  Ice draft.
 !

@@ -1,5 +1,6 @@
 #include "cppdefs.h"
       MODULE ini_strengthcoef_mod
+#ifdef ICE_STRENGTH_QUAL
 !
 ! svn $Id$
 !================================================== Hernan G. Arango ===
@@ -27,9 +28,7 @@
       USE mod_grid
       USE mod_ncparam
       USE mod_scalars
-#ifdef ICE_MODEL
       USE mod_ice
-#endif
 !
 !  Imported variable declarations.
 !
@@ -37,9 +36,9 @@
 !
 !  Local variable declarations.
 !
-#ifdef SOLVE3D
+# ifdef SOLVE3D
       real(r8) :: diffusion2(MT), diffusion4(MT)
-#endif
+# endif
       real(r8) :: viscosity2, viscosity4
 !
 #include "tile.h"
@@ -47,12 +46,8 @@
       CALL ini_strengthcoef_tile (ng, tile, model,                      &
      &                            LBi, UBi, LBj, UBj,                   &
      &                            IminS, ImaxS, JminS, JmaxS,           &
-#ifdef ICE_STRENGTH_QUAD
      &                            GRID(ng) % grdscl,                    &
      &                            ICE(ng) % pstar_grid)
-#else
-     &                            GRID(ng) % grdscl)
-#endif
 
       RETURN
       END SUBROUTINE ini_strengthcoef
@@ -61,24 +56,20 @@
       SUBROUTINE ini_strengthcoef_tile (ng, tile, model,                &
      &                                  LBi, UBi, LBj, UBj,             &
      &                                  IminS, ImaxS, JminS, JmaxS,     &
-#ifdef ICE_STRENGTH_QUAD
      &                                  grdscl,                         &
      &                                  pstar_grid)
-#else
-     &                                  grdscl)
-#endif
 !***********************************************************************
 !
       USE mod_param
       USE mod_scalars
 !
       USE exchange_2d_mod
-#ifdef DISTRIBUTE
+# ifdef DISTRIBUTE
       USE mp_exchange_mod, ONLY : mp_exchange2d
-# ifdef SOLVE3D
+#  ifdef SOLVE3D
       USE mp_exchange_mod, ONLY : mp_exchange3d
+#  endif
 # endif
-#endif
 !
 !  Imported variable declarations.
 !
@@ -86,17 +77,13 @@
       integer, intent(in) :: LBi, UBi, LBj, UBj
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
 !
-#ifdef ASSUMED_SHAPE
+# ifdef ASSUMED_SHAPE
       real(r8), intent(in) :: grdscl(LBi:,LBj:)
-# ifdef ICE_STRENGTH_QUAD
       real(r8), intent(inout) :: pstar_grid(LBi:,LBj:)
-# endif
-#else
+# else
       real(r8), intent(in) :: grdscl(LBi:UBi,LBj:UBj)
-# ifdef ICE_STRENGTH_QUAD
       real(r8), intent(inout) :: pstar_grid(LBi:UBi,LBj:UBj)
 # endif
-#endif
 !
 !  Local variable declarations.
 !
@@ -110,7 +97,6 @@
 !  Set horizontal, constant, mixing coefficient according to model flag.
 !-----------------------------------------------------------------------
 !
-#ifdef ICE_STRENGTH_QUAD
 !
 !-----------------------------------------------------------------------
 !  Scale ice strength according to the grid size. Scale by 1 km.
@@ -140,9 +126,9 @@
      &                    EWperiodic(ng), NSperiodic(ng),               &
      &                    pstar_grid)
 # endif
-#endif
 
       RETURN
       END SUBROUTINE ini_strengthcoef_tile
 
+#endif
       END MODULE ini_strengthcoef_mod

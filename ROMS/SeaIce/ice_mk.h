@@ -71,9 +71,9 @@
      &                      ICE(ng) % rhs_ice_heat,                     &
      &                      ICE(ng) % s0mk,                             &
      &                      ICE(ng) % t0mk,                             &
-     &                      ICE(ng) % io_mflux,                         &
+     &                      ICE(ng) % iomflx,                           &
 #ifdef ICE_DIAGS
-     &                      FORCES(ng) % ssflx_ai,                      &
+     &                      FORCES(ng) % ssflx_i,                       &
      &                      FORCES(ng) % qio_n,                         &
      &                      FORCES(ng) % qi2_n,                         &
      &                      FORCES(ng) % snoice,                        &
@@ -81,13 +81,13 @@
      &                      FORCES(ng) % sustr,                         &
      &                      FORCES(ng) % svstr,                         &
      &                      FORCES(ng) % qai_n,                         &
-     &                      FORCES(ng) % qi_o_n,                        &
+     &                      FORCES(ng) % sr_in_i,                       &
      &                      FORCES(ng) % qao_n,                         &
      &                      FORCES(ng) % snow_n,                        &
 #ifdef BULK_FLUXES
      &                      FORCES(ng) % rain,                          &
 #endif
-     &                      FORCES(ng) % sr_thru_ice,                   &
+     &                      FORCES(ng) % sr_th_i,                       &
      &                      FORCES(ng) % stflx)
 #ifdef PROFILE
       CALL wclock_off (ng, iNLM, 92, __LINE__, __FILE__)
@@ -117,17 +117,17 @@
      &                            ai, hi, hsn, ageice,                  &
      &                            tis, ti, t2, enthalpi, hage,          &
      &                            ui, vi, coef_ice_heat, rhs_ice_heat,  &
-     &                            s0mk, t0mk, io_mflux,                 &
+     &                            s0mk, t0mk, iomflx,                   &
 #ifdef ICE_DIAGS
-     &                            ssflx_ai, qio_n, qi2_n, snoice,       &
+     &                            ssflx_i, qio_n, qi2_n, snoice,        &
 #endif
      &                            sustr, svstr,                         &
-     &                            qai_n, qi_o_n, qao_n,                 &
+     &                            qai_n, sr_in_i, qao_n,                &
      &                            snow_n,                               &
 #ifdef BULK_FLUXES
      &                            rain,                                 &
 #endif
-     &                            sr_thru_ice,                          &
+     &                            sr_th_i,                              &
      &                            stflx)
 !***********************************************************************
 !
@@ -279,9 +279,9 @@
       real(r8), intent(inout) :: rhs_ice_heat(LBi:,LBj:)
       real(r8), intent(inout) :: s0mk(LBi:,LBj:)
       real(r8), intent(inout) :: t0mk(LBi:,LBj:)
-      real(r8), intent(out) :: io_mflux(LBi:,LBj:)
+      real(r8), intent(out) :: iomflx(LBi:,LBj:)
 #ifdef ICE_DIAGS
-      real(r8), intent(out) :: ssflx_ai(LBi:,LBj:)
+      real(r8), intent(out) :: ssflx_i(LBi:,LBj:)
       real(r8), intent(out) :: qio_n(LBi:,LBj:)
       real(r8), intent(out) :: qi2_n(LBi:,LBj:)
       real(r8), intent(out) :: snoice(LBi:,LBj:)
@@ -289,13 +289,13 @@
       real(r8), intent(in) :: sustr(LBi:,LBj:)
       real(r8), intent(in) :: svstr(LBi:,LBj:)
       real(r8), intent(in) :: qai_n(LBi:,LBj:)
-      real(r8), intent(in) :: qi_o_n(LBi:,LBj:)
+      real(r8), intent(in) :: sr_in_i(LBi:,LBj:)
       real(r8), intent(in) :: qao_n(LBi:,LBj:)
       real(r8), intent(in) :: snow_n(LBi:,LBj:)
 #ifdef BULK_FLUXES
       real(r8), intent(in) :: rain(LBi:,LBj:)
 #endif
-      real(r8), intent(in) :: sr_thru_ice(LBi:,LBj:)
+      real(r8), intent(in) :: sr_th_i(LBi:,LBj:)
       real(r8), intent(inout) :: stflx(LBi:,LBj:,:)
 #else
 # ifdef MASKING
@@ -334,9 +334,9 @@
       real(r8), intent(inout) :: rhs_ice_heat(LBi:UBi,LBj:UBj)
       real(r8), intent(inout) :: s0mk(LBi:UBi,LBj:UBj)
       real(r8), intent(inout) :: t0mk(LBi:UBi,LBj:UBj)
-      real(r8), intent(out) :: io_mflux(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: iomflx(LBi:UBi,LBj:UBj)
 #ifdef ICE_DIAGS
-      real(r8), intent(out) :: ssflx_ai(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: ssflx_i(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: qio_n(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: qi2_n(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: snoice(LBi:UBi,LBj:UBj)
@@ -344,13 +344,13 @@
       real(r8), intent(in) :: sustr(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: svstr(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: qai_n(LBi:UBi,LBj:UBj)
-      real(r8), intent(in) :: qi_o_n(LBi:UBi,LBj:UBj)
+      real(r8), intent(in) :: sr_in_i(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: qao_n(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: snow_n(LBi:UBi,LBj:UBj)
 #ifdef BULK_FLUXES
       real(r8), intent(in) :: rain(LBi:UBi,LBj:UBj)
 #endif
-      real(r8), intent(in) :: sr_thru_ice(LBi:UBi,LBj:UBj)
+      real(r8), intent(in) :: sr_th_i(LBi:UBi,LBj:UBj)
       real(r8), intent(inout) :: stflx(LBi:UBi,LBj:UBj,NT(ng))
 #endif
 !
@@ -551,7 +551,7 @@
      &        dtice(ng)/(rhoice(ng)*ice_thick(i,j)*cot)*                &
      &        (2._r8*alph(i,j)/ice_thick(i,j)*                          &
      &        (t0mk(i,j) + (tis(i,j) - (2._r8+coa(i,j))*ti(i,j,linew))/ &
-     &                     (1._r8+coa(i,j))) + qi_o_n(i,j))
+     &                     (1._r8+coa(i,j))) + sr_in_i(i,j))
 #else
             ti(i,j,linew) = ti(i,j,linew) + dtice(ng)*(                 &
      &        2._r8*alph(i,j)/(rhoice(ng)*ice_thick(i,j)**2*cot)*       &
@@ -758,27 +758,19 @@
 #ifdef ICESHELF
           IF (zice(i,j).eq.0.0_r8) THEN
 #endif
+            fac_sf = 1.0_r8
             IF (ai(i,j,linew).le.min_a(ng)) THEN
               stflx(i,j,itemp) = qao_n(i,j)
-              fac_sf = 1.0_r8
             ELSE
 #ifdef ICE_SHALLOW_LIMIT
               hh = h(i,j)+Zt_avg1(i,j)
               clear = hh-0.9_r8*hi(i,j,liold)
               clear = MAX(clear,0.0_r8)
-              IF (clear < 1.5_r8) THEN
-                fac_sf = MAX(clear-0.5_r8,0.0_r8)/1.0_r8
-              ELSE
-                fac_sf = 1.0_r8
-              END IF
-              stflx(i,j,itemp) = (1.0_r8-ai(i,j,linew))*qao_n(i,j) +    &
-     &          (ai(i,j,linew)*(qio(i,j)-sr_thru_ice(i,j)) -            &
-     &           xtot*hfus1(i,j))*fac_sf
-#else
-              stflx(i,j,itemp) = (1.0_r8-ai(i,j,linew))*qao_n(i,j) +    &
-     &          ai(i,j,linew)*(qio(i,j)-sr_thru_ice(i,j)) -             &
-     &          xtot*hfus1(i,j)
+              fac_sf = MIN(MAX(clear-0.5_r8,0.0_r8),1.0_r8)
 #endif
+              stflx(i,j,itemp) = (1.0_r8-ai(i,j,linew))*qao_n(i,j) +    &
+     &          (ai(i,j,linew)*(qio(i,j)-sr_th_i(i,j)) -                &
+     &           xtot*hfus1(i,j))*fac_sf
 !
 #ifdef ICE_DIAGS
               qio_n(i,j) = qio(i,j)
@@ -796,14 +788,9 @@
 #ifdef WET_DRY
             stflx(i,j,itemp) = stflx(i,j,itemp)*rmask_wet(i,j)
 #endif
-#ifdef ICE_SHALLOW_LIMIT
             stflx(i,j,isalt) = stflx(i,j,isalt) +                       &
      &        (xtot-ai(i,j,linew)*wro(i,j)*(salt_top(i,j)-sice(i,j)))*  &
      &        fac_sf
-#else
-            stflx(i,j,isalt) = stflx(i,j,isalt) +                       &
-     &        (xtot-ai(i,j,linew)*wro(i,j))*(salt_top(i,j)-sice(i,j))
-#endif
 #ifdef BULK_FLUXES
 !
 !  Test for case of rainfall on snow/ice and assume 100% drainage
@@ -814,29 +801,24 @@
             END IF
 #endif
 !
-!  io_mflux is ice production rate (+ve for growth)
+!  iomflx is ice production rate (+ve for growth)
 !
-            io_mflux(i,j) = xtot - ai(i,j,linew)*wro(i,j) + wfr(i,j)
+            iomflx(i,j) = xtot - ai(i,j,linew)*wro(i,j) + wfr(i,j)
 #ifdef MASKING
             stflx(i,j,isalt) = stflx(i,j,isalt)*rmask(i,j)
-            io_mflux(i,j) = io_mflux(i,j)*rmask(i,j)
+            iomflx(i,j) = iomflx(i,j)*rmask(i,j)
 #endif
 #ifdef WET_DRY
             stflx(i,j,isalt) = stflx(i,j,isalt)*rmask_wet(i,j)
-            io_mflux(i,j) = io_mflux(i,j)*rmask_wet(i,j)
+            iomflx(i,j) = iomflx(i,j)*rmask_wet(i,j)
 #endif
 #ifdef ICE_DIAGS
-# ifdef ICE_SHALLOW_LIMIT
-            ssflx_ai(i,j) = (xtot-ai(i,j,linew)*wro(i,j))*              &
+            ssflx_i(i,j) = (xtot-ai(i,j,linew)*wro(i,j))*               &
      &                      (salt_top(i,j)-sice(i,j))*fac_sf
-# else
-            ssflx_ai(i,j) = (xtot-ai(i,j,linew)*wro(i,j))*              &
-     &                      (salt_top(i,j)-sice(i,j))
-# endif
 #endif
 #ifdef ICESHELF
           ELSE
-            io_mflux(i,j) = 0.0_r8
+            iomflx(i,j) = 0.0_r8
           END IF
 #endif
         END DO

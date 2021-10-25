@@ -462,12 +462,12 @@
 
 #ifdef ICE_MODEL
           real(r8), pointer :: qai_n(:,:)
-          real(r8), pointer :: qi_o_n(:,:)
+          real(r8), pointer :: sr_in_i(:,:)
           real(r8), pointer :: qao_n(:,:)
           real(r8), pointer :: qio_n(:,:)
           real(r8), pointer :: qi2_n(:,:)
           real(r8), pointer :: snow_n(:,:)
-          real(r8), pointer :: sr_thru_ice(:,:)
+          real(r8), pointer :: sr_th_i(:,:)
 # ifdef ICE_BULK_FLUXES
           real(r8), pointer :: sustr_aw(:,:)
           real(r8), pointer :: svstr_aw(:,:)
@@ -488,8 +488,8 @@
 # endif
 # ifdef SOLVE3D
 #  if defined SHORTWAVE && defined ICE_ALBEDO
-          real(r8), pointer :: albedo(:,:)
-          real(r8), pointer :: albedo_ice(:,:)
+          real(r8), pointer :: alb(:,:)
+          real(r8), pointer :: alb_i(:,:)
 #   ifdef ICE_ALB_CSIM
           real(r8), pointer :: frswpen(:,:)
 #   endif
@@ -497,7 +497,7 @@
           real(r8), pointer :: cawdir(:,:)
 #   endif
 #   ifdef ICE_ALB_FILE
-          real(r8), pointer :: albedoG(:,:,:)
+          real(r8), pointer :: albG(:,:,:)
 #   endif
 #  endif
 #  if defined BULK_FLUXES && defined ICE_SNOWFALL
@@ -508,14 +508,14 @@
 #  endif
 # endif
 # ifdef ICE_DIAGS
-          real(r8), pointer :: LW_down(:,:)
-          real(r8), pointer :: SW_down(:,:)
-          real(r8), pointer :: lat_ice(:,:)
-          real(r8), pointer :: sens_ice(:,:)
-          real(r8), pointer :: LW_up_ice(:,:)
-          real(r8), pointer :: SW_up_ice(:,:)
-          real(r8), pointer :: ssflx_ai(:,:)
-          real(r8), pointer :: ssflx_ao(:,:)
+          real(r8), pointer :: lr_dn(:,:)
+          real(r8), pointer :: sr_dn(:,:)
+          real(r8), pointer :: lat_i(:,:)
+          real(r8), pointer :: sen_i(:,:)
+          real(r8), pointer :: lr_up_i(:,:)
+          real(r8), pointer :: sr_up_i(:,:)
+          real(r8), pointer :: ssflx_i(:,:)
+          real(r8), pointer :: ssflx_l(:,:)
           real(r8), pointer :: snoice(:,:)
 # endif
 #endif
@@ -1001,7 +1001,7 @@
 #ifdef ICE_MODEL
       allocate ( FORCES(ng) % qai_n(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % qi_o_n(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % sr_in_i(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( FORCES(ng) % qao_n(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
@@ -1011,7 +1011,7 @@
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( FORCES(ng) % snow_n(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % sr_thru_ice(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % sr_th_i(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
 # ifdef ICE_BULK_FLUXES
       allocate ( FORCES(ng) % sustr_aw(LBi:UBi,LBj:UBj) )
@@ -1043,9 +1043,9 @@
 # endif
 # ifdef SOLVE3D
 #  if defined SHORTWAVE && defined ICE_ALBEDO
-      allocate ( FORCES(ng) % albedo(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % alb(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % albedo_ice(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % alb_i(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
 #   ifdef ICE_ALB_CSIM
       allocate ( FORCES(ng) % frswpen(LBi:UBi,LBj:UBj) )
@@ -1056,7 +1056,7 @@
       Dmem(ng)=Dmem(ng)+size2d
 #   endif
 #   ifdef ICE_ALB_FILE
-      allocate ( FORCES(ng) % albedoG(LBi:UBi,LBj:UBj,2) )
+      allocate ( FORCES(ng) % albG(LBi:UBi,LBj:UBj,2) )
       Dmem(ng)=Dmem(ng)+2.0_r8*size2d
 #   endif
 #  endif
@@ -1070,21 +1070,21 @@
 #  endif
 # endif
 # ifdef ICE_DIAGS
-      allocate ( FORCES(ng) % LW_down(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % lr_dn(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % SW_down(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % sr_dn(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % lat_ice(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % lat_i(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % sens_ice(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % sen_i(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % LW_up_ice(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % lr_up_i(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % SW_up_ice(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % sr_up_i(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % ssflx_ai(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % ssflx_i(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % ssflx_ao(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % ssflx_l(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( FORCES(ng) % snoice(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
@@ -1572,8 +1572,8 @@
 # endif
 
 # ifdef ICE_MODEL
-      IF (.not.destroy(ng, FORCES(ng)%qi_o_n, MyFile,                   &
-     &                 __LINE__, 'FORCES(ng)%qi_o_n')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%sr_in_i, MyFile,                  &
+     &                 __LINE__, 'FORCES(ng)%sr_in_i')) RETURN
 
       IF (.not.destroy(ng, FORCES(ng)%qao_n, MyFile,                    &
      &                 __LINE__, 'FORCES(ng)%qao_n')) RETURN
@@ -1587,8 +1587,8 @@
       IF (.not.destroy(ng, FORCES(ng)%snow_n, MyFile,                   &
      &                 __LINE__, 'FORCES(ng)%snow_n')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%sr_thru_n, MyFile,                &
-     &                 __LINE__, 'FORCES(ng)%sr_thru_n')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%sr_th_i, MyFile,                  &
+     &                 __LINE__, 'FORCES(ng)%sr_th_i')) RETURN
 #  ifdef ICE_BULK_FLUXES
 
       IF (.not.destroy(ng, FORCES(ng)%sustr_aw, MyFile,                 &
@@ -1630,11 +1630,11 @@
 #  ifdef SOLVE3D
 #   if defined SHORTWAVE && defined ICE_ALBEDO
 
-      IF (.not.destroy(ng, FORCES(ng)%albedo, MyFile,                   &
-     &                 __LINE__, 'FORCES(ng)%albedo')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%alb, MyFile,                      &
+     &                 __LINE__, 'FORCES(ng)%alb')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%albedo_ice, MyFile,               &
-     &                 __LINE__, 'FORCES(ng)%albedo_ice')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%alb_i, MyFile,                    &
+     &                 __LINE__, 'FORCES(ng)%alb_i')) RETURN
 #    ifdef ICE_ALB_CSIM
 
       IF (.not.destroy(ng, FORCES(ng)%frswpen, MyFile,                  &
@@ -1647,8 +1647,8 @@
 #    endif
 #    ifdef ICE_ALB_FILE
 
-      IF (.not.destroy(ng, FORCES(ng)%albedoG, MyFile,                  &
-     &                 __LINE__, 'FORCES(ng)%albedoG')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%albG, MyFile,                     &
+     &                 __LINE__, 'FORCES(ng)%albG')) RETURN
 #    endif
 #   endif
 #   if defined BULK_FLUXES && defined ICE_SNOWFALL
@@ -1664,29 +1664,29 @@
 #  endif
 #  ifdef ICE_DIAGS
 
-      IF (.not.destroy(ng, FORCES(ng)%LW_down, MyFile,                  &
-     &                 __LINE__, 'FORCES(ng)%LW_down')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%lr_dn, MyFile,                    &
+     &                 __LINE__, 'FORCES(ng)%lr_dn')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%SW_down, MyFile,                  &
-     &                 __LINE__, 'FORCES(ng)%SW_down')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%sw_dn, MyFile,                    &
+     &                 __LINE__, 'FORCES(ng)%sw_dn')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%lat_ice, MyFile,                  &
-     &                 __LINE__, 'FORCES(ng)%lat_ice')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%lat_i, MyFile,                    &
+     &                 __LINE__, 'FORCES(ng)%lat_i')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%sens_ice, MyFile,                 &
-     &                 __LINE__, 'FORCES(ng)%sens_ice')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%sen_i, MyFile,                    &
+     &                 __LINE__, 'FORCES(ng)%sen_i')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%LW_up_ice, MyFile,                &
-     &                 __LINE__, 'FORCES(ng)%LW_up_ice')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%lr_up_i, MyFile,                  &
+     &                 __LINE__, 'FORCES(ng)%lr_up_i')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%SW_up_ice, MyFile,                &
-     &                 __LINE__, 'FORCES(ng)%SW_up_ice')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%sr_up_i, MyFile,                  &
+     &                 __LINE__, 'FORCES(ng)%sr_up_i')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%ssflx_ai, MyFile,                 &
-     &                 __LINE__, 'FORCES(ng)%ssflx_ai')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%ssflx_i, MyFile,                  &
+     &                 __LINE__, 'FORCES(ng)%ssflx_i')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%ssflx_ao, MyFile,                 &
-     &                 __LINE__, 'FORCES(ng)%ssflx_ao')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%ssflx_l, MyFile,                  &
+     &                 __LINE__, 'FORCES(ng)%ssflx_l')) RETURN
 
       IF (.not.destroy(ng, FORCES(ng)%snoice, MyFile,                   &
      &                 __LINE__, 'FORCES(ng)%snoice')) RETURN
@@ -2139,12 +2139,12 @@
         DO j=Jmin,Jmax
           DO i=Imin,Imax
             FORCES(ng) % qai_n(i,j) = IniVal
-            FORCES(ng) % qi_o_n(i,j) = IniVal
+            FORCES(ng) % sr_in_i(i,j) = IniVal
             FORCES(ng) % qao_n(i,j) = IniVal
             FORCES(ng) % qio_n(i,j) = IniVal
             FORCES(ng) % qi2_n(i,j) = IniVal
             FORCES(ng) % snow_n(i,j) = IniVal
-            FORCES(ng) % sr_thru_ice(i,j) = IniVal
+            FORCES(ng) % sr_th_i(i,j) = IniVal
 # ifdef ICE_BULK_FLUXES
             FORCES(ng) % sustr_aw(i,j) = IniVal
             FORCES(ng) % svstr_aw(i,j) = IniVal
@@ -2167,8 +2167,8 @@
 # endif
 # ifdef SOLVE3D
 #  if defined SHORTWAVE && defined ICE_ALBEDO
-            FORCES(ng) % albedo(i,j) = IniVal
-            FORCES(ng) % albedo_ice(i,j) = IniVal
+            FORCES(ng) % alb(i,j) = IniVal
+            FORCES(ng) % alb_i(i,j) = IniVal
 #   ifdef ICE_ALB_CSIM
             FORCES(ng) % frswpen(i,j) = IniVal
 #   endif
@@ -2176,8 +2176,8 @@
             FORCES(ng) % cawdir(i,j) = IniVal
 #   endif
 #   ifdef ICE_ALB_FILE
-            FORCES(ng) % albedoG(i,j,1) = IniVal
-            FORCES(ng) % albedoG(i,j,2) = IniVal
+            FORCES(ng) % albG(i,j,1) = IniVal
+            FORCES(ng) % albG(i,j,2) = IniVal
 #   endif
 #  endif
 #  if defined BULK_FLUXES && defined ICE_SNOWFALL
@@ -2189,14 +2189,14 @@
 #  endif
 # endif
 # ifdef ICE_DIAGS
-            FORCES(ng) % LW_down(i,j) = IniVal
-            FORCES(ng) % SW_down(i,j) = IniVal
-            FORCES(ng) % lat_ice(i,j) = IniVal
-            FORCES(ng) % sens_ice(i,j) = IniVal
-            FORCES(ng) % LW_up_ice(i,j) = IniVal
-            FORCES(ng) % SW_up_ice(i,j) = IniVal
-            FORCES(ng) % ssflx_ai(i,j) = IniVal
-            FORCES(ng) % ssflx_ao(i,j) = IniVal
+            FORCES(ng) % lr_dn(i,j) = IniVal
+            FORCES(ng) % sr_dn(i,j) = IniVal
+            FORCES(ng) % lat_i(i,j) = IniVal
+            FORCES(ng) % sen_i(i,j) = IniVal
+            FORCES(ng) % lr_up_i(i,j) = IniVal
+            FORCES(ng) % sr_up_i(i,j) = IniVal
+            FORCES(ng) % ssflx_i(i,j) = IniVal
+            FORCES(ng) % ssflx_l(i,j) = IniVal
             FORCES(ng) % snoice(i,j) = IniVal
 # endif
           END DO

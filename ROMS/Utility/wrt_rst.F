@@ -28,20 +28,20 @@
       USE mod_netcdf
       USE mod_ocean
       USE mod_scalars
-#ifdef ICE_MODEL
-      USE mod_ice
-#ifdef PERFECT_RESTART
-      USE mod_forces
-#endif
-#endif
 #if defined SEDIMENT || defined BBL_MODEL
       USE mod_sedbed
       USE mod_sediment
 #endif
+      USE mod_stepping
+#ifdef ICE_MODEL
+      USE mod_ice
+# ifdef PERFECT_RESTART
+      USE mod_forces
+# endif
+#endif
 #if defined ICESHELF && defined ICESHELF_TRACER
       USE mod_iceshelf, ONLY : ICESHELFVAR
 #endif
-      USE mod_stepping
 !
       USE nf_fwrite2d_mod, ONLY : nf_fwrite2d
 # if defined PERFECT_RESTART || defined SOLVE3D
@@ -241,487 +241,6 @@
      &                      varid = RST(ng)%Vid(idtime))
       IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 
-#ifdef ICE_MODEL
-      scale=1.0_r8
-!
-!  Write out ice 2D momentum component (m/s) in the XI-direction.
-!
-# ifdef PERFECT_RESTART
-      gtype=gfactor*u3dvar
-      status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idUice),   &
-     &                   RST(ng)%Rindex, gtype,                         &
-     &                   LBi, UBi, LBj, UBj, 1, 2, scale,               &
-#  ifdef MASKING
-     &                   GRID(ng) % umask,                              &
-#  endif
-     &                 ICE (ng) % ui)
-# else
-      gtype=gfactor*u2dvar
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idUice),   &
-     &                 RST(ng)%Rindex, gtype,                           &
-     &                 LBi, UBi, LBj, UBj, scale,                       &
-#  ifdef MASKING
-     &                 GRID(ng) % umask,                                &
-#  endif
-     &                 ICE (ng) % ui(:,:,IUOUT))
-# endif
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idUice)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-!
-!  Write out ice 2D momentum component (m/s) in the ETA-direction.
-!
-      scale=1.0_r8
-# ifdef PERFECT_RESTART
-      gtype=gfactor*v3dvar
-      status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idVice),   &
-     &                   RST(ng)%Rindex, gtype,                         &
-     &                   LBi, UBi, LBj, UBj, 1, 2, scale,               &
-#  ifdef MASKING
-     &                   GRID(ng) % vmask,                              &
-#  endif
-     &                   ICE (ng) % vi)
-# else
-      gtype=gfactor*v2dvar
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idVice),   &
-     &                 RST(ng)%Rindex, gtype,                           &
-     &                 LBi, UBi, LBj, UBj, scale,                       &
-#  ifdef MASKING
-     &                 GRID(ng) % vmask,                                &
-#  endif
-     &                 ICE (ng) % vi(:,:,IUOUT))
-# endif
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idVice)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-!
-!  Write out ice concentration
-!
-      scale=1.0_r8
-# ifdef PERFECT_RESTART
-      gtype=gfactor*r3dvar
-      status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idAice),   &
-     &                   RST(ng)%Rindex, gtype,                         &
-     &                   LBi, UBi, LBj, UBj, 1, 2, scale,               &
-#  ifdef MASKING
-     &                   GRID(ng) % rmask,                              &
-#  endif
-     &                 ICE (ng) % ai)
-# else
-      gtype=gfactor*r2dvar
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idAice),   &
-     &                 RST(ng)%Rindex, gtype,                           &
-     &                 LBi, UBi, LBj, UBj, scale,                       &
-#  ifdef MASKING
-     &                 GRID(ng) % rmask,                                &
-#  endif
-     &                 ICE (ng) % ai(:,:,IOUT))
-# endif
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idAice)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-!
-!  Write out ice average thickness
-!
-      scale=1.0_r8
-# ifdef PERFECT_RESTART
-      gtype=gfactor*r3dvar
-      status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idHice),   &
-     &                   RST(ng)%Rindex, gtype,                         &
-     &                   LBi, UBi, LBj, UBj, 1, 2, scale,               &
-#  ifdef MASKING
-     &                   GRID(ng) % rmask,                              &
-#  endif
-     &                 ICE (ng) % hi)
-# else
-      gtype=gfactor*r2dvar
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idHice),   &
-     &                 RST(ng)%Rindex, gtype,                           &
-     &                 LBi, UBi, LBj, UBj, scale,                       &
-#  ifdef MASKING
-     &                 GRID(ng) % rmask,                                &
-#  endif
-     &                 ICE (ng) % hi(:,:,IOUT))
-# endif
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idHice)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-!
-!  Write out snow average thickness
-!
-      scale=1.0_r8
-# ifdef PERFECT_RESTART
-      gtype=gfactor*r3dvar
-      status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idHsno),   &
-     &                   RST(ng)%Rindex, gtype,                         &
-     &                   LBi, UBi, LBj, UBj, 1, 2, scale,               &
-#  ifdef MASKING
-     &                   GRID(ng) % rmask,                              &
-#  endif
-     &                   ICE (ng) % hsn)
-# else
-      gtype=gfactor*r2dvar
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idHsno),   &
-     &                 RST(ng)%Rindex, gtype,                           &
-     &                 LBi, UBi, LBj, UBj, scale,                       &
-#  ifdef MASKING
-     &                 GRID(ng) % rmask,                                &
-#  endif
-     &                 ICE (ng) % hsn(:,:,IOUT))
-# endif
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idHsno)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-!
-!  Write out ice age
-!
-      scale=1.0_r8
-# ifdef PERFECT_RESTART
-      gtype=gfactor*r3dvar
-      status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idAgeice), &
-     &                   RST(ng)%Rindex, gtype,                         &
-     &                   LBi, UBi, LBj, UBj, 1, 2, scale,               &
-#  ifdef MASKING
-     &                   GRID(ng) % rmask,                              &
-#  endif
-     &                   ICE (ng) % ageice)
-# else
-      gtype=gfactor*r2dvar
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idAgeice), &
-     &                 RST(ng)%Rindex, gtype,                           &
-     &                 LBi, UBi, LBj, UBj, scale,                       &
-#  ifdef MASKING
-     &                 GRID(ng) % rmask,                                &
-#  endif
-     &                 ICE (ng) % ageice(:,:,IOUT))
-# endif
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idAgeice)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-!
-!  Write out ice/snow surface temperature
-!
-      scale=1.0_r8
-      gtype=gfactor*r2dvar
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idTice),   &
-     &                 RST(ng)%Rindex, gtype,                           &
-     &                 LBi, UBi, LBj, UBj, scale,                       &
-# ifdef MASKING
-     &                 GRID(ng) % rmask,                                &
-# endif
-     &                 ICE (ng) % tis)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idTice)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-!
-!  Write out ice interior temperature
-!
-      scale=1.0_r8
-# ifdef PERFECT_RESTART
-      gtype=gfactor*r3dvar
-      status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idTimid),  &
-     &                   RST(ng)%Rindex, gtype,                         &
-     &                   LBi, UBi, LBj, UBj, 1, 2, scale,               &
-#  ifdef MASKING
-     &                   GRID(ng) % rmask,                              &
-#  endif
-     &                   ICE (ng) % ti)
-# else
-      gtype=gfactor*r2dvar
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idTimid),  &
-     &                 RST(ng)%Rindex, gtype,                           &
-     &                 LBi, UBi, LBj, UBj, scale,                       &
-#  ifdef MASKING
-     &                 GRID(ng) % rmask,                                &
-#  endif
-     &                 ICE (ng) % ti(:,:,IOUT))
-# endif
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idTimid)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-!
-!  Write out internal ice stress component 11
-!
-      scale=1.0_r8
-# ifdef PERFECT_RESTART
-      gtype=gfactor*r3dvar
-      status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idSig11),  &
-     &                   RST(ng)%Rindex, gtype,                         &
-     &                   LBi, UBi, LBj, UBj, 1, 2, scale,               &
-#  ifdef MASKING
-     &                   GRID(ng) % rmask,                              &
-#  endif
-     &                   ICE (ng) % sig11)
-# else
-      gtype=gfactor*r2dvar
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idSig11),  &
-     &                 RST(ng)%Rindex, gtype,                           &
-     &                 LBi, UBi, LBj, UBj, scale,                       &
-#  ifdef MASKING
-     &                 GRID(ng) % rmask,                                &
-#  endif
-     &                 ICE (ng) % sig11(:,:,IEOUT))
-# endif
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idSig11)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-!
-!  Write out internal ice stress component 22
-!
-      scale=1.0_r8
-# ifdef PERFECT_RESTART
-      gtype=gfactor*r3dvar
-      status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idSig22),  &
-     &                   RST(ng)%Rindex, gtype,                         &
-     &                   LBi, UBi, LBj, UBj, 1, 2, scale,               &
-#  ifdef MASKING
-     &                   GRID(ng) % rmask,                              &
-#  endif
-     &                   ICE (ng) % sig22)
-# else
-      gtype=gfactor*r2dvar
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idSig22),  &
-     &                 RST(ng)%Rindex, gtype,                           &
-     &                 LBi, UBi, LBj, UBj, scale,                       &
-#  ifdef MASKING
-     &                 GRID(ng) % rmask,                                &
-#  endif
-     &                 ICE (ng) % sig22(:,:,IEOUT))
-# endif
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idSig22)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-!
-!  Write out internal ice stress component 12
-!
-      scale=1.0_r8
-# ifdef PERFECT_RESTART
-      gtype=gfactor*r3dvar
-      status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idSig12),  &
-     &                   RST(ng)%Rindex, gtype,                         &
-     &                   LBi, UBi, LBj, UBj, 1, 2, scale,               &
-#  ifdef MASKING
-     &                   GRID(ng) % rmask,                              &
-#  endif
-     &                   ICE (ng) % sig12)
-# else
-      gtype=gfactor*r2dvar
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idSig12),  &
-     &                 RST(ng)%Rindex, gtype,                           &
-     &                 LBi, UBi, LBj, UBj, scale,                       &
-#  ifdef MASKING
-     &                 GRID(ng) % rmask,                                &
-#  endif
-     &                 ICE (ng) % sig12(:,:,IEOUT))
-# endif
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idSig12)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-!
-!  Write out ice-ocean friction velocity
-!
-      scale=1.0_r8
-      gtype=gfactor*r2dvar
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idTauiw),  &
-     &                 RST(ng)%Rindex, gtype,                           &
-     &                 LBi, UBi, LBj, UBj, scale,                       &
-# ifdef MASKING
-     &                 GRID(ng) % rmask_full,                           &
-# endif
-     &                 ICE (ng) % utau_iw)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idTauiw)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-!
-!  Write out ice-ocean momentum transfer coefficient
-!
-      scale=1.0_r8
-      gtype=gfactor*r2dvar
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idChuiw),  &
-     &                 RST(ng)%Rindex, gtype,                           &
-     &                 LBi, UBi, LBj, UBj, scale,                       &
-# ifdef MASKING
-     &                 GRID(ng) % rmask_full,                           &
-# endif
-     &                 ICE (ng) % chu_iw)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idChuiw)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-!
-!  Write out salinity in molecular sub-layer under ice
-!
-      scale=1.0_r8
-      gtype=gfactor*r2dvar
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idS0mk),   &
-     &                 RST(ng)%Rindex, gtype,                           &
-     &                 LBi, UBi, LBj, UBj, scale,                       &
-# ifdef MASKING
-     &                 GRID(ng) % rmask,                                &
-# endif
-     &                 ICE (ng) % s0mk)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idS0mk)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-!
-!  Write out temperature in molecular sub-layer under ice
-!
-      scale=1.0_r8
-      gtype=gfactor*r2dvar
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idT0mk),   &
-     &                 RST(ng)%Rindex, gtype,                           &
-     &                 LBi, UBi, LBj, UBj, scale,                       &
-# ifdef MASKING
-     &                 GRID(ng) % rmask,                                &
-# endif
-     &                 ICE (ng) % t0mk)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idT0mk)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-#endif
-
-#ifdef ICESHELF
-# ifdef ICESHELF_MORPH
-!
-!  Write out time-dependent ice draft (m)
-!
-      scale=1.0_dp
-      gtype=gfactor*r2dvar
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idDraft),  &
-     &                   RST(ng)%Rindex, gtype,                         &
-     &                   LBi, UBi, LBj, UBj, scale,                     &
-#  ifdef MASKING
-     &                   GRID(ng) % rmask,                              &
-#  endif
-     &                   GRID(ng) % zice,                               &
-     &                   SetFillVal = .FALSE.)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idDraft)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-# endif
-# ifdef ICESHELF_TRACER
-!
-!  Write out iceshelf volume (m) and integrated tracer (m Tunits)
-!
-      scale=1.0_dp
-      gtype=gfactor*r2dvar
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIvol),   &
-     &                   RST(ng)%Rindex, gtype,                         &
-     &                   LBi, UBi, LBj, UBj, scale,                     &
-#  ifdef MASKING
-     &                   GRID(ng) % rmask,                              &
-#  endif
-     &                   ICESHELFVAR(ng) % iceshelf_vol)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idIvol)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-!
-      scale=1.0_dp
-      gtype=gfactor*r2dvar
-      DO itrc=NAT+1,NT(ng)
-        status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid,                      &
-     &                     RST(ng)%Vid(idItrc(itrc)),                   &
-     &                     RST(ng)%Rindex, gtype,                       &
-     &                     LBi, UBi, LBj, UBj, scale,                   &
-#  ifdef MASKING
-     &                     GRID(ng) % rmask,                            &
-#  endif
-     &                     ICESHELFVAR(ng) % iceshelf_tint(:,:,itrc))
-        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-          IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idItrc(itrc))), RST(ng)%Rindex
-          END IF
-          exit_flag=3
-          ioerror=status
-          RETURN
-        END IF
-      END DO
-# endif
-#endif
 #if defined SEDIMENT && defined SED_MORPH
 !
 !  Write out time-dependent bathymetry (m)
@@ -1002,75 +521,6 @@
       IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idRv2d)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-#endif
-
-#if defined PERFECT_RESTART && defined ICE_MODEL
-!
-!  Write out surface active traces fluxes.
-!
-      DO itrc=1,NAT
-        scale=1.0_r8
-        gtype=gfactor*r2dvar
-        status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid,                      &
-     &                     RST(ng)%Vid(idTsur(itrc)),                   &
-     &                     RST(ng)%Rindex, gtype,                       &
-     &                     LBi, UBi, LBj, UBj, scale,                   &
-# ifdef MASKING
-     &                     GRID(ng) % rmask_full,                       &
-# endif
-     &                     FORCES(ng) % stflx(:,:,itrc))
-        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-          IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idTsur(itrc))),              &
-     &                        RST(ng)%Rindex
-          END IF
-          exit_flag=3
-          ioerror=status
-          RETURN
-        END IF
-      END DO
-!
-!  Write out surface U-momentum stress.
-!
-      scale=1.0_r8
-      gtype=gfactor*u2dvar
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idUsms),   &
-     &                   RST(ng)%Rindex, gtype,                         &
-     &                   LBi, UBi, LBj, UBj, scale,                     &
-# ifdef MASKING
-     &                   GRID(ng) % umask_full,                         &
-# endif
-     &                   FORCES(ng) % sustr,                            &
-     &                   SetFillVal = .FALSE.)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idUsms)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-!
-!  Write out surface V-momentum stress.
-!
-      scale=1.0_r8
-      gtype=gfactor*v2dvar
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idVsms),   &
-     &                   RST(ng)%Rindex, gtype,                         &
-     &                   LBi, UBi, LBj, UBj, scale,                     &
-# ifdef MASKING
-     &                   GRID(ng) % vmask_full,                         &
-# endif
-     &                   FORCES(ng) % svstr,                            &
-     &                   SetFillVal = .FALSE.)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idVsms)), RST(ng)%Rindex
         END IF
         exit_flag=3
         ioerror=status
@@ -1721,6 +1171,8 @@
         END IF
 # endif
 #endif
+
+#include "wrt_rst_ice.h"
 !
 !-----------------------------------------------------------------------
 !  Synchronize restart NetCDF file to disk.
@@ -1849,6 +1301,37 @@
      &                          knew(ng:), (/RST(ng)%Rindex/), (/1/),   &
      &                          pioFile = RST(ng)%pioFile)
       IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+#  ifdef ICE_MODEL
+      CALL pio_netcdf_put_ivar (ng, iNLM, RST(ng)%name, 'linew',        &
+     &                          linew(ng:), (/RST(ng)%Rindex/), (/1/),  &
+     &                          pioFile = RST(ng)%pioFile)
+      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+
+      CALL pio_netcdf_put_ivar (ng, iNLM, RST(ng)%name, 'liold',        &
+     &                          liold(ng:), (/RST(ng)%Rindex/), (/1/),  &
+     &                          pioFile = RST(ng)%pioFile)
+      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+
+      CALL pio_netcdf_put_ivar (ng, iNLM, RST(ng)%name, 'liunw',        &
+     &                          liunw(ng:), (/RST(ng)%Rindex/), (/1/),  &
+     &                          pioFile = RST(ng)%pioFile)
+      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+
+      CALL pio_netcdf_put_ivar (ng, iNLM, RST(ng)%name, 'liuol',        &
+     &                          liuol(ng:), (/RST(ng)%Rindex/), (/1/),  &
+     &                          pioFile = RST(ng)%pioFile)
+      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+
+      CALL pio_netcdf_put_ivar (ng, iNLM, RST(ng)%name, 'lienw',        &
+     &                          lienw(ng:), (/RST(ng)%Rindex/), (/1/),  &
+     &                          pioFile = RST(ng)%pioFile)
+      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+
+      CALL pio_netcdf_put_ivar (ng, iNLM, RST(ng)%name, 'lieol',        &
+     &                          lieol(ng:), (/RST(ng)%Rindex/), (/1/),  &
+     &                          pioFile = RST(ng)%pioFile)
+      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+#  endif
 # endif
 !
 !  Write out model time (s).
@@ -1860,92 +1343,6 @@
      &                          pioVar = RST(ng)%pioVar(idtime)%vd)
       IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 
-# ifdef ICESHELF
-#  ifdef ICESHELF_MORPH
-!
-!  Write out time-dependent ice draft (m)
-!
-      scale=1.0_dp
-      IF (RST(ng)%pioVar(idDraft)%dkind.eq.PIO_double) THEN
-        ioDesc => ioDesc_dp_r2dvar(ng)
-      ELSE
-        ioDesc => ioDesc_sp_r2dvar(ng)
-      END IF
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%pioFile,                     &
-     &                   RST(ng)%pioVar(idDraft),                       &
-     &                   RST(ng)%Rindex,                                &
-     &                   ioDesc,                                        &
-     &                   LBi, UBi, LBj, UBj, scale,                     &
-#   ifdef MASKING
-     &                   GRID(ng) % rmask,                              &
-#   endif
-     &                   GRID(ng) % zice,                               &
-     &                   SetFillVal = .FALSE.)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idDraft)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-#  endif
-#  ifdef ICESHELF_TRACER
-!
-!  Write out iceshelf volume (m) and integrated tracer (m Tunits)
-!
-      scale=1.0_dp
-      IF (RST(ng)%pioVar(idIvol)%dkind.eq.PIO_double) THEN
-        ioDesc => ioDesc_dp_r2dvar(ng)
-      ELSE
-        ioDesc => ioDesc_sp_r2dvar(ng)
-      END IF
-      status=nf_fwrite2d(ng, iNLM, RST(ng)%pioFile,                     &
-     &                   RST(ng)%pioVar(idIvol),                        &
-     &                   RST(ng)%Rindex,                                &
-     &                   ioDesc,                                        &
-     &                   LBi, UBi, LBj, UBj, scale,                     &
-#   ifdef MASKING
-     &                   GRID(ng) % rmask,                              &
-#   endif
-     &                   ICESHELFVAR(ng) % iceshelf_vol)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-        IF (Master) THEN
-          WRITE (stdout,10) TRIM(Vname(1,idIvol)), RST(ng)%Rindex
-        END IF
-        exit_flag=3
-        ioerror=status
-        RETURN
-      END IF
-!
-      scale=1.0_dp
-      DO itrc=NAT+1,NT(ng)
-        IF (RST(ng)%pioVar(idItrc(itrc))%dkind.eq.PIO_double) THEN
-          ioDesc => ioDesc_dp_r2dvar(ng)
-        ELSE
-          ioDesc => ioDesc_sp_r2dvar(ng)
-        END IF
-        status=nf_fwrite2d(ng, iNLM, RST(ng)%pioFile,                   &
-     &                     RST(ng)%pioVar(idItrc(itrc)),                &
-     &                     RST(ng)%Rindex,                              &
-     &                     ioDesc,                                      &
-     &                     LBi, UBi, LBj, UBj, scale,                   &
-#   ifdef MASKING
-     &                     GRID(ng) % rmask,                            &
-#   endif
-     &                     ICESHELFVAR(ng) % iceshelf_tint(:,:,itrc))
-        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-          IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idItrc(itrc))),              &
-     &                        RST(ng)%Rindex
-          END IF
-          exit_flag=3
-          ioerror=status
-          RETURN
-        END IF
-      END DO
-#  endif
-# endif
 # if defined SEDIMENT && defined SED_MORPH
 !
 !  Write out time-dependent bathymetry (m)
@@ -1967,7 +1364,7 @@
 #  endif
      &                     GRID(ng) % h,                                &
      &                     SetFillVal = .FALSE.)
-        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idbath)), RST(ng)%Rindex
           END IF
@@ -1997,7 +1394,7 @@
 #  endif
      &                   GRID(ng) % pmask_wet,                          &
      &                   SetFillVal = .FALSE.)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idPwet)), RST(ng)%Rindex
         END IF
@@ -2024,7 +1421,7 @@
 #  endif
      &                   GRID(ng) % rmask_wet,                          &
      &                   SetFillVal = .FALSE.)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idRwet)), RST(ng)%Rindex
         END IF
@@ -2051,7 +1448,7 @@
 #  endif
      &                   GRID(ng) % umask_wet,                          &
      &                   SetFillVal = .FALSE.)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idUwet)), RST(ng)%Rindex
         END IF
@@ -2078,7 +1475,7 @@
 #  endif
      &                   GRID(ng) % vmask_wet,                          &
      &                   SetFillVal = .FALSE.)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idVwet)), RST(ng)%Rindex
         END IF
@@ -2132,7 +1529,7 @@
      &                   OCEAN(ng) % zeta(:,:,KOUT))
 #  endif
 # endif
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idFsur)), RST(ng)%Rindex
         END IF
@@ -2160,7 +1557,7 @@
      &                   GRID(ng) % rmask,                              &
 #  endif
      &                   OCEAN(ng) % rzeta)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idRzet)), RST(ng)%Rindex
         END IF
@@ -2206,7 +1603,7 @@
 #  endif
      &                   OCEAN(ng) % ubar(:,:,KOUT))
 # endif
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idUbar)), RST(ng)%Rindex
         END IF
@@ -2235,7 +1632,7 @@
 #  endif
      &                   OCEAN(ng) % rubar,                             &
      &                   SetFillVal = .FALSE.)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idRu2d)), RST(ng)%Rindex
         END IF
@@ -2280,7 +1677,7 @@
 #  endif
      &                   OCEAN(ng) % vbar(:,:,KOUT))
 # endif
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idVbar)), RST(ng)%Rindex
         END IF
@@ -2309,7 +1706,7 @@
 #  endif
      &                   OCEAN(ng) % rvbar,                             &
      &                   SetFillVal = .FALSE.)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idRv2d)), RST(ng)%Rindex
         END IF
@@ -2355,7 +1752,7 @@
 #   endif
      &                   OCEAN(ng) % u(:,:,:,NOUT))
 #  endif
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idUvel)), RST(ng)%Rindex
         END IF
@@ -2384,7 +1781,7 @@
 #   endif
      &                   OCEAN(ng) % ru,                                &
      &                   SetFillVal = .FALSE.)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idRu3d)), RST(ng)%Rindex
         END IF
@@ -2429,7 +1826,7 @@
 #   endif
      &                   OCEAN(ng) % v(:,:,:,NOUT))
 #  endif
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idVvel)), RST(ng)%Rindex
         END IF
@@ -2458,7 +1855,7 @@
 #   endif
      &                   OCEAN(ng) % rv,                                &
      &                   SetFillVal = .FALSE.)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idRv3d)), RST(ng)%Rindex
         END IF
@@ -2503,7 +1900,7 @@
 #   endif
      &                     OCEAN(ng) % t(:,:,:,NOUT,itrc))
 #  endif
-        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idTvar(itrc))), RST(ng)%Rindex
           END IF
@@ -2530,7 +1927,7 @@
      &                   GRID(ng) % rmask,                              &
 #  endif
      &                   OCEAN(ng) % rho)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idDano)), RST(ng)%Rindex
         END IF
@@ -2558,7 +1955,7 @@
      &                   GRID(ng) % rmask,                              &
 #   endif
      &                   MIXING(ng) % hsbl)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idHsbl)), RST(ng)%Rindex
         END IF
@@ -2586,7 +1983,7 @@
      &                   GRID(ng) % rmask,                              &
 #   endif
      &                   MIXING(ng) % hbbl)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idHbbl)), RST(ng)%Rindex
         END IF
@@ -2615,7 +2012,7 @@
      &                       GRID(ng) % rmask,                          &
 #   endif
      &                       MIXING(ng) % ghats(:,:,:,i))
-        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idGhat(i))), RST(ng)%Rindex
           END IF
@@ -2646,7 +2043,7 @@
 #   endif
      &                   MIXING(ng) % Akv,                              &
      &                   SetFillVal = .FALSE.)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idVvis)), RST(ng)%Rindex
         END IF
@@ -2674,7 +2071,7 @@
      &                   MIXING(ng) % Akt(:,:,:,itemp),                 &
      &                   SetFillVal = .FALSE.)
 
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idTdif)), RST(ng)%Rindex
         END IF
@@ -2703,7 +2100,7 @@
 #    endif
      &                   MIXING(ng) % Akt(:,:,:,isalt),                 &
      &                   SetFillVal = .FALSE.)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idSdif)), RST(ng)%Rindex
         END IF
@@ -2734,7 +2131,7 @@
 #   endif
      &                   MIXING(ng) % tke,                              &
      &                   SetFillVal = .FALSE.)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idMtke)), RST(ng)%Rindex
         END IF
@@ -2761,7 +2158,7 @@
 #   endif
      &                   MIXING(ng) % gls,                              &
      &                   SetFillVal = .FALSE.)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idMtls)), RST(ng)%Rindex
         END IF
@@ -2787,7 +2184,7 @@
      &                   GRID(ng) % rmask,                              &
 #   endif
      &                   MIXING(ng) % Lscale)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idVmLS)), RST(ng)%Rindex
         END IF
@@ -2813,7 +2210,7 @@
      &                   GRID(ng) % rmask,                              &
 #   endif
      &                   MIXING(ng) % Akk)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idVmKK)), RST(ng)%Rindex
         END IF
@@ -2841,7 +2238,7 @@
      &                   GRID(ng) % rmask,                              &
 #   endif
      &                   MIXING(ng) % Akp)
-      IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+      IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idVmKP)), RST(ng)%Rindex
         END IF
@@ -2872,7 +2269,7 @@
      &                     GRID(ng) % umask,                            &
 #    endif
      &                     SEDBED(ng) % bedldu(:,:,i))
-        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idUbld(i))), RST(ng)%Rindex
           END IF
@@ -2900,7 +2297,7 @@
      &                     GRID(ng) % vmask,                            &
 #    endif
      &                     SEDBED(ng) % bedldv(:,:,i))
-        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idVbld(i))), RST(ng)%Rindex
           END IF
@@ -2929,7 +2326,7 @@
      &                     GRID(ng) % rmask,                            &
 #   endif
      &                     SEDBED(ng) % bed_frac(:,:,:,i))
-        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idfrac(i))), RST(ng)%Rindex
           END IF
@@ -2957,7 +2354,7 @@
      &                     GRID(ng) % rmask,                            &
 #   endif
      &                     SEDBED(ng) % bed_mass(:,:,:,NOUT,i))
-        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idBmas(i))), RST(ng)%Rindex
           END IF
@@ -2989,7 +2386,7 @@
      &                     GRID(ng) % rmask,                            &
 #   endif
      &                     SEDBED(ng) % bed(:,:,:,i))
-        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idSbed(i))), RST(ng)%Rindex
           END IF
@@ -3022,7 +2419,7 @@
      &                     GRID(ng) % rmask,                            &
 #   endif
      &                     SEDBED(ng) % bottom(:,:,i))
-        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idBott(i))), RST(ng)%Rindex
           END IF
@@ -3052,7 +2449,7 @@
      &                     GRID(ng) % umask,                            &
 #  endif
      &                     OCEAN(ng) % ubar_stokes)
-        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) WRITE (stdout,10) TRIM(Vname(1,idU2Sd)),          &
      &                                  RST(ng)%Rindex
           exit_flag=3
@@ -3077,7 +2474,7 @@
      &                     GRID(ng) % vmask,                            &
 #  endif
      &                     OCEAN(ng) % vbar_stokes)
-        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) WRITE (stdout,10) TRIM(Vname(1,idV2Sd)),          &
      &                                  RST(ng)%Rindex
           exit_flag=3
@@ -3104,7 +2501,7 @@
      &                     GRID(ng) % umask,                            &
 #   endif
      &                     OCEAN(ng) % u_stokes)
-        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF(Master) WRITE (stdout,10) TRIM(Vname(1,idU3Sd)),           &
      &                                 RST(ng)%Rindex
           exit_flag=3
@@ -3129,7 +2526,7 @@
      &                     GRID(ng) % vmask,                            &
 #   endif
      &                     OCEAN(ng) % v_stokes)
-        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) WRITE (stdout,10) TRIM(Vname(1,idV3Sd)),          &
      &                                  RST(ng)%Rindex
           exit_flag=3
@@ -3138,6 +2535,8 @@
         END IF
 #  endif
 # endif
+
+#include "pio_wrt_rst_ice.h"
 !
 !-----------------------------------------------------------------------
 !  Synchronize restart NetCDF file to disk.

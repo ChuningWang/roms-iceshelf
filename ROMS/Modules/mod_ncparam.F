@@ -211,15 +211,6 @@
 !  Input/output identification indices.
 !
       integer  :: idAice        ! fraction of cell covered by ice
-      integer  :: idismr        ! iceshelf melt rate
-      integer  :: idisTstar     ! Temperature at base of the ice shelf
-      integer  :: idisUstar     ! Temperature at base of the ice shelf
-      integer  :: idisTb        ! Temperature at base of the ice shelf
-      integer  :: idisSb        ! Salinity at base of the ice shelf
-      integer  :: idDraft       ! iceshelf draft
-      integer  :: idIvol        ! iceshelf refreezed draft
-      integer  :: idshflxSOF    ! iceshelf melt rate
-      integer  :: idssflxSOF    ! iceshelf melt rate
       integer  :: idbath        ! bathymetry
       integer  :: idBgEr        ! Background error at observations
       integer  :: idBgTh        ! Threshold for BQC check
@@ -425,64 +416,73 @@
 !
 !  Ice variables.
 !
-      integer  :: idTimid     ! interior ice temperature
-      integer  :: idT2ice     ! top of ice temperature
-      integer  :: idTauiw     ! ice-water friction velocity
-      integer  :: idChuiw     ! ice-water momentum transfer coef.
-      integer  :: idS0mk      ! S of molecular sub-layer under ice
-      integer  :: idT0mk      ! T of molecular sub-layer under ice
-      integer  :: idWfr       ! frazil ice growth rate
-      integer  :: idWai       ! ice growth/melt rate
-      integer  :: idWao       ! ice growth/melt rate
-      integer  :: idWio       ! ice growth/melt rate
-      integer  :: idWro       ! ice pond runoff
-      integer  :: idWdiv      ! ice advective change
-      integer  :: idAgeice    ! age of sea ice (time since formation)
-      integer  :: idIomflx    ! ice-ocean mass flux
-      integer  :: idWg2d      ! wind gustiness from NCEP
-      integer  :: idCdd       ! momentum transfer coef. from NCEP
-      integer  :: idChd       ! sensible heat trans. coef. from NCEP
-      integer  :: idCed       ! latent heat transfer coef. from NCEP
-      integer  :: idWg2m      ! wind gustiness from model
-      integer  :: idCdm       ! momentum transfer coef. from model
-      integer  :: idChm       ! sensible heat trans. coef. from model
-      integer  :: idCem       ! latent heat transfer coef. from model
-      integer  :: idRhoa      ! near-surface air density from NCEP
-      integer  :: idSig11     ! internal ice stress component 11
-      integer  :: idSig22     ! internal ice stress component 22
-      integer  :: idSig12     ! internal ice stress component 12
-      integer  :: idAIclm     ! ice concentration climatology
-      integer  :: idHIclm     ! ice thickness climatology
-      integer  :: idHSNclm    ! ice thickness climatology
-      integer  :: idS11clm    ! ice sigma11 climatology
-      integer  :: idS12clm    ! ice sigma12 climatology
-      integer  :: idS22clm    ! ice sigma22 climatology
-      integer  :: idUIclm     ! ice u-velocity climatology
-      integer  :: idVIclm     ! ice v-velocity climatology
-      integer  :: idUiceE     ! ice U-velocity
-      integer  :: idViceN     ! ice U-velocity
+      integer  :: idIuice       ! ice U-veloicty
+      integer  :: idIvice       ! ice V-veloicty
+      integer  :: idIuiceE      ! ice eastward velocity
+      integer  :: idIviceN      ! ice northward velocity
+      integer  :: idIaice       ! ice coverage
+      integer  :: idIhice       ! ice thickness
+      integer  :: idIhsno       ! snow thickness
+      integer  :: idIagei       ! age of sea ice (time since formation)
+      integer  :: idItice       ! temperature of ice/snow surface
+      integer  :: idItmid       ! interior ice temperature
+      integer  :: idIt2ic       ! top of ice temperature
+      integer  :: idIutau       ! ice-water friction velocity
+      integer  :: idImchu       ! ice-water momentum transfer coef.
+      integer  :: idIs0mk       ! S of molecular sub-layer under ice
+      integer  :: idIt0mk       ! T of molecular sub-layer under ice
+      integer  :: idIwfr        ! frazil ice growth rate
+      integer  :: idIwai        ! ice growth/melt rate
+      integer  :: idIwao        ! ice growth/melt rate
+      integer  :: idIwio        ! ice growth/melt rate
+      integer  :: idIwro        ! ice pond runoff
+      integer  :: idIwdiv       ! ice advective change
+      integer  :: idImflx       ! ice-ocean mass flux
+      integer  :: idIsg11       ! internal ice stress component 11
+      integer  :: idIsg22       ! internal ice stress component 22
+      integer  :: idIsg12       ! internal ice stress component 12
+      integer  :: idAIclm       ! ice concentration climatology
+      integer  :: idHIclm       ! ice thickness climatology
+      integer  :: idHSNclm      ! ice thickness climatology
+      integer  :: idS11clm      ! ice sigma11 climatology
+      integer  :: idS12clm      ! ice sigma12 climatology
+      integer  :: idS22clm      ! ice sigma22 climatology
+      integer  :: idUIclm       ! ice u-velocity climatology
+      integer  :: idVIclm       ! ice v-velocity climatology
+      integer  :: idFastIce     ! landfast ice extent
 !
 !  Ice diagnostics.
 !
-      integer  :: idAlbe      ! shortwave albedo
-      integer  :: idAlbI      ! shortwave albedo of ice
-      integer  :: idLWdn      ! downward longwave
-      integer  :: idSWdn      ! downward shortwave
-      integer  :: idLatI      ! latent heat flux over ice
-      integer  :: idSenI      ! sensible heat flux over ice
-      integer  :: idLWupI     ! upward longwave from ice
-      integer  :: idSWupI     ! upward shortwave from ice
-      integer  :: idSWinI     ! upward shortwave from ice
-      integer  :: idSWthruI   ! shortwave through ice
-      integer  :: idSaltI     ! salt flux from ice
-      integer  :: idSaltL     ! salt flux from leads
-      integer  :: idQao       ! heat flux in leads
-      integer  :: idQai       ! heat flux ice to atmosphere
-      integer  :: idQio       ! heat flux ocean to ice
-      integer  :: idQi2       ! heat flux ocean to ice
-      integer  :: idSnoI      ! snow-ice conversion
-      integer  :: idfrswp     ! fraction of sw penetrating into ice
-      integer  :: idrfaci     ! reduction factor for near-IR fraction of SW under ice
+      integer  :: idIalbe       ! shortwave albedo
+      integer  :: idIalbI       ! shortwave albedo of ice
+      integer  :: idIfrsw       ! fraction of sw penetrating into ice
+      integer  :: idIrfac       ! reduction fac of near-IR SW under ice
+      integer  :: idIlrdn       ! downward longwave
+      integer  :: idIsrdn       ! downward shortwave
+      integer  :: idIlatI       ! latent heat flux over ice
+      integer  :: idIsenI       ! sensible heat flux over ice
+      integer  :: idIlrup       ! upward longwave from ice
+      integer  :: idIsrup       ! upward shortwave from ice
+      integer  :: idIsrin       ! upward shortwave from ice
+      integer  :: idIsrth       ! shortwave through ice
+      integer  :: idIsfI        ! salt flux from ice
+      integer  :: idIsfL        ! salt flux from leads
+      integer  :: idIqao        ! heat flux in leads
+      integer  :: idIqai        ! heat flux ice to atmosphere
+      integer  :: idIqio        ! heat flux ocean to ice
+      integer  :: idIqi2        ! heat flux ocean to ice
+      integer  :: idIsnoi       ! snow-ice conversion
+#endif
+#ifdef ICESHELF
+      integer  :: idIsMr        ! iceshelf melt rate
+      integer  :: idIsTs        ! Temperature at base of the ice shelf
+      integer  :: idIsUs        ! Temperature at base of the ice shelf
+      integer  :: idIsTb        ! Temperature at base of the ice shelf
+      integer  :: idIsSb        ! Salinity at base of the ice shelf
+      integer  :: idIsDrft      ! iceshelf draft
+      integer  :: idIsVol       ! iceshelf refreezed draft
+      integer  :: idSOFs        ! salt overflux
+      integer  :: idSOFh        ! heat overflux
 #endif
 !
 !  Last used variable ID counter.
@@ -492,7 +492,6 @@
 !  Input/output identification tracer indices.
 !
       integer, allocatable :: idRtrc(:)    ! river runoff for tracers
-      integer, allocatable :: idItrc(:)    ! river runoff for tracers
       integer, allocatable :: idsurT(:)    ! model surface tracers
       integer, allocatable :: idTads(:)    ! tracers adjoint sentivity
       integer, allocatable :: idTbot(:)    ! bottom flux for tracers
@@ -501,6 +500,9 @@
       integer, allocatable :: idTnud(:)    ! tracers nudge coefficient
       integer, allocatable :: idTsur(:)    ! surface flux for tracers
       integer, allocatable :: idTtlf(:)    ! tracers impulse forcing
+#ifdef ICESHELF
+      integer, allocatable :: idIsTrc(:)   ! iceshelf tracers
+#endif
 !
 !  Boundary conditions identification indices.
 !
@@ -859,10 +861,12 @@
         allocate ( idRtrc(MT) )
         Dmem(1)=Dmem(1)+REAL(MT,r8)
       END IF
-      IF (.not.allocated(idItrc)) THEN
-        allocate ( idItrc(MT) )
+#ifdef ICESHELF
+      IF (.not.allocated(idIsTrc)) THEN
+        allocate ( idIsTrc(MT) )
         Dmem(1)=Dmem(1)+REAL(MT,r8)
       END IF
+#endif
       IF (.not.allocated(idsurT)) THEN
         allocate ( idsurT(MT) )
         Dmem(1)=Dmem(1)+REAL(MT,r8)
@@ -1534,24 +1538,6 @@
           SELECT CASE (TRIM(ADJUSTL(Vinfo(6))))
             CASE ('idtime')
               idtime=varid
-            CASE ('idismr')
-              idismr=varid
-            CASE ('idisTstar')
-              idisTstar=varid
-            CASE ('idisUstar')
-              idisUstar=varid
-            CASE ('idisTb')
-              idisTb=varid
-            CASE ('idisSb')
-              idisSb=varid
-            CASE ('idDraft')
-              idDraft=varid
-            CASE ('idIvol')
-              idIvol=varid
-            CASE ('idssflxSOF')
-              idssflxSOF=varid
-            CASE ('idshflxSOF')
-              idshflxSOF=varid
             CASE ('idbath')
               idbath=varid
             CASE ('idpthR')
@@ -1850,12 +1836,6 @@
             CASE ('idRtrc(isalt)')
               idRtrc(isalt)=varid
 #endif
-            CASE ('idItrc(itemp)')
-              idItrc(itemp)=varid
-#ifdef SALINITY
-            CASE ('idItrc(isalt)')
-              idItrc(isalt)=varid
-#endif
             CASE ('idHsbl')
               idHsbl=varid
             CASE ('idHbbl')
@@ -2024,8 +2004,6 @@
             CASE ('idTbry(inorth,inert(i))')
               load=.TRUE.
             CASE ('idRtrc(inert(i))')
-              load=.TRUE.
-            CASE ('idItrc(inert(i))')
               load=.TRUE.
 #endif
             CASE ('id2dPV')
@@ -2259,6 +2237,112 @@
               idMOMf=varid
 #endif
 #ifdef ICE_MODEL
+            CASE ('idIuice')
+              idIuice=varid
+            CASE ('idIvice')
+              idIvice=varid
+            CASE ('idIuiceE')
+              idIuiceE=varid
+            CASE ('idIviceN')
+              idIviceN=varid
+            CASE ('idIaice')
+              idIaice=varid
+            CASE ('idIhice')
+              idIhice=varid
+            CASE ('idIhsno')
+              idIhsno=varid
+            CASE ('idItice')
+              idItice=varid
+            CASE ('idItmid')
+              idItmid=varid
+            CASE ('idIt2ic')
+              idIt2ic=varid
+            CASE ('idIutau')
+              idIutau=varid
+            CASE ('idImchu')
+              idImchu=varid
+            CASE ('idIs0mk')
+              idIs0mk=varid
+            CASE ('idIt0mk')
+              idIt0mk=varid
+            CASE ('idIwfr')
+              idIwfr=varid
+            CASE ('idIwai')
+              idIwai=varid
+            CASE ('idIwao')
+              idIwao=varid
+            CASE ('idIwio')
+              idIwio=varid
+            CASE ('idIwro')
+              idIwro=varid
+            CASE ('idIwdiv')
+              idIwdiv=varid
+            CASE ('idIagei')
+              idIagei=varid
+            CASE ('idImflx')
+              idImflx=varid
+            CASE ('idIsg11')
+              idIsg11=varid
+            CASE ('idIsg22')
+              idIsg22=varid
+            CASE ('idIsg12')
+              idIsg12=varid
+            CASE ('idAIclm')
+              idAIclm=varid
+            CASE ('idHIclm')
+              idHIclm=varid
+            CASE ('idHSNclm')
+              idHSNclm=varid
+            CASE ('idS11clm')
+              idS11clm=varid
+            CASE ('idS12clm')
+              idS12clm=varid
+            CASE ('idS22clm')
+              idS22clm=varid
+            CASE ('idUIclm')
+              idUIclm=varid
+            CASE ('idVIclm')
+              idVIclm=varid
+            CASE ('idFastIce')
+              idFastIce=varid
+            CASE ('idIalbe')
+              idIalbe=varid
+            CASE ('idIalbI')
+              idIalbI=varid
+            CASE ('idIlrdn')
+              idIlrdn=varid
+            CASE ('idIsrdn')
+              idIsrdn=varid
+            CASE ('idIlatI')
+              idIlatI=varid
+            CASE ('idIsenI')
+              idIsenI=varid
+            CASE ('idIlrup')
+              idIlrup=varid
+            CASE ('idIsrup')
+              idIsrup=varid
+            CASE ('idIsrin')
+              idIsrin=varid
+            CASE ('idIsrth')
+              idIsrth=varid
+            CASE ('idIsfI')
+              idIsfI=varid
+            CASE ('idIsfL')
+              idIsfL=varid
+            CASE ('idIqao')
+              idIqao=varid
+            CASE ('idIqai')
+              idIqai=varid
+            CASE ('idIqio')
+              idIqio=varid
+            CASE ('idIqi2')
+              idIqi2=varid
+            CASE ('idIsnoi')
+              idIsnoi=varid
+            CASE ('idIfrsw')
+              idIfrsw=varid
+            CASE ('idIrfac')
+              idIrfac=varid
             CASE ('idAibc(iwest)')
               idAibc(iwest)=varid
             CASE ('idAibc(ieast)')
@@ -2355,110 +2439,36 @@
               idS12bc(isouth)=varid
             CASE ('idS12bc(inorth)')
               idS12bc(inorth)=varid
-            CASE ('idUice')
-              idUice=varid
-            CASE ('idVice')
-              idVice=varid
-            CASE ('idUiceE')
-              idUiceE=varid
-            CASE ('idViceN')
-              idViceN=varid
-            CASE ('idAice')
-              idAice=varid
-            CASE ('idHice')
-              idHice=varid
-            CASE ('idHsno')
-              idHsno=varid
-            CASE ('idTice')
-              idTice=varid
-            CASE ('idTimid')
-              idTimid=varid
-            CASE ('idT2ice')
-              idT2ice=varid
-            CASE ('idTauiw')
-              idTauiw=varid
-            CASE ('idChuiw')
-              idChuiw=varid
-            CASE ('idS0mk')
-              idS0mk=varid
-            CASE ('idT0mk')
-              idT0mk=varid
-            CASE ('idWfr')
-              idWfr=varid
-            CASE ('idWai')
-              idWai=varid
-            CASE ('idWao')
-              idWao=varid
-            CASE ('idWio')
-              idWio=varid
-            CASE ('idWro')
-              idWro=varid
-            CASE ('idWdiv')
-              idWdiv=varid
-            CASE ('idAgeice')
-              idAgeice=varid
-            CASE ('idIomflx')
-              idIomflx=varid
-            CASE ('idSig11')
-              idSig11=varid
-            CASE ('idSig22')
-              idSig22=varid
-            CASE ('idSig12')
-              idSig12=varid
-            CASE ('idAIclm')
-              idAIclm=varid
-            CASE ('idHIclm')
-              idHIclm=varid
-            CASE ('idHSNclm')
-              idHSNclm=varid
-            CASE ('idS11clm')
-              idS11clm=varid
-            CASE ('idS12clm')
-              idS12clm=varid
-            CASE ('idS22clm')
-              idS22clm=varid
-            CASE ('idUIclm')
-              idUIclm=varid
-            CASE ('idVIclm')
-              idVIclm=varid
-            CASE ('idAlbe')
-              idAlbe=varid
-            CASE ('idAlbI')
-              idAlbI=varid
-            CASE ('idLWdn')
-              idLWdn=varid
-            CASE ('idSWdn')
-              idSWdn=varid
-            CASE ('idLatI')
-              idLatI=varid
-            CASE ('idSenI')
-              idSenI=varid
-            CASE ('idLWupI')
-              idLWupI=varid
-            CASE ('idSWupI')
-              idSWupI=varid
-            CASE ('idSWinI')
-              idSWinI=varid
-            CASE ('idSWthruI')
-              idSWthruI=varid
-            CASE ('idSaltI')
-              idSaltI=varid
-            CASE ('idSaltL')
-              idSaltL=varid
-            CASE ('idQao')
-              idQao=varid
-            CASE ('idQai')
-              idQai=varid
-            CASE ('idQio')
-              idQio=varid
-            CASE ('idQi2')
-              idQi2=varid
-            CASE ('idSnoI')
-              idSnoI=varid
-            CASE ('idfrswp')
-              idfrswp=varid
-            CASE ('idrfaci')
-              idrfaci=varid
+#endif
+#ifdef ICESHELF
+            CASE ('idIsMr')
+              idIsMr=varid
+            CASE ('idIsTs')
+              idIsTs=varid
+            CASE ('idIsUs')
+              idIsUs=varid
+            CASE ('idIsTb')
+              idIsTb=varid
+            CASE ('idIsSb')
+              idIsSb=varid
+            CASE ('idIsDrft')
+              idIsDrft=varid
+            CASE ('idIsVol')
+              idIsVol=varid
+            CASE ('idIsSOFs')
+              idIsSOFs=varid
+            CASE ('idIsSOFh')
+              idIsSOFh=varid
+            CASE ('idIsTrc(itemp)')
+              idIsTrc(itemp)=varid
+# ifdef SALINITY
+            CASE ('idIsTrc(isalt)')
+              idIsTrc(isalt)=varid
+# endif
+# ifdef T_PASSIVE
+            CASE ('idIsTrc(inert(i))')
+              load=.TRUE.
+# endif
 #endif
 
 #ifdef BIOLOGY
@@ -2686,7 +2696,8 @@
      &                    TRIM(ADJUSTL(Vinfo(5)))
                   END DO
                 END IF
-              CASE ('idItrc(inert(i))')
+# ifdef ICESHELF
+              CASE ('idIsTrc(inert(i))')
                 IF (NPT.gt.0) THEN
                   varid=varid-1
                   DO i=1,NPT
@@ -2708,6 +2719,7 @@
      &                    TRIM(ADJUSTL(Vinfo(5)))
                   END DO
                 END IF
+# endif
             END SELECT
 #endif
 #ifdef DIAGNOSTICS_TS
@@ -3224,15 +3236,15 @@
 # endif
 #endif
 #ifdef ICE_MODEL
-      idBvar(isUice)=idUice
-      idBvar(isVice)=idVice
-      idBvar(isAice)=idAice
-      idBvar(isHice)=idHice
-      idBvar(isTice)=idTice
-      idBvar(isHsno)=idHsno
-      idBvar(isSig11)=idSig11
-      idBvar(isSig12)=idSig12
-      idBvar(isSig22)=idSig22
+      idBvar(isUice)=idIuice
+      idBvar(isVice)=idIvice
+      idBvar(isAice)=idIaice
+      idBvar(isHice)=idIhice
+      idBvar(isTice)=idItice
+      idBvar(isHsno)=idIhsno
+      idBvar(isSig11)=idIsg11
+      idBvar(isSig12)=idIsg12
+      idBvar(isSig22)=idIsg22
       ic=ic+9
 #endif
 !

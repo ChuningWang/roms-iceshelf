@@ -64,6 +64,7 @@
 
 #ifdef ICESHELF
   USE_ICESHELF := on
+  USE_SEAICE := on
 #else
   USE_ICESHELF :=
 #endif

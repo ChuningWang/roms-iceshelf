@@ -237,47 +237,48 @@
 # endif
 #endif
 #ifdef ICE_MODEL
-        get_var(idUice)=.TRUE.
-        get_var(idVice)=.TRUE.
-        get_var(idAice)=.TRUE.
-        get_var(idHice)=.TRUE.
-        get_var(idHsno)=.TRUE.
-        get_var(idTice)=.TRUE.
-        get_var(idAgeice)=.TRUE.
-        get_var(idTimid)=.TRUE.
-        get_var(idSig11)=.TRUE.
-        get_var(idSig22)=.TRUE.
-        get_var(idSig12)=.TRUE.
-        get_var(idS0mk)=.TRUE.
-        get_var(idT0mk)=.TRUE.
-# ifndef ICE_MOM_BULK
-        get_var(idTauiw)=.TRUE.
-        get_var(idChuiw)=.TRUE.
-# endif
+!
+!-----------------------------------------------------------------------
+!  Determine ice model fields to read from input NetCDF file.
+!-----------------------------------------------------------------------
+!
+        get_var(idIuice)=.TRUE.
+        get_var(idIvice)=.TRUE.
+        get_var(idIaice)=.TRUE.
+        get_var(idIhice)=.TRUE.
+        get_var(idIhsno)=.TRUE.
+        get_var(idIagei)=.TRUE.
+        get_var(idItice)=.TRUE.
+        get_var(idItmid)=.TRUE.
+        get_var(idIsg11)=.TRUE.
+        get_var(idIsg22)=.TRUE.
+        get_var(idIsg12)=.TRUE.
+        get_var(idIutau)=.TRUE.
+        get_var(idImchu)=.TRUE.
+        get_var(idIs0mk)=.TRUE.
+        get_var(idIt0mk)=.TRUE.
 # ifdef PERFECT_RESTART
-        get_var(idUsms)=.TRUE.
-        get_var(idVsms)=.TRUE.
-        DO itrc=1,NT(ng)
-          get_var(idTsur(itrc))=.TRUE.
-        END DO
+        IF (nrrec(ng).ne.0) THEN
+          DO itrc=1,NAT
+            get_var(idTsur(itrc))=.TRUE.
+          END DO
+          get_var(idUsms)=.TRUE.
+          get_var(idVsms)=.TRUE.
+        END IF
 # endif
 #endif
 #ifdef ICESHELF
-# ifdef ICESHELF_MORPH
         IF (nrrec(ng).ne.0) THEN
-          get_var(idDraft)=.TRUE.
-        END IF
+# ifdef ICESHELF_MORPH
+          get_var(idIsDrft)=.TRUE.
 # endif
 # ifdef ICESHELF_TRACER
-        IF (nrrec(ng).ne.0) THEN
-          get_var(idIvol)=.TRUE.
-        END IF
-        IF (nrrec(ng).ne.0) THEN
+          get_var(idIsVol)=.TRUE.
           DO itrc=NAT+1,NT(ng)
-            get_var(idItrc(itrc))=.TRUE.
+            get_var(idIsTrc(itrc))=.TRUE.
           END DO
-        END IF
 # endif
+        END IF
 #endif
 #ifdef PERFECT_RESTART
 !
@@ -510,65 +511,71 @@
 # endif
 #endif
 #ifdef ICE_MODEL
-        IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idUice))) THEN
-          have_var(idUice)=.TRUE.
-        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idVice))) THEN
-          have_var(idVice)=.TRUE.
-        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idAice))) THEN
-          have_var(idAice)=.TRUE.
-        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idHice))) THEN
-          have_var(idHice)=.TRUE.
-        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idTice))) THEN
-          have_var(idTice)=.TRUE.
-        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idHsno))) THEN
-          have_var(idHsno)=.TRUE.
-        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idAgeice))) THEN
-          have_var(idAgeice)=.TRUE.
-        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idTimid))) THEN
-          have_var(idTimid)=.TRUE.
-        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idSig11))) THEN
-          have_var(idSig11)=.TRUE.
-        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idSig22))) THEN
-          have_var(idSig22)=.TRUE.
-        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idSig12))) THEN
-          have_var(idSig12)=.TRUE.
-        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idS0mk))) THEN
-          have_var(idS0mk)=.TRUE.
-        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idT0mk))) THEN
-          have_var(idT0mk)=.TRUE.
-        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idTauiw))) THEN
-          have_var(idTauiw)=.TRUE.
-        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idChuiw))) THEN
-          have_var(idChuiw)=.TRUE.
+!
+!-----------------------------------------------------------------------
+!  Scan ice model variable list from input NetCDF and activate switches
+!  for model state variables.
+!-----------------------------------------------------------------------
+!
+        IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIuice))) THEN
+          have_var(idIuice)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIvice))) THEN
+          have_var(idIvice)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIaice))) THEN
+          have_var(idIaice)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIhice))) THEN
+          have_var(idIhice)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idItice))) THEN
+          have_var(idItice)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIhsno))) THEN
+          have_var(idIhsno)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIagei))) THEN
+          have_var(idIagei)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idItmid))) THEN
+          have_var(idItmid)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsg11))) THEN
+          have_var(idIsg11)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsg22))) THEN
+          have_var(idIsg22)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsg12))) THEN
+          have_var(idIsg12)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIs0mk))) THEN
+          have_var(idIs0mk)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIt0mk))) THEN
+          have_var(idIt0mk)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIutau))) THEN
+          have_var(idIutau)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idImchu))) THEN
+          have_var(idImchu)=.TRUE.
         END IF
 # if defined PERFECT_RESTART
-        IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idUsms))) THEN
-          have_var(idUsms)=.TRUE.
-        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idVsms))) THEN
-          have_var(idVsms)=.TRUE.
-        END IF
         DO itrc=1,NT(ng)
           IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idTsur(itrc)))) THEN
             have_var(idTsur(itrc))=.TRUE.
           END IF
         END DO
+        IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idUsms))) THEN
+          have_var(idUsms)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idVsms))) THEN
+          have_var(idVsms)=.TRUE.
+        END IF
 # endif
 #endif
 #ifdef ICESHELF
 # ifdef ICESHELF_MORPH
-        IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idDraft))) THEN
-          have_var(idDraft)=.TRUE.
+        IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsDrft))) THEN
+          have_var(idIsDrft)=.TRUE.
         END IF
 # endif
 # ifdef ICESHELF_TRACER
-        IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIvol))) THEN
-          have_var(idIvol)=.TRUE.
+        IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsVol))) THEN
+          have_var(idIsVol)=.TRUE.
         END IF
 # endif
 # ifdef ICESHELF_TRACER
         DO itrc=NAT+1,NT(ng)
-          IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idItrc(itrc)))) THEN
-            have_var(idItrc(itrc))=.TRUE.
+          IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsTrc(itrc)))) THEN
+            have_var(idIsTrc(itrc))=.TRUE.
           END IF
         END DO
 # endif
@@ -855,108 +862,120 @@
 # endif
 #endif
 #ifdef ICE_MODEL
-      IF (.not.have_var(idUice).and.get_var(idUice)) THEN
-        IF (Master) WRITE (stdout,10) string,                           &
-     &                                TRIM(Vname(1,idUice)),            &
+!
+!-----------------------------------------------------------------------
+!  Check if ice model state variables are available in input NetCDF file.
+!-----------------------------------------------------------------------
+!
+      IF (.not.have_var(idIuice).and.get_var(idIuice)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIuice)),   &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
       END IF
-      IF (.not.have_var(idVice).and.get_var(idVice)) THEN
-        IF (Master) WRITE (stdout,10) string,                           &
-     &                                TRIM(Vname(1,idVice)),            &
+      IF (.not.have_var(idIvice).and.get_var(idIvice)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIvice)),   &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
       END IF
-      IF (.not.have_var(idAice).and.get_var(idAice)) THEN
-        IF (Master) WRITE (stdout,10) string,                           &
-     &                                TRIM(Vname(1,idAice)),            &
+      IF (.not.have_var(idIaice).and.get_var(idIaice)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIaice)),   &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
       END IF
-      IF (.not.have_var(idHice).and.get_var(idHice)) THEN
-        IF (Master) WRITE (stdout,10) string,                           &
-     &                                TRIM(Vname(1,idHice)),            &
+      IF (.not.have_var(idIhice).and.get_var(idIhice)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIhice)),   &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
       END IF
-      IF (.not.have_var(idTice).and.get_var(idTice)) THEN
-        IF (Master) WRITE (stdout,10) string,                           &
-     &                                TRIM(Vname(1,idTice)),            &
+      IF (.not.have_var(idItice).and.get_var(idItice)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idItice)),   &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
       END IF
-      IF (.not.have_var(idHsno).and.get_var(idHsno)) THEN
-        IF (Master) WRITE (stdout,10) string,                           &
-     &                                TRIM(Vname(1,idHsno)),            &
+      IF (.not.have_var(idIhsno).and.get_var(idIhsno)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIhsno)),   &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
       END IF
-      IF (.not.have_var(idAgeice).and.get_var(idAgeice)) THEN
-        IF (Master) WRITE (stdout,10) string,                           &
-     &                                TRIM(Vname(1,idAgeice)),          &
+      IF (.not.have_var(idIagei).and.get_var(idIagei)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIagei)),   &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
       END IF
-      IF (.not.have_var(idTimid).and.get_var(idTimid)) THEN
-        IF (Master) WRITE (stdout,10) string,                           &
-     &                                TRIM(Vname(1,idTimid)),           &
+      IF (.not.have_var(idItmid).and.get_var(idItmid)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idItmid)),   &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
       END IF
-      IF (.not.have_var(idSig11).and.get_var(idSig11)) THEN
-        IF (Master) WRITE (stdout,10) string,                           &
-     &                                TRIM(Vname(1,idSig11)),           &
+      IF (.not.have_var(idIsg11).and.get_var(idIsg11)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIsg11)),   &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
       END IF
-      IF (.not.have_var(idSig22).and.get_var(idSig22)) THEN
-        IF (Master) WRITE (stdout,10) string,                           &
-     &                                TRIM(Vname(1,idSig22)),           &
+      IF (.not.have_var(idIsg22).and.get_var(idIsg22)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIsg22)),   &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
       END IF
-      IF (.not.have_var(idSig12).and.get_var(idSig12)) THEN
-        IF (Master) WRITE (stdout,10) string,                           &
-     &                                TRIM(Vname(1,idSig12)),           &
+      IF (.not.have_var(idIsg12).and.get_var(idIsg12)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIsg12)),   &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
       END IF
-      IF (.not.have_var(idS0mk).and.get_var(idS0mk)) THEN
-        IF (Master) WRITE (stdout,10) string,                           &
-     &                                TRIM(Vname(1,idS0mk)),            &
+      IF (.not.have_var(idIutau).and.get_var(idIutau)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIutau)),   &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
       END IF
-      IF (.not.have_var(idT0mk).and.get_var(idT0mk)) THEN
-        IF (Master) WRITE (stdout,10) string,                           &
-     &                                TRIM(Vname(1,idT0mk)),            &
+      IF (.not.have_var(idImchu).and.get_var(idImchu)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idImchu)),   &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
       END IF
-# ifndef ICE_MOM_BULK
-      IF (.not.have_var(idChuiw).and.get_var(idChuiw)) THEN
-        IF (Master) WRITE (stdout,10) string,                           &
-     &                                TRIM(Vname(1,idChuiw)),           &
+      IF (.not.have_var(idIs0mk).and.get_var(idIs0mk)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIs0mk)),   &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
       END IF
-      IF (.not.have_var(idTauiw).and.get_var(idTauiw)) THEN
-        IF (Master) WRITE (stdout,10) string,                           &
-     &                                TRIM(Vname(1,idTauiw)),           &
+      IF (.not.have_var(idIt0mk).and.get_var(idIt0mk)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIt0mk)),   &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+# ifdef PERFECT_RESTART
+      DO itrc=1,NAT
+        IF (.not.have_var(idTsur(itrc)).and.get_var(idTsur(itrc)))      &
+     &    THEN
+          IF (Master) WRITE (stdout,10) string,                         &
+     &                                  TRIM(Vname(1,idTsur(itrc))),    &
+     &                                  TRIM(ncname)
+          exit_flag=2
+          RETURN
+        END IF
+      END DO
+      IF (.not.have_var(idUsms).and.get_var(idUsms)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idUsms)),    &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+      IF (.not.have_var(idVsms).and.get_var(idVsms)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idVsms)),    &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
@@ -965,24 +984,25 @@
 #endif
 #ifdef ICESHELF
 # ifdef ICESHELF_MORPH
-      IF (.not.have_var(idDraft).and.get_var(idDraft)) THEN
-        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idDraft)),   &
+      IF (.not.have_var(idIsDrft).and.get_var(idIsDrft)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIsDrft)),  &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
       END IF
 # endif
 # ifdef ICESHELF_TRACER
-      IF (.not.have_var(idIvol).and.get_var(idIvol)) THEN
-        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIvol)),    &
+      IF (.not.have_var(idIsVol).and.get_var(idIsVol)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIsVol)),   &
      &                                TRIM(ncname)
         exit_flag=2
         RETURN
       END IF
       DO itrc=NAT+1,NT(ng)
-        IF (.not.have_var(idItrc(itrc)).and.get_var(idItrc(itrc))) THEN
+        IF (.not.have_var(idIsTrc(itrc)).and.get_var(idIsTrc(itrc)))    &
+     &    THEN
           IF (Master) WRITE (stdout,10) string,                         &
-     &                                  TRIM(Vname(1,idItrc(itrc))),    &
+     &                                  TRIM(Vname(1,idIsTrc(itrc))),   &
      &                                  TRIM(ncname)
           exit_flag=2
           RETURN
@@ -1170,22 +1190,49 @@
 #   endif
 #  endif
 # endif
-# ifdef ICESHELF
-#  ifdef ICESHELF_MORPH
+# ifdef ICE_MODEL
+!
+!-----------------------------------------------------------------------
+!  Determine ice model fields to read from input NetCDF file.
+!-----------------------------------------------------------------------
+!
+        get_var(idIuice)=.TRUE.
+        get_var(idIvice)=.TRUE.
+        get_var(idIaice)=.TRUE.
+        get_var(idIhice)=.TRUE.
+        get_var(idIhsno)=.TRUE.
+        get_var(idIagei)=.TRUE.
+        get_var(idItice)=.TRUE.
+        get_var(idItmid)=.TRUE.
+        get_var(idIsg11)=.TRUE.
+        get_var(idIsg22)=.TRUE.
+        get_var(idIsg12)=.TRUE.
+        get_var(idIutau)=.TRUE.
+        get_var(idImchu)=.TRUE.
+        get_var(idIs0mk)=.TRUE.
+        get_var(idIt0mk)=.TRUE.
+#  ifdef PERFECT_RESTART
         IF (nrrec(ng).ne.0) THEN
-          get_var(idDraft)=.TRUE.
+          DO itrc=1,NAT
+            get_var(idTsur(itrc))=.TRUE.
+          END DO
+          get_var(idUsms)=.TRUE.
+          get_var(idVsms)=.TRUE.
         END IF
+#  endif
+# endif
+# ifdef ICESHELF
+        IF (nrrec(ng).ne.0) THEN
+#  ifdef ICESHELF_MORPH
+          get_var(idIsDrft)=.TRUE.
 #  endif
 #  ifdef ICESHELF_TRACER
-        IF (nrrec(ng).ne.0) THEN
-          get_var(idIvol)=.TRUE.
-        END IF
-        IF (nrrec(ng).ne.0) THEN
+          get_var(idIsVol)=.TRUE.
           DO itrc=NAT+1,NT(ng)
-            get_var(idItrc(itrc))=.TRUE.
+            get_var(idIsTrc(itrc))=.TRUE.
           END DO
-        END IF
 #  endif
+        END IF
 # endif
 # ifdef PERFECT_RESTART
 !
@@ -1273,16 +1320,6 @@
 # if defined SEDIMENT && defined SED_MORPH
         ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idbath))) THEN
           have_var(idbath)=.TRUE.
-# endif
-# ifdef ICESHELF
-#  ifdef ICESHELF_MORPH
-        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idDraft))) THEN
-          have_var(idDraft)=.TRUE.
-#  endif
-#  ifdef ICESHELF_TRACER
-        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIvol))) THEN
-          have_var(idIvol)=.TRUE.
-#  endif
 # endif
 # ifdef ADJUST_BOUNDARY
         ELSE IF (ANY(Lobc(:,isFsur,ng)).and.                            &
@@ -1379,13 +1416,6 @@
         ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idKhor))) THEN
           have_var(idKhor)=.TRUE.
         END IF
-#if defined ICESHELF && defined ICESHELF_TRACER
-        DO itrc=NAT+1,NT(ng)
-          IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idItrc(itrc)))) THEN
-            have_var(idItrc(itrc))=.TRUE.
-          END IF
-        END DO
-#endif
 # ifdef SOLVE3D
         DO itrc=1,NT(ng)
           IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idTvar(itrc)))) THEN
@@ -1434,6 +1464,76 @@
         END DO
 #  endif
 # endif
+# ifdef ICE_MODEL
+!
+!-----------------------------------------------------------------------
+!  Scan ice model variable list from input NetCDF and activate switches
+!  for model state variables.
+!-----------------------------------------------------------------------
+!
+        IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIuice))) THEN
+          have_var(idIuice)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIvice))) THEN
+          have_var(idIvice)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIaice))) THEN
+          have_var(idIaice)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIhice))) THEN
+          have_var(idIhice)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idItice))) THEN
+          have_var(idItice)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIhsno))) THEN
+          have_var(idIhsno)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIagei))) THEN
+          have_var(idIagei)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idItmid))) THEN
+          have_var(idItmid)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsg11))) THEN
+          have_var(idIsg11)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsg22))) THEN
+          have_var(idIsg22)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsg12))) THEN
+          have_var(idIsg12)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIs0mk))) THEN
+          have_var(idIs0mk)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIt0mk))) THEN
+          have_var(idIt0mk)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIutau))) THEN
+          have_var(idIutau)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idImchu))) THEN
+          have_var(idImchu)=.TRUE.
+        END IF
+#  if defined PERFECT_RESTART
+        DO itrc=1,NT(ng)
+          IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idTsur(itrc)))) THEN
+            have_var(idTsur(itrc))=.TRUE.
+          END IF
+        END DO
+        IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idUsms))) THEN
+          have_var(idUsms)=.TRUE.
+        ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idVsms))) THEN
+          have_var(idVsms)=.TRUE.
+        END IF
+#  endif
+# endif
+# ifdef ICESHELF
+#  ifdef ICESHELF_MORPH
+        IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsDrft))) THEN
+          have_var(idIsDrft)=.TRUE.
+        END IF
+#  endif
+#  ifdef ICESHELF_TRACER
+        IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsVol))) THEN
+          have_var(idIsVol)=.TRUE.
+        END IF
+#  endif
+#  ifdef ICESHELF_TRACER
+        DO itrc=NAT+1,NT(ng)
+          IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsTrc(itrc)))) THEN
+            have_var(idIsTrc(itrc))=.TRUE.
+          END IF
+        END DO
+#  endif
+# endif
       END DO
 !
 !  Check if model state variables are available in input NetCDF file.
@@ -1451,25 +1551,6 @@
         exit_flag=2
         RETURN
       END IF
-# endif
-# ifdef ICESHELF
-#  ifdef ICESHELF_MORPH
-      IF (.not.have_var(idIvol).and.get_var(idIvol)) THEN
-        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIvol)),    &
-     &                                TRIM(ncname)
-        exit_flag=2
-        RETURN
-      END IF
-      DO itrc=NAT+1,NT(ng)
-        IF (.not.have_var(idItrc(itrc)).and.get_var(idItrc(itrc))) THEN
-          IF (Master) WRITE (stdout,10) string,                         &
-     &                                  TRIM(Vname(1,idItrc(itrc))),    &
-     &                                  TRIM(ncname)
-          exit_flag=2
-          RETURN
-        END IF
-      END DO
-#  endif
 # endif
       IF (.not.have_var(idFsur).and.get_var(idFsur)) THEN
         IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idFsur)),    &
@@ -1727,6 +1808,172 @@
      &      get_var(idBott(itrc))) THEN
           IF (Master) WRITE (stdout,10) string,                         &
      &                                  TRIM(Vname(1,idBott(itrc))),    &
+     &                                  TRIM(ncname)
+          exit_flag=2
+          RETURN
+        END IF
+      END DO
+#  endif
+# endif
+# ifdef ICE_MODEL
+!
+!-----------------------------------------------------------------------
+!  Check if ice model state variables are available in input NetCDF file.
+!-----------------------------------------------------------------------
+!
+      IF (.not.have_var(idIuice).and.get_var(idIuice)) THEN
+        IF (Master) WRITE (stdout,10) string,                           &
+     &                                TRIM(Vname(1,idIuice)),           &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+      IF (.not.have_var(idIvice).and.get_var(idIvice)) THEN
+        IF (Master) WRITE (stdout,10) string,                           &
+     &                                TRIM(Vname(1,idIvice)),           &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+      IF (.not.have_var(idIaice).and.get_var(idIaice)) THEN
+        IF (Master) WRITE (stdout,10) string,                           &
+     &                                TRIM(Vname(1,idIaice)),           &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+      IF (.not.have_var(idIhice).and.get_var(idIhice)) THEN
+        IF (Master) WRITE (stdout,10) string,                           &
+     &                                TRIM(Vname(1,idIhice)),           &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+      IF (.not.have_var(idItice).and.get_var(idItice)) THEN
+        IF (Master) WRITE (stdout,10) string,                           &
+     &                                TRIM(Vname(1,idItice)),           &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+      IF (.not.have_var(idIhsno).and.get_var(idIhsno)) THEN
+        IF (Master) WRITE (stdout,10) string,                           &
+     &                                TRIM(Vname(1,idIhsno)),           &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+      IF (.not.have_var(idIagei).and.get_var(idIagei)) THEN
+        IF (Master) WRITE (stdout,10) string,                           &
+     &                                TRIM(Vname(1,idIagei)),           &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+      IF (.not.have_var(idItmid).and.get_var(idItmid)) THEN
+        IF (Master) WRITE (stdout,10) string,                           &
+     &                                TRIM(Vname(1,idItmid)),           &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+      IF (.not.have_var(idIsg11).and.get_var(idIsg11)) THEN
+        IF (Master) WRITE (stdout,10) string,                           &
+     &                                TRIM(Vname(1,idIsg11)),           &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+      IF (.not.have_var(idIsg22).and.get_var(idIsg22)) THEN
+        IF (Master) WRITE (stdout,10) string,                           &
+     &                                TRIM(Vname(1,idIsg22)),           &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+      IF (.not.have_var(idIsg12).and.get_var(idIsg12)) THEN
+        IF (Master) WRITE (stdout,10) string,                           &
+     &                                TRIM(Vname(1,idIsg12)),           &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+      IF (.not.have_var(idIutau).and.get_var(idIutau)) THEN
+        IF (Master) WRITE (stdout,10) string,                           &
+     &                                TRIM(Vname(1,idIutau)),           &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+      IF (.not.have_var(idImchu).and.get_var(idImchu)) THEN
+        IF (Master) WRITE (stdout,10) string,                           &
+     &                                TRIM(Vname(1,idImchu)),           &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+      IF (.not.have_var(idIs0mk).and.get_var(idIs0mk)) THEN
+        IF (Master) WRITE (stdout,10) string,                           &
+     &                                TRIM(Vname(1,idIs0mk)),           &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+      IF (.not.have_var(idIt0mk).and.get_var(idIt0mk)) THEN
+        IF (Master) WRITE (stdout,10) string,                           &
+     &                                TRIM(Vname(1,idIt0mk)),           &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+#  ifdef PERFECT_RESTART
+      DO itrc=1,NAT
+        IF (.not.have_var(idTsur(itrc)).and.get_var(idTsur(itrc)))      &
+     &    THEN
+          IF (Master) WRITE (stdout,10) string,                         &
+     &                                  TRIM(Vname(1,idTsur(itrc))),    &
+     &                                  TRIM(ncname)
+          exit_flag=2
+          RETURN
+        END IF
+      END DO
+      IF (.not.have_var(idUsms).and.get_var(idUsms)) THEN
+        IF (Master) WRITE (stdout,10) string,                           &
+     &                                TRIM(Vname(1,idUsms)),            &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+      IF (.not.have_var(idVsms).and.get_var(idVsms)) THEN
+        IF (Master) WRITE (stdout,10) string,                           &
+     &                                TRIM(Vname(1,idVsms)),            &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+#  endif
+# endif
+# ifdef ICESHELF
+#  ifdef ICESHELF_MORPH
+      IF (.not.have_var(idIsDrft).and.get_var(idIsDrft)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIsDrft)),  &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+#  endif
+#  ifdef ICESHELF_TRACER
+      IF (.not.have_var(idIsVol).and.get_var(idIsVol)) THEN
+        IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIsVol)),   &
+     &                                TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+      DO itrc=NAT+1,NT(ng)
+        IF (.not.have_var(idIsTrc(itrc)).and.get_var(idIsTrc(itrc)))    &
+     &    THEN
+          IF (Master) WRITE (stdout,10) string,                         &
+     &                                  TRIM(Vname(1,idIsTrc(itrc))),   &
      &                                  TRIM(ncname)
           exit_flag=2
           RETURN

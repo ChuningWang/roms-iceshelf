@@ -16,9 +16,13 @@
 !                                                                      !
 !=======================================================================
 !
-      USE mod_kinds
+        USE mod_kinds
 !
-      implicit none
+        implicit none
+
+        PUBLIC :: allocate_iceshelfvar
+        PUBLIC :: deallocate_iceshelfvar
+        PUBLIC :: initialize_iceshelfvar
 !
 !======================================================================!
 !                                                                      !
@@ -33,31 +37,31 @@
 !                                                                      !
 !======================================================================!
 !
-      real(r8), parameter :: a = -0.057_r8
-      real(r8), parameter :: b = 0.0939_r8
-      real(r8), parameter :: c = -7.61e-4_r8
+        real(r8), parameter :: a = -0.057_r8
+        real(r8), parameter :: b = 0.0939_r8
+        real(r8), parameter :: c = -7.61e-4_r8
 !
 # if defined ICESHELF_2EQN_VBC
-      real(r8), parameter :: L = 3.34e5_r8
-      real(r8), parameter :: gamma = 0.0001_r8
-      real(r8), parameter :: refSalt = 34.4_r8
+        real(r8), parameter :: L = 3.34e5_r8
+        real(r8), parameter :: gamma = 0.0001_r8
+        real(r8), parameter :: refSalt = 34.4_r8
 # elif defined ICESHELF_3EQN_VBC
-      real(r8), parameter :: Pr = 13.8_r8
-      real(r8), parameter :: Sc = 2432.2_r8
-      real(r8), parameter :: Cd = 5.0e-3_r8
-      real(r8), parameter :: visc = 1.95e-6_r8
-      real(r8), parameter :: L = 3.33e5_r8
-      real(r8), parameter :: small = 1.0e-3_r8
-!      real(r8), parameter :: small = 8.0e-6_r8 ! Diffusion only
-      real(r8), parameter :: dt_i = 1.54e-6_r8
-      real(r8), parameter :: cp_w = 3947.0_r8
-      real(r8), parameter :: rho_i = 920.0_r8
+        real(r8), parameter :: Pr = 13.8_r8
+        real(r8), parameter :: Sc = 2432.2_r8
+        real(r8), parameter :: Cd = 5.0e-3_r8
+        real(r8), parameter :: visc = 1.95e-6_r8
+        real(r8), parameter :: L = 3.33e5_r8
+        real(r8), parameter :: small = 1.0e-3_r8
+!       real(r8), parameter :: small = 8.0e-6_r8 ! Diffusion only
+        real(r8), parameter :: dt_i = 1.54e-6_r8
+        real(r8), parameter :: cp_w = 3947.0_r8
+        real(r8), parameter :: rho_i = 920.0_r8
 !
-      real(r8), parameter :: Ti = -20.0_r8
-      real(r8), parameter :: Si = 0.0_r8
+        real(r8), parameter :: Ti = -20.0_r8
+        real(r8), parameter :: Si = 0.0_r8
 # endif
-      real(r8), parameter :: eps = 1.0E-14_r8
-      real(r8), parameter :: trcIce = 1.0_r8
+        real(r8), parameter :: eps = 1.0E-14_r8
+        real(r8), parameter :: trcIce = 1.0_r8
 !
 ! =====================================================================!
 !                                                                      !
@@ -72,40 +76,40 @@
 !                                                                      !
 ! =====================================================================!
 !
-      TYPE T_ICESHELFVAR
+        TYPE T_ICESHELFVAR
 !
 !  Nonlinear model state.
 !
-        real(r8), pointer :: m(:,:)
+          real(r8), pointer :: m(:,:)
 # ifdef ICESHELF_3EQN_VBC
-        real(r8), pointer :: gammaT(:,:)
-        real(r8), pointer :: gammaS(:,:)
-        real(r8), pointer :: Tstar(:,:)
-        real(r8), pointer :: Ustar(:,:)
-        real(r8), pointer :: Tb(:,:)
-        real(r8), pointer :: Sb(:,:)
+          real(r8), pointer :: gammaT(:,:)
+          real(r8), pointer :: gammaS(:,:)
+          real(r8), pointer :: Tstar(:,:)
+          real(r8), pointer :: Ustar(:,:)
+          real(r8), pointer :: Tb(:,:)
+          real(r8), pointer :: Sb(:,:)
 # endif
-# ifdef SURFACE_OVERFLUX_FIX
-        real(r8), pointer :: ssflxSOF(:,:)
-        real(r8), pointer :: shflxSOF(:,:)
+# ifdef ICESHELF_SOF
+          real(r8), pointer :: SOFs(:,:)
+          real(r8), pointer :: SOFh(:,:)
 # endif
 # ifdef ICESHELF_MORPH
-        real(r8), pointer :: iceshelf_draft0(:,:)
-        real(r8), pointer :: iceshelf_draft(:,:,:)
+          real(r8), pointer :: iceshelf_draft0(:,:)
+          real(r8), pointer :: iceshelf_draft(:,:,:)
 #  ifdef FISOC_DDDT
-        real(r8), pointer :: iceshelf_dddt(:,:)
+          real(r8), pointer :: iceshelf_dddt(:,:)
 #  endif
 # endif
 # ifdef ICESHELF_TRACER
-        real(r8), pointer :: iceshelf_tint(:,:,:)
-        real(r8), pointer :: iceshelf_vol(:,:)
+          real(r8), pointer :: istrc(:,:,:)
+          real(r8), pointer :: isvol(:,:)
 # endif
-      END TYPE T_ICESHELFVAR
+        END TYPE T_ICESHELFVAR
 
-      TYPE (T_ICESHELFVAR), allocatable :: ICESHELFVAR(:)
- 
+        TYPE (T_ICESHELFVAR), allocatable :: ICESHELFVAR(:)
+!
       CONTAINS
-
+!
       SUBROUTINE allocate_iceshelfvar (ng, LBi, UBi, LBj, UBj)
 !
 !=======================================================================
@@ -162,11 +166,11 @@
       Dmem(ng)=Dmem(ng)+size2d
 
 # endif
-# ifdef SURFACE_OVERFLUX_FIX
-      allocate ( ICESHELFVAR(ng) % ssflxSOF(LBi:UBi,LBj:UBj) )
+# ifdef ICESHELF_SOF
+      allocate ( ICESHELFVAR(ng) % SOFs(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
 
-      allocate ( ICESHELFVAR(ng) % shflxSOF(LBi:UBi,LBj:UBj) )
+      allocate ( ICESHELFVAR(ng) % SOFh(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
 
 # endif
@@ -184,11 +188,10 @@
 #  endif
 # endif
 # ifdef ICESHELF_TRACER
-      allocate ( ICESHELFVAR(ng) % iceshelf_tint(LBi:UBi,LBj:UBj,       &
-     &                                           NAT+1:NT(ng)) )
+      allocate ( ICESHELFVAR(ng) % istrc(LBi:UBi,LBj:UBj,NAT+1:NT(ng)) )
       Dmem(ng)=Dmem(ng)+REAL(NT(ng)-2)*size2d
 
-      allocate ( ICESHELFVAR(ng) % iceshelf_vol(LBi:UBi,LBj:UBj) )
+      allocate ( ICESHELFVAR(ng) % isvol(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
 
 # endif
@@ -249,13 +252,13 @@
       IF (.not.destroy(ng, ICESHELFVAR(ng)%Sb, MyFile,                  &
      &                 __LINE__, 'ICESHELFVAR(ng)%Sb')) RETURN
 #  endif
-#  ifdef SURFACE_OVERFLUX_FIX
+#  ifdef ICESHELF_SOF
 
-      IF (.not.destroy(ng, ICESHELFVAR(ng)%ssflxSOF, MyFile,            &
-     &                 __LINE__, 'ICESHELFVAR(ng)%ssflxSOF')) RETURN
+      IF (.not.destroy(ng, ICESHELFVAR(ng)%SOFs, MyFile,                &
+     &                 __LINE__, 'ICESHELFVAR(ng)%SOFh')) RETURN
 
-      IF (.not.destroy(ng, ICESHELFVAR(ng)%shflxSOF, MyFile,            &
-     &                 __LINE__, 'ICESHELFVAR(ng)%shflxSOF')) RETURN
+      IF (.not.destroy(ng, ICESHELFVAR(ng)%SOFs, MyFile,                &
+     &                 __LINE__, 'ICESHELFVAR(ng)%SOFh')) RETURN
 #  endif
 #  ifdef ICESHELF_MORPH
 
@@ -275,12 +278,12 @@
 #  endif
 #  ifdef ICESHELF_TRACER
 
-      IF (.not.destroy(ng, ICESHELFVAR(ng)%iceshelf_tint, MyFile,       &
-     &                 __LINE__, 'ICESHELFVAR(ng)%iceshelf_tint'))      &
+      IF (.not.destroy(ng, ICESHELFVAR(ng)%istrc, MyFile,               &
+     &                 __LINE__, 'ICESHELFVAR(ng)%istrc'))              &
      &  RETURN
 
-      IF (.not.destroy(ng, ICESHELFVAR(ng)%iceshelf_vol, MyFile,        &
-     &                 __LINE__, 'ICESHELFVAR(ng)%iceshelf_vol'))       &
+      IF (.not.destroy(ng, ICESHELFVAR(ng)%isvol, MyFile,               &
+     &                 __LINE__, 'ICESHELFVAR(ng)%isvol'))              &
      &  RETURN
 #  endif
 # endif
@@ -374,9 +377,9 @@
             ICESHELFVAR(ng) % Tb(i,j) = IniVal
             ICESHELFVAR(ng) % Sb(i,j) = IniVal
 # endif
-# ifdef SURFACE_OVERFLUX_FIX
-            ICESHELFVAR(ng) % ssflxSOF(i,j) = IniVal
-            ICESHELFVAR(ng) % shflxSOF(i,j) = IniVal
+# ifdef ICESHELF_SOF
+            ICESHELFVAR(ng) % SOFs(i,j) = IniVal
+            ICESHELFVAR(ng) % SOFh(i,j) = IniVal
 # endif
 # ifdef ICESHELF_MORPH
             ICESHELFVAR(ng) % iceshelf_draft0(i,j) = IniVal
@@ -388,9 +391,9 @@
 # endif
 # ifdef ICESHELF_TRACER
             DO itrc=NAT+1,NT(ng)
-              ICESHELFVAR(ng) % iceshelf_tint(i,j,itrc) = IniVal
+              ICESHELFVAR(ng) % istrc(i,j,itrc) = IniVal
             END DO
-            ICESHELFVAR(ng) % iceshelf_vol(i,j) = IniVal
+            ICESHELFVAR(ng) % isvol(i,j) = IniVal
 # endif
           END DO
         END DO

@@ -1,0 +1,385 @@
+# ifdef ICE_MODEL
+!
+!-----------------------------------------------------------------------
+!  Ice model variables.
+!-----------------------------------------------------------------------
+!
+      IF (Aout(idIuice,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=Istr,IendR 
+            AVERAGE(ng) % avgIuice(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIvice,ng)) THEN
+        DO j=Jstr,JendR 
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIvice(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIuiceE,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIuiceE(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIviceN,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIviceN(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIaice,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIaice(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIhice,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIhice(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIhsno,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIhsno(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIagei,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIagei(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idItice,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgItice(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idItmid,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgItmid(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIt2ic,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIt2ic(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIsg11,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIsg11(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIsg12,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIsg12(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIsg22,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIsg22(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIutau,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIutau(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idImchu,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgImchu(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIt0mk,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIt0mk(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIs0mk,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIs0mk(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idImflx,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgImflx(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIwfr,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIwfr(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIwai,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIwai(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIwao,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIwao(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIwio,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIwio(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIwro,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIwro(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIwdiv,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIwdiv(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+#  ifdef ICE_DIAGS
+#   ifdef ICE_ALBEDO
+      IF (Aout(idIalbe,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIalbe(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIalbI,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIalbI(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+#    ifdef ICE_ALB_CSIM
+      IF (Aout(idIfrsw,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIfrsw(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+#    endif
+#   endif
+      IF (Aout(idIrfac,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIrfac(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIlrdn,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIlrdn(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIsrdn,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIsrdn(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIlatI,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIlatI(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIsenI,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIsenI(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIlrup,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIlrup(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIsrup,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIsrup(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIsrin,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIsrin(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIsrth,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIsrth(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIsfI,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIsfI(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIsfL,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIsfL(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIqao,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIqao(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIqai,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIqai(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIqio,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIqio(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIqi2,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIqi2(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIsnoi,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIsnoi(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+#  endif
+# endif
+# ifdef ICESHELF
+      IF (Aout(idIsMr,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIsMr(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+#  ifdef ICESHELF_3EQN_VBC
+      IF (Aout(idIsTs,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIsTs(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIsUs,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIsUs(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIsTb,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIsTb(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIsSb,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIsSb(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+#  endif
+#  ifdef ICESHELF_MORPH
+      IF (Aout(idIsDrft,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIsDrft(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+#  endif
+#  ifdef ICESHELF_SOF
+      IF (Aout(idIsSOFs,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIsSOFs(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIsSOFh,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgIsSOFh(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+#  endif
+# endif

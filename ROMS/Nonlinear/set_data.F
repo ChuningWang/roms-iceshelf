@@ -264,19 +264,6 @@
       IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 #   endif
 
-#   ifdef ICE_ALB_FILE
-!
-!  Set albedo of ocean and ice (fraction).
-!
-      CALL set_2dfld_tile (ng, tile, iNLM, idAlbe,                      &
-     &                     LBi, UBi, LBj, UBj,                          &
-     &                     FORCES(ng)%albedoG,                          &
-     &                     FORCES(ng)%albedo,                           &
-     &                     update)
-      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-      FORCES(ng)%albedo_ice = FORCES(ng)%albedo
-#   endif
-
 #   ifdef DIURNAL_SRFLUX
 !
 !  Modulate the averaged shortwave radiation flux by the local diurnal
@@ -1740,6 +1727,29 @@
         END IF
 #  endif
       END IF
+#  if defined ICE_ALB_FILE && defined SHORTWAVE
+!
+!  Set albedo of ocean and ice (fraction).
+!
+      CALL set_2dfld_tile (ng, tile, iNLM, idAlbe,                      &
+     &                     LBi, UBi, LBj, UBj,                          &
+     &                     FORCES(ng)%albG,                             &
+     &                     FORCES(ng)%alb,                              &
+     &                     update)
+      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+      FORCES(ng)%alb_i = FORCES(ng)%alb
+#  endif
+#  if defined ICE_LANDFAST_CLM && !defined ANA_ICE
+!
+!  Set landfast ice.
+!
+      CALL set_2dfld_tile (ng, tile, iNLM, idFastIce,                   &
+     &                     LBi, UBi, LBj, UBj,                          &
+     &                     FORCES(ng)%fastice_clmG,                     &
+     &                     FORCES(ng)%fastice_clm,                      &
+     &                     update)
+      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+#  endif
 !
       IF (LaiCLM(ng)) THEN
 #  ifdef ANA_AICLIMA

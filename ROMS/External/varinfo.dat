@@ -2033,52 +2033,43 @@
   'meter second-1'                                 ! [m/s]
   'melt_rate, scalar, series'
   'ocean_time'
-  'idismr'
+  'idIsMr'
   'r2dvar'
   1.0d0
 
-'wb'                                                ! Input
-  'ice shelf melt rate observations'
-  'meter second-1'                                 ! [m/s]
-  'melt_rate, scalar, series'
-  'sst_time'
-  'idwb'
-  'r2dvar'
-  1.0d0
-
-'Tstar'                                                ! Output
+'Tstar'                                            ! Output
   'insitu temperature driving force at ice base'
-  'Celsius'                                            !
+  'Celsius'                                        !
   'temperature_driving_force, scalar, series'
   'ocean_time'
-  'idisTstar'
+  'idIsTs'
   'r2dvar'
   1.0d0
 
-'Ustar'                                                ! Output
+'Ustar'                                            ! Output
   'friction velocity at ice base'
   'meter second-1'                                 ! [m/s]
   'friction_velocity, scalar, series'
   'ocean_time'
-  'idisUstar'
+  'idIsUs'
   'r2dvar'
   1.0d0
 
-'Tb'                                                ! Output
+'Tb'                                               ! Output
   'temperature at ice-shelf base'
-  'Celcius'                                         ! [Celcius]
+  'Celcius'                                        ! [Celcius]
   'temperature_base, scalar, series'
   'ocean_time'
-  'idisTb'
+  'idIsTb'
   'r2dvar'
   1.0d0
 
-'Sb'                                                ! Output
+'Sb'                                               ! Output
   'salinity at ice-shelf base'
-  'nondimensional'                                  ! [PSU]
+  'nondimensional'                                 ! [PSU]
   'salinity_base, scalar, series'
   'ocean_time'
-  'idisSb'
+  'idIsSb'
   'r2dvar'
   1.0d0
 
@@ -2087,7 +2078,7 @@
   'meter'                                          ! [m]
   'bathymetry, scalar, series'
   'ocean_time'
-  'idDraft'
+  'idIsDrft'
   'r2dvar'
   1.0d0
 
@@ -2096,16 +2087,16 @@
   'meter'                                          ! [m]
   'bathymetry, scalar, series'
   'ocean_time'
-  'idIvol'
+  'idIsVol'
   'r2dvar'
   1.0d0
 
-'iceshelf_tint_'                                   ! Input/Output
+'iceshelf_trc_'                                    ! Input/Output
   'integrated passive tracer in refreezed iceshelf draft'
   'meter kilogram meter-3'                         ! [m kg/m3]
   'dye_, scalar, series'
   'ocean_time'
-  'idItrc(inert(i))'
+  'idIsTrc(inert(i))'
   'r2dvar'
   1.0d0
 

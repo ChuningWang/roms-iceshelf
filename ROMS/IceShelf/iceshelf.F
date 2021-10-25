@@ -92,8 +92,8 @@
 #  endif
 # endif
 # ifdef ICESHELF_TRACER
-     &                        ICESHELFVAR(ng) % iceshelf_tint,          &
-     &                        ICESHELFVAR(ng) % iceshelf_vol,           &
+     &                        ICESHELFVAR(ng) % istrc,                  &
+     &                        ICESHELFVAR(ng) % isvol,                  &
 # endif
      &                        OCEAN(ng) % u,                            &
      &                        OCEAN(ng) % v,                            &
@@ -107,9 +107,9 @@
      &                        ICESHELFVAR(ng) % Sb,                     &
 # endif
      &                        ICESHELFVAR(ng) % m,                      &
-# ifdef SURFACE_OVERFLUX_FIX
-     &                        ICESHELFVAR(ng) % ssflxSOF,               &
-     &                        ICESHELFVAR(ng) % shflxSOF,               &
+# ifdef ICESHELF_SOF
+     &                        ICESHELFVAR(ng) % SOFs,                   &
+     &                        ICESHELFVAR(ng) % SOFh,                   &
 # endif
      &                        OCEAN(ng) % rho,                          &
      &                        FORCES(ng) % sustr,                       &
@@ -142,8 +142,7 @@
 #  endif
 # endif
 # ifdef ICESHELF_TRACER
-     &                              iceshelf_tint,                      &
-     &                              iceshelf_vol,                       &
+     &                              istrc, isvol,                       &
 # endif
      &                              u, v, t,                            &
 # ifdef ICESHELF_3EQN_VBC
@@ -151,9 +150,8 @@
      &                              Tb, Tstar, Ustar, Sb,               &
 # endif 
      &                              m,                                  &
-# ifdef SURFACE_OVERFLUX_FIX
-     &                              ssflxSOF,                           &
-     &                              shflxSOF,                           &
+# ifdef ICESHELF_SOF
+     &                              SOFs, SOFh,                         &
 # endif
      &                              rho,                                &
      &                              sustr, svstr,                       &
@@ -200,8 +198,8 @@
 #   endif
 #  endif
 #  ifdef ICESHELF_TRACER
-      real(r8), intent(inout) :: iceshelf_tint(LBi:,LBj:,3:)
-      real(r8), intent(inout) :: iceshelf_vol(LBi:,LBj:)
+      real(r8), intent(inout) :: istrc(LBi:,LBj:,3:)
+      real(r8), intent(inout) :: isvol(LBi:,LBj:)
 #  endif
       real(r8), intent(in) :: t(LBi:,LBj:,:,:,:)
 #  ifdef ICESHELF_3EQN_VBC
@@ -213,9 +211,9 @@
       real(r8), intent(out) :: Sb(LBi:,LBj:)
 #  endif
       real(r8), intent(out) :: m(LBi:,LBj:)
-#  ifdef SURFACE_OVERFLUX_FIX
-      real(r8), intent(out) :: ssflxSOF(LBi:,LBj:)
-      real(r8), intent(out) :: shflxSOF(LBi:,LBj:)
+#  ifdef ICESHELF_SOF
+      real(r8), intent(out) :: SOFs(LBi:,LBj:)
+      real(r8), intent(out) :: SOFh(LBi:,LBj:)
 #  endif
 #  ifdef SHORTWAVE
       real(r8), intent(inout) :: srflx(LBi:,LBj:)
@@ -242,8 +240,8 @@
 #   endif
 #  endif
 #  ifdef ICESHELF_TRACER
-      real(r8), intent(inout) :: iceshelf_tint(LBi:UBi,LBj:UBj,3:NT(ng))
-      real(r8), intent(inout) :: iceshelf_vol(LBi:UBi,LBj:UBj)
+      real(r8), intent(inout) :: istrc(LBi:UBi,LBj:UBj,3:NT(ng))
+      real(r8), intent(inout) :: isvol(LBi:UBi,LBj:UBj)
 #  endif
       real(r8), intent(in) :: t(LBi:UBi,LBj:UBj,N(ng),3,NT(ng))
 #  ifdef ICESHELF_3EQN_VBC
@@ -255,9 +253,9 @@
       real(r8), intent(out) :: Sb(LBi:UBi,LBj:UBj)
 #  endif
       real(r8), intent(out) :: m(LBi:UBi,LBj:UBj)
-#  ifdef SURFACE_OVERFLUX_FIX
-      real(r8), intent(out) :: ssflxSOF(LBi:UBi,LBj:UBj)
-      real(r8), intent(out) :: shflxSOF(LBi:UBi,LBj:UBj)
+#  ifdef ICESHELF_SOF
+      real(r8), intent(out) :: SOFs(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: SOFh(LBi:UBi,LBj:UBj)
 #  endif
 #  ifdef SHORTWAVE
       real(r8), intent(inout) :: srflx(LBi:UBi,LBj:UBj)
@@ -281,7 +279,7 @@
 # ifdef ICESHELF_TEOS10
       real(r8) :: ct
 # endif
-# ifdef SURFACE_OVERFLUX_FIX
+# ifdef ICESHELF_SOF
       real(r8) :: Salt_insitu, Temp_insitu, Tf, shflx_old
 # endif
 # include "set_bounds.h"
@@ -629,7 +627,7 @@
             Tstar(i,j) = Tm - Tb(i,j)
             stflx(i,j,itemp)=(gammaT(i,j)+m(i,j))*(Tb(i,j)-Tm)
             stflx(i,j,isalt)=(gammaS(i,j)+m(i,j))*(Sb(i,j)-Sm)
-#   ifdef SURFACE_OVERFLUX_FIX
+#   ifdef ICESHELF_SOF
 !
 !  Addition by Eva Cougnon 2016
 !  Turn on to limit salt flux if surface temp is not cold enough, which
@@ -655,7 +653,7 @@
 !
             IF (stflx(i,j,itemp).lt.0.0_r8.and.                         &
      &          Temp_insitu.gt.(Tf+0.1_r8)) THEN
-               ssflxSOF(i,j)=stflx(i,j,isalt)
+               SOFs(i,j)=stflx(i,j,isalt)
                stflx(i,j,isalt)=0.0_r8
 !
 !  Ben's code: If temperature below Tf and heat flux < 0 relax
@@ -665,9 +663,9 @@
      &              Temp_insitu.lt.Tf) THEN
                shflx_old = stflx(i,j,itemp)
                stflx(i,j,itemp)=Hz(i,j,N(ng))*(Tf-Temp_insitu)/trelax
-               shflxSOF(i,j) = stflx(i,j,itemp) - shflx_old
-!            ELSE IF (stflx(i,j,itemp).gt.0.0_r8.and.
-!                     Temp_insitu.gt.0.0_r8) THEN
+               SOFh(i,j) = stflx(i,j,itemp) - shflx_old
+!           ELSE IF (stflx(i,j,itemp).gt.0.0_r8.and.
+!                    Temp_insitu.gt.0.0_r8) THEN
 !
 !  summer condition: decrease input of heat from the surface forcing
 !  relax to new temperature at the surface to avoir over warming from
@@ -708,25 +706,24 @@
         IF (LtracerIce(itrc,ng)) THEN
           DO j=Jstr,Jend
             DO i=Istr,Iend
-              IF ((m(i,j)*dt(ng)).gt.iceshelf_vol(i,j)) THEN
+              IF ((m(i,j)*dt(ng)).gt.isvol(i,j)) THEN
 !
 !  Melt, use refreezed ice as well as iceshelf ice.
 !
-                stflx(i,j,itrc)=iceshelf_tint(i,j,itrc)+                &
-     &                          (m(i,j)-iceshelf_vol(i,j)/dt(ng))*trcIce
-                iceshelf_tint(i,j,itrc)=0.0_r8
+                stflx(i,j,itrc)=istrc(i,j,itrc)+                        &
+     &                          (m(i,j)-isvol(i,j)/dt(ng))*trcIce
+                istrc(i,j,itrc)=0.0_r8
               ELSE
 !
 !  Melt or refreeze of refreezed ice only.
 !
                 stflx(i,j,itrc)=                                        &
      &  MIN(m(i,j),0.0_r8)*t(i,j,N(ng),nrhs,itrc)
-                IF (iceshelf_vol(i,j).gt.0.0_r8) THEN
+                IF (isvol(i,j).gt.0.0_r8) THEN
                   stflx(i,j,itrc)=stflx(i,j,itrc)+                      &
-     &  MAX(m(i,j),0.0_r8)*iceshelf_tint(i,j,itrc)/iceshelf_vol(i,j)
+     &  MAX(m(i,j),0.0_r8)*istrc(i,j,itrc)/isvol(i,j)
                 END IF
-                iceshelf_tint(i,j,itrc)=iceshelf_tint(i,j,itrc)-        &
-     &                                  stflx(i,j,itrc)*dt(ng)
+                istrc(i,j,itrc)=istrc(i,j,itrc) - stflx(i,j,itrc)*dt(ng)
               END IF
             END DO
           END DO
@@ -737,10 +734,10 @@
 !
       DO j=Jstr,Jend
         DO i=Istr,Iend
-          IF ((m(i,j)*dt(ng)).gt.iceshelf_vol(i,j)) THEN
-            iceshelf_vol(i,j)=0.0_r8
+          IF ((m(i,j)*dt(ng)).gt.isvol(i,j)) THEN
+            isvol(i,j)=0.0_r8
           ELSE
-            iceshelf_vol(i,j)=iceshelf_vol(i,j)-m(i,j)*dt(ng)
+            isvol(i,j)=isvol(i,j)-m(i,j)*dt(ng)
           END IF
         END DO
       END DO

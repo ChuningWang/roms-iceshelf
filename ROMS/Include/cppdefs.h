@@ -436,18 +436,17 @@
 **                                                                           **
 ** ICESHELF             use if including ice shelf cavities                  **
 ** ICESHELF_MORPH       use if allow ice draft to evolve                     **
-** ICESHELF_2EQN_VBC    use to activate 2-equation ice/ocean thermodynamics  **          
+** ICESHELF_2EQN_VBC    use to activate 2-equation ice/ocean thermodynamics  **
 ** ICESHELF_3EQN_VBC    use to activate 3-equation ice/ocean thermodynamics  **
-** ICESHELF_TEOS10      use for teos10 in situ freezing point temperature    **
-** LIMIT_ICESTRESS      use to limit the magnitude of ice shelf basal stress **    
-** SURFACE_OVERFLUX_FIX use to reduce surface salt flux if surface temp too  **
+** ICESHELF_SOF         use to reduce surface salt flux if surface temp too  **
 **                      warm. Do not use with a dynamic sea ice model.       **
+** ICESHELF_TEOS10      use for teos10 in situ freezing point temperature    **
 **                                                                           **
-** OPTIONS to enable coupling to an ice shet model using the Framework for   ** 
+** OPTIONS to enable coupling to an ice shet model using the Framework for   **
 ** Ice Sheet-Ocean model Coupling (FISOC), using an alternate implemenation  **
 ** of ESMF libraries, requiring ROMS to be built as a shared library:        **
 **                                                                           **
-** FISOC                use Framework for Ice Sheet-Ocean model Coupling     ** 
+** FISOC                use Framework for Ice Sheet-Ocean model Coupling     **
 ** FISOC_DDDT           use to provide rate of change of ice draft to FISOC  **
 **                                                                           **
 ** Fennel et al. (2006) biology model OPTIONS:                               **
@@ -610,7 +609,6 @@
 ** ICE_LANDFAST        use for a shorefast-ice algorithm (Lemieux et al)     **
 ** ICE_MK              use for Mellor-Kantha thermodynamics (only choice)    **
 ** ICE_MOMENTUM        use for momentum component                            **
-** ICE_MOM_BULK        some option for ice-water stress computation          **
 ** ICE_NO_SCORRECTION  use for no scorrection under the ice                  **
 ** ICE_NO_SNOW         use to remove snow layer in ice model                 **
 ** ICE_OUTFLOW_MASK    use for Hibler style outflow cells                    **

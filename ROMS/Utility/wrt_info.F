@@ -1439,7 +1439,7 @@
 #else
       GRID_VARS : IF (ncid.ne.FLT(ng)%ncid) THEN
 #endif
-#if defined ICESHELF && !(defined ICESHELF_MORPH) 
+#if defined ICESHELF && !(defined ICESHELF_MORPH)
 !
 !  Ice draft.
 !
@@ -3788,7 +3788,7 @@
 # else
       GRID_VARS : IF (FileH.ne.ABS(FLT(ng)%pioFile%fh)) THEN
 # endif
-#if defined ICESHELF && !(defined ICESHELF_MORPH) 
+#if defined ICESHELF && !(defined ICESHELF_MORPH)
 !
 !  Ice draft.
 !
