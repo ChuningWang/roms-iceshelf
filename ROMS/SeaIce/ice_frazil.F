@@ -172,12 +172,6 @@
                 gamma_k = (t_fr - t(i,j,k,nnew,itemp)) /                &
      &                     (Lhat + t(i,j,k,nnew,itemp)*(1.0_r8 - r)     &
      &                         - depressT * t(i,j,k,nnew,isalt))
-                IF (gamma_k .lt. 0.0_r8) THEN
-                  WRITE(stdout,*) 'Trouble in ice_frazil', i, j, k,     &
-     &             t(i,j,k,nnew,itemp), t(i,j,k,nnew,isalt),            &
-     &             t_fr, wfr(i,j), gamma_k, Hz(i,j,k)
-                  exit_flag = 10
-                END IF
                 wfr(i,j) = wfr(i,j) + gamma_k * Hz(i,j,k) *             &
      &                    (rho0 + rho(i,j,k) ) / ice_dens
                 t(i,j,k,nnew,itemp) = t(i,j,k,nnew,itemp) + gamma_k *   &
@@ -192,8 +186,8 @@
 ! gamma_k becomes negative here.
 !
                 gamma_k = (t_fr - t(i,j,k,nnew,itemp)) /                &
-     &                    (Lhat + t(i,j,k,nnew,itemp)*(1.0_r8 - r)      &
-     &                     - depressT * t(i,j,k,nnew,isalt))
+     &                    (Lhat + t(i,j,k,nnew,itemp)*(1.0_r8 - r) -    &
+     &                     depressT * t(i,j,k,nnew,isalt))
                 delta_wfr = gamma_k * Hz(i,j,k) *                       &
      &                      (rho0 + rho(i,j,k) ) / rhoice(ng)
                 IF ((wfr(i,j) + delta_wfr) > 0._r8) THEN

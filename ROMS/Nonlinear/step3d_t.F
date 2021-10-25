@@ -1603,13 +1603,6 @@
           END DO
         END DO
 # endif
-
-#  ifdef ICE_THERMO
-        IF (itrc == isalt) THEN
-          CALL ice_frazil (ng, tile)
-        END IF
-#  endif
-
 !
 !  Apply periodic boundary conditions.
 !
@@ -1619,6 +1612,11 @@
      &                            t(:,:,:,nnew,itrc))
         END IF
       END DO
+
+# ifdef ICE_THERMO
+      CALL ice_frazil (ng, tile)
+# endif
+
 # ifdef DISTRIBUTE
 !
 !  Exchange boundary data.

@@ -828,8 +828,11 @@
 
       DO j = Jstr,Jend
         DO i = Istr,Iend
-          phi = 4._r8
-          if (wao(i,j) .lt. 0.0_r8 ) phi = 0.5_r8
+          IF (wao(i,j) .lt. 0.0_r8 ) THEN
+            phi = 0.5_r8
+          ELSE
+            phi = 4._r8
+          END IF
           hi(i,j,linew) = hi(i,j,linew) + dtice(ng)*                    &
      &      (ai(i,j,linew)*(wio(i,j)-wai(i,j)) +                        &
      &       (1.0_r8-ai(i,j,linew))*wao(i,j) + wfr(i,j))
@@ -861,7 +864,7 @@
             hsn(i,j,linew) = hsn(i,j,linew) - hstar*rhoice(ng)/rhosw
             hi(i,j,linew) = hi(i,j,linew) + hstar*rhosnow_dry(ng)/rhosw
 !
-! Add salt to ice (negative salt flux) ??
+! Add salt to ice (negative salt flux)
 !
             stflx(i,j,isalt) = stflx(i,j,isalt) -                       &
      &                   hstar*sice_ref/dtice(ng)
