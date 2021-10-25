@@ -388,7 +388,6 @@
       real(r8) :: tfrz
       real(r8) :: cot
       real(r8) :: ai_tmp
-      real(r8) :: pmelt
 
       real(r8), parameter :: eps = 1.E-4_r8
       real(r8), parameter :: prt = 13._r8
@@ -693,8 +692,7 @@
             hsn(i,j,linew) = MAX(0.0_r8,hsn(i,j,linew))
 #endif
           END IF
-          pmelt = MAX(0._r8,wai(i,j)+wsm(i,j))
-          wro(i,j) = pmelt
+          wro(i,j) = MAX(0._r8,wai(i,j)+wsm(i,j))
         END DO
       END DO
 
@@ -741,9 +739,10 @@
 !
 !  MK89 version
 !
-            wio(i,j) = (qio(i,j)/rhosw + cpw*cht(i,j)*(t0mk(i,j) -      &
-     &                  temp_top(i,j)))/hfus1(i,j)
-            xtot = ai(i,j,linew)*wio(i,j)+(1._r8-ai(i,j,linew))*wao(i,j)
+            wio(i,j) = (qio(i,j)/rhosw + cpw*cht(i,j)*                  &
+     &                 (t0mk(i,j) - temp_top(i,j)))/hfus1(i,j)
+            xtot =        ai(i,j,linew) *wio(i,j) +                     &
+     &             (1._r8-ai(i,j,linew))*wao(i,j)
 !
             s0mk(i,j) =                                                 &
      &        (chs(i,j)*salt_top(i,j) + (ai(i,j,linew)*wro(i,j) -       &
@@ -751,7 +750,7 @@
      &        (chs(i,j) + ai(i,j,linew)*wro(i,j) - xtot -               &
      &         (1._r8-ai(i,j,linew))*stflx(i,j,isalt))
             IF (s0mk(i,j) < 0.0) s0mk(i,j) = salt_top(i,j)
-            s0mk(i,j) = MIN(MAX(s0mk(i,j),0._r8),40._r8)
+            s0mk(i,j) = MIN(MAX(s0mk(i,j),0._r8),60._r8)
             t0mk(i,j) = frln*s0mk(i,j)
           END IF
 
@@ -819,6 +818,9 @@
 #ifdef ICESHELF
           ELSE
             iomflx(i,j) = 0.0_r8
+# ifdef ICE_DIAGS
+            ssflx_i(i,j) = 0.0_r8
+# endif
           END IF
 #endif
         END DO
@@ -867,7 +869,7 @@
 ! Add salt to ice (negative salt flux)
 !
             stflx(i,j,isalt) = stflx(i,j,isalt) -                       &
-     &                   hstar*sice_ref/dtice(ng)
+     &                         hstar*sice_ref/dtice(ng)
           END IF
 # endif
 #endif

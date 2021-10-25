@@ -2024,11 +2024,413 @@
 
 !
 !------------------------------------------------------------------------------
+! ice model variables (Chuning Wang)
+!------------------------------------------------------------------------------
+!
+
+'uice'                                             ! Output
+  'ice u-momentum component'
+  'meter second-1'                                 ! [m/s]
+  'ui, scalar, series'
+  'ocean_time'
+  'idIuice'
+  'u2dvar'
+  1.0d0
+
+'vice'                                             ! Output
+  'ice v-momentum component'
+  'meter second-1'                                 ! [m/s]
+  'vi, scalar, series'
+  'ocean_time'
+  'idIvice'
+  'v2dvar'
+  1.0d0
+
+'uice_eastward'                                    ! Output
+  'ice eastward momentum component at RHO-points'
+  'meter second-1'                                 ! [m/s]
+  'uice_eastward, scalar, series'
+  'ocean_time'
+  'idIuiceE'
+  'r2dvar'
+  1.0d0
+
+'vice_northward'                                   ! Output
+  'ice northward momentum component at RHO-points'
+  'meter second-1'                                 ! [m/s]
+  'vice_northward, scalar, series'
+  'ocean_time'
+  'idIviceN'
+  'r2dvar'
+  1.0d0
+
+'aice'
+  'fraction of cell covered by ice'
+  'nondimensional'
+  'ice concentration, scalar, series'
+  'ocean_time'
+  'idIaice'
+  'r2dvar'
+  1.0d0
+
+'hice'
+  'average ice thickness in cell'
+  'meter'
+  'ice thickness, scalar, series'
+  'ocean_time'
+  'idIhice'
+  'r2dvar'
+  1.0d0
+
+'hsnow'
+  'thickness of snow cover'
+  'meter'
+  'snow thickness, scalar, series'
+  'ocean_time'
+  'idIhsno'
+  'r2dvar'
+  1.0d0
+
+'ageice'
+  'age of the ice'
+  'sec'
+  'ice age, scalar, series'
+  'ocean_time'
+  'idIagei'
+  'r2dvar'
+  1.0d0
+
+'tice_sur'
+  'temperature of ice/snow surface'
+  'degrees Celcius'
+  'surface temperature, scalar, series'
+  'ocean_time'
+  'idItice'
+  'r2dvar'
+  1.0d0
+
+'tice_snow'
+  'temperature of ice-snow boundary'
+  'degrees Celcius'
+  'ice-snow boundary temperature, scalar, series'
+  'ocean_time'
+  'idIt2ic'
+  'r2dvar'
+  1.0d0
+
+'tice_mid'
+  'temperature of ice interior'
+  'degrees Celcius'
+  'interior temperature, scalar, series'
+  'ocean_time'
+  'idItmid'
+  'r2dvar'
+  1.0d0
+
+'tau_iw'
+  'ice-water friction velocity'
+  'meter second-1'
+  'friction velocity, scalar, series'
+  'ocean_time'
+  'idIutau'
+  'r2dvar'
+  1.0d0
+
+'chu_iw'
+  'ice-water momentum transfer coefficient'
+  'meter second-1'
+  'transfer coefficient, scalar, series'
+  'ocean_time'
+  'idImchu'
+  'r2dvar'
+  1.0d0
+
+'s0mk'
+  'salinity of molecular sub-layer under ice'
+  'nondimensional'
+  'salinity, scalar, series'
+  'ocean_time'
+  'idIs0mk'
+  'r2dvar'
+  1.0d0
+
+'t0mk'
+  'temperature of molecular sub-layer under ice'
+  'degrees Celsius'
+  'temperature, scalar, series'
+  'ocean_time'
+  'idIt0mk'
+  'r2dvar'
+  1.0d0
+
+'iomflx'
+  'ice-ocean mass flux'
+  'meter second-1'
+  'ice-ocean mass flux, scalar, series'
+  'ocean_time'
+  'idImflx'
+  'r2dvar'
+  1.0d0
+
+'sig11'
+  'internal ice stress 11 component'
+  'Newton meter-1'
+  'ice stress 11, scalar, series'
+  'ocean_time'
+  'idIsg11'
+  'r2dvar'
+  1.0d0
+
+'sig22'
+  'internal ice stress 22 component'
+  'Newton meter-1'
+  'ice stress 22, scalar, series'
+  'ocean_time'
+  'idIsg22'
+  'r2dvar'
+  1.0d0
+
+'sig12'
+  'internal ice stress 12 component'
+  'Newton meter-1'
+  'ice stress 12, scalar, series'
+  'ocean_time'
+  'idIsg12'
+  'r2dvar'
+  1.0d0
+
+'wfr'
+  'rate of frazil ice growth'
+  'm^3 s-1'
+  'freeze rate, scalar, series'
+  'ocean_time'
+  'idIwfr'
+  'r2dvar'
+  1.0d0
+
+'wai'
+  'rate of ice melt on ice-air boundary'
+  'm^3 s-1'
+  'freeze/melt rate, scalar, series'
+  'ocean_time'
+  'idIwai'
+  'r2dvar'
+  1.0d0
+
+'wao'
+  'rate of ice growth on ocean-air boundary'
+  'm^3 s-1'
+  'freeze/melt rate, scalar, series'
+  'ocean_time'
+  'idIwao'
+  'r2dvar'
+  1.0d0
+
+'wio'
+  'rate of ice growth under ice'
+  'm^3 s-1'
+  'freeze rate, scalar, series'
+  'ocean_time'
+  'idIwio'
+  'r2dvar'
+  1.0d0
+
+'wro'
+  'rate of ice melt runoff'
+  'm^3 s-1'
+  'melt runoff rate, scalar, series'
+  'ocean_time'
+  'idIwro'
+  'r2dvar'
+  1.0d0
+
+'wdiv'
+  'rate of ice divergence'
+  'm^3 s-1'
+  'ice divergence rate, scalar, series'
+  'ocean_time'
+  'idIwdiv'
+  'r2dvar'
+  1.0d0
+
+'alb'                                              ! Input/Output
+  'albedo'
+  'fraction'                                       ! Input: [fraction]
+  'albedo, scalar, series'                         ! [Celsius m/s]
+  'ocean_time'                                     ! Output: [fraction]
+  'idIalbe'
+  'r2dvar'
+  1.0d0
+
+'alb_i'                                            ! Input/Output
+  'albedo_ice'
+  'fraction'                                       ! Input: [fraction]
+  'albedo_ice, scalar, series'                     ! [Celsius m/s]
+  'ocean_time'                                     ! Output: [fraction]
+  'idIalbI'
+  'r2dvar'
+  1.0d0
+
+'lr_down'
+  'downward longwave radiation'
+  'W m-2'
+  'LW_down, scalar, series'
+  'ocean_time'
+  'idIlrdn'
+  'r2dvar'
+  1.0d0
+
+'sr_down'
+  'downward shortwave radiation'
+  'W m-2'
+  'SW_down, scalar, series'
+  'ocean_time'
+  'idIsrdn'
+  'r2dvar'
+  1.0d0
+
+'lat_ice'
+  'latent heat flux over ice'
+  'W m-2'
+  'lat_ice, scalar, series'
+  'ocean_time'
+  'idIlatI'
+  'r2dvar'
+  1.0d0
+
+'sen_ice'
+  'sensible heat flux over ice'
+  'W m-2'
+  'sens_ice, scalar, series'
+  'ocean_time'
+  'idIsenI'
+  'r2dvar'
+  1.0d0
+
+'lr_up_ice'
+  'upward longwave radiation over ice'
+  'W m-2'
+  'LW_up_ice, scalar, series'
+  'ocean_time'
+  'idIlrup'
+  'r2dvar'
+  1.0d0
+
+'sr_up_ice'
+  'upward shortwave radiation over ice'
+  'W m-2'
+  'SW_up_ice, scalar, series'
+  'ocean_time'
+  'idIsrup'
+  'r2dvar'
+  1.0d0
+
+'sr_in_ice'
+  'shortwave radiation into ice'
+  'W m-2'
+  'SW_in_ice, scalar, series'
+  'ocean_time'
+  'idIsrin'
+  'r2dvar'
+  1.0d0
+
+'sr_th_ice'
+  'shortwave radiation through ice'
+  'W m-2'
+  'SW_thru_ice, scalar, series'
+  'ocean_time'
+  'idIsrth'
+  'r2dvar'
+  1.0d0
+
+'ssflx_i'
+  'salt flux under ice'
+  'meter second-1'                                 ! [PSU m/s]
+  'ssflx_ai, scalar, series'
+  'ocean_time'
+  'idIsfI'
+  'r2dvar'
+  1.0d0
+
+'ssflx_l'
+  'salt flux of air-ocean'
+  'meter second-1'                                 ! [PSU m/s]
+  'ssflx_ao, scalar, series'
+  'ocean_time'
+  'idIsfL'
+  'r2dvar'
+  1.0d0
+
+'qao'
+  'air-ocean heat flux'
+  'W m-2'
+  'qao, scalar, series'
+  'ocean_time'
+  'idIqao'
+  'r2dvar'
+  1.0d0
+
+'qai'
+  'ice-air heat flux'
+  'W m-2'
+  'qai, scalar, series'
+  'ocean_time'
+  'idIqai'
+  'r2dvar'
+  1.0d0
+
+'qio'
+  'ice-ocean heat flux'
+  'W m-2'
+  'qio, scalar, series'
+  'ocean_time'
+  'idIqio'
+  'r2dvar'
+  1.0d0
+
+'qi2'
+  'ice heat flux'
+  'W m-2'
+  'qi2, scalar, series'
+  'ocean_time'
+  'idIqi2'
+  'r2dvar'
+  1.0d0
+
+'snoice'
+  'snow-ice conversion'
+  'm s-1'
+  'snoice, scalar, series'
+  'ocean_time'
+  'idIsnoi'
+  'r2dvar'
+  1.0d0
+
+'frswp'
+  'shortwave penetration into ice'
+  'm s-1'
+  'frswpen, scalar, series'
+  'ocean_time'
+  'idIfrsw'
+  'r2dvar'
+  1.0d0
+
+'rfaci'
+  'reduction factor for near-IR fraction of SW under ice'
+  'm s-1'
+  'rfaci, scalar, series'
+  'ocean_time'
+  'idIrfac'
+  'r2dvar'
+  1.0d0
+
+!
+!------------------------------------------------------------------------------
 ! ICESHELF variables (Chuning Wang)
 !------------------------------------------------------------------------------
 !
 
-'m'                                                ! Output
+'is_mr'                                            ! Output
   'ice shelf melt rate'
   'meter second-1'                                 ! [m/s]
   'melt_rate, scalar, series'
@@ -2037,7 +2439,7 @@
   'r2dvar'
   1.0d0
 
-'Tstar'                                            ! Output
+'is_Tstar'                                         ! Output
   'insitu temperature driving force at ice base'
   'Celsius'                                        !
   'temperature_driving_force, scalar, series'
@@ -2046,7 +2448,7 @@
   'r2dvar'
   1.0d0
 
-'Ustar'                                            ! Output
+'is_Ustar'                                         ! Output
   'friction velocity at ice base'
   'meter second-1'                                 ! [m/s]
   'friction_velocity, scalar, series'
@@ -2055,7 +2457,7 @@
   'r2dvar'
   1.0d0
 
-'Tb'                                               ! Output
+'is_Tb'                                            ! Output
   'temperature at ice-shelf base'
   'Celcius'                                        ! [Celcius]
   'temperature_base, scalar, series'
@@ -2064,7 +2466,7 @@
   'r2dvar'
   1.0d0
 
-'Sb'                                               ! Output
+'is_Sb'                                            ! Output
   'salinity at ice-shelf base'
   'nondimensional'                                 ! [PSU]
   'salinity_base, scalar, series'
@@ -2073,7 +2475,7 @@
   'r2dvar'
   1.0d0
 
-'draft'                                            ! Input/Output
+'is_draft'                                         ! Input/Output
   'ice draft'
   'meter'                                          ! [m]
   'bathymetry, scalar, series'
@@ -2082,7 +2484,7 @@
   'r2dvar'
   1.0d0
 
-'iceshelf_vol'                                     ! Input/Output
+'is_vol'                                           ! Input/Output
   'refreezed iceshelf draft'
   'meter'                                          ! [m]
   'bathymetry, scalar, series'
@@ -2091,7 +2493,7 @@
   'r2dvar'
   1.0d0
 
-'iceshelf_trc_'                                    ! Input/Output
+'is_dye_'                                          ! Input/Output
   'integrated passive tracer in refreezed iceshelf draft'
   'meter kilogram meter-3'                         ! [m kg/m3]
   'dye_, scalar, series'
