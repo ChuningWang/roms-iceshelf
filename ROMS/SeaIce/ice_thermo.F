@@ -1,6 +1,6 @@
 #include "cppdefs.h"
       MODULE ice_thermo_mod
-#if defined ICE_MODEL && defined ICE_THERMO
+#ifdef ICE_THERMO
 !
 !=======================================================================
 !  Copyright (c) 2002-2021 The ROMS/TOMS Group                         !

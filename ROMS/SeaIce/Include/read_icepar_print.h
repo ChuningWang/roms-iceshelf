@@ -61,13 +61,13 @@
      &       'Write out ice frazil growth rate.'
           IF (Hout(idIwai,ng)) WRITE (out,70) Hout(idIwai,ng),          &
      &       'Hout(idIwai)',                                            &
-     &       'Write out ice groth/melt rate of ice-air.'
+     &       'Write out ice growth/melt rate of ice-air.'
           IF (Hout(idIwao,ng)) WRITE (out,70) Hout(idIwao,ng),          &
      &       'Hout(idIwao)',                                            &
-     &       'Write out ice groth/melt rate of leads.'
+     &       'Write out ice growth/melt rate of leads.'
           IF (Hout(idIwio,ng)) WRITE (out,70) Hout(idIwio,ng),          &
      &       'Hout(idIwio)',                                            &
-     &       'Write out ice groth/melt rate of ice-ocean.'
+     &       'Write out ice growth/melt rate of ice-ocean.'
           IF (Hout(idIwro,ng)) WRITE (out,70) Hout(idIwro,ng),          &
      &       'Hout(idIwro)',                                            &
      &       'Write out ice melt runoff rate.'
@@ -234,13 +234,13 @@
      &       'Write out averaged ice frazil growth rate.'
           IF (Aout(idIwai,ng)) WRITE (out,70) Aout(idIwai,ng),          &
      &       'Aout(idIwai)',                                            &
-     &       'Write out averaged ice groth/melt rate of ice-air.'
+     &       'Write out averaged ice growth/melt rate of ice-air.'
           IF (Aout(idIwao,ng)) WRITE (out,70) Aout(idIwao,ng),          &
      &       'Aout(idIwao)',                                            &
-     &       'Write out averaged ice groth/melt rate of leads.'
+     &       'Write out averaged ice growth/melt rate of leads.'
           IF (Aout(idIwio,ng)) WRITE (out,70) Aout(idIwio,ng),          &
      &       'Aout(idIwio)',                                            &
-     &       'Write out averaged ice groth/melt rate of ice-ocean.'
+     &       'Write out averaged ice growth/melt rate of ice-ocean.'
           IF (Aout(idIwro,ng)) WRITE (out,70) Aout(idIwro,ng),          &
      &       'Aout(idIwro)',                                            &
      &       'Write out averaged ice melt runoff rate.'
@@ -407,13 +407,13 @@
      &       'Write out quick ice frazil growth rate.'
           IF (Qout(idIwai,ng)) WRITE (out,70) Qout(idIwai,ng),          &
      &       'Qout(idIwai)',                                            &
-     &       'Write out quick ice groth/melt rate of ice-air.'
+     &       'Write out quick ice growth/melt rate of ice-air.'
           IF (Qout(idIwao,ng)) WRITE (out,70) Qout(idIwao,ng),          &
      &       'Qout(idIwao)',                                            &
-     &       'Write out quick ice groth/melt rate of leads.'
+     &       'Write out quick ice growth/melt rate of leads.'
           IF (Qout(idIwio,ng)) WRITE (out,70) Qout(idIwio,ng),          &
      &       'Qout(idIwio)',                                            &
-     &       'Write out quick ice groth/melt rate of ice-ocean.'
+     &       'Write out quick ice growth/melt rate of ice-ocean.'
           IF (Qout(idIwro,ng)) WRITE (out,70) Qout(idIwro,ng),          &
      &       'Qout(idIwro)',                                            &
      &       'Write out quick ice melt runoff rate.'

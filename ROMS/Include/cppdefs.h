@@ -614,7 +614,7 @@
 ** ICE_OUTFLOW_MASK    use for Hibler style outflow cells                    **
 ** ICE_SHALLOW_LIMIT   use for grounded sea ice                              **
 ** ICE_SHOREFAST       use for a simple shorefast-ice algorithm (Budgell)    **
-** ICE_SHORTWAVE_R     use for ice impact on shortwave spectral quality      **
+** ICE_LMD_SHORTWAVE   use for ice impact on shortwave spectral quality      **
 ** ICE_SMOLAR          use for MPDATA advection scheme                       **
 ** ICE_SNOWFALL        use for snow fall on sea ice                          **
 ** ICE_STRENGTH_QUAD   use for ice strength quadratic function of thickness  **

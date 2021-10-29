@@ -469,22 +469,9 @@
 !
       real(r8), parameter :: epsilon = 0.622_r8
 
-      real(r8) :: Hscale, Hscale2
+      real(r8) :: Hscale, Hscale_inv
       real(r8) :: RH, cff1, cff2
       real(r8) :: cff
-# ifdef ICE_MODEL
-      real(r8) :: transw, transi, rtransi
-#  ifdef ICE_THERMO
-      real(r8) :: qswi, qlwi, qlh_i, qsh_i
-      real(r8) :: le_i, dq_i,fqlat1, sfc_temp, slp, Qsati
-      real(r8) :: vap_p_i
-      real(r8), parameter :: Io_frac = 0.17_r8   ! from MU
-#  endif
-#  ifdef ICE_ALB_DIRDIFF
-      real(r8), parameter :: albw_d=0.065_r8
-      real(r8) :: cawdif
-#  endif
-# endif
 # ifdef EVAP_SHALLOW
       real(r8), parameter :: coef_shallow = 5.28_r8
 !     real(r8), parameter :: coef_shallow = 4.69_r8
@@ -532,12 +519,12 @@
 ! real(R8), intent(in) :: Uwind (imax)   ! atm u wind        (m/s)
 ! real(R8), intent(in) :: Vwind (imax)   ! atm v wind        (m/s)
 ! real(R8), intent(in) :: Tair (imax)    ! atm potential T   (K)
-! real(R8), intent(in) :: Hair (imax)    ! atm spec humidity (kg/kg)
+! real(R8), intent(in) :: Hair (imax)    ! atm rel humidity  (frac)
 ! real(R8), intent(in) :: rhoAir (imax)  ! atm air density   (kg/m^3)
 ! real(R8), intent(in) :: u (imax)       ! ocn u-velocity    (m/s)
 ! real(R8), intent(in) :: v (imax)       ! ocn v-velocity    (m/s)
 ! real(R8), intent(in) :: t (imax)       ! ocn temperature   (K)
-
+!
 !--- output arguments -------------------------------
 ! real(R8), intent(out) :: shflx (imax)  ! heat flux: sensible    (W/m^2)
 ! real(R8), intent(out) :: lhflx (imax)  ! heat flux: latent      (W/m^2)
@@ -548,7 +535,7 @@
 ! real(R8), intent(out) :: tref (imax)   ! diag:  2m ref height T     (K)
 ! real(R8), intent(out) :: qref (imax)   ! diag:  2m ref humidity (kg/kg)
 ! real(R8), intent(out) :: duu10n (imax) ! diag: 10m wspeed sqrd (m/s)^2
-
+!
 !EOP
 !
 !--- local constants --------------------------------
@@ -559,35 +546,35 @@
 !
 !--- local variables --------------------------------
 !
-      real(r8)    :: lwup    ! upward longwave radiation
-      real(r8)    :: vmag    ! surface wind magnitude   (m/s)
-      real(r8)    :: thvbot  ! virtual temperature      (K)
-      real(r8)    :: ssq     ! sea surface humidity     (kg/kg)
-      real(r8)    :: Tseak   ! SST in Kelvins           (K)
-      real(r8)    :: delt    ! potential T difference   (K)
-      real(r8)    :: delq    ! humidity difference      (kg/kg)
-      real(r8)    :: stable  ! stability factor
-      real(r8)    :: rdn     ! sqrt of neutral exchange coeff (momentum)
-      real(r8)    :: rhn     ! sqrt of neutral exchange coeff (heat)
-      real(r8)    :: ren     ! sqrt of neutral exchange coeff (water)
-      real(r8)    :: rd      ! sqrt of exchange coefficient (momentum)
-      real(r8)    :: re      ! sqrt of exchange coefficient (water)
-      real(r8)    :: ustar   ! ustar
-      real(r8)    :: qstar   ! qstar
-      real(r8)    :: tstar   ! tstar
-      real(r8)    :: hol     ! H (at blk_ZX) over L
-      real(r8)    :: xsq     ! ?
-      real(r8)    :: xqq     ! ?
-      real(r8)    :: psimh   ! stability function at blk_ZX (momentum)
-      real(r8)    :: psixh   ! stability function at blk_ZX (heat/water)
-      real(r8)    :: psix2   ! stability function at ztref ref height
-      real(r8)    :: alz     ! ln(blk_ZX/zref)
-      real(r8)    :: al2     ! ln(zref/ztref)
-      real(r8)    :: u10n    ! 10m neutral wind
-      real(r8)    :: tau     ! stress at blk_ZX
-      real(r8)    :: cpair   ! specific heat of moist air
-      real(r8)    :: fac     ! vertical interpolation factor
-      real(r8)    :: Hlv     ! Latent heat of vaporization at surface
+      real(r8) :: lwup    ! upward longwave radiation
+      real(r8) :: vmag    ! surface wind magnitude   (m/s)
+      real(r8) :: thvbot  ! virtual temperature      (K)
+      real(r8) :: ssq     ! sea surface humidity     (kg/kg)
+      real(r8) :: Tseak   ! SST in Kelvins           (K)
+      real(r8) :: delt    ! potential T difference   (K)
+      real(r8) :: delq    ! humidity difference      (kg/kg)
+      real(r8) :: stable  ! stability factor
+      real(r8) :: rdn     ! sqrt of neutral exchange coeff (momentum)
+      real(r8) :: rhn     ! sqrt of neutral exchange coeff (heat)
+      real(r8) :: ren     ! sqrt of neutral exchange coeff (water)
+      real(r8) :: rd      ! sqrt of exchange coefficient (momentum)
+      real(r8) :: re      ! sqrt of exchange coefficient (water)
+      real(r8) :: ustar   ! ustar
+      real(r8) :: qstar   ! qstar
+      real(r8) :: tstar   ! tstar
+      real(r8) :: hol     ! H (at blk_ZX) over L
+      real(r8) :: xsq     ! ?
+      real(r8) :: xqq     ! ?
+      real(r8) :: psimh   ! stability function at blk_ZX (momentum)
+      real(r8) :: psixh   ! stability function at blk_ZX (heat/water)
+      real(r8) :: psix2   ! stability function at ztref ref height
+      real(r8) :: alz     ! ln(blk_ZX/zref)
+      real(r8) :: u10n    ! 10m neutral wind
+      real(r8) :: tau     ! stress at blk_ZX
+      real(r8) :: cpair   ! specific heat of moist air
+      real(r8) :: fac     ! vertical interpolation factor
+      real(r8) :: Hlv     ! Latent heat of vaporization at surface
+      real(r8) :: Qair    ! Specific humidity [kg/kg]
 !
       real(r8), dimension(IminS:ImaxS) :: rhoAir
       real(r8), dimension(IminS:ImaxS) :: TairK
@@ -596,16 +583,25 @@
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: Taux
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: Tauy
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: u10n_tmp
-# ifdef ICE_THERMO
-      real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: Coef_Ice
-      real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: RHS_Ice
-      real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: Qai
-# endif
+!
 # ifdef ICE_MODEL
+      real(r8) :: transw, transi, rtransi
+      real(r8) :: ice_thick
+      real(r8) :: snow_thick
 !
 ! Visual fraction of total shortwave (Aumont et al., 2015)
 !
       real(r8), parameter :: fv=0.43_r8
+#  ifdef ICE_THERMO
+      real(r8), parameter :: Io_frac = 0.17_r8   ! from MU
+      real(r8) :: qswi, qlwi, qlh_i, qsh_i
+      real(r8) :: le_i, dq_i,fqlat1, sfc_temp, slp, Qsati
+      real(r8) :: vap_p_i
+#  endif
+#  ifdef ICE_ALB_DIRDIFF
+      real(r8), parameter :: albw_d=0.065_r8
+      real(r8) :: cawdif
+#  endif
 #  ifdef ICE_CCSM_SHORTWAVE
 !
 ! Vis extnctn coef in ice (1/m); CESM2/CICE5.1 default,
@@ -615,9 +611,12 @@
 #  endif
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: Taux_Ice
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: Tauy_Ice
-      real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: ice_thick
-      real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: snow_thick
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: i0frac
+#  ifdef ICE_THERMO
+      real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: Coef_Ice
+      real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: RHS_Ice
+      real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: Qai
+#  endif
 # endif
 
 !--- local functions --------------------------------
@@ -626,6 +625,7 @@
       real(r8)    :: psimhu  ! function: unstable part of psimh
       real(r8)    :: psixhu  ! function: unstable part of psimx
       real(r8)    :: tsk     ! water temperature (K)
+      real(r8)    :: tak     ! air temperature (K)
       real(r8)    :: Tk      ! dummy arg ~ air temperature (K)
       real(r8)    :: Umps    ! dummy arg ~ wind velocity (m/s)
       real(r8)    :: xd      ! dummy arg ~ ?
@@ -716,7 +716,6 @@
 !   o The saturation humidity of air at T(K): qsat(T)  (kg/m^3)
 !-----------------------------------------------------------------------
 !
-      al2 = LOG(zref/ztref)
 # if defined ICE_MODEL
       IF (PerfectRST(ng) .and. iic(ng).eq.ntstart(ng)) THEN
         listp = liold
@@ -754,7 +753,7 @@
 # endif
 
       Hscale = rho0*Cp
-      Hscale2 = 1.0_r8/(rho0*Cp)
+      Hscale_inv = 1.0_r8/Hscale
 !
 !  Note that this loop needs to be cleaned of all global arrays for
 !  OpenMP.
@@ -762,17 +761,28 @@
       DO j=JstrR,JendR
         DO i=IstrR,IendR
 !
+!  Compute specific humidities (kg/kg).
+!
+          IF (Hair(i,j).lt.2.0_r8) THEN  !RH fraction
+            cff=(1.0007_r8+3.46E-6_r8*Pair(i,j))*6.1121_r8*             &
+     &          EXP(17.502_r8*Tair(i,j)/(240.97_r8+Tair(i,j)))
+            cff=cff*Hair(i,j)
+            Qair=0.62197_r8*(cff/(Pair(i,j)-0.378_r8*cff))
+          ELSE  !RH input was actually specific humidity in g/kg
+            Qair=Hair(i,j)/1000.0_r8  !Spec Hum (kg/kg)
+          END IF
+!
 !--- compute some needed quantities ---
 !
-          vmag   = MAX(umin, SQRT( (Uair(i,j)**2 + Vair(i,j)**2)) )
+          vmag = MAX(umin, SQRT( (Uair(i,j)**2 + Vair(i,j)**2)) )
           TairK(i) = Tair(i,j) + 273.16_r8
           TseaK = t(i,j,N(ng),nrhs,itemp) + 273.16_r8
-          thvbot = TairK(i) * (1.0 + shr_const_zvir * Hair(i,j))
+          thvbot = TairK(i) * (1.0 + shr_const_zvir * Qair)
 !
 !  Virtual temp (K)
 !
-          rhoAir(i) = Pair(i,j)*100.0_r8/(blk_Rgas*TairK(i)*            &
-     &                    (1.0_r8+0.61_r8*Hair(i,j)))
+          rhoAir(i) = Pair(i,j)*100.0_r8 /                              &
+     &                (blk_Rgas*TairK(i)*(1.0_r8+0.61_r8*Qair))
 !
 !  Moist air density (kg/m3).
 !
@@ -784,12 +794,12 @@
 !
 !  Pot temp diff (K)
 !
-          delq   = Hair(i,j) - ssq
+          delq   = Qair - ssq
 !
 !  Spec hum dif (kg/kg)
 !
           alz    = LOG(blk_ZW(ng)/zref)
-          cpair     = shr_const_cpdair*(1.0 + shr_const_cpvir*ssq)
+          cpair  = shr_const_cpdair*(1.0 + shr_const_cpvir*ssq)
 !
 !  first estimate of Z/L and ustar, tstar and qstar
 !
@@ -809,7 +819,7 @@
 !--- compute stability & evaluate all stability functions ---
 !
           hol  = shr_const_karman*g*blk_ZT(ng)*                         &
-     &          (tstar/thvbot+qstar/(1.0_r8/shr_const_zvir+Hair(i,j)))/ &
+     &          (tstar/thvbot+qstar/(1.0_r8/shr_const_zvir+Qair))/      &
      &                     ustar**2
           hol  = SIGN( MIN(ABS(hol),10.0_r8), hol )
           stable = 0.5_r8 + SIGN(0.5_r8 , hol)
@@ -848,7 +858,7 @@
 !--- compute stability & evaluate all stability functions ---
 !
           hol  = shr_const_karman*g*blk_ZQ(ng)*                         &
-     &            (tstar/thvbot+qstar/(1.0/shr_const_zvir+Hair(i,j)))/  &
+     &            (tstar/thvbot+qstar/(1.0/shr_const_zvir+Qair))/       &
      &                         ustar**2
           hol  = SIGN( MIN(ABS(hol),10.0_r8), hol )
           stable = 0.5_r8 + SIGN(0.5_r8 , hol)
@@ -890,26 +900,30 @@
 !------------------------------------------------------------
 !
           tau = rhoAir(i) * ustar * ustar
-# ifdef ICE_THERMO
-          qswi_n(i,j) = srflx(i,j) * Hscale
-# endif
 !
 !--- momentum flux ---
 !
           Taux(i,j) = tau * Uair(i,j) / vmag
           Tauy(i,j) = tau * Vair(i,j) / vmag
+
 # ifdef ICE_MODEL
+!
+!  Ice model bulk flux formula
+!
+!  Sea ice momentum flux.
+!
           Taux_Ice(i,j) = rhoAir(i)*cdai(ng)*Uwind(i,j)*vmag
           Tauy_Ice(i,j) = rhoAir(i)*cdai(ng)*Vwind(i,j)*vmag
 
 #  ifdef ICE_THERMO
+          qswi_n(i,j) = srflx(i,j) * Hscale
 !
 !  Correct ocean net short-wave radiation for ice cover and convert to
 !  kinematic units
 !
 
           Coef_Ice(i,j) = 0._r8
-          RHS_Ice(i,j) = 0._r8
+          RHS_Ice(i,j)  = 0._r8
 !
 !  Sensible heat flux over ice
 !
@@ -918,15 +932,13 @@
           ELSE
             sfc_temp = t(i,j,N(ng),nrhs,itemp) + 273.16_r8
           ENDIF
-          qsh_i = rhoAir(i)*blk_Cpa*Ch*vmag*                            &
-     &            (TairK(i)+0.0098*blk_ZT(ng)-sfc_temp)
+          qsh_i         = rhoAir(i)*blk_Cpa*Ch*vmag*                    &
+     &                    (TairK(i)+0.0098*blk_ZT(ng)-sfc_temp)
           Coef_Ice(i,j) = Coef_Ice(i,j) +                               &
-     &          rhoAir(i)*blk_Cpa*Ch*vmag
-          RHS_Ice(i,j) = RHS_Ice(i,j) +                                 &
-     &        rhoAir(i)*blk_Cpa*Ch*vmag*(TairK(i)+0.0098*blk_ZT(ng))
-#   ifdef ICE_DIAGS
-          sen_i(i,j) = qsh_i
-#   endif
+     &                    rhoAir(i)*blk_Cpa*Ch*vmag
+          RHS_Ice(i,j)  = RHS_Ice(i,j) +                                &
+     &                    rhoAir(i)*blk_Cpa*Ch*vmag*                    &
+     &                    (TairK(i)+0.0098*blk_ZT(ng))
 !
 !  Latent heat of sublimation
 !
@@ -938,13 +950,14 @@
 !  Convert back to Pascal from millibars
 !
           slp = Pair(i,j)*100._r8
-          cff = 611._r8*                                                &
-     &      10._r8**(9.5_r8*(sfc_temp-273.16_r8)/(sfc_temp-7.66_r8))
-          Qsati=epsilon*cff/(slp-(1._r8-epsilon)*cff)
-          dq_i=Hair(i,j)-Qsati
-          fqlat1=rhoAir(i)*Ce*vmag
-          qlh_i = fqlat1*le_i*dq_i
+          cff = 611._r8*10._r8**(9.5_r8*(sfc_temp-273.16_r8)/           &
+     &                           (sfc_temp-7.66_r8))
+          Qsati  = epsilon*cff/(slp-(1._r8-epsilon)*cff)
+          dq_i   = Qair-Qsati
+          fqlat1 = rhoAir(i)*Ce*vmag
+          qlh_i  = fqlat1*le_i*dq_i
 #   ifdef ICE_DIAGS
+          sen_i(i,j) = qsh_i
           lat_i(i,j) = qlh_i
 #   endif
           RHS_Ice(i,j) = RHS_Ice(i,j) + qlh_i
@@ -955,10 +968,10 @@
 !
 !  Total absorbed shortwave (W/m2 ice)
 !
-          qswi = (1.0_r8-alb_i(i,j))*qswi_n(i,j)
 #    ifdef ICE_DIAGS
           sr_up_i(i,j) = alb_i(i,j)*qswi_n(i,j)
 #    endif
+          qswi = (1.0_r8-alb_i(i,j))*qswi_n(i,j)
 #   else
           qswi = qswi_n(i,j)
 #   endif
@@ -973,35 +986,53 @@
 !
 !  Assume only visual part penetrates (Briegleb et al., 2004)
 !
+#    ifdef ICE_ALBEDO
           i0frac(i,j) = (1.0_r8-alb_i(i,j))*fv
+#    else
+          i0frac(i,j) = fv
+#    endif
 #   endif
 
 #   ifdef ICE_I_O
-!
-!  Modified PWA 14/03/2019 to account for ICE_CCSM_SHORTWAVE option
-!
           IF (ai(i,j,listp) .gt. min_a(ng)) THEN
 #    ifdef ICE_CCSM_SHORTWAVE
 !
+!  Modified PWA 14/03/2019 to account for ICE_CCSM_SHORTWAVE option
+!
 !  Penetrating SW = frswpen*SW (W/m2 ice)
 !
-            sr_in_i(i,j) = qswi_n(i,j) * i0frac(i,j)
+            sr_th_i(i,j) = qswi_n(i,j) * i0frac(i,j)
+            sr_in_i(i,j) = sr_in_i(i,j) - sr_th_i(i,j)
 !
 !  SW absorbed in surface layer (W/m2 ice)
 !
-            qswi = qswi - sr_in_i(i,j)
-            IF (hsn(i,j,listp) > 1.e-3_r8) THEN
-              sr_in_i(i,j) = 0._r8
-            ELSE
-              sr_in_i(i,j) = qswi * Io_frac
-              qswi = qswi - sr_in_i(i,j)
+            IF (hsn(i,j,listp) < 1.e-3_r8) THEN
+              cff = sr_in_i(i,j) * Io_frac
+              sr_th_i(i,j) = sr_th_i(i,j) + cff
+              sr_in_i(i,j) = sr_in_i(i,j) - cff
             END IF
+#    else
+!
+!  Limit shortwave radiation to be used in computing penetrative
+!  radiation by presence of ice and biology
+!
+            ice_thick  = hi(i,j,listp)  / (ai(i,j,listp)+0.001_r8)
+            snow_thick = hsn(i,j,listp) / (ai(i,j,listp)+0.001_r8)
+!
+            IF (ice_thick.le.0.1_r8) THEN
+              cff1 = ice_thick*5._r8
+            ELSE
+              cff1 = 0.1_r8*5._r8+(ice_thick-0.1_r8)*1._r8
+            ENDIF
+            cff1=cff1+snow_thick*20._r8
+!
+            sr_th_i(i,j) = sr_in_i(i,j)*          exp(-cff1)
+            sr_in_i(i,j) = sr_in_i(i,j)*(1.0_r8 - exp(-cff1))
 #    endif
-          ELSE
 !
-!  This should be arbitrary
+!  Update qswi
 !
-            sr_in_i(i,j) = 0.0_r8
+            qswi = sr_in_i(i,j)
           ENDIF
 #   endif
 !
@@ -1011,26 +1042,28 @@
 !
 !  Net long-wave radiation from ice
 !
-          cff = Hair(i,j)/(1.0_r8+Hair(i,j))
+          cff     = Qair/(1.0_r8+Qair)
           vap_p_i = slp*cff/(0.62197 + cff)
 #   ifdef LONGWAVE
           qlwi = emmiss*StefBo*(TairK(i)**4)*                           &
-     &         (0.39_r8-0.005_r8*SQRT(vap_p_i))*                        &
-     &                (1.0_r8-0.65_r8*cloud(i,j)) -                     &
-     &          4._r8*StefBo*emmiss*TairK(i)**3*(sfc_temp-TairK(i))
+     &           (0.39_r8-0.005_r8*SQRT(vap_p_i))*                      &
+     &           (1.0_r8-0.65_r8*cloud(i,j)) -                          &
+     &           4._r8*StefBo*emmiss*TairK(i)**3*(sfc_temp-TairK(i))
 
           Coef_Ice(i,j) = Coef_Ice(i,j) +                               &
-     &           4._r8*StefBo*emmiss*TairK(i)**3
-          RHS_Ice(i,j) = RHS_Ice(i,j) -                                 &
-     &         emmiss*StefBo*(TairK(i)**4)*(                            &
-     &    (0.39_r8-0.005_r8*SQRT(vap_p_i))*(1.0_r8-0.65_r8*cloud(i,j))  &
-     &    - 4.0_r8)
-#   else
-          qlwi = lrflx(i,j)*Hscale - emmiss*StefBo*sfc_temp**4
+     &                    4._r8*StefBo*emmiss*TairK(i)**3
+          RHS_Ice(i,j)  = RHS_Ice(i,j) -                                &
+     &                    emmiss*StefBo*(TairK(i)**4)*                  &
+     &                    ((0.39_r8-0.005_r8*SQRT(vap_p_i))*            &
+     &                     (1.0_r8-0.65_r8*cloud(i,j)) - 4.0_r8)
+#   elif defined LONGWAVE_OUT
+          qlwi          = lrflx(i,j)*Hscale - emmiss*StefBo*sfc_temp**4
           Coef_Ice(i,j) = Coef_Ice(i,j) +                               &
-     &            4._r8*StefBo*emmiss*sfc_temp**3
-          RHS_Ice(i,j) = RHS_Ice(i,j) + lrflx(i,j)*Hscale +             &
-     &            3._r8*StefBo*emmiss*sfc_temp**4
+     &                    4._r8*StefBo*emmiss*sfc_temp**3
+          RHS_Ice(i,j)  = RHS_Ice(i,j) + lrflx(i,j)*Hscale +            &
+     &                    3._r8*StefBo*emmiss*sfc_temp**4
+#   else
+          qlwi = 0.0_r8
 #   endif
 #   ifdef ICE_DIAGS
           lr_up_i(i,j) = emmiss*StefBo*sfc_temp**4
@@ -1038,8 +1071,7 @@
 !
 !  Correct for Kelvin to Celsius in RHS
 !
-          RHS_Ice(i,j) = RHS_Ice(i,j) -                                 &
-     &            Coef_Ice(i,j)*273.16_r8
+          RHS_Ice(i,j) = RHS_Ice(i,j) - Coef_Ice(i,j)*273.16_r8
 !
 !  Net heat flux from ice to atmosphere
 !
@@ -1051,9 +1083,9 @@
           SHeat(i,j) = cpair * tau * tstar / ustar
           LHeat(i,j) = shr_const_latvap * tau * qstar / ustar
           SHeat(i,j) = SHeat(i,j)*(1-ai(i,j,listp)) +                   &
-     &                    ai(i,j,listp)*qsh_i
+     &                 qsh_i     *   ai(i,j,listp)
           LHeat(i,j) = LHeat(i,j)*(1-ai(i,j,listp)) +                   &
-     &                    ai(i,j,listp)*qlh_i
+     &                 qlh_i     *   ai(i,j,listp)
 # else
           SHeat(i,j) = cpair * tau * tstar / ustar
           LHeat(i,j) = shr_const_latvap * tau * qstar / ustar
@@ -1066,8 +1098,8 @@
         DO i=IstrR,IendR
           shflx (i,j) = SHeat(i,j)
           lhflx (i,j) = LHeat(i,j)
-          tsk = t(i,j,N(ng),nrhs,itemp) + 273.16_r8
-          lwup = -shr_const_stebol * tsk**4
+          tsk         = t(i,j,N(ng),nrhs,itemp) + 273.16_r8
+          lwup        = -shr_const_stebol * tsk**4
 
 # ifdef ICE_MODEL
 #  ifdef ICE_DIAGS
@@ -1079,8 +1111,8 @@
 !  albedo. Note that qswi is corrected separately for ice albedo above
 !
           IF (ai(i,j,listp) .gt. min_a(ng)) THEN
-            ice_thick(i,j) = hi(i,j,listp)/(ai(i,j,listp)+0.001_r8)
-            snow_thick(i,j) = hsn(i,j,listp)/(ai(i,j,listp)+0.001_r8)
+            ice_thick  = hi(i,j,listp)  / (ai(i,j,listp)+0.001_r8)
+            snow_thick = hsn(i,j,listp) / (ai(i,j,listp)+0.001_r8)
 !
 !  Note: This is necessary because hi,hsn are average thickness over the
 !        full cell
@@ -1090,34 +1122,34 @@
 !  Note: The attenuation due to snow is here accounted for in
 !        i0frac=frswpen, which uses asnow (see albedo.F)
 !
-            cff1 = kappav*ice_thick(i,j)
+            cff1 = kappav*ice_thick
 #  else
-            IF (ice_thick(i,j).le.0.1_r8) THEN
-              cff1 = ice_thick(i,j)*5._r8
+            IF (ice_thick.le.0.1_r8) THEN
+              cff1 = ice_thick*5._r8
             ELSE
-              cff1 = 0.1_r8*5._r8+(ice_thick(i,j)-0.1_r8)*1._r8
+              cff1 = 0.1_r8*5._r8+(ice_thick-0.1_r8)*1._r8
             ENDIF
-            cff1 = cff1+snow_thick(i,j)*20._r8
+            cff1 = cff1+snow_thick*20._r8
 #  endif
 #  ifdef ICE_ALBEDO
 #   ifdef ICE_ALB_DIRDIFF
-            cawdif = 1._r8-albw_d
-            transw = cawdir(i,j)*(1.0_r8-cloud(i,j))+cawdif*cloud(i,j)
-            transi = i0frac(i,j)*EXP(-cff1)
+            cawdif  = 1._r8-albw_d
+            transw  = cawdir(i,j)*(1.0_r8-cloud(i,j))+cawdif*cloud(i,j)
+            transi  = i0frac(i,j)*EXP(-cff1)
             rtransi = transi/transw
-            srflx(i,j) = srflx(i,j)*((1.0_r8-ai(i,j,listp))*transw      &
-     &                   + ai(i,j,listp)*transi)
+            srflx(i,j) = srflx(i,j)*((1.0_r8-ai(i,j,listp))*transw +    &
+     &                               ai(i,j,listp)         *transi)
 #   else
-            transw = 1.0_r8-alb(i,j)
-            transi = i0frac(i,j)*EXP(-cff1)
+            transw  = 1.0_r8-alb(i,j)
+            transi  = i0frac(i,j)*EXP(-cff1)
             rtransi = transi/transw
-            srflx(i,j) = srflx(i,j)*((1.0_r8-ai(i,j,listp))*transw      &
-     &                   + ai(i,j,listp)*transi)
+            srflx(i,j) = srflx(i,j)*((1.0_r8-ai(i,j,listp))*transw +    &
+     &                   ai(i,j,listp)*transi)
 #   endif
 #  else
             rtransi = i0frac(i,j)*EXP(-cff1)
-            srflx(i,j) = srflx(i,j)*((1.0_r8-ai(i,j,listp))             &
-     &                   + ai(i,j,listp)*rtransi)
+            srflx(i,j) = srflx(i,j)*((1.0_r8-ai(i,j,listp)) +           &
+     &                               ai(i,j,listp)*rtransi)
 #  endif
 !
 !  Correction factor for lmd_r1 (near IR fraction of total SW)
@@ -1142,11 +1174,27 @@
 !
 # endif
 
-# if defined LONGWAVE_OUT || defined LONGWAVE
-          lrflx(i,j) = lwup*Hscale2 + lrflx(i,j)
+# if defined LONGWAVE
+          tsk = t(i,j,N(ng),nrhs,itemp) + 273.16_r8
+          tak = Tair(i,j) + 273.16_r8
+
+          cff=(0.7859_r8+0.03477_r8*Tair(i,j))/                         &
+     &        (1.0_r8+0.00412_r8*Tair(i,j))
+          cff=10.0_r8**cff   ! saturation vapor pressure (hPa or mbar)
+          cff=cff*Hair(i,j)  ! water vapor pressure (hPa or mbar)
+
+          cff2=tak*tak*tak
+          cff1=cff2*tak
+          lrflx(i,j) = -shr_const_stebol*                               &
+     &                 (cff1*(0.39_r8-0.05_r8*SQRT(cff))  *             &
+     &                       (1.0_r8-0.6823_r8*cloud(i,j)*cloud(i,j))+  &
+     &                  cff2*4.0_r8*(tsk-tak))
+          lrflx(i,j) = lrflx(i,j)*Hscale_inv
+# elif defined LONGWAVE_OUT
+          lrflx(i,j) = lwup*Hscale_inv + lrflx(i,j)
 # endif
-          lhflx(i,j) = lhflx(i,j)*Hscale2
-          shflx(i,j) = shflx(i,j)*Hscale2
+          lhflx(i,j) = lhflx(i,j)*Hscale_inv
+          shflx(i,j) = shflx(i,j)*Hscale_inv
           stflux(i,j,itemp) = (srflx(i,j)+lrflx(i,j)+                   &
      &                         lhflx(i,j)+shflx(i,j))
 # ifdef EMINUSP
@@ -1167,48 +1215,10 @@
 #  endif
 # endif
 # ifdef WET_DRY
-#   ifdef EMINUSP
+#  ifdef EMINUSP
           evap(i,j)=evap(i,j)*rmask_wet(i,j)
-#   endif
-# endif
-!
-!  Limit shortwave radiation to be used in computing penetrative
-!  radiation by presence of ice and biology
-!  This all needs fixing to be consistent with the ICE_CCSM_SHORTWAVE
-!  above.
-!
-!          ice_thick(i,j) = hi(i,j,listp)/(ai(i,j,listp)+eps)
-!          snow_thick(i,j) = hsn(i,j,listp)/(ai(i,j,listp)+eps)
-!
-!          IF (ice_thick(i,j).le.0.1_r8) THEN
-!            cff1=ice_thick(i,j)*5._r8
-!          ELSE
-!            cff1=0.1_r8*5._r8+(ice_thick(i,j)-0.1_r8)*1._r8
-!          ENDIF
-!
-!          cff1= cff1+snow_thick(i,j)*20._r8
-!
-!          sr_th_i(i,j) = sr_in_i(i,j)*exp(-cff1)
-!          sr_in_i(i,j) = sr_in_i(i,j)*(1.0_r8 - exp(-cff1))
-
-# ifdef ICE_MODEL
-          qao_n(i,j) = -stflux(i,j,itemp)*Hscale
-!
-!  Net precipitation - evaporation in m/s
-!
-          IF (Tair(i,j).ge.0.0) THEN
-            snow_n(i,j) = 0.0_r8
-          ELSE
-#  ifdef ICE_SNOWFALL
-            snow_n(i,j) = (snow(i,j) + rain(i,j))/rhosnow_dry(ng)
-#  else
-            snow_n(i,j) = rain(i,j)/rhosnow_dry(ng)
 #  endif
-          ENDIF
-          coef_ice_heat(i,j) = Coef_Ice(i,j)
-          rhs_ice_heat(i,j) = RHS_Ice(i,j)
-          qai_n(i,j) = Qai(i,j)
-# endif  /* ICE_MODEL */
+# endif
 !
 !--- water flux ---
 !     evap(i,j) = lhflx(i,j)/shr_const_latvap
@@ -1224,9 +1234,13 @@
 !     tref(i,j) = TairK - delt*fac
 !     tref(i,j) = tref(i,j) - 0.01*ztref -- pot temp to temp correction
 !     fac       = (re/shr_const_karman) * (alz + al2 - psixh + psix2 )
-!     qref(i,j) =  Hair(i,j) - delq*fac
+!     qref(i,j) = Qair(i,j) - delq*fac
 !
 !     duu10n(i,j) = u10n*u10n ! 10m wind speed squared
+!
+!     real(r8) :: al2     ! ln(zref/ztref)
+!     al2 = LOG(zref/ztref)
+!
 
 # ifdef MASKING
           stflux(i,j,itemp)=stflux(i,j,itemp)*rmask(i,j)
@@ -1253,6 +1267,24 @@
           ssflx_l(i,j)=(1.0_r8-ai(i,j,listp))*stflux(i,j,isalt)
 #  endif
 # endif
+# ifdef ICE_MODEL
+          qao_n(i,j) = -stflux(i,j,itemp)*Hscale
+          qai_n(i,j) = Qai(i,j)
+          coef_ice_heat(i,j) = Coef_Ice(i,j)
+          rhs_ice_heat(i,j)  = RHS_Ice(i,j)
+!
+!  Net precipitation - evaporation in m/s
+!
+          IF (Tair(i,j).ge.0.0) THEN
+            snow_n(i,j) = 0.0_r8
+          ELSE
+#  ifdef ICE_SNOWFALL
+            snow_n(i,j) = (snow(i,j) + rain(i,j))/rhosnow_dry(ng)
+#  else
+            snow_n(i,j) = rain(i,j)/rhosnow_dry(ng)
+#  endif
+          ENDIF
+# endif  /* ICE_MODEL */
         END DO
       END DO
 !

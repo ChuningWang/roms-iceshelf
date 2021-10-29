@@ -2297,6 +2297,8 @@
         END DO
 # endif
       END IF
+
+#include "set_avg_ice.h"
 !
 !-----------------------------------------------------------------------
 !  Convert accumulated sums into time-averages, if appropriate.
@@ -4576,8 +4578,6 @@
         END DO
 #  endif
       END IF
-
-#include "set_avg_ice.h"
 
       RETURN
       END SUBROUTINE set_detide_tile

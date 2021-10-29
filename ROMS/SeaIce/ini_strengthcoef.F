@@ -1,6 +1,6 @@
 #include "cppdefs.h"
       MODULE ini_strengthcoef_mod
-#ifdef ICE_STRENGTH_QUAL
+#ifdef ICE_STRENGTH_QUAD
 !
 ! svn $Id$
 !================================================== Hernan G. Arango ===

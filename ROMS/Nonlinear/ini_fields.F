@@ -770,7 +770,7 @@
 !-----------------------------------------------------------------------
 !
       IF (.not.PerfectRST(ng)) THEN
-        CALL ice_limit(ng, TILE)
+        CALL ice_limit (ng, tile)
         DO j=Jstr,Jend
           DO i=IstrU,Iend
             cff1=ui(i,j,nstp)
@@ -827,6 +827,7 @@
 #  endif
             ageice(i,j,nstp)=cff1
             ageice(i,j,nnew)=cff1
+!
           END DO
         END DO
       END IF

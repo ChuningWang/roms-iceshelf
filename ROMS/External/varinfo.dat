@@ -2100,8 +2100,8 @@
   'r2dvar'
   1.0d0
 
-'tice_sur'
-  'temperature of ice/snow surface'
+'tice3'
+  'temperature of ice or snow top'
   'degrees Celcius'
   'surface temperature, scalar, series'
   'ocean_time'
@@ -2109,8 +2109,8 @@
   'r2dvar'
   1.0d0
 
-'tice_snow'
-  'temperature of ice-snow boundary'
+'tice2'
+  'temperature of ice-snow interface'
   'degrees Celcius'
   'ice-snow boundary temperature, scalar, series'
   'ocean_time'
@@ -2118,7 +2118,7 @@
   'r2dvar'
   1.0d0
 
-'tice_mid'
+'tice1'
   'temperature of ice interior'
   'degrees Celcius'
   'interior temperature, scalar, series'
@@ -2397,7 +2397,7 @@
   'r2dvar'
   1.0d0
 
-'snoice'
+'sno_ice'
   'snow-ice conversion'
   'm s-1'
   'snoice, scalar, series'
@@ -2406,7 +2406,7 @@
   'r2dvar'
   1.0d0
 
-'frswp'
+'frac_sr_ice'
   'shortwave penetration into ice'
   'm s-1'
   'frswpen, scalar, series'
@@ -2415,7 +2415,7 @@
   'r2dvar'
   1.0d0
 
-'rfaci'
+'rfac_ice'
   'reduction factor for near-IR fraction of SW under ice'
   'm s-1'
   'rfaci, scalar, series'

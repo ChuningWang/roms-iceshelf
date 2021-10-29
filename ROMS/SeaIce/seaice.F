@@ -20,10 +20,7 @@
 
       USE ice_spdiw_mod, ONLY : ice_spdiw
       USE ice_vbc_mod, ONLY : ice_vbc
-# ifdef ICE_THERMO
-      USE ice_thermo_mod, ONLY : ice_thermo
-# endif
-# if defined ICE_MOMENTUM && defined ICE_EVP
+# ifdef ICE_MOMENTUM
       USE ice_evp_mod, ONLY : ice_evp
       USE ice_evp_sig_mod, ONLY : ice_evp_sig
       USE ice_elastic_mod, ONLY : ice_elastic
@@ -31,6 +28,9 @@
 # ifdef ICE_ADVECT
       USE ice_advect_mod, ONLY : ice_advect
       USE ice_enthalpi_mod, ONLY : ice_enthalpi
+# endif
+# ifdef ICE_THERMO
+      USE ice_thermo_mod, ONLY : ice_thermo
 # endif
 # if defined ICE_ADVECT || defined ICE_THERMO
       USE ice_limit_mod, ONLY : ice_limit
@@ -69,7 +69,6 @@
         END DO
 
 # ifdef ICE_MOMENTUM
-#  ifdef ICE_EVP
 ! ----------------------------------------------------------------------
 !  Compute the internal ice stresses according to the 
 !  Elastic-Viscous-Plastic rheology (EVP).
@@ -104,12 +103,6 @@
 !$OMP BARRIER
           END DO
         END DO
-
-#  else
-        write(*,*) 'An ice rheology must be defined if ICE_MOMENTUM',   &
-     &             ' option is specified'
-        stop
-#  endif
 # endif
 
 # ifdef ICE_ADVECT

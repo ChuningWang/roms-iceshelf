@@ -150,9 +150,9 @@
             CASE ('TRANS_COEFF')
               Npts=load_r(Nval, Rval, 1, Rvalue)
               trans_coeff=Rvalue(1)
-            CASE ('SUBLIM_LATENT_HEAT')
+            CASE ('SUBLIM_LAT_H')
               Npts=load_r(Nval, Rval, 1, Rvalue)
-              sublim_latent_heat=Rvalue(1)
+              sublim_lat_h=Rvalue(1)
             CASE ('T0DEG')
               Npts=load_r(Nval, Rval, 1, Rvalue)
               t0deg=Rvalue(1)
@@ -261,7 +261,7 @@
      &          'Specific heat of air.'
           WRITE (out,60) trans_coeff, 'TRANS_COEFF',                    &
      &          'Transfer coefficient.'
-          WRITE (out,60) sublim_latent_heat, 'SUBLIM_LATENT_HEAT',      &
+          WRITE (out,60) sublim_lat_h, 'SUBLIM_LAT_H',                  &
      &          'Latent_heat of sublimation.'
           WRITE (out,60) t0deg, 'T0DEG',                                &
      &          'Zero degrees Celsius in degrees Kelvin.'

@@ -142,10 +142,8 @@
 
 # include "set_bounds.h"
 
-# define I_RANGE MAX(Istr-2,0),MIN(Iend+2,Lm(ng)+1)
-# define J_RANGE MAX(Jstr-2,0),MIN(Jend+2,Mm(ng)+1)
-      DO j=J_RANGE
-        DO i=I_RANGE
+      DO j=MAX(Jstr-2,0),MIN(Jend+2,Mm(ng)+1)
+        DO i=MAX(Istr-2,0),MIN(Iend+2,Lm(ng)+1)
 !         sl_dpth = lmd_epsilon*(z_w(i,j,N(ng))-hsbl(i,j))
 # ifdef LMD_SKPP
 !
@@ -167,12 +165,9 @@
 !
         END DO
       END DO
-# undef I_RANGE
-# undef J_RANGE
 
-# define I_RANGE MAX(Istr-1,1),Iend+1
       DO j=Jstr,Jend
-        DO i=I_RANGE
+        DO i=MAX(Istr-1,1),Iend+1
           nlio = 0
           nbotu = NINT(0.5_r8*(nbot(i-1,j)+nbot(i,j)))
           nbotu = MAX(MIN(nbotu,N(ng)),1)
@@ -190,8 +185,7 @@
         END DO
       END DO
 
-# define J_RANGE MAX(Jstr-1,1),Jend+1 
-      DO j=J_RANGE
+      DO j=MAX(Jstr-1,1),Jend+1
         DO i=Istr,Iend
           nlio = 0
           nbotv = NINT(0.5_r8*(nbot(i,j-1)+nbot(i,j)))
@@ -209,8 +203,6 @@
 !         vw(i,j) = v(i,j,N,nrhs)
         END DO
       END DO
-# undef I_RANGE
-# undef J_RANGE
 
       DO j=Jstr,Jend
         DO i=Istr,Iend

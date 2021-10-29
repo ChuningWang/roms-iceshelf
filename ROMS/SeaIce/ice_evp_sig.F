@@ -1,6 +1,6 @@
 #include "cppdefs.h"
       MODULE ice_evp_sig_mod
-#if defined ICE_MOMENTUM && defined ICE_EVP
+#ifdef ICE_EVP
 !
 !================================================ W. Paul Budgell ======
 !  Copyright (c) 2002-2021 The ROMS/TOMS Group                         !

@@ -347,7 +347,7 @@
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
       END IF
 !
-!  Write out ice groth/melt rate of ice-air.
+!  Write out ice growth/melt rate of ice-air.
 !
       IF (Sout(idIwai,ng)) THEN
         scale=1.0_dp
@@ -363,7 +363,7 @@
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
       END IF
 !
-!  Write out ice groth/melt rate of leads.
+!  Write out ice growth/melt rate of leads.
 !
       IF (Sout(idIwao,ng)) THEN
         scale=1.0_dp
@@ -379,7 +379,7 @@
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
       END IF
 !
-!  Write out ice groth/melt rate of ice-ocean.
+!  Write out ice growth/melt rate of ice-ocean.
 !
       IF (Sout(idIwio,ng)) THEN
         scale=1.0_dp

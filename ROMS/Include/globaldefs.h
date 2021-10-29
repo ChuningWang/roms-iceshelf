@@ -1041,17 +1041,8 @@
 ** Check for calling ice model
 */
 
-#if defined ICE_ADVECT        || defined ICE_ALB_EC92       || \
-    defined ICE_BULK_FLUXES   || defined ICE_CCSM_SHORTWAVE || \
-    defined ICE_CONVSNOW      || defined ICE_DIAGS          || \
-    defined ICE_EVP           || defined ICE_I_O            || \
-    defined ICE_LANDFAST      || defined ICE_LANDFAST_CLIM  || \
-    defined ICE_MK            || defined ICE_MOMENTUM       || \
-    defined ICE_NO_SNOW       || defined ICE_OUTFLOW_MASK   || \
-    defined ICE_SHALLOW_LIMIT || defined ICE_SHOREFAST      || \
-    defined ICE_SHORTWAVE_R   || defined ICE_SMOLAR         || \
-    defined ICE_STRENGTH_QUAD || defined ICE_THERMO         || \
-    defined ICE_ALBEDO        || defined ICE_UPWIND
+#if defined ICE_ADVECT   || defined ICE_BULK_FLUXES || \
+    defined ICE_MOMENTUM || defined ICE_THERMO
 # define ICE_MODEL
 #endif
 
@@ -1059,6 +1050,42 @@
 # define IOUT linew(ng)
 # define IUOUT liunw(ng)
 # define IEOUT lienw(ng)
+#endif
+
+/*
+** Default momentum/advection/thermodynamic models for ice
+*/
+
+#if defined ICE_MOMENTUM && !defined ICE_EVP
+# define ICE_EVP
+#endif
+
+#if defined ICE_ADVECT && !defined ICE_SMOLAR
+# define ICE_SMOLAR
+#endif
+
+#if defined ICE_THERMO && !defined ICE_MK
+# define ICE_MK
+#endif
+
+#if defined CCSM_FLUXES && !defined BULK_FLUXES
+# define BULK_FLUXES
+#endif
+
+/*
+** Ice bulk flux formula
+*/
+
+#if defined ICE_MODEL && defined BULK_FLUXES
+# define ICE_BULK_FLUXES
+#endif
+
+/*
+** Ice albedo formula
+*/
+
+#if defined ICE_ALB_CSIM || defined ICE_ALB_EC92
+# define ICE_ALBEDO
 #endif
 
 /*
@@ -1071,24 +1098,42 @@
 #endif
 
 /*
-** Check for calling albedo function
+** Undefine some functions when bulk flux is not used
 */
 
-#if defined ICE_ALB_CSIM    || defined ICE_ALB_CURVE || \
-    defined ICE_ALB_DIRDIFF || defined ICE_ALB_FILE
-# define ICE_ALBEDO
+#if !defined ICE_BULK_FLUXES
+# undef ICE_ALBEDO
+# undef ICE_LMD_SHORTWAVE
+# undef ICE_SNOWFALL
 #endif
 
-#if defined ANA_ICE         || \
-    defined ANA_AIOBC       || \
-    defined ANA_HIOBC       || \
-    defined ANA_HSNOBC      || \
-    defined ANA_TIOBC       || \
-    defined ANA_SIGOBC      || \
-    defined ANA_MIOBC       || \
-    defined ANA_AICLIMA     || \
-    defined ANA_SICLIMA     || \
-    defined ANA_MICLIMA
+/*
+** Undefine other functions
+*/
+
+#if !defined ICE_MODEL
+# undef ICE_LANDFAST
+# undef ICE_SHOREFAST
+#endif
+
+#if !defined ICE_MOMENTUM
+# undef ICE_OUTFLOW_MASK
+# undef ICE_STRENGTH_QUAD
+#endif
+
+#if defined ICE_LANDFAST && defined ICE_SHOREFAST
+# undef ICE_SHOREFAST
+#endif
+
+/*
+** Ice analytical fields
+*/
+
+#if defined ANA_ICE     || defined ANA_AIOBC   || \
+    defined ANA_HIOBC   || defined ANA_HSNOBC  || \
+    defined ANA_TIOBC   || defined ANA_SIGOBC  || \
+    defined ANA_MIOBC   || defined ANA_AICLIMA || \
+    defined ANA_SICLIMA || defined ANA_MICLIMA
 # define ANALYTICAL
 #endif
 

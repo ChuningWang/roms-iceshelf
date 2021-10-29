@@ -7,7 +7,7 @@
 !    See License_ROMS.txt                                              !
 !=======================================================================
 !
-#if defined ICE_MODEL
+#ifdef ICE_MODEL
         USE mod_kinds
 !
         implicit none

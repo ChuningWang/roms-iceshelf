@@ -8,7 +8,7 @@
 !
         IF (get_var(idIuice)) THEN
           foundit=find_string(var_name, n_var, TRIM(Vname(1,idIuice)),  &
-     &                        varid)
+     &                        vindex)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
             my_pioVar%gtype=u2dvar
@@ -93,7 +93,7 @@
 !
         IF (get_var(idIvice)) THEN
           foundit=find_string(var_name, n_var, TRIM(Vname(1,idIvice)),  &
-     &                        varid)
+     &                        vindex)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
             my_pioVar%gtype=v2dvar
@@ -178,7 +178,7 @@
 !
         IF (get_var(idIaice)) THEN
           foundit=find_string(var_name, n_var, TRIM(Vname(1,idIaice)),  &
-     &                        varid)
+     &                        vindex)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
             my_pioVar%gtype=r2dvar
@@ -263,7 +263,7 @@
 !
         IF (get_var(idIhice)) THEN
           foundit=find_string(var_name, n_var, TRIM(Vname(1,idIhice)),  &
-     &                        varid)
+     &                        vindex)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
             my_pioVar%gtype=r2dvar
@@ -348,7 +348,7 @@
 !
         IF (get_var(idIhsno)) THEN
           foundit=find_string(var_name, n_var, TRIM(Vname(1,idIhsno)),  &
-     &                        varid)
+     &                        vindex)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
             my_pioVar%gtype=r2dvar
@@ -433,7 +433,7 @@
 !
         IF (get_var(idIagei)) THEN
           foundit=find_string(var_name, n_var, TRIM(Vname(1,idIagei)),  &
-     &                        varid)
+     &                        vindex)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
             my_pioVar%gtype=r2dvar
@@ -518,7 +518,7 @@
 !
         IF (get_var(idItice)) THEN
           foundit=find_string(var_name, n_var, TRIM(Vname(1,idItice)),  &
-     &                        varid)
+     &                        vindex)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
             my_pioVar%gtype=r2dvar
@@ -538,10 +538,10 @@
      &                        GRID(ng) % rmask,                         &
 #  endif
 #  ifdef CHECKSUM
-     &                        ICE(ng) % tis(:,:,Tindex),                &
+     &                        ICE(ng) % tis,                            &
      &                        checksum = Fhash)
 #  else
-     &                        ICE(ng) % tis(:,:,Tindex))
+     &                        ICE(ng) % tis)
 #  endif
             IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
               IF (Master) THEN
@@ -579,7 +579,7 @@
 !
         IF (get_var(idItmid)) THEN
           foundit=find_string(var_name, n_var, TRIM(Vname(1,idItmid)),  &
-     &                        varid)
+     &                        vindex)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
             my_pioVar%gtype=r2dvar
@@ -664,7 +664,7 @@
 !
         IF (get_var(idIsg11)) THEN
           foundit=find_string(var_name, n_var, TRIM(Vname(1,idIsg11)),  &
-     &                        varid)
+     &                        vindex)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
             my_pioVar%gtype=r2dvar
@@ -749,7 +749,7 @@
 !
         IF (get_var(idIsg12)) THEN
           foundit=find_string(var_name, n_var, TRIM(Vname(1,idIsg12)),  &
-     &                        varid)
+     &                        vindex)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
             my_pioVar%gtype=r2dvar
@@ -834,7 +834,7 @@
 !
         IF (get_var(idIsg22)) THEN
           foundit=find_string(var_name, n_var, TRIM(Vname(1,idIsg22)),  &
-     &                        varid)
+     &                        vindex)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
             my_pioVar%gtype=r2dvar
@@ -919,7 +919,7 @@
 !
         IF (get_var(idIutau)) THEN
           foundit=find_string(var_name, n_var, TRIM(Vname(1,idIutau)),  &
-     &                        varid)
+     &                        vindex)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
             my_pioVar%gtype=r2dvar
@@ -939,10 +939,10 @@
      &                        GRID(ng) % rmask,                         &
 #  endif
 #  ifdef CHECKSUM
-     &                        ICE(ng) % utau_iw(:,:,Tindex),            &
+     &                        ICE(ng) % utau_iw,                        &
      &                        checksum = Fhash)
 #  else
-     &                        ICE(ng) % utau_iw(:,:,Tindex))
+     &                        ICE(ng) % utau_iw)
 #  endif
             IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
               IF (Master) THEN
@@ -980,7 +980,7 @@
 !
         IF (get_var(idImchu)) THEN
           foundit=find_string(var_name, n_var, TRIM(Vname(1,idImchu)),  &
-     &                        varid)
+     &                        vindex)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
             my_pioVar%gtype=r2dvar
@@ -1000,10 +1000,10 @@
      &                        GRID(ng) % rmask,                         &
 #  endif
 #  ifdef CHECKSUM
-     &                        ICE(ng) % chu_iw(:,:,Tindex),             &
+     &                        ICE(ng) % chu_iw,                         &
      &                        checksum = Fhash)
 #  else
-     &                        ICE(ng) % chu_iw(:,:,Tindex))
+     &                        ICE(ng) % chu_iw)
 #  endif
             IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
               IF (Master) THEN
@@ -1041,7 +1041,7 @@
 !
         IF (get_var(idIt0mk)) THEN
           foundit=find_string(var_name, n_var, TRIM(Vname(1,idIt0mk)),  &
-     &                        varid)
+     &                        vindex)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
             my_pioVar%gtype=r2dvar
@@ -1061,10 +1061,10 @@
      &                        GRID(ng) % rmask,                         &
 #  endif
 #  ifdef CHECKSUM
-     &                        ICE(ng) % t0mk(:,:,Tindex),               &
+     &                        ICE(ng) % t0mk,                           &
      &                        checksum = Fhash)
 #  else
-     &                        ICE(ng) % t0mk(:,:,Tindex))
+     &                        ICE(ng) % t0mk)
 #  endif
             IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
               IF (Master) THEN
@@ -1102,7 +1102,7 @@
 !
         IF (get_var(idIs0mk)) THEN
           foundit=find_string(var_name, n_var, TRIM(Vname(1,idIs0mk)),  &
-     &                        varid)
+     &                        vindex)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
             my_pioVar%gtype=r2dvar
@@ -1122,10 +1122,10 @@
      &                        GRID(ng) % rmask,                         &
 #  endif
 #  ifdef CHECKSUM
-     &                        ICE(ng) % s0mk(:,:,Tindex),               &
+     &                        ICE(ng) % s0mk,                           &
      &                        checksum = Fhash)
 #  else
-     &                        ICE(ng) % s0mk(:,:,Tindex))
+     &                        ICE(ng) % s0mk)
 #  endif
             IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
               IF (Master) THEN
@@ -1232,7 +1232,7 @@
 !
         IF (get_var(idUsms)) THEN
           foundit=find_string(var_name, n_var, TRIM(Vname(1,idUsms)),   &
-     &                        varid)
+     &                        vindex)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
             my_pioVar%gtype=r2dvar
@@ -1252,10 +1252,10 @@
      &                        GRID(ng) % rmask,                         &
 #   endif
 #   ifdef CHECKSUM
-     &                        FORCES(ng) % sustr(:,:,Tindex),           &
+     &                        FORCES(ng) % sustr,                       &
      &                        checksum = Fhash)
 #   else
-     &                        FORCES(ng) % sustr(:,:,Tindex))
+     &                        FORCES(ng) % sustr)
 #   endif
             IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
               IF (Master) THEN
@@ -1293,7 +1293,7 @@
 !
         IF (get_var(idVsms)) THEN
           foundit=find_string(var_name, n_var, TRIM(Vname(1,idVsms)),   &
-     &                        varid)
+     &                        vindex)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
             my_pioVar%gtype=r2dvar
@@ -1313,10 +1313,10 @@
      &                        GRID(ng) % rmask,                         &
 #   endif
 #   ifdef CHECKSUM
-     &                        FORCES(ng) % svstr(:,:,Tindex),           &
+     &                        FORCES(ng) % svstr,                       &
      &                        checksum = Fhash)
 #   else
-     &                        FORCES(ng) % svstr(:,:,Tindex))
+     &                        FORCES(ng) % svstr)
 #   endif
             IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
               IF (Master) THEN
@@ -1358,7 +1358,7 @@
 !
         IF (get_var(idIsDrft)) THEN
           foundit=find_string(var_name, n_var, TRIM(Vname(1,idIsDrft)), &
-     &                        varid)
+     &                        vindex)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
             my_pioVar%gtype=r2dvar
@@ -1378,10 +1378,10 @@
      &                        GRID(ng) % rmask,                         &
 #   endif
 #   ifdef CHECKSUM
-     &                        GRID(ng) % zice(:,:,Tindex),              &
+     &                        GRID(ng) % zice,                          &
      &                        checksum = Fhash)
 #   else
-     &                        GRID(ng) % zice(:,:,Tindex))
+     &                        GRID(ng) % zice)
 #   endif
             IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
               IF (Master) THEN
@@ -1421,7 +1421,7 @@
 !
         IF (get_var(idIsVol)) THEN
           foundit=find_string(var_name, n_var, TRIM(Vname(1,idIsVol)),  &
-     &                        varid)
+     &                        vindex)
           IF (foundit) THEN
             my_pioVar%vd=var_desc(vindex)
             my_pioVar%gtype=r2dvar
@@ -1441,10 +1441,10 @@
      &                        GRID(ng) % rmask,                         &
 #   endif
 #   ifdef CHECKSUM
-     &                        ICESHELFVAR(ng) % isvol(:,:,Tindex),      &
+     &                        ICESHELFVAR(ng) % isvol,                  &
      &                        checksum = Fhash)
 #   else
-     &                        ICESHELFVAR(ng) % isvol(:,:,Tindex))
+     &                        ICESHELFVAR(ng) % isvol)
 #   endif
             IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
               IF (Master) THEN

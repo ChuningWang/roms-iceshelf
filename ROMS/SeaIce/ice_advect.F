@@ -1,6 +1,6 @@
 #include "cppdefs.h"
       MODULE ice_advect_mod
-#if defined ICE_MODEL && defined ICE_ADVECT
+#ifdef ICE_ADVECT
 !
 !=======================================================================
 !  Copyright (c) 2002-2020 The ROMS/TOMS Group                         !

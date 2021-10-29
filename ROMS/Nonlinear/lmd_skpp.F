@@ -91,7 +91,7 @@
 # ifdef LMD_NONLOCAL
      &                    MIXING(ng) % ghats,                           &
 # endif
-# ifdef ICE_SHORTWAVE_R
+# ifdef ICE_LMD_SHORTWAVE
      &                    ICE(ng) % rfaci,                              &
 # endif
      &                    MIXING(ng) % Akt,                             &
@@ -121,7 +121,7 @@
 # ifdef LMD_NONLOCAL
      &                          ghats,                                  &
 # endif
-# ifdef ICE_SHORTWAVE_R
+# ifdef ICE_LMD_SHORTWAVE
      &                          rfaci,                                  &
 # endif
      &                          Akt, Akv, hsbl, ksbl)
@@ -167,7 +167,7 @@
       real(r8), intent(in) :: sustr(LBi:,LBj:)
       real(r8), intent(in) :: svstr(LBi:,LBj:)
       real(r8), intent(in) :: bvf(LBi:,LBj:,0:)
-#  ifdef ICE_SHORTWAVE_R
+#  ifdef ICE_LMD_SHORTWAVE
       real(r8), intent(in) :: rfaci(LBi:,LBj:)
 #  endif
       real(r8), intent(inout) :: Akt(LBi:,LBj:,0:,:)
@@ -199,7 +199,7 @@
       real(r8), intent(in) :: sustr(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: svstr(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: bvf(LBi:UBi,LBj:UBj,0:N(ng))
-#  ifdef ICE_SHORTWAVE_R
+#  ifdef ICE_LMD_SHORTWAVE
       real(r8), intent(in) :: rfaci(LBi:UBi,LBj:UBj)
 #  endif
       real(r8), intent(inout) :: Akt(LBi:UBi,LBj:UBj,0:N(ng),NAT)
@@ -325,7 +325,7 @@
         CALL lmd_swfrac_tile (ng, tile,                                 &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        IminS, ImaxS, JminS, JmaxS,               &
-# ifdef ICE_SHORTWAVE_R
+# ifdef ICE_LMD_SHORTWAVE
      &                        rfaci,                                    &
 # endif
      &                        -1.0_r8, zgrid, swdk)
@@ -586,7 +586,7 @@
       CALL lmd_swfrac_tile (ng, tile,                                   &
      &                      LBi, UBi, LBj, UBj,                         &
      &                      IminS, ImaxS, JminS, JmaxS,                 &
-# ifdef ICE_SHORTWAVE_R
+# ifdef ICE_LMD_SHORTWAVE
      &                      rfaci,                                      &
 # endif
      &                      -1.0_r8, zgrid, swdk)
@@ -696,7 +696,7 @@
       CALL lmd_swfrac_tile (ng, tile,                                   &
      &                      LBi, UBi, LBj, UBj,                         &
      &                      IminS, ImaxS, JminS, JmaxS,                 &
-# ifdef ICE_SHORTWAVE_R
+# ifdef ICE_LMD_SHORTWAVE
      &                      rfaci,                                      &
 # endif
      &                      -1.0_r8, zgrid, swdk)

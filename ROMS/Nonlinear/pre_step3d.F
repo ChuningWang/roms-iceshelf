@@ -104,7 +104,7 @@
      &                      OCEAN(ng) % W,                              &
      &                      OCEAN(ng) % ru,                             &
      &                      OCEAN(ng) % rv,                             &
-# ifdef ICE_SHORTWAVE_R
+# ifdef ICE_LMD_SHORTWAVE
      &                      ICE(ng) % rfaci,                            &
 # endif
 # ifdef DIAGNOSTICS_TS
@@ -151,7 +151,7 @@
 # endif
      &                            W,                                    &
      &                            ru, rv,                               &
-# ifdef ICE_SHORTWAVE_R
+# ifdef ICE_LMD_SHORTWAVE
      &                            rfaci,                                &
 # endif
 # ifdef DIAGNOSTICS_TS
@@ -218,7 +218,7 @@
       real(r8), intent(in) :: W(LBi:,LBj:,0:)
       real(r8), intent(in) :: ru(LBi:,LBj:,0:,:)
       real(r8), intent(in) :: rv(LBi:,LBj:,0:,:)
-#  ifdef ICE_SHORTWAVE_R
+#  ifdef ICE_LMD_SHORTWAVE
       real(r8), intent(in) :: rfaci(LBi:,LBj:)
 #  endif
 #  ifdef DIAGNOSTICS_TS
@@ -272,7 +272,7 @@
       real(r8), intent(in) :: W(LBi:UBi,LBj:UBj,0:N(ng))
       real(r8), intent(in) :: ru(LBi:UBi,LBj:UBj,0:N(ng),2)
       real(r8), intent(in) :: rv(LBi:UBi,LBj:UBj,0:N(ng),2)
-#  ifdef ICE_SHORTWAVE_R
+#  ifdef ICE_LMD_SHORTWAVE
       real(r8), intent(in) :: rfaci(LBi:UBi,LBj:UBj)
 #  endif
 #  ifdef DIAGNOSTICS_TS
@@ -339,9 +339,9 @@
         CALL lmd_swfrac_tile (ng, tile,                                 &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        IminS, ImaxS, JminS, JmaxS,               &
-# ifdef ICE_SHORTWAVE_R
+#   ifdef ICE_LMD_SHORTWAVE
      &                        rfaci,                                    &
-# endif
+#   endif
      &                        -1.0_r8, FX, FE)
         DO j=Jstr,Jend
           DO i=Istr,Iend

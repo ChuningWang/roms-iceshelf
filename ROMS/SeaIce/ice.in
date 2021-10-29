@@ -38,17 +38,51 @@
 
     Lice == T
 
-! Ice boundary conditions
+! Set ice lateral boundary conditions keyword. Notice that a value is
+! expected for each boundary segment per nested grid for each state variable.
+!
+! Each tracer variable requires [1:4,1:NAT+NPT,Ngrids] values. Otherwise,
+! [1:4,1:Ngrids] values are expected for other variables. The boundary
+! order is: 1=west, 2=south, 3=east, and 4=north. That is, anticlockwise
+! starting at the western boundary.
+!
+! The keyword is case insensitive and usually has three characters. However,
+! it is possible to have compound keywords, if applicable. For example, the
+! keyword "RadNud" implies radiation boundary condition with nudging. This
+! combination is usually used in active/passive radiation conditions.
+!
+!   Keyword    Lateral Boundary Condition Type
+!
+!   Cha        Chapman_implicit (free-surface)
+!   Che        Chapman_explicit (free-surface)
+!   Cla        Clamped
+!   Clo        Closed
+!   Fla        Flather (2D momentum)                  _____N_____     j=Mm
+!   Gra        Gradient                              |     4     |
+!   Nes        Nested (refinement)                   |           |
+!   Nud        Nudging                             1 W           E 3
+!   Per        Periodic                              |           |
+!   Rad        Radiation                             |_____S_____|
+!   Red        Reduced Physics (2D momentum)               2          j=1
+!   Shc        Shchepetkin (2D momentum)            i=1         i=Lm
+!
+!                   W       S       E       N
+!                   e       o       a       o
+!                   s       u       s       r
+!                   t       t       t       t
+!                           h               h
+!
+!                   1       2       3       4
 
-   LBC(isAice)  ==   Clo     Clo     Clo     Clo     ! ice concentration
-   LBC(isHice)  ==   Clo     Clo     Clo     Clo     ! ice thickness
-   LBC(isHsno)  ==   Clo     Clo     Clo     Clo     ! snow thickness
-   LBC(isTice)  ==   Clo     Clo     Clo     Clo     ! ice temperature
-   LBC(isSig11) ==   Clo     Clo     Clo     Clo     ! sigma-11
-   LBC(isSig12) ==   Clo     Clo     Clo     Clo     ! sigma-12
-   LBC(isSig22) ==   Clo     Clo     Clo     Clo     ! sigma-22
-   LBC(isUice)  ==   Clo     Clo     Clo     Clo     ! ice U-momentum
-   LBC(isVice)  ==   Clo     Clo     Clo     Clo     ! ice V-momentum
+  LBC(isAice)  ==   Clo     Per     Clo     Per     ! ice concentration
+  LBC(isHice)  ==   Clo     Per     Clo     Per     ! ice thickness
+  LBC(isHsno)  ==   Clo     Per     Clo     Per     ! snow thickness
+  LBC(isTice)  ==   Clo     Per     Clo     Per     ! ice temperature
+  LBC(isSig11) ==   Clo     Per     Clo     Per     ! sigma-11
+  LBC(isSig12) ==   Clo     Per     Clo     Per     ! sigma-12
+  LBC(isSig22) ==   Clo     Per     Clo     Per     ! sigma-22
+  LBC(isUice)  ==   Clo     Per     Clo     Per     ! ice U-momentum
+  LBC(isVice)  ==   Clo     Per     Clo     Per     ! ice V-momentum
 
 ! Maximum number of iterations to achieve convergence of the nonlinear
 ! ice dynamics solution
@@ -73,7 +107,7 @@
 
 ! Slipperiness parameter for ice: 1.0 (free slip) or -1.0 (no slip)
 
-            GAMMA2 = -1.0d0
+            GAMMA2 = 1.0d0
 
 ! Density of air [kg/m3]
 
@@ -174,110 +208,223 @@ SUBLIM_LATENT_HEAT = 2.834d6
 ! Logical switches (TRUE/FALSE) to activate writing of ice prognostic
 ! variables into HISTORY output file.
 
-Hout(idUice)    == T
-Hout(idVice)    == T
-Hout(idUiceE)   == F
-Hout(idViceN)   == F
-Hout(idAice)    == T
-Hout(idHice)    == T
-Hout(idTice)    == T
-Hout(idHsno)    == T
-Hout(idTimid)   == T
-Hout(idTauiw)   == F
-Hout(idChuiw)   == F
-Hout(idAgeice)  == T
-Hout(idSig11)   == T
-Hout(idSig12)   == T
-Hout(idSig22)   == T
-Hout(idS0mk)    == T
-Hout(idT0mk)    == T
-Hout(idWfr)     == T
-Hout(idWai)     == T
-Hout(idWao)     == T
-Hout(idWio)     == T
-Hout(idWro)     == T
-Hout(idWdiv)    == T
-Hout(idIomflx)  == T
-
-Hout(idAlbe)    == T
-Hout(idAlbI)    == T
-Hout(idLWdn)    == T
-Hout(idSWdn)    == T
-Hout(idLatI)    == T
-Hout(idSenI)    == T
-Hout(idLWupI)   == T
-Hout(idSWupI)   == T
-Hout(idSWinI)   == T
-Hout(idSWthruI) == T
-Hout(idSaltI)   == T
-Hout(idSaltL)   == T
-Hout(idQao)     == T
-Hout(idQai)     == T
-Hout(idQio)     == T
-Hout(idSnoI)    == T
+Hout(idIuice)   == T
+Hout(idIvice)   == T
+Hout(idIuiceE)  == T
+Hout(idIviceN)  == T
+Hout(idIaice)   == T
+Hout(idIhice)   == T
+Hout(idIhsno)   == T
+Hout(idIagei)   == T
+Hout(idItice)   == T
+Hout(idItmid)   == T
+Hout(idIt2ic)   == T
+Hout(idIsg11)   == T
+Hout(idIsg12)   == T
+Hout(idIsg22)   == T
+Hout(idIutau)   == T
+Hout(idImchu)   == T
+Hout(idIt0mk)   == T
+Hout(idIs0mk)   == T
+Hout(idImflx)   == T
+Hout(idIwfr)    == T
+Hout(idIwai)    == T
+Hout(idIwao)    == T
+Hout(idIwio)    == T
+Hout(idIwro)    == T
+Hout(idIwdiv)   == T
+Hout(idIalbe)   == T
+Hout(idIalbI)   == T
+Hout(idIfrsw)   == T
+Hout(idIrfac)   == T
+Hout(idIlrdn)   == T
+Hout(idIsrdn)   == T
+Hout(idIlatI)   == T
+Hout(idIsenI)   == T
+Hout(idIlrup)   == T
+Hout(idIsrup)   == T
+Hout(idIsrin)   == T
+Hout(idIsrth)   == T
+Hout(idIsfI)    == T
+Hout(idIsfL)    == T
+Hout(idIqao)    == T
+Hout(idIqai)    == T
+Hout(idIqio)    == T
+Hout(idIqi2)    == T
+Hout(idIsnoi)   == T
+Hout(idIsMr)    == T
+Hout(idIsTs)    == T
+Hout(idIsUs)    == T
+Hout(idIsTb)    == T
+Hout(idIsSb)    == T
+Hout(idIsDrft)  == T
+Hout(idIsSOFs)  == T
+Hout(idIsSOFh)  == T
 
 ! Logical switches (TRUE/FALSE) to activate writing of ice prognostic
 ! variables into AVERAGES output file.
 
-Aout(idUice)    == T
-Aout(idVice)    == T
-Aout(idUiceE)   == F
-Aout(idViceN)   == F
-Aout(idAice)    == T
-Aout(idHice)    == T
-Aout(idTice)    == T
-Aout(idHsno)    == T
-Aout(idTimid)   == T
-Aout(idTauiw)   == F
-Aout(idChuiw)   == F
-Aout(idAgeice)  == T
-Aout(idSig11)   == T
-Aout(idSig12)   == T
-Aout(idSig22)   == T
-Aout(idS0mk)    == T
-Aout(idT0mk)    == T
-Aout(idWfr)     == T
-Aout(idWai)     == T
-Aout(idWao)     == T
-Aout(idWio)     == T
-Aout(idWro)     == T
-Aout(idWdiv)    == T
-Aout(idIomflx)  == T
-
-Aout(idAlbe)    == T
-Aout(idAlbI)    == T
-Aout(idLWdn)    == T
-Aout(idSWdn)    == T
-Aout(idLatI)    == T
-Aout(idSenI)    == T
-Aout(idLWupI)   == T
-Aout(idSWupI)   == T
-Aout(idSWinI)   == T
-Aout(idSWthruI) == T
-Aout(idSaltI)   == T
-Aout(idSaltL)   == T
-Aout(idQao)     == T
-Aout(idQai)     == T
-Aout(idQio)     == T
-Aout(idSnoI)    == T
+Aout(idIuice)   == T
+Aout(idIvice)   == T
+Aout(idIuiceE)  == T
+Aout(idIviceN)  == T
+Aout(idIaice)   == T
+Aout(idIhice)   == T
+Aout(idIhsno)   == T
+Aout(idIagei)   == T
+Aout(idItice)   == T
+Aout(idItmid)   == T
+Aout(idIt2ic)   == T
+Aout(idIsg11)   == T
+Aout(idIsg12)   == T
+Aout(idIsg22)   == T
+Aout(idIutau)   == T
+Aout(idImchu)   == T
+Aout(idIt0mk)   == T
+Aout(idIs0mk)   == T
+Aout(idImflx)   == T
+Aout(idIwfr)    == T
+Aout(idIwai)    == T
+Aout(idIwao)    == T
+Aout(idIwio)    == T
+Aout(idIwro)    == T
+Aout(idIwdiv)   == T
+Aout(idIalbe)   == T
+Aout(idIalbI)   == T
+Aout(idIfrsw)   == T
+Aout(idIrfac)   == T
+Aout(idIlrdn)   == T
+Aout(idIsrdn)   == T
+Aout(idIlatI)   == T
+Aout(idIsenI)   == T
+Aout(idIlrup)   == T
+Aout(idIsrup)   == T
+Aout(idIsrin)   == T
+Aout(idIsrth)   == T
+Aout(idIsfI)    == T
+Aout(idIsfL)    == T
+Aout(idIqao)    == T
+Aout(idIqai)    == T
+Aout(idIqio)    == T
+Aout(idIqi2)    == T
+Aout(idIsnoi)   == T
+Aout(idIsMr)    == T
+Aout(idIsTs)    == T
+Aout(idIsUs)    == T
+Aout(idIsTb)    == T
+Aout(idIsSb)    == T
+Aout(idIsDrft)  == T
+Aout(idIsSOFs)  == T
+Aout(idIsSOFh)  == T
 
 ! Logical switches (TRUE/FALSE) to activate writing of ice prognostic
-! variables into HISTORY output file.
+! variables into QUICKSAVE output file.
 
-Qout(idUice)    == T
-Qout(idVice)    == T
-Qout(idUiceE)   == T
-Qout(idViceN)   == T
-Qout(idAice)    == T
-Qout(idHice)    == T
-Qout(idTice)    == T
-Qout(idHsno)    == T
-Qout(idTimid)   == T
-Qout(idTauiw)   == F
-Qout(idChuiw)   == F
-Qout(idAgeice)  == T
-Qout(idSig11)   == F
-Qout(idSig12)   == F
-Qout(idSig22)   == F
-Qout(idS0mk)    == F
-Qout(idT0mk)    == F
+Qout(idIuice)   == T
+Qout(idIvice)   == T
+Qout(idIuiceE)  == T
+Qout(idIviceN)  == T
+Qout(idIaice)   == T
+Qout(idIhice)   == T
+Qout(idIhsno)   == T
+Qout(idIagei)   == T
+Qout(idItice)   == T
+Qout(idItmid)   == T
+Qout(idIt2ic)   == T
+Qout(idIsg11)   == T
+Qout(idIsg12)   == T
+Qout(idIsg22)   == T
+Qout(idIutau)   == T
+Qout(idImchu)   == T
+Qout(idIt0mk)   == T
+Qout(idIs0mk)   == T
+Qout(idImflx)   == T
+Qout(idIwfr)    == T
+Qout(idIwai)    == T
+Qout(idIwao)    == T
+Qout(idIwio)    == T
+Qout(idIwro)    == T
+Qout(idIwdiv)   == T
+Qout(idIalbe)   == T
+Qout(idIalbI)   == T
+Qout(idIfrsw)   == T
+Qout(idIrfac)   == T
+Qout(idIlrdn)   == T
+Qout(idIsrdn)   == T
+Qout(idIlatI)   == T
+Qout(idIsenI)   == T
+Qout(idIlrup)   == T
+Qout(idIsrup)   == T
+Qout(idIsrin)   == T
+Qout(idIsrth)   == T
+Qout(idIsfI)    == T
+Qout(idIsfL)    == T
+Qout(idIqao)    == T
+Qout(idIqai)    == T
+Qout(idIqio)    == T
+Qout(idIqi2)    == T
+Qout(idIsnoi)   == T
+Qout(idIsMr)    == T
+Qout(idIsTs)    == T
+Qout(idIsUs)    == T
+Qout(idIsTb)    == T
+Qout(idIsSb)    == T
+Qout(idIsDrft)  == T
+Qout(idIsSOFs)  == T
+Qout(idIsSOFh)  == T
+
+! Logical switches (TRUE/FALSE) to activate writing of ice prognostic
+! variables into STATION output file.
+
+Sout(idIuice)   == T
+Sout(idIvice)   == T
+Sout(idIuiceE)  == T
+Sout(idIviceN)  == T
+Sout(idIaice)   == T
+Sout(idIhice)   == T
+Sout(idIhsno)   == T
+Sout(idIagei)   == T
+Sout(idItice)   == T
+Sout(idItmid)   == T
+Sout(idIt2ic)   == T
+Sout(idIsg11)   == T
+Sout(idIsg12)   == T
+Sout(idIsg22)   == T
+Sout(idIutau)   == T
+Sout(idImchu)   == T
+Sout(idIt0mk)   == T
+Sout(idIs0mk)   == T
+Sout(idImflx)   == T
+Sout(idIwfr)    == T
+Sout(idIwai)    == T
+Sout(idIwao)    == T
+Sout(idIwio)    == T
+Sout(idIwro)    == T
+Sout(idIwdiv)   == T
+Sout(idIalbe)   == T
+Sout(idIalbI)   == T
+Sout(idIfrsw)   == T
+Sout(idIrfac)   == T
+Sout(idIlrdn)   == T
+Sout(idIsrdn)   == T
+Sout(idIlatI)   == T
+Sout(idIsenI)   == T
+Sout(idIlrup)   == T
+Sout(idIsrup)   == T
+Sout(idIsrin)   == T
+Sout(idIsrth)   == T
+Sout(idIsfI)    == T
+Sout(idIsfL)    == T
+Sout(idIqao)    == T
+Sout(idIqai)    == T
+Sout(idIqio)    == T
+Sout(idIqi2)    == T
+Sout(idIsnoi)   == T
+Sout(idIsMr)    == T
+Sout(idIsTs)    == T
+Sout(idIsUs)    == T
+Sout(idIsTb)    == T
+Sout(idIsSb)    == T
+Sout(idIsDrft)  == T
+Sout(idIsSOFs)  == T
+Sout(idIsSOFh)  == T

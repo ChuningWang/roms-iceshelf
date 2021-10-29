@@ -500,7 +500,7 @@
           real(r8), pointer :: albG(:,:,:)
 #   endif
 #  endif
-#  if defined BULK_FLUXES && defined ICE_SNOWFALL
+#  ifdef ICE_SNOWFALL
           real(r8), pointer :: snow(:,:)
 #   ifndef ANA_RAIN
           real(r8), pointer :: snowG(:,:,:)
@@ -1060,7 +1060,7 @@
       Dmem(ng)=Dmem(ng)+2.0_r8*size2d
 #   endif
 #  endif
-#  if defined BULK_FLUXES && defined ICE_SNOWFALL
+#  ifdef ICE_SNOWFALL
       allocate ( FORCES(ng) % snow(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
 #   ifndef ANA_RAIN
@@ -1651,7 +1651,7 @@
      &                 __LINE__, 'FORCES(ng)%albG')) RETURN
 #    endif
 #   endif
-#   if defined BULK_FLUXES && defined ICE_SNOWFALL
+#   ifdef ICE_SNOWFALL
 
       IF (.not.destroy(ng, FORCES(ng)%snow, MyFile,                     &
      &                 __LINE__, 'FORCES(ng)%snow')) RETURN
@@ -2180,7 +2180,7 @@
             FORCES(ng) % albG(i,j,2) = IniVal
 #   endif
 #  endif
-#  if defined BULK_FLUXES && defined ICE_SNOWFALL
+#  ifdef ICE_SNOWFALL
             FORCES(ng) % snow(i,j) = IniVal
 #   ifndef ANA_RAIN
             FORCES(ng) % snowG(i,j,1) = IniVal

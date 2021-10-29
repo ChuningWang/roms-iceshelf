@@ -273,8 +273,8 @@
       real(r8), intent(inout) :: t2(LBi:,LBj:)
       real(r8), intent(inout) :: enthalpi(LBi:,LBj:,:)
       real(r8), intent(inout) :: hage(LBi:,LBj:,:)
-      real(r8), intent(in)    :: ui(LBi:,LBj:,:)
-      real(r8), intent(in)    :: vi(LBi:,LBj:,:)
+      real(r8), intent(in) :: ui(LBi:,LBj:,:)
+      real(r8), intent(in) :: vi(LBi:,LBj:,:)
       real(r8), intent(inout) :: coef_ice_heat(LBi:,LBj:)
       real(r8), intent(inout) :: rhs_ice_heat(LBi:,LBj:)
       real(r8), intent(inout) :: s0mk(LBi:,LBj:)
@@ -328,8 +328,8 @@
       real(r8), intent(inout) :: t2(LBi:UBi,LBj:UBj)
       real(r8), intent(inout) :: enthalpi(LBi:UBi,LBj:UBj,2)
       real(r8), intent(inout) :: hage(LBi:UBi,LBj:UBj,2)
-      real(r8), intent(in)    :: ui(LBi:UBi,LBj:UBj,2)
-      real(r8), intent(in)    :: vi(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(in) :: ui(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(in) :: vi(LBi:UBi,LBj:UBj,2)
       real(r8), intent(inout) :: coef_ice_heat(LBi:UBi,LBj:UBj)
       real(r8), intent(inout) :: rhs_ice_heat(LBi:UBi,LBj:UBj)
       real(r8), intent(inout) :: s0mk(LBi:UBi,LBj:UBj)
@@ -403,7 +403,7 @@
       real(r8), parameter :: hfus = 3.347E+5_r8         ! [J kg-1]
       real(r8), parameter :: cpi = 2093.0_r8            ! [J kg-1 K-1]
       real(r8), parameter :: cpw = 3990.0_r8            ! [J kg-1 K-1]
-      real(r8), parameter :: rhocpr = 0.2442754E-6_r8   ! [m s2 K kg-1]
+      real(r8), parameter :: rhocpr = 0.2448205E-6_r8   ! [m s2 K kg-1]
       real(r8), parameter :: ykf = 3.14_r8
 
       real(r8) :: corfac
@@ -432,13 +432,13 @@
 #include "set_bounds.h"
 
       CALL caldate(tdays(ng), dd_i=iday, h_dp=hour)
-      DO j=Jstr,Jend
-        DO i=Istr,Iend
-          temp_top(i,j)=t(i,j,N(ng),nrhs,itemp)
-          salt_top(i,j)=t(i,j,N(ng),nrhs,isalt)
-!         salt_top(i,j) = MIN(MAX(0.0_r8,salt_top(i,j)),40.0_r8)
+      DO j = Jstr,Jend
+        DO i = Istr,Iend
+          temp_top(i,j) = t(i,j,N(ng),nrhs,itemp)
+          salt_top(i,j) = t(i,j,N(ng),nrhs,isalt)
           salt_top(i,j) = MAX(0.0_r8,salt_top(i,j))
-          dztop(i,j)=z_w(i,j,N(ng))-z_r(i,j,N(ng))
+!         salt_top(i,j) = MIN(MAX(0.0_r8,salt_top(i,j)),40.0_r8)
+          dztop(i,j)    = z_w(i,j,N(ng))-z_r(i,j,N(ng))
 !
 ! This is commented out due to the ROMS new surface flux convention
 !
@@ -447,17 +447,16 @@
         END DO
       END DO
 
-      d1 = rho_air(ng) * spec_heat_air * trans_coeff
-      d2i = rho_air(ng) * sublim_latent_heat * trans_coeff
-      d3 = StefBo * ice_emiss
+      d1  = rho_air(ng) * spec_heat_air * trans_coeff
+      d2i = rho_air(ng) * sublim_lat_h  * trans_coeff
+      d3  = StefBo * ice_emiss
 
-      DO j=Jstr,Jend
-        DO i=Istr,Iend
+      DO j = Jstr,Jend
+        DO i = Istr,Iend
           utau(i,j) = sqrt(sqrt(                                        &
      &                  (0.5_r8*(sustr(i,j)+sustr(i+1,j)))**2 +         &
-     &                  (0.5_r8*(svstr(i,j)+svstr(i,j+1)))**2           &
-     &                    )    )
-          utau(i,j) = max(utau(i,j),0.0001_r8)
+     &                  (0.5_r8*(svstr(i,j)+svstr(i,j+1)))**2))
+          utau(i,j) = MAX(utau(i,j),0.0001_r8)
         END DO
       END DO
 
@@ -497,7 +496,7 @@
           corfac = 1._r8/(0.5_r8*(1._r8+EXP(-(hi(i,j,linew)/1._r8)**2)))
           alph(i,j) = alph(i,j)*corfac
           coa(i,j) = 2.0_r8*alph(i,j)*snow_thick(i,j)/                  &
-     &               (alphsn*ice_thick(i,j))
+     &               (alphsn*(ice_thick(i,j)+eps))
         END DO
       END DO
 
@@ -506,16 +505,15 @@
 !     snow thickness compute net ice atmos. surface heat transfer zero
 !     if temp. is below freezing. frysepunktspemp. (t=-0.27 c)
 !
-!-----------------------------------------------------------------------
-!     SOLVE FOR TEMPERATURE AT THE TOP OF THE ICE LAYER
-!-----------------------------------------------------------------------
+!     Solve for temperature at the top of the ice layer
 !
       DO j = Jstr,Jend
         DO i = Istr,Iend
 !
 !  Gradient coefficient for heat conductivity part
 !
-          b2d(i,j) = 2.0_r8*alph(i,j)/(ice_thick(i,j)*(1._r8+coa(i,j)))
+          b2d(i,j) = 2.0_r8*alph(i,j) /                                 &
+     &               ((ice_thick(i,j)+eps)*(1._r8+coa(i,j)))
           coef_ice_heat(i,j) = coef_ice_heat(i,j) + b2d(i,j)
 
           IF (ai(i,j,linew) .gt. min_a(ng)) THEN
@@ -527,10 +525,8 @@
      &                          b2d(i,j)*ti(i,j,linew)
             tis(i,j) = rhs_ice_heat(i,j)/coef_ice_heat(i,j)
             tis(i,j) = MAX(tis(i,j),-45._r8)
-            qai(i,j) = qai_n(i,j)
           ELSE
             tis(i,j) = temp_top(i,j)
-            qai(i,j) = qai_n(i,j)
           END IF
         END DO
       END DO
@@ -545,7 +541,7 @@
             cot = cpi - frln*sice(i,j)*hfus/(ti(i,j,linew)-eps)**2
 !           enthal(i,j,1) = brnfr(i,j) * (hfus + cpw*ti(i,j,linew)) +   &
 !    &                      (1 - brnfr(i,j)) * cpi * ti(i,j,linew)
-#ifdef ICE_I_O
+#if defined ICE_BULK_FLUXES
             ti(i,j,linew) = ti(i,j,linew) +                             &
      &        dtice(ng)/(rhoice(ng)*ice_thick(i,j)*cot)*                &
      &        (2._r8*alph(i,j)/ice_thick(i,j)*                          &
@@ -642,8 +638,6 @@
                 tis(i,j) = tfrz
                 t2(i,j) = tfrz
 !
-!  Ice warmer than freezing point
-!
                 hfus1(i,j) = hfus*(1._r8-brnfr(i,j)) + tis(i,j)*cpw -   &
      &            ((1._r8-brnfr(i,j))*cpi+brnfr(i,j)*cpw)*ti(i,j,linew)
                 qai(i,j) = qai_n(i,j)
@@ -695,7 +689,7 @@
           wro(i,j) = MAX(0._r8,wai(i,j)+wsm(i,j))
         END DO
       END DO
-
+!
       DO j = Jstr,Jend
         DO i = Istr,Iend
           z0 = max(z0ii*ice_thick(i,j),0.01_r8)
@@ -705,7 +699,7 @@
 !
           zdz0 = dztop(i,j)/z0   !WPB
           zdz0 = MAX(zdz0,3._r8)
-
+!
           rno = utau(i,j)*z0/nu
 !         rno = utau(i,j)*0.09_r8/nu
           termt = ykf*sqrt(rno)*prt**0.666667_r8
@@ -720,7 +714,7 @@
           tfz = frln*salt_top(i,j)
           wao(i,j) = 0._r8
           wio(i,j) = 0._r8
-
+!
           hfus1(i,j) = hfus*(1.0_r8-brnfr(i,j)) + t0mk(i,j)*cpw -       &
      &      ((1.0_r8-brnfr(i,j))*cpi+brnfr(i,j)*cpw)*ti(i,j,linew)
 !
@@ -753,7 +747,7 @@
             s0mk(i,j) = MIN(MAX(s0mk(i,j),0._r8),60._r8)
             t0mk(i,j) = frln*s0mk(i,j)
           END IF
-
+!
 #ifdef ICESHELF
           IF (zice(i,j).eq.0.0_r8) THEN
 #endif
@@ -825,9 +819,11 @@
 #endif
         END DO
       END DO
-
-!***********************************************************************
-
+!
+!-----------------------------------------------------------------------
+!  Determine coverage/thicknes of sea ice
+!-----------------------------------------------------------------------
+!
       DO j = Jstr,Jend
         DO i = Istr,Iend
           IF (wao(i,j) .lt. 0.0_r8 ) THEN
@@ -860,9 +856,9 @@
           hstar = hsn(i,j,linew) - (rhosw - rhoice(ng)) *               &
      &             hi(i,j,linew) / rhosnow_dry(ng)
           IF (hstar .gt. 0.0_r8) THEN
-#ifdef ICE_DIAGS
+#  ifdef ICE_DIAGS
             snoice(i,j) = hstar*sice_ref/dtice(ng)
-#endif
+#  endif
             hsn(i,j,linew) = hsn(i,j,linew) - hstar*rhoice(ng)/rhosw
             hi(i,j,linew) = hi(i,j,linew) + hstar*rhosnow_dry(ng)/rhosw
 !

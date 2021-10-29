@@ -50,10 +50,10 @@
 !
 !***********************************************************************
       SUBROUTINE ice_limit_tile (ng, tile,                              &
-     &                        LBi, UBi, LBj, UBj,                       &
-     &                        IminS, ImaxS, JminS, JmaxS,               &
-     &                        liold, linew,                             &
-     &                        ui, vi, ai, hi, hsn, ti, enthalpi)
+     &                           LBi, UBi, LBj, UBj,                    &
+     &                           IminS, ImaxS, JminS, JmaxS,            &
+     &                           liold, linew,                          &
+     &                           ui, vi, ai, hi, hsn, ti, enthalpi)
 !***********************************************************************
 !
       USE mod_param
@@ -76,7 +76,7 @@
       integer, intent(in) :: ng, tile
       integer, intent(in) :: LBi, UBi, LBj, UBj
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
-      integer, intent(inout) :: liold, linew
+      integer, intent(in) :: liold, linew
 
 # ifdef ASSUMED_SHAPE
       real(r8), intent(in)    :: ui(LBi:,LBj:,:)
@@ -151,17 +151,17 @@
      &                ui, vi, hi, ti, enthalpi)
 !
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
-        CALL exchange_r2d_tile (ng, tile,                                 &
-     &                            LBi, UBi, LBj, UBj,                     &
+        CALL exchange_r2d_tile (ng, tile,                               &
+     &                            LBi, UBi, LBj, UBj,                   &
      &                            ai(:,:,linew))
-        CALL exchange_r2d_tile (ng, tile,                                 &
-     &                            LBi, UBi, LBj, UBj,                     &
+        CALL exchange_r2d_tile (ng, tile,                               &
+     &                            LBi, UBi, LBj, UBj,                   &
      &                            hi(:,:,linew))
-        CALL exchange_r2d_tile (ng, tile,                                 &
-     &                            LBi, UBi, LBj, UBj,                     &
+        CALL exchange_r2d_tile (ng, tile,                               &
+     &                            LBi, UBi, LBj, UBj,                   &
      &                            hsn(:,:,linew))
-        CALL exchange_r2d_tile (ng, tile,                                 &
-     &                            LBi, UBi, LBj, UBj,                     &
+        CALL exchange_r2d_tile (ng, tile,                               &
+     &                            LBi, UBi, LBj, UBj,                   &
      &                            ti(:,:,linew))
 !
       END IF

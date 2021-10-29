@@ -107,15 +107,6 @@
 # ifdef SEDIMENT
       USE sediment_mod,         ONLY : sediment
 # endif
-# ifdef ICE_MODEL
-      USE ice_flux_mod
-#  ifdef ICE_ALBEDO
-      USE albedo_mod,           ONLY : albedo_eval
-#   ifdef ICE_ALB_DIRDIFF
-      USE cawdir_eval_mod,      ONLY : cawdir_eval
-#   endif
-#  endif
-# endif
 # ifdef AVERAGES
       USE set_avg_mod,          ONLY : set_avg
 # endif
@@ -125,9 +116,6 @@
       USE set_tides_mod,        ONLY : set_tides
 # endif
       USE set_vbc_mod,          ONLY : set_vbc
-# ifdef ICESHELF
-      USE iceshelf_mod,         ONLY : iceshelf_vbc
-# endif
       USE set_zeta_mod,         ONLY : set_zeta
       USE step2d_mod,           ONLY : step2d
 # ifndef TS_FIXED
@@ -139,6 +127,18 @@
 # endif
       USE strings_mod,          ONLY : FoundError
       USE wvelocity_mod,        ONLY : wvelocity
+# ifdef ICE_MODEL
+      USE ice_flux_mod
+#  ifdef ICE_ALBEDO
+      USE albedo_mod,           ONLY : albedo_eval
+#   ifdef ICE_ALB_DIRDIFF
+      USE cawdir_eval_mod,      ONLY : cawdir_eval
+#   endif
+#  endif
+# endif
+# ifdef ICESHELF
+      USE iceshelf_mod,         ONLY : iceshelf_vbc
+# endif
 !
       implicit none
 !

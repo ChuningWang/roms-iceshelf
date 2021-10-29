@@ -464,7 +464,7 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 !
-!  Define ice groth/melt rate of ice-air.
+!  Define ice growth/melt rate of ice-air.
 !
         IF (Hout(idIwai,ng)) THEN
           Vinfo( 1)=Vname(1,idIwai)
@@ -487,7 +487,7 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 !
-!  Define ice groth/melt rate of leads.
+!  Define ice growth/melt rate of leads.
 !
         IF (Hout(idIwao,ng)) THEN
           Vinfo( 1)=Vname(1,idIwao)
@@ -510,7 +510,7 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 !
-!  Define ice groth/melt rate of ice-ocean.
+!  Define ice growth/melt rate of ice-ocean.
 !
         IF (Hout(idIwio,ng)) THEN
           Vinfo( 1)=Vname(1,idIwio)

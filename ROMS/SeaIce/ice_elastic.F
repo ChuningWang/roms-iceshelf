@@ -1,6 +1,6 @@
 #include "cppdefs.h"
       MODULE ice_elastic_mod
-#if defined ICE_MOMENTUM && defined ICE_EVP
+#ifdef ICE_EVP
 !
 !=======================================================================
 !  Copyright (c) 2002-2020 The ROMS/TOMS Group                         !
@@ -736,7 +736,7 @@
             vie(i,j,lienw)=vie(i,j,lienw)+                              &
      &                 dte(ng)*cff*(CLIMA(ng)%viclm(i,j)-vie(i,j,lienw))
           END IF
-#  ifdef ICE_SHOREFAST
+# ifdef ICE_SHOREFAST
           hv = 0.5_r8*(h(i,j-1)+MIN(Zt_avg1(i,j-1),0.0_r8) +            &
      &          h(i,j)+MIN(Zt_avg1(i,j),0.0_r8))
           masv = 0.5_r8*(hi(i,j,liold)+hi(i,j-1,liold))
@@ -744,19 +744,19 @@
           clear = MAX(clear,0.0_r8)
           IF (clear.lt.5.0_r8) vie(i,j,lienw) =                         &
      &       MAX(clear-1.0_r8,0.0_r8)/4.0_r8*vie(i,j,lienw)
-#  endif
-#  ifdef ICE_LANDFAST_CLM
+# endif
+# ifdef ICE_LANDFAST_CLM
           vie(i,j,lienw) = 0.5*(fastice_clm(i,j)+fastice_clm(i,j-1))    &
      &              *vie(i,j,lienw)
-#  endif
-#  ifdef MASKING
+# endif
+# ifdef MASKING
           vie(i,j,lienw) = vmask(i,j)*vie(i,j,lienw)
-#  endif
-#  ifdef ICESHELF
+# endif
+# ifdef ICESHELF
           IF (zice(i,j-1)+zice(i,j).ne.0.0_r8) THEN
             vie(i,j,lienw) = 0.0_r8
           ENDIF
-#  endif
+# endif
         END DO
       END DO
 
@@ -776,12 +776,12 @@
      &                          LBi, UBi, LBj, UBj,                     &
      &                          vie(:,:,lienw))
       END IF
-#  ifdef DISTRIBUTE
+# ifdef DISTRIBUTE
       CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
      &                    uie(:,:,lienw), vie(:,:,lienw))
-#  endif
+# endif
 !
 ! Update ice velocity
 !

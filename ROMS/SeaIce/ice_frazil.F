@@ -79,6 +79,7 @@
 !
       USE bc_2d_mod, ONLY : bc_r2d_tile
       USE exchange_3d_mod, ONLY : exchange_r3d_tile
+      USE exchange_2d_mod, ONLY : exchange_r2d_tile
 # ifdef DISTRIBUTE
       USE mp_exchange_mod
 # endif
@@ -134,6 +135,7 @@
       real(r8) :: ice_dens
       real(r8) :: delta_wfr
       real(r8), parameter :: depressT = -0.0543_r8
+      real(r8) :: cff
 !
 !  Inline functions
 !
@@ -168,12 +170,14 @@
             IF (rmask(i,j) .ne. 0.0_r8) THEN
 # endif
               t_fr = t_freeze(t(i,j,k,nnew,isalt),z_r(i,j,k))
+              delta_wfr = 0._r8
               IF (t(i,j,k,nnew,itemp) .lt. t_fr) THEN
                 gamma_k = (t_fr - t(i,j,k,nnew,itemp)) /                &
-     &                     (Lhat + t(i,j,k,nnew,itemp)*(1.0_r8 - r)     &
-     &                         - depressT * t(i,j,k,nnew,isalt))
-                wfr(i,j) = wfr(i,j) + gamma_k * Hz(i,j,k) *             &
-     &                    (rho0 + rho(i,j,k) ) / ice_dens
+     &                     (Lhat + t(i,j,k,nnew,itemp)*(1.0_r8 - r) -   &
+     &                      t_fr)
+                delta_wfr = gamma_k * Hz(i,j,k) *                       &
+     &                      (rho0 + rho(i,j,k) ) / ice_dens
+                wfr(i,j) = wfr(i,j) + delta_wfr
                 t(i,j,k,nnew,itemp) = t(i,j,k,nnew,itemp) + gamma_k *   &
      &                 (Lhat + t(i,j,k,nnew,itemp)*(1.0_r8 - r))
                 sice = MIN(sice_ref,t(i,j,k,nnew,isalt))
@@ -186,22 +190,30 @@
 ! gamma_k becomes negative here.
 !
                 gamma_k = (t_fr - t(i,j,k,nnew,itemp)) /                &
-     &                    (Lhat + t(i,j,k,nnew,itemp)*(1.0_r8 - r) -    &
-     &                     depressT * t(i,j,k,nnew,isalt))
+     &                     (Lhat + t(i,j,k,nnew,itemp)*(1.0_r8 - r) -   &
+     &                      t_fr)
                 delta_wfr = gamma_k * Hz(i,j,k) *                       &
-     &                      (rho0 + rho(i,j,k) ) / rhoice(ng)
+     &                      (rho0 + rho(i,j,k) ) / ice_dens
                 IF ((wfr(i,j) + delta_wfr) > 0._r8) THEN
                   wfr(i,j) = wfr(i,j) + delta_wfr
                 ELSE
-                  gamma_k = -wfr(i,j) * rhoice(ng) /                    &
+                  gamma_k = -wfr(i,j) * ice_dens /                      &
      &                      (Hz(i,j,k)*(rho0+rho(i,j,k)))
                   wfr(i,j) = 0.0_r8
+                  delta_wfr = -wfr(i,j)
                 ENDIF
                 t(i,j,k,nnew,itemp) = t(i,j,k,nnew,itemp) +             &
      &            gamma_k*(Lhat + t(i,j,k,nnew,itemp)*(1.0_r8 - r))
                 t(i,j,k,nnew,isalt) = t(i,j,k,nnew,isalt) *             &
      &            (1.0_r8 + gamma_k)
               END IF
+# ifdef T_PASSIVE
+              cff = delta_wfr*ice_dens/(rho0+rho(i,j,k))
+              DO itrc=NAT+1,NT(ng)
+                t(i,j,k,nnew,itrc) = t(i,j,k,nnew,itrc)*                &
+     &                               (Hz(i,j,k)-cff)/Hz(i,j,k)
+              END DO
+# endif
 # if defined WET_DRY || defined MASKING
             END IF
 # endif
@@ -217,11 +229,24 @@
 !
         END DO
       END DO
-
-      CALL bc_r2d_tile (ng, tile,                                       &
-     &                  LBi, UBi, LBj, UBj,                             &
-     &                  wfr)
+!
+!  Apply periodic boundary conditions.
+!
+      IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+        CALL exchange_r3d_tile (ng, tile,                               &
+     &                          LBi, UBi, LBj, UBj, 1, N(ng),           &
+     &                          t(:,:,:,nnew,itemp))
+        CALL exchange_r3d_tile (ng, tile,                               &
+     &                          LBi, UBi, LBj, UBj, 1, N(ng),           &
+     &                          t(:,:,:,nnew,isalt))
+        CALL exchange_r2d_tile (ng, tile,                               &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          wfr)
+      END IF
 # ifdef DISTRIBUTE
+!
+!  Exchange boundary data.
+!
       CALL mp_exchange2d (ng, tile, iNLM, 1,                            &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
