@@ -286,8 +286,8 @@
       CALL tibc_tile (ng, tile, iNLM,                                   &
      &                LBi, UBi, LBj, UBj,                               &
      &                liold(ng), linew(ng),                             &
-     &                ICE(ng)%ui, ICE(ng)%vi, ICE(ng)%hi, ICE(ng)%ti,   &
-     &                ICE(ng)%enthalpi)
+     &                ICE(ng)%ui, ICE(ng)%vi, ICE(ng)%hi,               &
+     &                ICE(ng)%ti, ICE(ng)%enthalpi)
 !
       CALL bc_r2d_tile (ng, tile,                                       &
      &                  LBi, UBi, LBj, UBj,                             &
