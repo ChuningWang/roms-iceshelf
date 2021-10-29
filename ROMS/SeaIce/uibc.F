@@ -167,10 +167,6 @@
               ui(Istr,j,liunw)=ui(Istr,j,liunw)*                        &
      &                         GRID(ng)%umask(Istr,j)
 # endif
-# ifdef WET_DRY
-              ui(Istr,j,liunw)=ui(Istr,j,liunw)*                        &
-     &                         GRID(ng)%umask_wet(Istr,j)
-# endif
             END IF
           END DO
 !
@@ -183,10 +179,6 @@
 # ifdef MASKING
               ui(Istr,j,liunw)=ui(Istr,j,liunw)*                        &
      &                         GRID(ng)%umask(Istr,j)
-# endif
-# ifdef WET_DRY
-              ui(Istr,j,liunw)=ui(Istr,j,liunw)*                        &
-     &                         GRID(ng)%umask_wet(Istr,j)
 # endif
             END IF
           END DO
@@ -283,10 +275,6 @@
               ui(Iend+1,j,liunw)=ui(Iend+1,j,liunw)*                    &
      &                           GRID(ng)%umask(Iend+1,j)
 # endif
-# ifdef WET_DRY
-              ui(Iend+1,j,liunw)=ui(Iend+1,j,liunw)*                    &
-     &                           GRID(ng)%umask_wet(Iend+1,j)
-# endif
             END IF
           END DO
 !
@@ -299,10 +287,6 @@
 # ifdef MASKING
               ui(Iend+1,j,liunw)=ui(Iend+1,j,liunw)*                    &
      &                           GRID(ng)%umask(Iend+1,j)
-# endif
-# ifdef WET_DRY
-              ui(Iend+1,j,liunw)=ui(Iend+1,j,liunw)*                    &
-     &                           GRID(ng)%umask_wet(Iend+1,j)
 # endif
             END IF
           END DO
@@ -399,10 +383,6 @@
               ui(i,Jstr-1,liunw)=ui(i,Jstr-1,liunw)*                    &
      &                           GRID(ng)%umask(i,Jstr-1)
 # endif
-# ifdef WET_DRY
-              ui(i,Jstr-1,liunw)=ui(i,Jstr-1,liunw)*                    &
-     &                           GRID(ng)%umask_wet(i,Jstr-1)
-# endif
             END IF
           END DO
 !
@@ -415,10 +395,6 @@
 # ifdef MASKING
               ui(i,Jstr-1,liunw)=ui(i,Jstr-1,liunw)*                    &
      &                           GRID(ng)%umask(i,Jstr-1)
-# endif
-# ifdef WET_DRY
-              ui(i,Jstr-1,liunw)=ui(i,Jstr-1,liunw)*                    &
-     &                           GRID(ng)%umask_wet(i,Jstr-1)
 # endif
             END IF
           END DO
@@ -440,10 +416,6 @@
 # ifdef MASKING
               ui(i,Jstr-1,liunw)=ui(i,Jstr-1,liunw)*                    &
      &                           GRID(ng)%umask(i,Jstr-1)
-# endif
-# ifdef WET_DRY
-              ui(i,Jstr-1,liunw)=ui(i,Jstr-1,liunw)*                    &
-     &                           GRID(ng)%umask_wet(i,Jstr-1)
 # endif
             END IF
           END DO
@@ -530,10 +502,6 @@
               ui(i,Jend+1,liunw)=ui(i,Jend+1,liunw)*                    &
      &                           GRID(ng)%umask(i,Jend+1)
 # endif
-# ifdef WET_DRY
-              ui(i,Jend+1,liunw)=ui(i,Jend+1,liunw)*                    &
-     &                           GRID(ng)%umask_wet(i,Jend+1)
-# endif
             END IF
           END DO
 !
@@ -546,10 +514,6 @@
 # ifdef MASKING
               ui(i,Jend+1,liunw)=ui(i,Jend+1,liunw)*                    &
      &                           GRID(ng)%umask(i,Jend+1)
-# endif
-# ifdef WET_DRY
-              ui(i,Jend+1,liunw)=ui(i,Jend+1,liunw)*                    &
-     &                           GRID(ng)%umask_wet(i,Jend+1)
 # endif
             END IF
           END DO
@@ -571,10 +535,6 @@
 # ifdef MASKING
               ui(i,Jend+1,liunw)=ui(i,Jend+1,liunw)*                    &
      &                           GRID(ng)%umask(i,Jend+1)
-# endif
-# ifdef WET_DRY
-              ui(i,Jend+1,liunw)=ui(i,Jend+1,liunw)*                    &
-     &                           GRID(ng)%umask_wet(i,Jend+1)
 # endif
             END IF
           END DO

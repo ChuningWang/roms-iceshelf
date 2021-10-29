@@ -167,10 +167,6 @@
               vi(Istr-1,j,liunw)=vi(Istr-1,j,liunw)*                    &
      &                           GRID(ng)%vmask(Istr-1,j)
 # endif
-# ifdef WET_DRY
-              vi(Istr-1,j,liunw)=vi(Istr-1,j,liunw)*                    &
-     &                           GRID(ng)%vmask_wet(Istr-1,j)
-# endif
             END IF
           END DO
 !
@@ -183,10 +179,6 @@
 # ifdef MASKING
               vi(Istr-1,j,liunw)=vi(Istr-1,j,liunw)*                    &
      &                           GRID(ng)%vmask(Istr-1,j)
-# endif
-# ifdef WET_DRY
-              vi(Istr-1,j,liunw)=vi(Istr-1,j,liunw)*                    &
-     &                           GRID(ng)%vmask_wet(Istr-1,j)
 # endif
             END IF
           END DO
@@ -208,10 +200,6 @@
 # ifdef MASKING
               vi(Istr-1,j,liunw)=vi(Istr-1,j,liunw)*                    &
      &                           GRID(ng)%vmask(Istr-1,j)
-# endif
-# ifdef WET_DRY
-              vi(Istr-1,j,liunw)=vi(Istr-1,j,liunw)*                    &
-     &                           GRID(ng)%vmask_wet(Istr-1,j)
 # endif
             END IF
           END DO
@@ -299,10 +287,6 @@
               vi(Iend+1,j,liunw)=vi(Iend+1,j,liunw)*                    &
      &                           GRID(ng)%vmask(Iend+1,j)
 # endif
-# ifdef WET_DRY
-              vi(Iend+1,j,liunw)=vi(Iend+1,j,liunw)*                    &
-     &                           GRID(ng)%vmask_wet(Iend+1,j)
-# endif
             END IF
           END DO
 !
@@ -315,10 +299,6 @@
 # ifdef MASKING
               vi(Iend+1,j,liunw)=vi(Iend+1,j,liunw)*                    &
      &                           GRID(ng)%vmask(Iend+1,j)
-# endif
-# ifdef WET_DRY
-              vi(Iend+1,j,liunw)=vi(Iend+1,j,liunw)*                    &
-     &                           GRID(ng)%vmask_wet(Iend+1,j)
 # endif
             END IF
           END DO
@@ -340,10 +320,6 @@
 # ifdef MASKING
               vi(Iend+1,j,liunw)=vi(Iend+1,j,liunw)*                    &
      &                           GRID(ng)%vmask(Iend+1,j)
-# endif
-# ifdef WET_DRY
-              vi(Iend+1,j,liunw)=vi(Iend+1,j,liunw)*                    &
-     &                           GRID(ng)%vmask_wet(Iend+1,j)
 # endif
             END IF
           END DO
@@ -431,10 +407,6 @@
                 vi(i,Jstr,liunw)=vi(i,Jstr,liunw)*                        &
      &                           GRID(ng)%vmask(i,Jstr)
 # endif
-# ifdef WET_DRY
-                vi(i,Jstr,liunw)=vi(i,Jstr,liunw)*                        &
-     &                           GRID(ng)%vmask_wet(i,Jstr)
-# endif
             END IF
           END DO
 !
@@ -447,10 +419,6 @@
 # ifdef MASKING
               vi(i,Jstr,liunw)=vi(i,Jstr,liunw)*                        &
      &                         GRID(ng)%vmask(i,Jstr)
-# endif
-# ifdef WET_DRY
-              vi(i,Jstr,liunw)=vi(i,Jstr,liunw)*                        &
-     &                         GRID(ng)%vmask_wet(i,Jstr)
 # endif
             END IF
           END DO
@@ -546,10 +514,6 @@
               vi(i,Jend+1,liunw)=vi(i,Jend+1,liunw)*                    &
      &                           GRID(ng)%vmask(i,Jend+1)
 # endif
-# ifdef WET_DRY
-              vi(i,Jend+1,liunw)=vi(i,Jend+1,liunw)*                    &
-     &                           GRID(ng)%vmask_wet(i,Jend+1)
-# endif
             END IF
           END DO
 !
@@ -562,10 +526,6 @@
 # ifdef MASKING
               vi(i,Jend+1,liunw)=vi(i,Jend+1,liunw)*                    &
      &                           GRID(ng)%vmask(i,Jend+1)
-# endif
-# ifdef WET_DRY
-              vi(i,Jend+1,liunw)=vi(i,Jend+1,liunw)*                    &
-     &                           GRID(ng)%vmask_wet(i,Jend+1)
 # endif
             END IF
           END DO

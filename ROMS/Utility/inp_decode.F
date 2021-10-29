@@ -1652,6 +1652,9 @@
               S(ib,ifield,igrid)%Shchepetkin = .TRUE.
               S(ib,ifield,igrid)%acquire = .TRUE.
               S(ib,isFsur,igrid)%acquire = .TRUE.
+            CASE ('MIX')
+              S(ib,ifield,igrid)%mixed = .TRUE.
+              S(ib,ifield,igrid)%acquire = .TRUE.
             CASE DEFAULT
               IF (Master) THEN
                 WRITE (stdout,10) TRIM(Vinp(ib)), TRIM(line)

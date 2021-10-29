@@ -306,7 +306,7 @@
             f1 = 0.5_r8*(sig12(i,j,lienw)+sig12(i-1,j,lienw))
 #  ifdef WET_DRY
           ELSE IF (umask_wet(i,j).gt.0.0_r8.and.                        &
-     &            umask_wet(i,j+1).lt.1.0_r8) THEN
+     &             umask_wet(i,j+1).lt.1.0_r8) THEN
             f1 = 0.5_r8*(sig12(i,j,lienw)+sig12(i-1,j,lienw))
 #  endif
 #  ifdef ICESHELF

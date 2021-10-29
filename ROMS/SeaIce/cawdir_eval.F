@@ -37,9 +37,6 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-# ifdef WET_DRY
-     &                     GRID(ng) % rmask_wet,                        &
-# endif
      &                     GRID(ng) % latr,                             &
 # ifdef CLOUDS
      &                     FORCES(ng) % cloud,                          &
@@ -57,9 +54,6 @@
      &                     IminS, ImaxS, JminS, JmaxS,                  &
 # ifdef MASKING
      &                     rmask,                                       &
-# endif
-# ifdef WET_DRY
-     &                     rmask_wet,                                   &
 # endif
      &                     latr,                                        &
 # ifdef CLOUDS
@@ -88,9 +82,6 @@
 #  ifdef MASKING
       real(r8), intent(in) :: rmask(LBi:,LBj:)
 #  endif
-#  ifdef WET_DRY
-      real(r8), intent(in) :: rmask_wet(LBi:,LBj:)
-#  endif
       real(r8), intent(in) :: latr(LBi:,LBj:)
 #  ifdef CLOUDS
       real(r8), intent(in) :: cloud(LBi:,LBj:)
@@ -99,9 +90,6 @@
 # else
 #  ifdef MASKING
       real(r8), intent(in) :: rmask(LBi:UBi,LBj:UBj)
-#  endif
-#  ifdef WET_DRY
-      real(r8), intent(in) :: rmask_wet(LBi:UBi,LBj:UBj)
 #  endif
       real(r8), intent(in) :: latr(LBi:UBi,LBj:UBj)
 #  ifdef CLOUDS
@@ -264,9 +252,6 @@
           cawdir(i,j)=1._r8-sads/stot
 #ifdef MASKING
           cawdir(i,j) = cawdir(i,j)*rmask(i,j)
-#endif
-#ifdef WET_DRY
-          cawdir(i,j) = cawdir(i,j)*rmask_wet(i,j)
 #endif
         ENDDO
       ENDDO

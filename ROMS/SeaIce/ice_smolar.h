@@ -260,8 +260,7 @@
      &                  BOUNDARY(ng)%ai_east(LBj:UBj),                  &
      &                  BOUNDARY(ng)%ai_north(LBi:UBi),                 &
      &                  BOUNDARY(ng)%ai_south(LBi:UBi),                 &
-     &                  ICE(ng)%ui,                                     &
-     &                  ICE(ng)%vi,                                     &
+     &                  ICE(ng)%ui, ICE(ng)%vi,                         &
      &                  ICE(ng)%ai, LBC(:,isAice,ng))
       CALL i2d_bc_tile (ng, tile, iNLM,                                 &
      &                  LBi, UBi, LBj, UBj,                             &
@@ -271,8 +270,7 @@
      &                  BOUNDARY(ng)%hi_east(LBj:UBj),                  &
      &                  BOUNDARY(ng)%hi_north(LBi:UBi),                 &
      &                  BOUNDARY(ng)%hi_south(LBi:UBi),                 &
-     &                  ICE(ng)%ui,                                     &
-     &                  ICE(ng)%vi,                                     &
+     &                  ICE(ng)%ui, ICE(ng)%vi,                         &
      &                  ICE(ng)%hi, LBC(:,isHice,ng))
       CALL i2d_bc_tile (ng, tile, iNLM,                                 &
      &                  LBi, UBi, LBj, UBj,                             &
@@ -282,17 +280,13 @@
      &                  BOUNDARY(ng)%hsn_east(LBj:UBj),                 &
      &                  BOUNDARY(ng)%hsn_north(LBi:UBi),                &
      &                  BOUNDARY(ng)%hsn_south(LBi:UBi),                &
-     &                  ICE(ng)%ui,                                     &
-     &                  ICE(ng)%vi,                                     &
+     &                  ICE(ng)%ui, ICE(ng)%vi,                         &
      &                  ICE(ng)%hsn, LBC(:,isHsno,ng))
 !
       CALL tibc_tile (ng, tile, iNLM,                                   &
      &                LBi, UBi, LBj, UBj,                               &
      &                liold(ng), linew(ng),                             &
-     &                ICE(ng)%ui,                                       &
-     &                ICE(ng)%vi,                                       &
-     &                ICE(ng)%hi,                                       &
-     &                ICE(ng)%ti,                                       &
+     &                ICE(ng)%ui, ICE(ng)%vi, ICE(ng)%hi, ICE(ng)%ti,   &
      &                ICE(ng)%enthalpi)
 !
       CALL bc_r2d_tile (ng, tile,                                       &

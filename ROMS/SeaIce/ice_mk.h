@@ -882,10 +882,6 @@
           ai(i,j,linew) = ai(i,j,linew)*rmask(i,j)
           hi(i,j,linew) = hi(i,j,linew)*rmask(i,j)
 #endif
-#ifdef WET_DRY
-!         ai(i,j,linew) = ai(i,j,linew)*rmask_wet(i,j)
-!         hi(i,j,linew) = hi(i,j,linew)*rmask_wet(i,j)
-#endif
 #ifdef ICESHELF
           IF (zice(i,j).ne.0.0_r8) THEN
             ai(i,j,linew) = 0.0_r8
