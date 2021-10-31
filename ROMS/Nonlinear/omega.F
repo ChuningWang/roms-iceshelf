@@ -32,13 +32,15 @@
       USE mod_param
       USE mod_grid
       USE mod_ocean
-# if defined ICESHELF && defined ICESHELF_MORPH
-      USE mod_iceshelf, ONLY : ICESHELFVAR
+# if defined SEDIMENT && defined SED_MORPH
+      USE mod_sedbed
 # endif
 # if (defined SEDIMENT && defined SED_MORPH) || \
      (defined ICESHELF && defined ICESHELF_MORPH)
-      USE mod_sedbed
       USE mod_stepping
+# endif
+# if defined ICESHELF && defined ICESHELF_MORPH
+      USE mod_iceshelf, ONLY : ICESHELFVAR
 # endif
 !
 !  Imported variable declarations.
@@ -62,11 +64,11 @@
      (defined ICESHELF && defined ICESHELF_MORPH)
      &                 nstp(ng), nnew(ng),                              &
      &                 GRID(ng) % omn,                                  &
-#  if defined ICESHELF && defined ICESHELF_MORPH
-     &                 ICESHELFVAR(ng) % iceshelf_draft,                &
-#  endif
 #  if defined SEDIMENT && defined SED_MORPH
      &                 SEDBED(ng) % bed_thick,                          &
+#  endif
+#  if defined ICESHELF && defined ICESHELF_MORPH
+     &                 ICESHELFVAR(ng) % iceshelf_draft,                &
 #  endif
 # endif
      &                 GRID(ng) % Huon,                                 &
@@ -88,11 +90,11 @@
      (defined ICESHELF && defined ICESHELF_MORPH)
      &                       nstp, nnew,                                &
      &                       omn,                                       &
-#  if defined ICESHELF && defined ICESHELF_MORPH
-     &                       iceshelf_draft,                            &
-#  endif
 #  if defined SEDIMENT && defined SED_MORPH
      &                       bed_thick,                                 &
+#  endif
+#  if defined ICESHELF && defined ICESHELF_MORPH
+     &                       iceshelf_draft,                            &
 #  endif
 # endif
      &                       Huon, Hvom,                                &
@@ -123,11 +125,11 @@
 #  if (defined SEDIMENT && defined SED_MORPH) || \
       (defined ICESHELF && defined ICESHELF_MORPH)
       real(r8), intent(in) :: omn(LBi:,LBj:)
-#   if defined ICESHELF && defined ICESHELF_MORPH
-      real(r8), intent(in) :: iceshelf_draft(LBi:,LBj:,:)
-#   endif
 #   if defined SEDIMENT && defined SED_MORPH
       real(r8), intent(in):: bed_thick(LBi:,LBj:,:)
+#   endif
+#   if defined ICESHELF && defined ICESHELF_MORPH
+      real(r8), intent(in) :: iceshelf_draft(LBi:,LBj:,:)
 #   endif
 #  endif
       real(r8), intent(in) :: Huon(LBi:,LBj:,:)
@@ -140,11 +142,11 @@
 #  if (defined SEDIMENT && defined SED_MORPH) || \
       (defined ICESHELF && defined ICESHELF_MORPH)
       real(r8), intent(in) :: omn(LBi:UBi,LBj:UBj)
-#   if defined ICESHELF && defined ICESHELF_MORPH
-      real(r8), intent(in):: iceshelf_draft(LBi:,LBj:,:)
-#   endif
 #   if defined SEDIMENT && defined SED_MORPH
       real(r8), intent(in):: bed_thick(LBi:UBi,LBj:UBj,2)
+#   endif
+#   if defined ICESHELF && defined ICESHELF_MORPH
+      real(r8), intent(in):: iceshelf_draft(LBi:,LBj:,:)
 #   endif
 #  endif
       real(r8), intent(in) :: Huon(LBi:UBi,LBj:UBj,N(ng))
@@ -197,7 +199,7 @@
      &          W(i,j,N(ng))+cff1*(iceshelf_draft(i,j,nstp)-            &
      &          iceshelf_draft(i,j,nnew))*omn(i,j)
             END IF
-# endif            
+# endif
           END DO
         END DO
 !

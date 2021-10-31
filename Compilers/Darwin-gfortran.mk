@@ -70,9 +70,6 @@ ifdef USE_ROMS
  endif
         MDEPFLAGS := --cpp --fext=f90 --file=- --objdir=$(SCRATCH_DIR)
 endif
-ifdef USE_GCC10
-           FFLAGS += -fallow-argument-mismatch
-endif
 
 #--------------------------------------------------------------------------
 # Compiling flags for CICE Applications.

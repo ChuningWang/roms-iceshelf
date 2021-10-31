@@ -547,6 +547,7 @@
       integer, allocatable :: idTTav(:)     ! <t*t> for active tracers
       integer, allocatable :: idUTav(:)     ! <u*t> for active tracers
       integer, allocatable :: idVTav(:)     ! <v*t> for active tracers
+
 #ifdef DIAGNOSTICS
 !
 !  Tracer/Momentum Diagnostic variable IDs.
