@@ -1130,10 +1130,10 @@
 */
 
 #if defined ANA_ICE     || defined ANA_AIOBC   || \
-    defined ANA_HIOBC   || defined ANA_HSNOBC  || \
-    defined ANA_TIOBC   || defined ANA_SIGOBC  || \
-    defined ANA_MIOBC   || defined ANA_AICLIMA || \
-    defined ANA_SICLIMA || defined ANA_MICLIMA
+    defined ANA_HIOBC   || defined ANA_TIOBC   || \
+    defined ANA_SIGOBC  || defined ANA_MIOBC   || \
+    defined ANA_AICLIMA || defined ANA_SICLIMA || \
+    defined ANA_MICLIMA
 # define ANALYTICAL
 #endif
 

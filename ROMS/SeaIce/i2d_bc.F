@@ -13,13 +13,220 @@
 !                                                                      !
 !=======================================================================
 !
-
       implicit none
-
+!
       PRIVATE
+      PUBLIC i2d_ice_bc
+      PUBLIC i2d_sig_bc
       PUBLIC i2d_bc_tile
 
       CONTAINS
+!
+!***********************************************************************
+      SUBROUTINE i2d_ice_bc (ng, tile, model,                           &
+     &                       LBi, UBi, LBj, UBj,                        &
+     &                       IminS, ImaxS, JminS, JmaxS,                &
+     &                       liold, linew)
+!***********************************************************************
+!
+      USE mod_param
+      USE mod_ncparam
+      USE mod_ice
+      USE mod_boundary
+      USE mod_scalars
+!
+!  Imported variable declarations.
+!
+      integer, intent(in) :: ng, tile, model
+      integer, intent(in) :: LBi, UBi, LBj, UBj
+      integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
+      integer, intent(in) :: liold, linew
+!
+!  Local variable declarations.
+!
+      integer :: i, j
+!
+      real(r8), dimension(LBj:UBj) :: a_west
+      real(r8), dimension(LBj:UBj) :: a_east
+      real(r8), dimension(LBi:UBi) :: a_north
+      real(r8), dimension(LBi:UBi) :: a_south
+!
+#include "set_bounds.h"
+!
+      IF (LBC(iwest,isAice,ng)%acquire) THEN
+        DO j=Jstr,Jend+1
+          a_west(j) = BOUNDARY(ng)%ai_west(j)
+        END DO
+      END IF
+      IF (LBC(ieast,isAice,ng)%acquire) THEN
+        DO j=Jstr,Jend+1
+          a_east(j) = BOUNDARY(ng)%ai_east(j)
+        END DO
+      END IF
+      IF (LBC(inorth,isAice,ng)%acquire) THEN
+        DO i=Istr,Iend+1
+          a_north(i) = BOUNDARY(ng)%ai_north(i)
+        END DO
+      END IF
+      IF (LBC(isouth,isAice,ng)%acquire) THEN
+        DO i=Istr,Iend+1
+          a_south(i) = BOUNDARY(ng)%ai_south(i)
+        END DO
+      END IF
+!
+      CALL i2d_bc_tile (ng, tile, model,                                &
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  IminS, ImaxS, JminS, JmaxS,                     &
+     &                  liold, linew,                                   &
+     &                  a_west, a_east, a_north, a_south,               &
+     &                  ICE(ng)%ui, ICE(ng)%vi, ICE(ng)%ai,             &
+     &                  LBC(:,isAice,ng))
+!
+      IF (LBC(iwest,isHice,ng)%acquire) THEN
+        DO j=Jstr,Jend+1
+          a_west(j) = BOUNDARY(ng)%hi_west(j)
+        END DO
+      END IF
+      IF (LBC(ieast,isHice,ng)%acquire) THEN
+        DO j=Jstr,Jend+1
+          a_east(j) = BOUNDARY(ng)%hi_east(j)
+        END DO
+      END IF
+      IF (LBC(inorth,isHice,ng)%acquire) THEN
+        DO i=Istr,Iend+1
+          a_north(i) = BOUNDARY(ng)%hi_north(i)
+        END DO
+      END IF
+      IF (LBC(isouth,isHice,ng)%acquire) THEN
+        DO i=Istr,Iend+1
+          a_south(i) = BOUNDARY(ng)%hi_south(i)
+        END DO
+      END IF
+!
+      CALL i2d_bc_tile (ng, tile, model,                                &
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  IminS, ImaxS, JminS, JmaxS,                     &
+     &                  liold, linew,                                   &
+     &                  a_west, a_east, a_north, a_south,               &
+     &                  ICE(ng)%ui, ICE(ng)%vi, ICE(ng)%hi,             &
+     &                  LBC(:,isHice,ng))
+!
+      IF (LBC(iwest,isHice,ng)%acquire) THEN
+        DO j=Jstr,Jend+1
+          a_west(j) = BOUNDARY(ng)%hsn_west(j)
+        END DO
+      END IF
+      IF (LBC(ieast,isHice,ng)%acquire) THEN
+        DO j=Jstr,Jend+1
+          a_east(j) = BOUNDARY(ng)%hsn_east(j)
+        END DO
+      END IF
+      IF (LBC(inorth,isHice,ng)%acquire) THEN
+        DO i=Istr,Iend+1
+          a_north(i) = BOUNDARY(ng)%hsn_north(i)
+        END DO
+      END IF
+      IF (LBC(isouth,isHice,ng)%acquire) THEN
+        DO i=Istr,Iend+1
+          a_south(i) = BOUNDARY(ng)%hsn_south(i)
+        END DO
+      END IF
+!
+      CALL i2d_bc_tile (ng, tile, model,                                &
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  IminS, ImaxS, JminS, JmaxS,                     &
+     &                  liold, linew,                                   &
+     &                  a_west, a_east, a_north, a_south,               &
+     &                  ICE(ng)%ui, ICE(ng)%vi, ICE(ng)%hsn,            &
+     &                  LBC(:,isHice,ng))
+!
+      END SUBROUTINE i2d_ice_bc
+!
+!***********************************************************************
+      SUBROUTINE i2d_sig_bc (ng, tile, model,                           &
+     &                       LBi, UBi, LBj, UBj,                        &
+     &                       IminS, ImaxS, JminS, JmaxS,                &
+     &                       liold, linew)
+!***********************************************************************
+!
+      USE mod_param
+      USE mod_ncparam
+      USE mod_ice
+      USE mod_boundary
+      USE mod_scalars
+!
+!  Imported variable declarations.
+!
+      integer, intent(in) :: ng, tile, model
+      integer, intent(in) :: LBi, UBi, LBj, UBj
+      integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
+      integer, intent(in) :: liold, linew
+!
+!  Local variable declarations.
+!
+      integer :: i, j
+!
+      real(r8), dimension(LBj:UBj,1:3) :: a_west
+      real(r8), dimension(LBj:UBj,1:3) :: a_east
+      real(r8), dimension(LBi:UBi,1:3) :: a_north
+      real(r8), dimension(LBi:UBi,1:3) :: a_south
+!
+#include "set_bounds.h"
+!
+      IF (LBC(iwest,isIsig,ng)%acquire) THEN
+        DO j=Jstr,Jend+1
+          a_west(j,1) = BOUNDARY(ng)%sig11_west(j)
+          a_west(j,2) = BOUNDARY(ng)%sig22_west(j)
+          a_west(j,3) = BOUNDARY(ng)%sig12_west(j)
+        END DO
+      END IF
+      IF (LBC(ieast,isIsig,ng)%acquire) THEN
+        DO j=Jstr,Jend+1
+          a_east(j,1) = BOUNDARY(ng)%sig11_east(j)
+          a_east(j,2) = BOUNDARY(ng)%sig22_east(j)
+          a_east(j,3) = BOUNDARY(ng)%sig12_east(j)
+        END DO
+      END IF
+      IF (LBC(inorth,isIsig,ng)%acquire) THEN
+        DO i=Istr,Iend+1
+          a_north(i,1) = BOUNDARY(ng)%sig11_north(i)
+          a_north(i,2) = BOUNDARY(ng)%sig22_north(i)
+          a_north(i,3) = BOUNDARY(ng)%sig12_north(i)
+        END DO
+      END IF
+      IF (LBC(isouth,isIsig,ng)%acquire) THEN
+        DO i=Istr,Iend+1
+          a_south(i,1) = BOUNDARY(ng)%sig11_south(i)
+          a_south(i,2) = BOUNDARY(ng)%sig22_south(i)
+          a_south(i,3) = BOUNDARY(ng)%sig12_south(i)
+        END DO
+      END IF
+!
+      CALL i2d_bc_tile (ng, tile, model,                                &
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  IminS, ImaxS, JminS, JmaxS,                     &
+     &                  liold, linew,                                   &
+     &                  a_west(:,1), a_east(:,1),                       &
+     &                  a_north(:,1), a_south(:,1),                     &
+     &                  ICE(ng)%ui, ICE(ng)%vi, ICE(ng)%sig11,          &
+     &                  LBC(:,isIsig,ng))
+      CALL i2d_bc_tile (ng, tile, model,                                &
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  IminS, ImaxS, JminS, JmaxS,                     &
+     &                  liold, linew,                                   &
+     &                  a_west(:,2), a_east(:,2),                       &
+     &                  a_north(:,2), a_south(:,2),                     &
+     &                  ICE(ng)%ui, ICE(ng)%vi, ICE(ng)%sig22,          &
+     &                  LBC(:,isIsig,ng))
+      CALL i2d_bc_tile (ng, tile, model,                                &
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  IminS, ImaxS, JminS, JmaxS,                     &
+     &                  liold, linew,                                   &
+     &                  a_west(:,3), a_east(:,3),                       &
+     &                  a_north(:,3), a_south(:,3),                     &
+     &                  ICE(ng)%ui, ICE(ng)%vi, ICE(ng)%sig12,          &
+     &                  LBC(:,isIsig,ng))
+      END SUBROUTINE i2d_sig_bc
 !
 !***********************************************************************
       SUBROUTINE i2d_bc_tile (ng, tile, model,                          &

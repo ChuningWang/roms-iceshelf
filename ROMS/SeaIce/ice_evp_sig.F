@@ -33,20 +33,20 @@
 # endif
 !
       CALL ice_evp_sig_tile (ng, tile,                                  &
-     &                      LBi, UBi, LBj, UBj,                         &
-     &                      IminS, ImaxS, JminS, JmaxS,                 &
-     &                      liold(ng), lieol(ng), lienw(ng),            &
-     &                      GRID(ng) % pm,                              &
-     &                      GRID(ng) % pn,                              &
-     &                      ICE(ng) % uie,                              &
-     &                      ICE(ng) % vie,                              &
-     &                      ICE(ng) % hi,                               &
-     &                      ICE(ng) % pice,                             &
-     &                      ICE(ng) % zetai,                            &
-     &                      ICE(ng) % eta,                              &
-     &                      ICE(ng) % sig11,                            &
-     &                      ICE(ng) % sig22,                            &
-     &                      ICE(ng) % sig12)
+     &                       LBi, UBi, LBj, UBj,                        &
+     &                       IminS, ImaxS, JminS, JmaxS,                &
+     &                       liold(ng), lieol(ng), lienw(ng),           &
+     &                       GRID(ng) % pm,                             &
+     &                       GRID(ng) % pn,                             &
+     &                       ICE(ng) % uie,                             &
+     &                       ICE(ng) % vie,                             &
+     &                       ICE(ng) % hi,                              &
+     &                       ICE(ng) % pice,                            &
+     &                       ICE(ng) % zetai,                           &
+     &                       ICE(ng) % eta,                             &
+     &                       ICE(ng) % sig11,                           &
+     &                       ICE(ng) % sig22,                           &
+     &                       ICE(ng) % sig12)
 # ifdef PROFILE
       CALL wclock_off (ng, iNLM, 94, __LINE__, __FILE__)
 # endif
@@ -67,7 +67,6 @@
       USE mod_param
       USE mod_ncparam
       USE mod_scalars
-      USE mod_boundary
       USE mod_clima
 !
       USE exchange_2d_mod, ONLY : exchange_r2d_tile
@@ -75,7 +74,7 @@
       USE mp_exchange_mod, ONLY : mp_exchange2d
 #endif
 !
-      USE i2d_bc_mod, ONLY : i2d_bc_tile
+      USE i2d_bc_mod, ONLY : i2d_sig_bc
 !
       implicit none
 !
@@ -202,33 +201,10 @@
         END DO
       END DO
 !
-      CALL i2d_bc_tile (ng, tile, iNLM,                                 &
-     &                  LBi, UBi, LBj, UBj,                             &
-     &                  IminS, ImaxS, JminS, JmaxS,                     &
-     &                  lieol, lienw,                                   &
-     &                  BOUNDARY(ng)%sig11_west(LBj:UBj),               &
-     &                  BOUNDARY(ng)%sig11_east(LBj:UBj),               &
-     &                  BOUNDARY(ng)%sig11_north(LBi:UBi),              &
-     &                  BOUNDARY(ng)%sig11_south(LBi:UBi),              &
-     &                  uie, vie, sig11, LBC(:,isSig11,ng))
-      CALL i2d_bc_tile (ng, tile, iNLM,                                 &
-     &                  LBi, UBi, LBj, UBj,                             &
-     &                  IminS, ImaxS, JminS, JmaxS,                     &
-     &                  lieol, lienw,                                   &
-     &                  BOUNDARY(ng)%sig22_west(LBj:UBj),               &
-     &                  BOUNDARY(ng)%sig22_east(LBj:UBj),               &
-     &                  BOUNDARY(ng)%sig22_north(LBi:UBi),              &
-     &                  BOUNDARY(ng)%sig22_south(LBi:UBi),              &
-     &                  uie, vie, sig22, LBC(:,isSig22,ng))
-      CALL i2d_bc_tile (ng, tile, iNLM,                                 &
-     &                  LBi, UBi, LBj, UBj,                             &
-     &                  IminS, ImaxS, JminS, JmaxS,                     &
-     &                  lieol, lienw,                                   &
-     &                  BOUNDARY(ng)%sig12_west(LBj:UBj),               &
-     &                  BOUNDARY(ng)%sig12_east(LBj:UBj),               &
-     &                  BOUNDARY(ng)%sig12_north(LBi:UBi),              &
-     &                  BOUNDARY(ng)%sig12_south(LBi:UBi),              &
-     &                  uie, vie, sig12, LBC(:,isSig12,ng))
+      CALL i2d_sig_bc (ng, tile, iNLM,                                  &
+     &                 LBi, UBi, LBj, UBj,                              &
+     &                 IminS, ImaxS, JminS, JmaxS,                      &
+     &                 lieol, lienw)
 !
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
         CALL exchange_r2d_tile (ng, tile,                               &

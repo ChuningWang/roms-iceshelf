@@ -2172,6 +2172,15 @@
   'r2dvar'
   1.0d0
 
+'ice_sig'
+  'internal ice stress'
+  'Newton meter-1'
+  'ice stress, scalar, series'
+  'ocean_time'
+  'idIsig'
+  'r2dvar'
+  1.0d0
+
 'sig11'
   'internal ice stress 11 component'
   'Newton meter-1'
@@ -2422,6 +2431,402 @@
   'ocean_time'
   'idIrfac'
   'r2dvar'
+  1.0d0
+
+'aice_west'
+  'ice concentration western boundary condition'
+  ' '
+  'aice_west, scalar, series'
+  'bry_time'
+  'idAibc(iwest)'
+  'nulvar'
+  1.0d0
+
+'aice_east'
+  'ice concentration eastern boundary condition'
+  ' '
+  'aice_east, scalar, series'
+  'bry_time'
+  'idAibc(ieast)'
+  'nulvar'
+  1.0d0
+
+'aice_north'
+  'ice concentration northern boundary condition'
+  ' '
+  'aice_north, scalar, series'
+  'bry_time'
+  'idAibc(inorth)'
+  'nulvar'
+  1.0d0
+
+'aice_south'
+  'ice concentration southern boundary condition'
+  ' '
+  'aice_south, scalar, series'
+  'bry_time'
+  'idAibc(isouth)'
+  'nulvar'
+  1.0d0
+
+'hice_west'
+  'ice thickness western boundary condition'
+  'meter'
+  'hice_west, scalar, series'
+  'bry_time'
+  'idHibc(iwest)'
+  'nulvar'
+  1.0d0
+
+'hice_east'
+  'ice thickness eastern boundary condition'
+  'meter'
+  'hice_east, scalar, series'
+  'bry_time'
+  'idHibc(ieast)'
+  'nulvar'
+  1.0d0
+
+'hice_north'
+  'ice thickness northern boundary condition'
+  'meter'
+  'hice_north, scalar, series'
+  'bry_time'
+  'idHibc(inorth)'
+  'nulvar'
+  1.0d0
+
+'hice_south'
+  'ice thickness southern boundary condition'
+  'meter'
+  'hice_south, scalar, series'
+  'bry_time'
+  'idHibc(isouth)'
+  'nulvar'
+  1.0d0
+
+'hsnow_west'
+  'snow thickness western boundary condition'
+  'meter'
+  'hsnow_west, scalar, series'
+  'bry_time'
+  'idHsnbc(iwest)'
+  'nulvar'
+  1.0d0
+
+'hsnow_east'
+  'snow thickness eastern boundary condition'
+  'meter'
+  'hsnow_east, scalar, series'
+  'bry_time'
+  'idHsnbc(ieast)'
+  'nulvar'
+  1.0d0
+
+'hsnow_north'
+  'snow thickness northern boundary condition'
+  'meter'
+  'hsnow_north, scalar, series'
+  'bry_time'
+  'idHsnbc(inorth)'
+  'nulvar'
+  1.0d0
+
+'hsnow_south'
+  'snow thickness southern boundary condition'
+  'meter'
+  'hsnow_south, scalar, series'
+  'bry_time'
+  'idHsnbc(isouth)'
+  'nulvar'
+  1.0d0
+
+'ti_west'
+  'ice interior temperature western boundary condition'
+  'Celsius'
+  'ti_west, scalar, series'
+  'bry_time'
+  'idTibc(iwest)'
+  'nulvar'
+  1.0d0
+
+'ti_east'
+  'ice interior temperature eastern boundary condition'
+  'Celsius'
+  'ti_east, scalar, series'
+  'bry_time'
+  'idTibc(ieast)'
+  'nulvar'
+  1.0d0
+
+'ti_north'
+  'ice interior temperature northern boundary condition'
+  'Celsius'
+  'ti_north, scalar, series'
+  'bry_time'
+  'idTibc(inorth)'
+  'nulvar'
+  1.0d0
+
+'ti_south'
+  'ice interior temperature southern boundary condition'
+  'Celsius'
+  'ti_south, scalar, series'
+  'bry_time'
+  'idTibc(isouth)'
+  'nulvar'
+  1.0d0
+
+'apond_west'
+  'surface meltwater fraction western boundary condition'
+  ' '
+  'apond_west, scalar, series'
+  'bry_time'
+  'idApdbc(iwest)'
+  'nulvar'
+  1.0d0
+
+'apond_east'
+  'surface meltwater fraction eastern boundary condition'
+  ' '
+  'apond_east, scalar, series'
+  'bry_time'
+  'idApdbc(ieast)'
+  'nulvar'
+  1.0d0
+
+'apond_north'
+  'surface meltwater fraction northern boundary condition'
+  ' '
+  'apond_north, scalar, series'
+  'bry_time'
+  'idApdbc(inorth)'
+  'nulvar'
+  1.0d0
+
+'apond_south'
+  'surface meltwater fraction southern boundary condition'
+  ' '
+  'apond_south, scalar, series'
+  'bry_time'
+  'idApdbc(isouth)'
+  'nulvar'
+  1.0d0
+
+'hpond_west'
+  'surface meltwater thickness western boundary condition'
+  'meter'
+  'hpond_west, scalar, series'
+  'bry_time'
+  'idHpdbc(iwest)'
+  'nulvar'
+  1.0d0
+
+'hpond_east'
+  'surface meltwater thickness eastern boundary condition'
+  'meter'
+  'hpond_east, scalar, series'
+  'bry_time'
+  'idHpdbc(ieast)'
+  'nulvar'
+  1.0d0
+
+'hpond_north'
+  'surface meltwater thickness northern boundary condition'
+  'meter'
+  'hpond_north, scalar, series'
+  'bry_time'
+  'idHpdbc(inorth)'
+  'nulvar'
+  1.0d0
+
+'hpond_south'
+  'surface meltwater thickness southern boundary condition'
+  'meter'
+  'hpond_south, scalar, series'
+  'bry_time'
+  'idHpdbc(isouth)'
+  'nulvar'
+  1.0d0
+
+'sig11_west'
+  'ice stress component 11 western boundary condition'
+  'N meter-1'
+  'sig11_west, scalar, series'
+  'bry_time'
+  'idS11bc(iwest)'
+  'nulvar'
+  1.0d0
+
+'sig11_east'
+  'ice stress component 11 eastern boundary condition'
+  'N meter-1'
+  'sig11_east, scalar, series'
+  'bry_time'
+  'idS11bc(ieast)'
+  'nulvar'
+  1.0d0
+
+'sig11_north'
+  'ice stress component 11 northern boundary condition'
+  'N meter-1'
+  'sig11_north, scalar, series'
+  'bry_time'
+  'idS11bc(inorth)'
+  'nulvar'
+  1.0d0
+
+'sig11_south'
+  'ice stress component 22 southern boundary condition'
+  'N meter-1'
+  'sig11_south, scalar, series'
+  'bry_time'
+  'idS11bc(isouth)'
+  'nulvar'
+  1.0d0
+
+'sig22_west'
+  'ice stress component 22 western boundary condition'
+  'N meter-1'
+  'sig22_west, scalar, series'
+  'bry_time'
+  'idS22bc(iwest)'
+  'nulvar'
+  1.0d0
+
+'sig22_east'
+  'ice stress component 22 eastern boundary condition'
+  'N meter-1'
+  'sig22_east, scalar, series'
+  'bry_time'
+  'idS22bc(ieast)'
+  'nulvar'
+  1.0d0
+
+'sig22_north'
+  'ice stress component 22 northern boundary condition'
+  'N meter-1'
+  'sig22_north, scalar, series'
+  'bry_time'
+  'idS22bc(inorth)'
+  'nulvar'
+  1.0d0
+
+'sig22_south'
+  'ice stress component 12 southern boundary condition'
+  'N meter-1'
+  'sig22_south, scalar, series'
+  'bry_time'
+  'idS22bc(isouth)'
+  'nulvar'
+  1.0d0
+
+'sig12_west'
+  'ice stress component 12 western boundary condition'
+  'N meter-1'
+  'sig12_west, scalar, series'
+  'bry_time'
+  'idS12bc(iwest)'
+  'nulvar'
+  1.0d0
+
+'sig12_east'
+  'ice stress component 12 eastern boundary condition'
+  'N meter-1'
+  'sig12_east, scalar, series'
+  'bry_time'
+  'idS12bc(ieast)'
+  'nulvar'
+  1.0d0
+
+'sig12_north'
+  'ice stress component 12 northern boundary condition'
+  'N meter-1'
+  'sig12_north, scalar, series'
+  'bry_time'
+  'idS12bc(inorth)'
+  'nulvar'
+  1.0d0
+
+'sig12_south'
+  'ice stress component 12 southern boundary condition'
+  'N meter-1'
+  'sig12_south, scalar, series'
+  'bry_time'
+  'idS12bc(isouth)'
+  'nulvar'
+  1.0d0
+
+'uice_west'
+  'ice u-momentum western boundary condition'
+  'meter second-1'
+  'uice_west, scalar, series'
+  'bry_time'
+  'idUibc(iwest)'
+  'nulvar'
+  1.0d0
+
+'uice_east'
+  'ice u-momentum eastern boundary condition'
+  'meter second-1'
+  'uice_east, scalar, series'
+  'bry_time'
+  'idUibc(ieast)'
+  'nulvar'
+  1.0d0
+
+'uice_north'
+  'ice u-momentum northern boundary condition'
+  'meter second-1'
+  'uice_north, scalar, series'
+  'bry_time'
+  'idUibc(inorth)'
+  'nulvar'
+  1.0d0
+
+'uice_south'
+  'ice u-momentum southern boundary condition'
+  'meter second-1'
+  'uice_south, scalar, series'
+  'bry_time'
+  'idUibc(isouth)'
+  'nulvar'
+  1.0d0
+
+'vice_west'
+  'ice v-momentum western boundary condition'
+  'meter second-1'
+  'vice_west, scalar, series'
+  'bry_time'
+  'idVibc(iwest)'
+  'nulvar'
+  1.0d0
+
+'vice_east'
+  'ice v-momentum eastern boundary condition'
+  'meter second-1'
+  'vice_east, scalar, series'
+  'bry_time'
+  'idVibc(ieast)'
+  'nulvar'
+  1.0d0
+
+'vice_north'
+  'ice v-momentum northern boundary condition'
+  'meter second-1'
+  'vice_north, scalar, series'
+  'bry_time'
+  'idVibc(inorth)'
+  'nulvar'
+  1.0d0
+
+'vice_south'
+  'ice v-momentum southern boundary condition'
+  'meter second-1'
+  'vice_south, scalar, series'
+  'bry_time'
+  'idVibc(isouth)'
+  'nulvar'
   1.0d0
 
 !

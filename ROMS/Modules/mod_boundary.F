@@ -645,9 +645,7 @@
           real(r8), pointer :: hiG_east(:,:)
           real(r8), pointer :: hiG_south(:,:)
           real(r8), pointer :: hiG_north(:,:)
-# endif
 
-# ifndef ANA_HSNOBC
           real(r8), pointer :: hsnG_west(:,:)
           real(r8), pointer :: hsnG_east(:,:)
           real(r8), pointer :: hsnG_south(:,:)
@@ -1888,193 +1886,270 @@
 
 #ifdef ICE_MODEL
 !
-      allocate ( BOUNDARY(ng) % ai_west(LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+Ysize
-
-      allocate ( BOUNDARY(ng) % ai_east(LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+Ysize
-
-      allocate ( BOUNDARY(ng) % ai_south(LBi:UBi) )
-      Dmem(ng)=Dmem(ng)+Xsize
-
-      allocate ( BOUNDARY(ng) % ai_north(LBi:UBi) )
-      Dmem(ng)=Dmem(ng)+Xsize
+      IF (LBC(iwest,isAice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % ai_west(LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+Ysize
+      END IF
+      IF (LBC(ieast,isAice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % ai_east(LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+Ysize
+      END IF
+      IF (LBC(isouth,isAice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % ai_south(LBi:UBi) )
+        Dmem(ng)=Dmem(ng)+Xsize
+      END IF
+      IF (LBC(inorth,isAice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % ai_north(LBi:UBi) )
+        Dmem(ng)=Dmem(ng)+Xsize
+      END IF
 !
-      allocate ( BOUNDARY(ng) % hi_west(LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+Ysize
-
-      allocate ( BOUNDARY(ng) % hi_east(LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+Ysize
-
-      allocate ( BOUNDARY(ng) % hi_south(LBi:UBi) )
-      Dmem(ng)=Dmem(ng)+Xsize
-
-      allocate ( BOUNDARY(ng) % hi_north(LBi:UBi) )
-      Dmem(ng)=Dmem(ng)+Xsize
+      IF (LBC(iwest,isHice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % hi_west(LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+Ysize
+        allocate ( BOUNDARY(ng) % hsn_west(LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+Ysize
+      END IF
+      IF (LBC(ieast,isHice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % hi_east(LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+Ysize
+        allocate ( BOUNDARY(ng) % hsn_east(LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+Ysize
+      END IF
+      IF (LBC(isouth,isHice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % hi_south(LBi:UBi) )
+        Dmem(ng)=Dmem(ng)+Xsize
+        allocate ( BOUNDARY(ng) % hsn_south(LBi:UBi) )
+        Dmem(ng)=Dmem(ng)+Xsize
+      END IF
+      IF (LBC(inorth,isHice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % hi_north(LBi:UBi) )
+        Dmem(ng)=Dmem(ng)+Xsize
+        allocate ( BOUNDARY(ng) % hsn_north(LBi:UBi) )
+        Dmem(ng)=Dmem(ng)+Xsize
+      END IF
 !
-      allocate ( BOUNDARY(ng) % hsn_west(LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+Ysize
+      IF (LBC(iwest,isTice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % ti_west(LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+Ysize
+      END IF
+      IF (LBC(ieast,isTice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % ti_east(LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+Ysize
+      END IF
+      IF (LBC(isouth,isTice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % ti_south(LBi:UBi) )
+        Dmem(ng)=Dmem(ng)+Xsize
+      END IF
+      IF (LBC(inorth,isTice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % ti_north(LBi:UBi) )
+        Dmem(ng)=Dmem(ng)+Xsize
+      END IF
 
-      allocate ( BOUNDARY(ng) % hsn_east(LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+Ysize
+      IF (LBC(iwest,isIsig,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % sig11_west(LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+Ysize
+        allocate ( BOUNDARY(ng) % sig22_west(LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+Ysize
+        allocate ( BOUNDARY(ng) % sig12_west(LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+Ysize
+      END IF
 
-      allocate ( BOUNDARY(ng) % hsn_south(LBi:UBi) )
-      Dmem(ng)=Dmem(ng)+Xsize
+      IF (LBC(ieast,isIsig,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % sig11_east(LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+Ysize
+        allocate ( BOUNDARY(ng) % sig22_east(LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+Ysize
+        allocate ( BOUNDARY(ng) % sig12_east(LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+Ysize
+      END IF
 
-      allocate ( BOUNDARY(ng) % hsn_north(LBi:UBi) )
-      Dmem(ng)=Dmem(ng)+Xsize
+      IF (LBC(isouth,isIsig,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % sig11_south(LBi:UBi) )
+        Dmem(ng)=Dmem(ng)+Xsize
+        allocate ( BOUNDARY(ng) % sig22_south(LBi:UBi) )
+        Dmem(ng)=Dmem(ng)+Xsize
+        allocate ( BOUNDARY(ng) % sig12_south(LBi:UBi) )
+        Dmem(ng)=Dmem(ng)+Xsize
+      END IF
 
-      allocate ( BOUNDARY(ng) % ti_west(LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+Ysize
-      allocate ( BOUNDARY(ng) % ti_east(LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+Ysize
-      allocate ( BOUNDARY(ng) % ti_south(LBi:UBi) )
-      Dmem(ng)=Dmem(ng)+Xsize
-      allocate ( BOUNDARY(ng) % ti_north(LBi:UBi) )
-      Dmem(ng)=Dmem(ng)+Xsize
+      IF (LBC(inorth,isIsig,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % sig11_north(LBi:UBi) )
+        Dmem(ng)=Dmem(ng)+Xsize
+        allocate ( BOUNDARY(ng) % sig22_north(LBi:UBi) )
+        Dmem(ng)=Dmem(ng)+Xsize
+        allocate ( BOUNDARY(ng) % sig12_north(LBi:UBi) )
+        Dmem(ng)=Dmem(ng)+Xsize
+      END IF
 
-      allocate ( BOUNDARY(ng) % sig11_west(LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+Ysize
-      allocate ( BOUNDARY(ng) % sig11_east(LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+Ysize
-      allocate ( BOUNDARY(ng) % sig11_south(LBi:UBi) )
-      Dmem(ng)=Dmem(ng)+Xsize
-      allocate ( BOUNDARY(ng) % sig11_north(LBi:UBi) )
-      Dmem(ng)=Dmem(ng)+Xsize
+      IF (LBC(iwest,isUice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % ui_west(LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+Ysize
+      END IF
+      IF (LBC(ieast,isUice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % ui_east(LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+Ysize
+      END IF
+      IF (LBC(isouth,isUice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % ui_south(LBi:UBi) )
+        Dmem(ng)=Dmem(ng)+Xsize
+      END IF
+      IF (LBC(inorth,isUice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % ui_north(LBi:UBi) )
+        Dmem(ng)=Dmem(ng)+Xsize
+      END iF
 
-      allocate ( BOUNDARY(ng) % sig22_west(LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+Ysize
-      allocate ( BOUNDARY(ng) % sig22_east(LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+Ysize
-      allocate ( BOUNDARY(ng) % sig22_south(LBi:UBi) )
-      Dmem(ng)=Dmem(ng)+Xsize
-      allocate ( BOUNDARY(ng) % sig22_north(LBi:UBi) )
-      Dmem(ng)=Dmem(ng)+Xsize
-
-      allocate ( BOUNDARY(ng) % sig12_west(LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+Ysize
-      allocate ( BOUNDARY(ng) % sig12_east(LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+Ysize
-      allocate ( BOUNDARY(ng) % sig12_south(LBi:UBi) )
-      Dmem(ng)=Dmem(ng)+Xsize
-      allocate ( BOUNDARY(ng) % sig12_north(LBi:UBi) )
-      Dmem(ng)=Dmem(ng)+Xsize
-
-      allocate ( BOUNDARY(ng) % ui_west(LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+Ysize
-      allocate ( BOUNDARY(ng) % ui_east(LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+Ysize
-      allocate ( BOUNDARY(ng) % ui_south(LBi:UBi) )
-      Dmem(ng)=Dmem(ng)+Xsize
-      allocate ( BOUNDARY(ng) % ui_north(LBi:UBi) )
-      Dmem(ng)=Dmem(ng)+Xsize
-
-      allocate ( BOUNDARY(ng) % vi_west(LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+Ysize
-      allocate ( BOUNDARY(ng) % vi_east(LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+Ysize
-      allocate ( BOUNDARY(ng) % vi_south(LBi:UBi) )
-      Dmem(ng)=Dmem(ng)+Xsize
-      allocate ( BOUNDARY(ng) % vi_north(LBi:UBi) )
-      Dmem(ng)=Dmem(ng)+Xsize
+      IF (LBC(iwest,isVice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % vi_west(LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+Ysize
+      END iF
+      IF (LBC(ieast,isVice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % vi_east(LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+Ysize
+      END iF
+      IF (LBC(isouth,isVice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % vi_south(LBi:UBi) )
+        Dmem(ng)=Dmem(ng)+Xsize
+      END iF
+      IF (LBC(inorth,isVice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % vi_north(LBi:UBi) )
+        Dmem(ng)=Dmem(ng)+Xsize
+      END iF
 # ifndef ANA_AIOBC
 !
-      allocate ( BOUNDARY(ng) % aiG_west(LBj:UBj,2) )
-      Dmem(ng)=Dmem(ng)+Ysize*2
-      allocate ( BOUNDARY(ng) % aiG_east(LBj:UBj,2) )
-      Dmem(ng)=Dmem(ng)+Ysize*2
-      allocate ( BOUNDARY(ng) % aiG_south(LBi:UBi,2) )
-      Dmem(ng)=Dmem(ng)+Xsize*2
-      allocate ( BOUNDARY(ng) % aiG_north(LBi:UBi,2) )
-      Dmem(ng)=Dmem(ng)+Xsize*2
+      IF (LBC(iwest,isAice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % aiG_west(LBj:UBj,2) )
+        Dmem(ng)=Dmem(ng)+Ysize*2
+      END IF
+      IF (LBC(ieast,isAice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % aiG_east(LBj:UBj,2) )
+        Dmem(ng)=Dmem(ng)+Ysize*2
+      END IF
+      IF (LBC(isouth,isAice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % aiG_south(LBi:UBi,2) )
+        Dmem(ng)=Dmem(ng)+Xsize*2
+      END IF
+      IF (LBC(inorth,isAice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % aiG_north(LBi:UBi,2) )
+        Dmem(ng)=Dmem(ng)+Xsize*2
+      END IF
 # endif
 # ifndef ANA_HIOBC
 !
-      allocate ( BOUNDARY(ng) % hiG_west(LBj:UBj,2) )
-      Dmem(ng)=Dmem(ng)+Ysize*2
-      allocate ( BOUNDARY(ng) % hiG_east(LBj:UBj,2) )
-      Dmem(ng)=Dmem(ng)+Ysize*2
-      allocate ( BOUNDARY(ng) % hiG_south(LBi:UBi,2) )
-      Dmem(ng)=Dmem(ng)+Xsize*2
-      allocate ( BOUNDARY(ng) % hiG_north(LBi:UBi,2) )
-      Dmem(ng)=Dmem(ng)+Xsize*2
-# endif
-# ifndef ANA_HSNOBC
+      IF (LBC(iwest,isHice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % hiG_west(LBj:UBj,2) )
+        Dmem(ng)=Dmem(ng)+Ysize*2
+        allocate ( BOUNDARY(ng) % hsnG_west(LBj:UBj,2) )
+        Dmem(ng)=Dmem(ng)+Ysize*2
+      END IF
+      IF (LBC(ieast,isHice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % hiG_east(LBj:UBj,2) )
+        Dmem(ng)=Dmem(ng)+Ysize*2
+        allocate ( BOUNDARY(ng) % hsnG_east(LBj:UBj,2) )
+        Dmem(ng)=Dmem(ng)+Ysize*2
+      END IF
+      IF (LBC(isouth,isHice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % hiG_south(LBi:UBi,2) )
+        Dmem(ng)=Dmem(ng)+Xsize*2
+        allocate ( BOUNDARY(ng) % hsnG_south(LBi:UBi,2) )
+        Dmem(ng)=Dmem(ng)+Xsize*2
+      END IF
+      IF (LBC(inorth,isHice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % hiG_north(LBi:UBi,2) )
+        Dmem(ng)=Dmem(ng)+Xsize*2
+        allocate ( BOUNDARY(ng) % hsnG_north(LBi:UBi,2) )
+        Dmem(ng)=Dmem(ng)+Xsize*2
+      END IF
 !
-      allocate ( BOUNDARY(ng) % hsnG_west(LBj:UBj,2) )
-      Dmem(ng)=Dmem(ng)+Ysize*2
-      allocate ( BOUNDARY(ng) % hsnG_east(LBj:UBj,2) )
-      Dmem(ng)=Dmem(ng)+Ysize*2
-      allocate ( BOUNDARY(ng) % hsnG_south(LBi:UBi,2) )
-      Dmem(ng)=Dmem(ng)+Xsize*2
-      allocate ( BOUNDARY(ng) % hsnG_north(LBi:UBi,2) )
-      Dmem(ng)=Dmem(ng)+Xsize*2
 # endif
 # ifndef ANA_TIOBC
 !
-      allocate ( BOUNDARY(ng) % tiG_west(LBj:UBj,2) )
-      Dmem(ng)=Dmem(ng)+Ysize*2
-      allocate ( BOUNDARY(ng) % tiG_east(LBj:UBj,2) )
-      Dmem(ng)=Dmem(ng)+Ysize*2
-      allocate ( BOUNDARY(ng) % tiG_south(LBi:UBi,2) )
-      Dmem(ng)=Dmem(ng)+Xsize*2
-      allocate ( BOUNDARY(ng) % tiG_north(LBi:UBi,2) )
-      Dmem(ng)=Dmem(ng)+Xsize*2
+      IF (LBC(iwest,isTice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % tiG_west(LBj:UBj,2) )
+        Dmem(ng)=Dmem(ng)+Ysize*2
+      END IF
+      IF (LBC(ieast,isTice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % tiG_east(LBj:UBj,2) )
+        Dmem(ng)=Dmem(ng)+Ysize*2
+      END IF
+      IF (LBC(isouth,isTice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % tiG_south(LBi:UBi,2) )
+        Dmem(ng)=Dmem(ng)+Xsize*2
+      END IF
+      IF (LBC(inorth,isTice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % tiG_north(LBi:UBi,2) )
+        Dmem(ng)=Dmem(ng)+Xsize*2
+      END IF
 # endif
 # ifndef ANA_SIGOBC
 !
-      allocate ( BOUNDARY(ng) % sig11G_west(LBj:UBj,2) )
-      Dmem(ng)=Dmem(ng)+Ysize*2
-      allocate ( BOUNDARY(ng) % sig11G_east(LBj:UBj,2) )
-      Dmem(ng)=Dmem(ng)+Ysize*2
-      allocate ( BOUNDARY(ng) % sig11G_south(LBi:UBi,2) )
-      Dmem(ng)=Dmem(ng)+Xsize*2
-      allocate ( BOUNDARY(ng) % sig11G_north(LBi:UBi,2) )
-      Dmem(ng)=Dmem(ng)+Xsize*2
-
-      allocate ( BOUNDARY(ng) % sig22G_west(LBj:UBj,2) )
-      Dmem(ng)=Dmem(ng)+Ysize*2
-      allocate ( BOUNDARY(ng) % sig22G_east(LBj:UBj,2) )
-      Dmem(ng)=Dmem(ng)+Ysize*2
-      allocate ( BOUNDARY(ng) % sig22G_south(LBi:UBi,2) )
-      Dmem(ng)=Dmem(ng)+Xsize*2
-      allocate ( BOUNDARY(ng) % sig22G_north(LBi:UBi,2) )
-      Dmem(ng)=Dmem(ng)+Xsize*2
-
-      allocate ( BOUNDARY(ng) % sig12G_west(LBj:UBj,2) )
-      Dmem(ng)=Dmem(ng)+Ysize*2
-      allocate ( BOUNDARY(ng) % sig12G_east(LBj:UBj,2) )
-      Dmem(ng)=Dmem(ng)+Ysize*2
-      allocate ( BOUNDARY(ng) % sig12G_south(LBi:UBi,2) )
-      Dmem(ng)=Dmem(ng)+Xsize*2
-      allocate ( BOUNDARY(ng) % sig12G_north(LBi:UBi,2) )
-      Dmem(ng)=Dmem(ng)+Xsize*2
+      IF (LBC(iwest,isIsig,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % sig11G_west(LBj:UBj,2) )
+        Dmem(ng)=Dmem(ng)+Ysize*2
+        allocate ( BOUNDARY(ng) % sig22G_west(LBj:UBj,2) )
+        Dmem(ng)=Dmem(ng)+Ysize*2
+        allocate ( BOUNDARY(ng) % sig12G_west(LBj:UBj,2) )
+        Dmem(ng)=Dmem(ng)+Ysize*2
+      END IF
+      IF (LBC(ieast,isIsig,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % sig11G_east(LBj:UBj,2) )
+        Dmem(ng)=Dmem(ng)+Ysize*2
+        allocate ( BOUNDARY(ng) % sig22G_east(LBj:UBj,2) )
+        Dmem(ng)=Dmem(ng)+Ysize*2
+        allocate ( BOUNDARY(ng) % sig12G_east(LBj:UBj,2) )
+        Dmem(ng)=Dmem(ng)+Ysize*2
+      END IF
+      IF (LBC(isouth,isIsig,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % sig11G_south(LBi:UBi,2) )
+        Dmem(ng)=Dmem(ng)+Xsize*2
+        allocate ( BOUNDARY(ng) % sig22G_south(LBi:UBi,2) )
+        Dmem(ng)=Dmem(ng)+Xsize*2
+        allocate ( BOUNDARY(ng) % sig12G_south(LBi:UBi,2) )
+        Dmem(ng)=Dmem(ng)+Xsize*2
+      END IF
+      IF (LBC(inorth,isIsig,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % sig11G_north(LBi:UBi,2) )
+        Dmem(ng)=Dmem(ng)+Xsize*2
+        allocate ( BOUNDARY(ng) % sig22G_north(LBi:UBi,2) )
+        Dmem(ng)=Dmem(ng)+Xsize*2
+        allocate ( BOUNDARY(ng) % sig12G_north(LBi:UBi,2) )
+        Dmem(ng)=Dmem(ng)+Xsize*2
+      END IF
 # endif
 # ifndef ANA_MIOBC
 !
-      allocate ( BOUNDARY(ng) % uiG_west(LBj:UBj,2) )
-      Dmem(ng)=Dmem(ng)+Ysize*2
+      IF (LBC(iwest,isUice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % uiG_west(LBj:UBj,2) )
+        Dmem(ng)=Dmem(ng)+Ysize*2
+      END IF
+      IF (LBC(ieast,isUice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % uiG_east(LBj:UBj,2) )
+        Dmem(ng)=Dmem(ng)+Ysize*2
+      END IF
+      IF (LBC(isouth,isUice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % uiG_south(LBi:UBi,2) )
+        Dmem(ng)=Dmem(ng)+Xsize*2
+      END IF
+      IF (LBC(inorth,isUice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % uiG_north(LBi:UBi,2) )
+        Dmem(ng)=Dmem(ng)+Xsize*2
+      END IF
 
-      allocate ( BOUNDARY(ng) % uiG_east(LBj:UBj,2) )
-      Dmem(ng)=Dmem(ng)+Ysize*2
-
-      allocate ( BOUNDARY(ng) % uiG_south(LBi:UBi,2) )
-      Dmem(ng)=Dmem(ng)+Xsize*2
-
-      allocate ( BOUNDARY(ng) % uiG_north(LBi:UBi,2) )
-      Dmem(ng)=Dmem(ng)+Xsize*2
-
-      allocate ( BOUNDARY(ng) % viG_west(LBj:UBj,2) )
-      Dmem(ng)=Dmem(ng)+Ysize*2
-
-      allocate ( BOUNDARY(ng) % viG_east(LBj:UBj,2) )
-      Dmem(ng)=Dmem(ng)+Ysize*2
-
-      allocate ( BOUNDARY(ng) % viG_south(LBi:UBi,2) )
-      Dmem(ng)=Dmem(ng)+Xsize*2
-
-      allocate ( BOUNDARY(ng) % viG_north(LBi:UBi,2) )
-      Dmem(ng)=Dmem(ng)+Xsize*2
+      IF (LBC(iwest,isVice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % viG_west(LBj:UBj,2) )
+        Dmem(ng)=Dmem(ng)+Ysize*2
+      END IF
+      IF (LBC(ieast,isVice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % viG_east(LBj:UBj,2) )
+        Dmem(ng)=Dmem(ng)+Ysize*2
+      END IF
+      IF (LBC(isouth,isVice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % viG_south(LBi:UBi,2) )
+        Dmem(ng)=Dmem(ng)+Xsize*2
+      END IF
+      IF (LBC(inorth,isVice,ng)%acquire) THEN
+        allocate ( BOUNDARY(ng) % viG_north(LBi:UBi,2) )
+        Dmem(ng)=Dmem(ng)+Xsize*2
+      END IF
 # endif
 #endif
 !
@@ -3129,232 +3204,284 @@
 # endif
 # ifdef ICE_MODEL
 !
-      IF (.not.destroy(ng, BOUNDARY(ng)%ai_west, MyFile,                &
-     &                 __LINE__, 'BOUNDARY(ng)%ai_west')) RETURN
+      IF (LBC(iwest,isAice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%ai_west, MyFile,              &
+     &                   __LINE__, 'BOUNDARY(ng)%ai_west')) RETURN
+      END IF
 
-      IF (.not.destroy(ng, BOUNDARY(ng)%ai_east, MyFile,                &
-     &                 __LINE__, 'BOUNDARY(ng)%ai_east')) RETURN
+      IF (LBC(ieast,isAice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%ai_east, MyFile,              &
+     &                   __LINE__, 'BOUNDARY(ng)%ai_east')) RETURN
+      END IF
 
-      IF (.not.destroy(ng, BOUNDARY(ng)%ai_south, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%ai_south')) RETURN
+      IF (LBC(isouth,isAice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%ai_south, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%ai_south')) RETURN
+      END IF
 
-      IF (.not.destroy(ng, BOUNDARY(ng)%ai_north, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%ai_north')) RETURN
+      IF (LBC(inorth,isAice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%ai_north, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%ai_north')) RETURN
+      END IF
 !
-      IF (.not.destroy(ng, BOUNDARY(ng)%hi_west, MyFile,                &
-     &                 __LINE__, 'BOUNDARY(ng)%hi_west')) RETURN
+      IF (LBC(iwest,isHice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%hi_west, MyFile,              &
+     &                   __LINE__, 'BOUNDARY(ng)%hi_west')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%hsn_west, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%hsn_west')) RETURN
+      END IF
 
-      IF (.not.destroy(ng, BOUNDARY(ng)%hi_east, MyFile,                &
-     &                 __LINE__, 'BOUNDARY(ng)%hi_east')) RETURN
+      IF (LBC(ieast,isHice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%hi_east, MyFile,              &
+     &                   __LINE__, 'BOUNDARY(ng)%hi_east')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%hsn_east, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%hsn_east')) RETURN
+      END IF
 
-      IF (.not.destroy(ng, BOUNDARY(ng)%hi_south, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%hi_south')) RETURN
+      IF (LBC(isouth,isHice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%hi_south, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%hi_south')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%hsn_south, MyFile,            &
+     &                   __LINE__, 'BOUNDARY(ng)%hsn_south')) RETURN
+      END IF
 
-      IF (.not.destroy(ng, BOUNDARY(ng)%hi_north, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%hi_north')) RETURN
+      IF (LBC(inorth,isHice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%hi_north, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%hi_north')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%hsn_north, MyFile,            &
+     &                   __LINE__, 'BOUNDARY(ng)%hsn_north')) RETURN
+      END IF
 !
-      IF (.not.destroy(ng, BOUNDARY(ng)%hsn_west, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%hsn_west')) RETURN
+      IF (LBC(iwest,isTice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%ti_west, MyFile,              &
+     &                   __LINE__, 'BOUNDARY(ng)%ti_west')) RETURN
+      END IF
 
-      IF (.not.destroy(ng, BOUNDARY(ng)%hsn_east, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%hsn_east')) RETURN
+      IF (LBC(ieast,isTice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%ti_east, MyFile,              &
+     &                   __LINE__, 'BOUNDARY(ng)%ti_east')) RETURN
+      END IF
 
-      IF (.not.destroy(ng, BOUNDARY(ng)%hsn_south, MyFile,              &
-     &                 __LINE__, 'BOUNDARY(ng)%hsn_south')) RETURN
+      IF (LBC(isouth,isTice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%ti_south, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%ti_south')) RETURN
+      END IF
 
-      IF (.not.destroy(ng, BOUNDARY(ng)%hsn_north, MyFile,              &
-     &                 __LINE__, 'BOUNDARY(ng)%hsn_north')) RETURN
+      IF (LBC(inorth,isTice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%ti_north, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%ti_north')) RETURN
+      END IF
 !
-      IF (.not.destroy(ng, BOUNDARY(ng)%ti_west, MyFile,                &
-     &                 __LINE__, 'BOUNDARY(ng)%ti_west')) RETURN
+      IF (LBC(iwest,isIsig,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig11_west, MyFile,           &
+     &                   __LINE__, 'BOUNDARY(ng)%sig11_west')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig22_west, MyFile,           &
+     &                   __LINE__, 'BOUNDARY(ng)%sig22_west')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig12_west, MyFile,           &
+     &                   __LINE__, 'BOUNDARY(ng)%sig12_west')) RETURN
+      END IF
 
-      IF (.not.destroy(ng, BOUNDARY(ng)%ti_east, MyFile,                &
-     &                 __LINE__, 'BOUNDARY(ng)%ti_east')) RETURN
+      IF (LBC(ieast,isIsig,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig11_east, MyFile,           &
+     &                   __LINE__, 'BOUNDARY(ng)%sig11_east')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig22_east, MyFile,           &
+     &                   __LINE__, 'BOUNDARY(ng)%sig22_east')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig12_east, MyFile,           &
+     &                   __LINE__, 'BOUNDARY(ng)%sig12_east')) RETURN
+      END IF
 
-      IF (.not.destroy(ng, BOUNDARY(ng)%ti_south, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%ti_south')) RETURN
+      IF (LBC(isouth,isIsig,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig11_south, MyFile,          &
+     &                   __LINE__, 'BOUNDARY(ng)%sig11_south')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig22_south, MyFile,          &
+     &                   __LINE__, 'BOUNDARY(ng)%sig22_south')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig12_south, MyFile,          &
+     &                   __LINE__, 'BOUNDARY(ng)%sig12_south')) RETURN
+      END IF
 
-      IF (.not.destroy(ng, BOUNDARY(ng)%ti_north, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%ti_north')) RETURN
+      IF (LBC(inorth,isIsig,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig11_north, MyFile,          &
+     &                   __LINE__, 'BOUNDARY(ng)%sig11_north')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig22_north, MyFile,          &
+     &                   __LINE__, 'BOUNDARY(ng)%sig22_north')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig12_north, MyFile,          &
+     &                   __LINE__, 'BOUNDARY(ng)%sig12_north')) RETURN
+      END IF
 !
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig11_west, MyFile,             &
-     &                 __LINE__, 'BOUNDARY(ng)%sig11_west')) RETURN
+      IF (LBC(iwest,isUice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%ui_west, MyFile,              &
+     &                   __LINE__, 'BOUNDARY(ng)%ui_west')) RETURN
+      END IF
 
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig11_east, MyFile,             &
-     &                 __LINE__, 'BOUNDARY(ng)%sig11_east')) RETURN
+      IF (LBC(ieast,isUice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%ui_east, MyFile,              &
+     &                   __LINE__, 'BOUNDARY(ng)%ui_east')) RETURN
+      END IF
 
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig11_south, MyFile,            &
-     &                 __LINE__, 'BOUNDARY(ng)%sig11_south')) RETURN
+      IF (LBC(isouth,isUice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%ui_south, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%ui_south')) RETURN
+      END IF
 
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig11_north, MyFile,            &
-     &                 __LINE__, 'BOUNDARY(ng)%sig11_north')) RETURN
+      IF (LBC(inorth,isUice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%ui_north, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%ui_north')) RETURN
+      END IF
 !
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig22_west, MyFile,             &
-     &                 __LINE__, 'BOUNDARY(ng)%sig22_west')) RETURN
+      IF (LBC(iwest,isVice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%vi_west, MyFile,              &
+     &                   __LINE__, 'BOUNDARY(ng)%vi_west')) RETURN
+      END IF
 
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig22_east, MyFile,             &
-     &                 __LINE__, 'BOUNDARY(ng)%sig22_east')) RETURN
+      IF (LBC(ieast,isVice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%vi_east, MyFile,              &
+     &                   __LINE__, 'BOUNDARY(ng)%vi_east')) RETURN
+      END IF
 
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig22_south, MyFile,            &
-     &                 __LINE__, 'BOUNDARY(ng)%sig22_south')) RETURN
+      IF (LBC(isouth,isVice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%vi_south, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%vi_south')) RETURN
+      END IF
 
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig22_north, MyFile,            &
-     &                 __LINE__, 'BOUNDARY(ng)%sig22_north')) RETURN
-!
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig12_west, MyFile,             &
-     &                 __LINE__, 'BOUNDARY(ng)%sig12_west')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig12_east, MyFile,             &
-     &                 __LINE__, 'BOUNDARY(ng)%sig12_east')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig12_south, MyFile,            &
-     &                 __LINE__, 'BOUNDARY(ng)%sig12_south')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig12_north, MyFile,            &
-     &                 __LINE__, 'BOUNDARY(ng)%sig12_north')) RETURN
-!
-      IF (.not.destroy(ng, BOUNDARY(ng)%ui_west, MyFile,                &
-     &                 __LINE__, 'BOUNDARY(ng)%ui_west')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%ui_east, MyFile,                &
-     &                 __LINE__, 'BOUNDARY(ng)%ui_east')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%ui_south, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%ui_south')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%ui_north, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%ui_north')) RETURN
-!
-      IF (.not.destroy(ng, BOUNDARY(ng)%vi_west, MyFile,                &
-     &                 __LINE__, 'BOUNDARY(ng)%vi_west')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%vi_east, MyFile,                &
-     &                 __LINE__, 'BOUNDARY(ng)%vi_east')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%vi_south, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%vi_south')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%vi_north, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%vi_north')) RETURN
+      IF (LBC(inorth,isVice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%vi_north, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%vi_north')) RETURN
+      END IF
 #  ifndef ANA_AIOBC
 !
-      IF (.not.destroy(ng, BOUNDARY(ng)%aiG_west, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%aiG_west')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%aiG_east, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%aiG_east')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%aiG_south, MyFile,              &
-     &                 __LINE__, 'BOUNDARY(ng)%aiG_south')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%aiG_north, MyFile,              &
-     &                 __LINE__, 'BOUNDARY(ng)%aiG_north')) RETURN
+      IF (LBC(iwest,isAice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%aiG_west, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%aiG_west')) RETURN
+      END IF
+      IF (LBC(ieast,isAice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%aiG_east, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%aiG_east')) RETURN
+      END IF
+      IF (LBC(isouth,isAice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%aiG_south, MyFile,            &
+     &                   __LINE__, 'BOUNDARY(ng)%aiG_south')) RETURN
+      END IF
+      IF (LBC(inorth,isAice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%aiG_north, MyFile,            &
+     &                   __LINE__, 'BOUNDARY(ng)%aiG_north')) RETURN
+      END IF
 #  endif
 #  ifndef ANA_HIOBC
 !
-      IF (.not.destroy(ng, BOUNDARY(ng)%hiG_west, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%hiG_west')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%hiG_east, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%hiG_east')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%hiG_south, MyFile,              &
-     &                 __LINE__, 'BOUNDARY(ng)%hiG_south')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%hiG_north, MyFile,              &
-     &                 __LINE__, 'BOUNDARY(ng)%hiG_north')) RETURN
-#  endif
-#  ifndef ANA_HSNOBC
-!
-      IF (.not.destroy(ng, BOUNDARY(ng)%hsnG_west, MyFile,              &
-     &                 __LINE__, 'BOUNDARY(ng)%hsnG_west')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%hsnG_east, MyFile,              &
-     &                 __LINE__, 'BOUNDARY(ng)%hsnG_east')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%hsnG_south, MyFile,             &
-     &                 __LINE__, 'BOUNDARY(ng)%hsnG_south')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%hsnG_north, MyFile,             &
+      IF (LBC(iwest,isHice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%hiG_west, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%hiG_west')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%hsnG_west, MyFile,            &
+     &                   __LINE__, 'BOUNDARY(ng)%hsnG_west')) RETURN
+      END IF
+      IF (LBC(ieast,isHice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%hiG_east, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%hiG_east')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%hsnG_east, MyFile,            &
+     &                   __LINE__, 'BOUNDARY(ng)%hsnG_east')) RETURN
+      END IF
+      IF (LBC(isouth,isHice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%hiG_south, MyFile,            &
+     &                   __LINE__, 'BOUNDARY(ng)%hiG_south')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%hsnG_south, MyFile,           &
+     &                   __LINE__, 'BOUNDARY(ng)%hsnG_south')) RETURN
+      END IF
+      IF (LBC(inorth,isHice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%hiG_north, MyFile,            &
+     &                   __LINE__, 'BOUNDARY(ng)%hiG_north')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%hsnG_north, MyFile,           &
      &                 __LINE__, 'BOUNDARY(ng)%hsnG_north')) RETURN
+      END IF
 #  endif
 #  ifndef ANA_TIOBC
 !
-      IF (.not.destroy(ng, BOUNDARY(ng)%tiG_west, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%tiG_west')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%tiG_east, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%tiG_east')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%tiG_south, MyFile,              &
-     &                 __LINE__, 'BOUNDARY(ng)%tiG_south')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%tiG_north, MyFile,              &
-     &                 __LINE__, 'BOUNDARY(ng)%tiG_north')) RETURN
+      IF (LBC(iwest,isTice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%tiG_west, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%tiG_west')) RETURN
+      END IF
+      IF (LBC(ieast,isTice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%tiG_east, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%tiG_east')) RETURN
+      END IF
+      IF (LBC(isouth,isTice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%tiG_south, MyFile,            &
+     &                   __LINE__, 'BOUNDARY(ng)%tiG_south')) RETURN
+      END IF
+      IF (LBC(inorth,isTice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%tiG_north, MyFile,            &
+     &                   __LINE__, 'BOUNDARY(ng)%tiG_north')) RETURN
+      END IF
 #  endif
 #  ifndef ANA_SIGOBC
 !
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig11G_west, MyFile,            &
-     &                 __LINE__, 'BOUNDARY(ng)%sig11G_west')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig11G_east, MyFile,            &
-     &                 __LINE__, 'BOUNDARY(ng)%sig11G_east')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig11G_south, MyFile,           &
-     &                 __LINE__, 'BOUNDARY(ng)%sig11G_south')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig11G_north, MyFile,           &
-     &                 __LINE__, 'BOUNDARY(ng)%sig11G_north')) RETURN
-!
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig22G_west, MyFile,            &
-     &                 __LINE__, 'BOUNDARY(ng)%sig22G_west')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig22G_east, MyFile,            &
-     &                 __LINE__, 'BOUNDARY(ng)%sig22G_east')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig22G_south, MyFile,           &
-     &                 __LINE__, 'BOUNDARY(ng)%sig22G_south')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig22G_north, MyFile,           &
-     &                 __LINE__, 'BOUNDARY(ng)%sig22G_north')) RETURN
-!
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig12G_west, MyFile,            &
-     &                 __LINE__, 'BOUNDARY(ng)%sig12G_west')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig12G_east, MyFile,            &
-     &                 __LINE__, 'BOUNDARY(ng)%sig12G_east')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig12G_south, MyFile,           &
-     &                 __LINE__, 'BOUNDARY(ng)%sig12G_south')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%sig12G_north, MyFile,           &
-     &                 __LINE__, 'BOUNDARY(ng)%sig12G_north')) RETURN
+      IF (LBC(iwest,isIsig,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig11G_west, MyFile,          &
+     &                   __LINE__, 'BOUNDARY(ng)%sig11G_west')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig22G_west, MyFile,          &
+     &                   __LINE__, 'BOUNDARY(ng)%sig22G_west')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig12G_west, MyFile,          &
+     &                   __LINE__, 'BOUNDARY(ng)%sig12G_west')) RETURN
+      END IF
+      IF (LBC(ieast,isIsig,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig11G_east, MyFile,          &
+     &                   __LINE__, 'BOUNDARY(ng)%sig11G_east')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig22G_east, MyFile,          &
+     &                   __LINE__, 'BOUNDARY(ng)%sig22G_east')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig12G_east, MyFile,          &
+     &                   __LINE__, 'BOUNDARY(ng)%sig12G_east')) RETURN
+      END IF
+      IF (LBC(isouth,isIsig,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig11G_south, MyFile,         &
+     &                   __LINE__, 'BOUNDARY(ng)%sig11G_south')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig22G_south, MyFile,         &
+     &                   __LINE__, 'BOUNDARY(ng)%sig22G_south')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig12G_south, MyFile,         &
+     &                   __LINE__, 'BOUNDARY(ng)%sig12G_south')) RETURN
+      END IF
+      IF (LBC(inorth,isIsig,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig11G_north, MyFile,         &
+     &                   __LINE__, 'BOUNDARY(ng)%sig11G_north')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig22G_north, MyFile,         &
+     &                   __LINE__, 'BOUNDARY(ng)%sig22G_north')) RETURN
+        IF (.not.destroy(ng, BOUNDARY(ng)%sig12G_north, MyFile,         &
+     &                   __LINE__, 'BOUNDARY(ng)%sig12G_north')) RETURN
+      END IF
 #  endif
 #  ifndef ANA_MIOBC
 !
-      IF (.not.destroy(ng, BOUNDARY(ng)%uiG_west, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%uiG_west')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%uiG_east, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%uiG_east')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%uiG_south, MyFile,              &
-     &                 __LINE__, 'BOUNDARY(ng)%uiG_south')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%uiG_north, MyFile,              &
-     &                 __LINE__, 'BOUNDARY(ng)%uiG_north')) RETURN
+      IF (LBC(iwest,isUice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%uiG_west, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%uiG_west')) RETURN
+      END IF
+      IF (LBC(ieast,isUice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%uiG_east, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%uiG_east')) RETURN
+      END IF
+      IF (LBC(isouth,isUice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%uiG_south, MyFile,            &
+     &                   __LINE__, 'BOUNDARY(ng)%uiG_south')) RETURN
+      END IF
+      IF (LBC(inorth,isUice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%uiG_north, MyFile,            &
+     &                   __LINE__, 'BOUNDARY(ng)%uiG_north')) RETURN
+      END IF
 !
-      IF (.not.destroy(ng, BOUNDARY(ng)%viG_west, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%viG_west')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%viG_east, MyFile,               &
-     &                 __LINE__, 'BOUNDARY(ng)%viG_east')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%viG_south, MyFile,              &
-     &                 __LINE__, 'BOUNDARY(ng)%viG_south')) RETURN
-
-      IF (.not.destroy(ng, BOUNDARY(ng)%viG_north, MyFile,              &
-     &                 __LINE__, 'BOUNDARY(ng)%viG_north')) RETURN
+      IF (LBC(iwest,isVice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%viG_west, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%viG_west')) RETURN
+      END iF
+      IF (LBC(ieast,isVice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%viG_east, MyFile,             &
+     &                   __LINE__, 'BOUNDARY(ng)%viG_east')) RETURN
+      END iF
+      IF (LBC(isouth,isVice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%viG_south, MyFile,            &
+     &                   __LINE__, 'BOUNDARY(ng)%viG_south')) RETURN
+      END iF
+      IF (LBC(inorth,isVice,ng)%acquire) THEN
+        IF (.not.destroy(ng, BOUNDARY(ng)%viG_north, MyFile,            &
+     &                   __LINE__, 'BOUNDARY(ng)%viG_north')) RETURN
+      END iF
 #  endif
 # endif
 #endif
@@ -3725,34 +3852,6 @@
 
 #ifdef ICE_MODEL
         IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
-     &      LBC(iwest,isAice,ng)%acquire) THEN
-          BOUNDARY(ng) % ai_west = IniVal
-        END IF
-        IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
-     &      LBC(iwest,isHice,ng)%acquire) THEN
-          BOUNDARY(ng) % hi_west = IniVal
-        END IF
-        IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
-     &      LBC(iwest,isHsno,ng)%acquire) THEN
-          BOUNDARY(ng) % hsn_west = IniVal
-        END IF
-        IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
-     &      LBC(iwest,isTice,ng)%acquire) THEN
-          BOUNDARY(ng) % ti_west = IniVal
-        END IF
-        IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
-     &      LBC(iwest,isSig11,ng)%acquire) THEN
-          BOUNDARY(ng) % sig11_west = IniVal
-        END IF
-        IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
-     &      LBC(iwest,isSig22,ng)%acquire) THEN
-          BOUNDARY(ng) % sig22_west = IniVal
-        END IF
-        IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
-     &      LBC(iwest,isSig12,ng)%acquire) THEN
-          BOUNDARY(ng) % sig12_west = IniVal
-        END IF
-        IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
      &      LBC(iwest,isUice,ng)%acquire) THEN
           BOUNDARY(ng) % ui_west = IniVal
         END IF
@@ -3760,6 +3859,36 @@
      &      LBC(iwest,isVice,ng)%acquire) THEN
           BOUNDARY(ng) % vi_west = IniVal
         END IF
+        IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
+     &      LBC(iwest,isAice,ng)%acquire) THEN
+          BOUNDARY(ng) % ai_west = IniVal
+        END IF
+        IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
+     &      LBC(iwest,isHice,ng)%acquire) THEN
+          BOUNDARY(ng) % hi_west = IniVal
+          BOUNDARY(ng) % hsn_west = IniVal
+        END IF
+        IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
+     &      LBC(iwest,isTice,ng)%acquire) THEN
+          BOUNDARY(ng) % ti_west = IniVal
+        END IF
+        IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
+     &      LBC(iwest,isIsig,ng)%acquire) THEN
+          BOUNDARY(ng) % sig11_west = IniVal
+          BOUNDARY(ng) % sig22_west = IniVal
+          BOUNDARY(ng) % sig12_west = IniVal
+        END IF
+
+# ifndef ANA_MIOBC
+        IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
+     &      LBC(iwest,isUice,ng)%acquire) THEN
+          BOUNDARY(ng) % uiG_west = IniVal
+        END IF
+        IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
+     &      LBC(iwest,isVice,ng)%acquire) THEN
+          BOUNDARY(ng) % viG_west = IniVal
+        END IF
+# endif
 # ifndef ANA_AIOBC
         IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
      &      LBC(iwest,isAice,ng)%acquire) THEN
@@ -3770,11 +3899,6 @@
         IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
      &      LBC(iwest,isHice,ng)%acquire) THEN
           BOUNDARY(ng) % hiG_west = IniVal
-        END IF
-# endif
-# ifndef ANA_HSNOBC
-        IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
-     &      LBC(iwest,isHsno,ng)%acquire) THEN
           BOUNDARY(ng) % hsnG_west = IniVal
         END IF
 # endif
@@ -3786,57 +3910,13 @@
 # endif
 # ifndef ANA_SIGOBC
         IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
-     &      LBC(iwest,isSig11,ng)%acquire) THEN
+     &      LBC(iwest,isIsig,ng)%acquire) THEN
           BOUNDARY(ng) % sig11G_west = IniVal
-        END IF
-        IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
-     &      LBC(iwest,isSig22,ng)%acquire) THEN
           BOUNDARY(ng) % sig22G_west = IniVal
-        END IF
-        IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
-     &      LBC(iwest,isSig12,ng)%acquire) THEN
           BOUNDARY(ng) % sig12G_west = IniVal
         END IF
 # endif
-# ifndef ANA_MIOBC
-        IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
-     &      LBC(iwest,isUice,ng)%acquire) THEN
-          BOUNDARY(ng) % uiG_west = IniVal
-        END IF
-        IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
-     &      LBC(iwest,isVice,ng)%acquire) THEN
-          BOUNDARY(ng) % viG_west = IniVal
-        END IF
-# endif
 
-        IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
-     &      LBC(ieast,isAice,ng)%acquire) THEN
-          BOUNDARY(ng) % ai_east = IniVal
-        END IF
-        IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
-     &      LBC(ieast,isHice,ng)%acquire) THEN
-          BOUNDARY(ng) % hi_east = IniVal
-        END IF
-        IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
-     &      LBC(ieast,isHsno,ng)%acquire) THEN
-          BOUNDARY(ng) % hsn_east = IniVal
-        END IF
-        IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
-     &      LBC(ieast,isTice,ng)%acquire) THEN
-          BOUNDARY(ng) % ti_east = IniVal
-        END IF
-        IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
-     &      LBC(ieast,isSig11,ng)%acquire) THEN
-          BOUNDARY(ng) % sig11_east = IniVal
-        END IF
-        IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
-     &      LBC(ieast,isSig22,ng)%acquire) THEN
-          BOUNDARY(ng) % sig22_east = IniVal
-        END IF
-        IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
-     &      LBC(ieast,isSig12,ng)%acquire) THEN
-          BOUNDARY(ng) % sig12_east = IniVal
-        END IF
         IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
      &      LBC(ieast,isUice,ng)%acquire) THEN
           BOUNDARY(ng) % ui_east = IniVal
@@ -3845,6 +3925,36 @@
      &      LBC(ieast,isVice,ng)%acquire) THEN
           BOUNDARY(ng) % vi_east = IniVal
         END IF
+        IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
+     &      LBC(ieast,isAice,ng)%acquire) THEN
+          BOUNDARY(ng) % ai_east = IniVal
+        END IF
+        IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
+     &      LBC(ieast,isHice,ng)%acquire) THEN
+          BOUNDARY(ng) % hi_east = IniVal
+          BOUNDARY(ng) % hsn_east = IniVal
+        END IF
+        IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
+     &      LBC(ieast,isTice,ng)%acquire) THEN
+          BOUNDARY(ng) % ti_east = IniVal
+        END IF
+        IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
+     &      LBC(ieast,isIsig,ng)%acquire) THEN
+          BOUNDARY(ng) % sig11_east = IniVal
+          BOUNDARY(ng) % sig22_east = IniVal
+          BOUNDARY(ng) % sig12_east = IniVal
+        END IF
+
+# ifndef ANA_MIOBC
+        IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
+     &      LBC(ieast,isUice,ng)%acquire) THEN
+          BOUNDARY(ng) % uiG_east = IniVal
+        END IF
+        IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
+     &      LBC(ieast,isVice,ng)%acquire) THEN
+          BOUNDARY(ng) % viG_east = IniVal
+        END IF
+# endif
 # ifndef ANA_AIOBC
         IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
      &      LBC(ieast,isAice,ng)%acquire) THEN
@@ -3855,11 +3965,6 @@
         IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
      &      LBC(ieast,isHice,ng)%acquire) THEN
           BOUNDARY(ng) % hiG_east = IniVal
-        END IF
-# endif
-# ifndef ANA_HSNOBC
-        IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
-     &      LBC(ieast,isHsno,ng)%acquire) THEN
           BOUNDARY(ng) % hsnG_east = IniVal
         END IF
 # endif
@@ -3871,57 +3976,13 @@
 # endif
 # ifndef ANA_SIGOBC
         IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
-     &      LBC(ieast,isSig11,ng)%acquire) THEN
+     &      LBC(ieast,isIsig,ng)%acquire) THEN
           BOUNDARY(ng) % sig11G_east = IniVal
-        END IF
-        IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
-     &      LBC(ieast,isSig22,ng)%acquire) THEN
           BOUNDARY(ng) % sig22G_east = IniVal
-        END IF
-        IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
-     &      LBC(ieast,isSig12,ng)%acquire) THEN
           BOUNDARY(ng) % sig12G_east = IniVal
         END IF
 # endif
-# ifndef ANA_MIOBC
-        IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
-     &      LBC(ieast,isUice,ng)%acquire) THEN
-          BOUNDARY(ng) % uiG_east = IniVal
-        END IF
-        IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
-     &      LBC(ieast,isVice,ng)%acquire) THEN
-          BOUNDARY(ng) % viG_east = IniVal
-        END IF
-# endif
 
-        IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
-     &      LBC(isouth,isAice,ng)%acquire) THEN
-          BOUNDARY(ng) % ai_south = IniVal
-        END IF
-        IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
-     &      LBC(isouth,isHice,ng)%acquire) THEN
-          BOUNDARY(ng) % hi_south = IniVal
-        END IF
-        IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
-     &      LBC(isouth,isHsno,ng)%acquire) THEN
-          BOUNDARY(ng) % hsn_south = IniVal
-        END IF
-        IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
-     &      LBC(isouth,isTice,ng)%acquire) THEN
-          BOUNDARY(ng) % ti_south = IniVal
-        END IF
-        IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
-     &      LBC(isouth,isSig11,ng)%acquire) THEN
-          BOUNDARY(ng) % sig11_south = IniVal
-        END IF
-        IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
-     &      LBC(isouth,isSig22,ng)%acquire) THEN
-          BOUNDARY(ng) % sig22_south = IniVal
-        END IF
-        IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
-     &      LBC(isouth,isSig12,ng)%acquire) THEN
-          BOUNDARY(ng) % sig12_south = IniVal
-        END IF
         IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
      &      LBC(isouth,isUice,ng)%acquire) THEN
           BOUNDARY(ng) % ui_south = IniVal
@@ -3930,6 +3991,36 @@
      &      LBC(isouth,isVice,ng)%acquire) THEN
           BOUNDARY(ng) % vi_south = IniVal
         END IF
+        IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
+     &      LBC(isouth,isAice,ng)%acquire) THEN
+          BOUNDARY(ng) % ai_south = IniVal
+        END IF
+        IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
+     &      LBC(isouth,isHice,ng)%acquire) THEN
+          BOUNDARY(ng) % hi_south = IniVal
+          BOUNDARY(ng) % hsn_south = IniVal
+        END IF
+        IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
+     &      LBC(isouth,isTice,ng)%acquire) THEN
+          BOUNDARY(ng) % ti_south = IniVal
+        END IF
+        IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
+     &      LBC(isouth,isIsig,ng)%acquire) THEN
+          BOUNDARY(ng) % sig11_south = IniVal
+          BOUNDARY(ng) % sig22_south = IniVal
+          BOUNDARY(ng) % sig12_south = IniVal
+        END IF
+
+# ifndef ANA_MIOBC
+        IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
+     &      LBC(isouth,isUice,ng)%acquire) THEN
+          BOUNDARY(ng) % uiG_south = IniVal
+        END IF
+        IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
+     &      LBC(isouth,isVice,ng)%acquire) THEN
+          BOUNDARY(ng) % viG_south = IniVal
+        END IF
+# endif
 # ifndef ANA_AIOBC
         IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
      &      LBC(isouth,isAice,ng)%acquire) THEN
@@ -3940,11 +4031,6 @@
         IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
      &      LBC(isouth,isHice,ng)%acquire) THEN
           BOUNDARY(ng) % hiG_south = IniVal
-        END IF
-# endif
-# ifndef ANA_HSNOBC
-        IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
-     &      LBC(isouth,isHsno,ng)%acquire) THEN
           BOUNDARY(ng) % hsnG_south = IniVal
         END IF
 # endif
@@ -3956,57 +4042,13 @@
 # endif
 # ifndef ANA_SIGOBC
         IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
-     &      LBC(isouth,isSig11,ng)%acquire) THEN
+     &      LBC(isouth,isIsig,ng)%acquire) THEN
           BOUNDARY(ng) % sig11G_south = IniVal
-        END IF
-        IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
-     &      LBC(isouth,isSig22,ng)%acquire) THEN
           BOUNDARY(ng) % sig22G_south = IniVal
-        END IF
-        IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
-     &      LBC(isouth,isSig12,ng)%acquire) THEN
           BOUNDARY(ng) % sig12G_south = IniVal
         END IF
 # endif
-# ifndef ANA_MIOBC
-        IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
-     &      LBC(isouth,isUice,ng)%acquire) THEN
-          BOUNDARY(ng) % uiG_south = IniVal
-        END IF
-        IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
-     &      LBC(isouth,isVice,ng)%acquire) THEN
-          BOUNDARY(ng) % viG_south = IniVal
-        END IF
-# endif
 
-        IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
-     &      LBC(inorth,isAice,ng)%acquire) THEN
-          BOUNDARY(ng) % ai_north = IniVal
-        END IF
-        IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
-     &      LBC(inorth,isHice,ng)%acquire) THEN
-          BOUNDARY(ng) % hi_north = IniVal
-        END IF
-        IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
-     &      LBC(inorth,isHsno,ng)%acquire) THEN
-          BOUNDARY(ng) % hsn_north = IniVal
-        END IF
-        IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
-     &      LBC(inorth,isTice,ng)%acquire) THEN
-          BOUNDARY(ng) % ti_north = IniVal
-        END IF
-        IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
-     &      LBC(inorth,isSig11,ng)%acquire) THEN
-          BOUNDARY(ng) % sig11_north = IniVal
-        END IF
-        IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
-     &      LBC(inorth,isSig22,ng)%acquire) THEN
-          BOUNDARY(ng) % sig22_north = IniVal
-        END IF
-        IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
-     &      LBC(inorth,isSig12,ng)%acquire) THEN
-          BOUNDARY(ng) % sig12_north = IniVal
-        END IF
         IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
      &      LBC(inorth,isUice,ng)%acquire) THEN
           BOUNDARY(ng) % ui_north = IniVal
@@ -4015,6 +4057,36 @@
      &      LBC(inorth,isVice,ng)%acquire) THEN
           BOUNDARY(ng) % vi_north = IniVal
         END IF
+        IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
+     &      LBC(inorth,isAice,ng)%acquire) THEN
+          BOUNDARY(ng) % ai_north = IniVal
+        END IF
+        IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
+     &      LBC(inorth,isHice,ng)%acquire) THEN
+          BOUNDARY(ng) % hi_north = IniVal
+          BOUNDARY(ng) % hsn_north = IniVal
+        END IF
+        IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
+     &      LBC(inorth,isTice,ng)%acquire) THEN
+          BOUNDARY(ng) % ti_north = IniVal
+        END IF
+        IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
+     &      LBC(inorth,isIsig,ng)%acquire) THEN
+          BOUNDARY(ng) % sig11_north = IniVal
+          BOUNDARY(ng) % sig22_north = IniVal
+          BOUNDARY(ng) % sig12_north = IniVal
+        END IF
+
+# ifndef ANA_MIOBC
+        IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
+     &      LBC(inorth,isUice,ng)%acquire) THEN
+          BOUNDARY(ng) % uiG_north = IniVal
+        END IF
+        IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
+     &      LBC(inorth,isVice,ng)%acquire) THEN
+          BOUNDARY(ng) % viG_north = IniVal
+        END IF
+# endif
 # ifndef ANA_AIOBC
         IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
      &      LBC(inorth,isAice,ng)%acquire) THEN
@@ -4025,11 +4097,6 @@
         IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
      &      LBC(inorth,isHice,ng)%acquire) THEN
           BOUNDARY(ng) % hiG_north = IniVal
-        END IF
-# endif
-# ifndef ANA_HSNOBC
-        IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
-     &      LBC(inorth,isHsno,ng)%acquire) THEN
           BOUNDARY(ng) % hsnG_north = IniVal
         END IF
 # endif
@@ -4041,26 +4108,10 @@
 # endif
 # ifndef ANA_SIGOBC
         IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
-     &      LBC(inorth,isSig11,ng)%acquire) THEN
+     &      LBC(inorth,isIsig,ng)%acquire) THEN
           BOUNDARY(ng) % sig11G_north = IniVal
-        END IF
-        IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
-     &      LBC(inorth,isSig22,ng)%acquire) THEN
           BOUNDARY(ng) % sig22G_north = IniVal
-        END IF
-        IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
-     &      LBC(inorth,isSig12,ng)%acquire) THEN
           BOUNDARY(ng) % sig12G_north = IniVal
-        END IF
-# endif
-# ifndef ANA_MIOBC
-        IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
-     &      LBC(inorth,isUice,ng)%acquire) THEN
-          BOUNDARY(ng) % uiG_north = IniVal
-        END IF
-        IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
-     &      LBC(inorth,isVice,ng)%acquire) THEN
-          BOUNDARY(ng) % viG_north = IniVal
         END IF
 # endif
 #endif

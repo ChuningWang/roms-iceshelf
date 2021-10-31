@@ -438,6 +438,7 @@
       integer  :: idIwro        ! ice pond runoff
       integer  :: idIwdiv       ! ice advective change
       integer  :: idImflx       ! ice-ocean mass flux
+      integer  :: idIsig        ! internal ice stress
       integer  :: idIsg11       ! internal ice stress component 11
       integer  :: idIsg22       ! internal ice stress component 22
       integer  :: idIsg12       ! internal ice stress component 12
@@ -595,12 +596,9 @@
       integer  :: isUice                    ! ice U-velocity
       integer  :: isVice                    ! ice V-velocity
       integer  :: isAice                    ! ice concentration
-      integer  :: isHice                    ! ice thickness
-      integer  :: isHsno                    ! snow thickness
+      integer  :: isHice                    ! ice/snow thickness
       integer  :: isTice                    ! ice temperature
-      integer  :: isSig11                   ! ice 11-stress
-      integer  :: isSig12                   ! ice 12-stress
-      integer  :: isSig22                   ! ice 22-stress
+      integer  :: isIsig                    ! ice stress
 #endif
 !
 !  Input lateral boundary, climatology, and forcing NetCDF files IDs
@@ -1357,11 +1355,8 @@
       isAice=ic+3
       isHice=ic+4
       isTice=ic+5
-      isHsno=ic+6
-      isSig11=ic+7
-      isSig12=ic+8
-      isSig22=ic+9
-      ic=ic+9
+      isIsig=ic+6
+      ic=ic+6
 #endif
 !
 !  Set generic lateral boundary indices for LBC structure.  Use the same
@@ -2281,6 +2276,8 @@
               idIagei=varid
             CASE ('idImflx')
               idImflx=varid
+            CASE ('idIsig')
+              idIsig=varid
             CASE ('idIsg11')
               idIsg11=varid
             CASE ('idIsg22')
@@ -3241,11 +3238,8 @@
       idBvar(isAice)=idIaice
       idBvar(isHice)=idIhice
       idBvar(isTice)=idItice
-      idBvar(isHsno)=idIhsno
-      idBvar(isSig11)=idIsg11
-      idBvar(isSig12)=idIsg12
-      idBvar(isSig22)=idIsg22
-      ic=ic+9
+      idBvar(isIsig)=idIsig
+      ic=ic+6
 #endif
 !
 !-----------------------------------------------------------------------

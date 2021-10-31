@@ -97,10 +97,6 @@
 #   include <ana_hiobc.h>
 #  endif
 
-#  ifdef ANA_HSNOBC
-#   include <ana_hsnobc.h>
-#  endif
-
 #  ifdef ANA_TIOBC
 #   include <ana_tiobc.h>
 #  endif

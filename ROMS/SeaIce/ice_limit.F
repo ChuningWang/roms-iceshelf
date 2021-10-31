@@ -59,9 +59,8 @@
       USE mod_param
       USE mod_ncparam
       USE mod_scalars
-      USE mod_boundary
 !
-      USE i2d_bc_mod, ONLY : i2d_bc_tile
+      USE i2d_bc_mod, ONLY : i2d_ice_bc
       USE tibc_mod, ONLY : tibc_tile
 !
       USE exchange_2d_mod, ONLY : exchange_r2d_tile
@@ -118,33 +117,11 @@
         END DO
       END DO
 !
-      CALL i2d_bc_tile (ng, tile, iNLM,                                 &
-     &                  LBi, UBi, LBj, UBj,                             &
-     &                  IminS, ImaxS, JminS, JmaxS,                     &
-     &                  liold, linew,                                   &
-     &                  BOUNDARY(ng)%ai_west(LBj:UBj),                  &
-     &                  BOUNDARY(ng)%ai_east(LBj:UBj),                  &
-     &                  BOUNDARY(ng)%ai_north(LBi:UBi),                 &
-     &                  BOUNDARY(ng)%ai_south(LBi:UBi),                 &
-     &                  ui, vi, ai, LBC(:,isAice,ng))
-      CALL i2d_bc_tile (ng, tile, iNLM,                                 &
-     &                  LBi, UBi, LBj, UBj,                             &
-     &                  IminS, ImaxS, JminS, JmaxS,                     &
-     &                  liold, linew,                                   &
-     &                  BOUNDARY(ng)%hi_west(LBj:UBj),                  &
-     &                  BOUNDARY(ng)%hi_east(LBj:UBj),                  &
-     &                  BOUNDARY(ng)%hi_north(LBi:UBi),                 &
-     &                  BOUNDARY(ng)%hi_south(LBi:UBi),                 &
-     &                  ui, vi, hi, LBC(:,isHice,ng))
-      CALL i2d_bc_tile (ng, tile, iNLM,                                 &
-     &                  LBi, UBi, LBj, UBj,                             &
-     &                  IminS, ImaxS, JminS, JmaxS,                     &
-     &                  liold, linew,                                   &
-     &                  BOUNDARY(ng)%hsn_west(LBj:UBj),                 &
-     &                  BOUNDARY(ng)%hsn_east(LBj:UBj),                 &
-     &                  BOUNDARY(ng)%hsn_north(LBi:UBi),                &
-     &                  BOUNDARY(ng)%hsn_south(LBi:UBi),                &
-     &                  ui, vi, hsn, LBC(:,isHsno,ng))
+      CALL i2d_ice_bc (ng, tile, iNLM,                                  &
+     &                 LBi, UBi, LBj, UBj,                              &
+     &                 IminS, ImaxS, JminS, JmaxS,                      &
+     &                 liold, linew)
+!
       CALL tibc_tile (ng, tile, iNLM,                                   &
      &                LBi, UBi, LBj, UBj,                               &
      &                liold, linew,                                     &

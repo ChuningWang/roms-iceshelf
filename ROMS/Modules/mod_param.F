@@ -1467,7 +1467,7 @@
       nLBCvar=3
 #endif
 #ifdef ICE_MODEL
-      nLBCvar=nLBCvar+9
+      nLBCvar=nLBCvar+6
 #endif
 !
       IF (.not.allocated(LBC)) THEN

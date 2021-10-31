@@ -157,6 +157,9 @@
 # if defined SEDIMENT || defined BBL_MODEL
       USE mod_sediment
 # endif
+# ifdef ICE_MODEL
+      USE ice_limit_mod, ONLY : ice_limit
+# endif
 !
       USE exchange_2d_mod
 # ifdef SOLVE3D
@@ -179,9 +182,6 @@
 # endif
       USE u2dbc_mod, ONLY : u2dbc_tile
       USE v2dbc_mod, ONLY : v2dbc_tile
-# ifdef ICE_MODEL
-      USE ice_limit_mod, ONLY : ice_limit
-# endif
 !
 !  Imported variable declarations.
 !

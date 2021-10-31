@@ -79,18 +79,9 @@
             CASE ('LBC(isTice)')
               Npts=load_lbc(Nval, Cval, line, nline, isTice, igrid,     &
      &                      0, 0, Vname(1,idItice), LBC)
-            CASE ('LBC(isHsno)')
-              Npts=load_lbc(Nval, Cval, line, nline, isHsno, igrid,     &
-     &                      0, 0, Vname(1,idIhsno), LBC)
-            CASE ('LBC(isSig11)')
-              Npts=load_lbc(Nval, Cval, line, nline, isSig11, igrid,    &
-     &                      0, 0, Vname(1,idIsg11), LBC)
-            CASE ('LBC(isSig12)')
-              Npts=load_lbc(Nval, Cval, line, nline, isSig12, igrid,    &
-     &                      0, 0, Vname(1,idIsg12), LBC)
-            CASE ('LBC(isSig22)')
-              Npts=load_lbc(Nval, Cval, line, nline, isSig22, igrid,    &
-     &                      0, 0, Vname(1,idIsg22), LBC)
+            CASE ('LBC(isIsig)')
+              Npts=load_lbc(Nval, Cval, line, nline, isIsig, igrid,     &
+     &                      0, 0, Vname(1,idIsig), LBC)
 !
 ! Model constants.
 !

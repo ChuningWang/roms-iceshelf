@@ -1212,8 +1212,7 @@
      &                GRID(ng) % rmask,                                 &
 #    endif
      &                FORCES(ng) % fastice_clmG)
-      IF (FoundError(exit_flag, NoError, __LINE__,                      &
-     &               __FILE__)) RETURN
+      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 #  endif
 
 #  ifndef ANA_MIOBC
@@ -1224,8 +1223,7 @@
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % uiG_west)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
         IF (LBC(iwest,isVice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idVibc(iwest),                      &
@@ -1233,8 +1231,7 @@
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    JLB, JUB, 1, 2, 1, Mm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % viG_west)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
         IF (LBC(ieast,isUice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idUibc(ieast),                      &
@@ -1242,8 +1239,7 @@
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % uiG_east)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
         IF (LBC(ieast,isVice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idVibc(ieast),                      &
@@ -1251,8 +1247,7 @@
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    JLB, JUB, 1, 2, 1, Mm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % viG_east)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
         IF (LBC(isouth,isUice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idUibc(isouth),                     &
@@ -1260,8 +1255,7 @@
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    ILB, IUB, 1, 2, 1, Lm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % uiG_south)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
         IF (LBC(isouth,isVice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idVibc(isouth),                     &
@@ -1269,8 +1263,7 @@
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % viG_south)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
         IF (LBC(inorth,isUice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idUibc(inorth),                     &
@@ -1278,8 +1271,7 @@
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    ILB, IUB, 1, 2, 1, Lm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % uiG_north)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
         IF (LBC(inorth,isVice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idVibc(inorth),                     &
@@ -1287,8 +1279,7 @@
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % viG_north)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
       END IF
 #  endif
@@ -1301,8 +1292,7 @@
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % aiG_west)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
         IF (LBC(ieast,isAice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idAibc(ieast),                      &
@@ -1310,8 +1300,7 @@
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % aiG_east)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
         IF (LBC(isouth,isAice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idAibc(isouth),                     &
@@ -1319,8 +1308,7 @@
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % aiG_south)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
         IF (LBC(inorth,isAice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idAibc(inorth),                     &
@@ -1328,8 +1316,7 @@
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % aiG_north)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
       END IF
 #  endif
@@ -1342,8 +1329,13 @@
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % hiG_west)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+          CALL get_ngfld (ng, iNLM, idHsnbc(iwest),                     &
+     &                    BRYncid(idHsnbc(iwest),ng),                   &
+     &                    nBCfiles(ng), BRY(1,ng), update(1),           &
+     &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
+     &                    BOUNDARY(ng) % hsnG_west)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
         IF (LBC(ieast,isHice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idHibc(ieast),                      &
@@ -1351,8 +1343,13 @@
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % hiG_east)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+          CALL get_ngfld (ng, iNLM, idHsnbc(ieast),                     &
+     &                    BRYncid(idHsnbc(ieast),ng),                   &
+     &                    nBCfiles(ng), BRY(1,ng), update(1),           &
+     &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
+     &                    BOUNDARY(ng) % hsnG_east)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
         IF (LBC(isouth,isHice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idHibc(isouth),                     &
@@ -1360,8 +1357,13 @@
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % hiG_south)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+          CALL get_ngfld (ng, iNLM, idHsnbc(isouth),                    &
+     &                    BRYncid(idHsnbc(isouth),ng),                  &
+     &                    nBCfiles(ng), BRY(1,ng), update(1),           &
+     &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
+     &                    BOUNDARY(ng) % hsnG_south)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
         IF (LBC(inorth,isHice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idHibc(inorth),                     &
@@ -1369,49 +1371,13 @@
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % hiG_north)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
-        END IF
-      END IF
-#  endif
-
-#  ifndef ANA_HSNOBC
-      IF (.not.(RefinedGrid(ng).and.RefineScale(ng).gt.0)) THEN
-        IF (LBC(iwest,isHsno,ng)%acquire) THEN
-          CALL get_ngfld (ng, iNLM, idHsnbc(iwest),                     &
-     &                    BRYncid(idHsnbc(iwest),ng),                   &
-     &                    nBCfiles(ng), BRY(1,ng), update(1),           &
-     &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
-     &                    BOUNDARY(ng) % hsnG_west)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
-        END IF
-        IF (LBC(ieast,isHsno,ng)%acquire) THEN
-          CALL get_ngfld (ng, iNLM, idHsnbc(ieast),                     &
-     &                    BRYncid(idHsnbc(ieast),ng),                   &
-     &                    nBCfiles(ng), BRY(1,ng), update(1),           &
-     &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
-     &                    BOUNDARY(ng) % hsnG_east)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
-        END IF
-        IF (LBC(isouth,isHsno,ng)%acquire) THEN
-          CALL get_ngfld (ng, iNLM, idHsnbc(isouth),                    &
-     &                    BRYncid(idHsnbc(isouth),ng),                  &
-     &                    nBCfiles(ng), BRY(1,ng), update(1),           &
-     &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
-     &                    BOUNDARY(ng) % hsnG_south)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
-        END IF
-        IF (LBC(inorth,isHsno,ng)%acquire) THEN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
           CALL get_ngfld (ng, iNLM, idHsnbc(inorth),                    &
      &                    BRYncid(idHsnbc(inorth),ng),                  &
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % hsnG_north)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
       END IF
 #  endif
@@ -1424,8 +1390,7 @@
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % tiG_west)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
         IF (LBC(ieast,isTice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idTibc(ieast),                      &
@@ -1433,8 +1398,7 @@
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % tiG_east)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
         IF (LBC(isouth,isTice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idTibc(isouth),                     &
@@ -1442,8 +1406,7 @@
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % tiG_south)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
         IF (LBC(inorth,isTice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idTibc(inorth),                     &
@@ -1451,125 +1414,92 @@
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % tiG_north)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
       END IF
 #  endif
 
 #  ifndef ANA_SIGOBC
       IF (.not.(RefinedGrid(ng).and.RefineScale(ng).gt.0)) THEN
-        IF (LBC(iwest,isSig11,ng)%acquire) THEN
+        IF (LBC(iwest,isIsig,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idS11bc(iwest),                     &
      &                    BRYncid(idS11bc(iwest),ng),                   &
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % sig11G_west)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
-        END IF
-        IF (LBC(ieast,isSig11,ng)%acquire) THEN
-          CALL get_ngfld (ng, iNLM, idS11bc(ieast),                     &
-     &                    BRYncid(idS11bc(ieast),ng),                   &
-     &                    nBCfiles(ng), BRY(1,ng), update(1),           &
-     &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
-     &                    BOUNDARY(ng) % sig11G_east)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
-        END IF
-        IF (LBC(isouth,isSig11,ng)%acquire) THEN
-          CALL get_ngfld (ng, iNLM, idS11bc(isouth),                    &
-     &                    BRYncid(idS11bc(isouth),ng),                  &
-     &                    nBCfiles(ng), BRY(1,ng), update(1),           &
-     &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
-     &                    BOUNDARY(ng) % sig11G_south)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
-        END IF
-        IF (LBC(inorth,isSig11,ng)%acquire) THEN
-          CALL get_ngfld (ng, iNLM, idS11bc(inorth),                    &
-     &                    BRYncid(idS11bc(inorth),ng),                  &
-     &                    nBCfiles(ng), BRY(1,ng), update(1),           &
-     &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
-     &                    BOUNDARY(ng) % sig11G_north)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
-        END IF
-      END IF
-      IF (.not.(RefinedGrid(ng).and.RefineScale(ng).gt.0)) THEN
-        IF (LBC(iwest,isSig22,ng)%acquire) THEN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
           CALL get_ngfld (ng, iNLM, idS22bc(iwest),                     &
      &                    BRYncid(idS22bc(iwest),ng),                   &
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % sig22G_west)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
-        END IF
-        IF (LBC(ieast,isSig22,ng)%acquire) THEN
-          CALL get_ngfld (ng, iNLM, idS22bc(ieast),                     &
-     &                    BRYncid(idS22bc(ieast),ng),                   &
-     &                    nBCfiles(ng), BRY(1,ng), update(1),           &
-     &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
-     &                    BOUNDARY(ng) % sig22G_east)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
-        END IF
-        IF (LBC(isouth,isSig22,ng)%acquire) THEN
-          CALL get_ngfld (ng, iNLM, idS22bc(isouth),                    &
-     &                    BRYncid(idS22bc(isouth),ng),                  &
-     &                    nBCfiles(ng), BRY(1,ng), update(1),           &
-     &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
-     &                    BOUNDARY(ng) % sig22G_south)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
-        END IF
-        IF (LBC(inorth,isSig22,ng)%acquire) THEN
-          CALL get_ngfld (ng, iNLM, idS22bc(inorth),                    &
-     &                    BRYncid(idS22bc(inorth),ng),                  &
-     &                    nBCfiles(ng), BRY(1,ng), update(1),           &
-     &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
-     &                    BOUNDARY(ng) % sig22G_north)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
-        END IF
-      END IF
-      IF (.not.(RefinedGrid(ng).and.RefineScale(ng).gt.0)) THEN
-        IF (LBC(iwest,isSig12,ng)%acquire) THEN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
           CALL get_ngfld (ng, iNLM, idS12bc(iwest),                     &
      &                    BRYncid(idS12bc(iwest),ng),                   &
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % sig12G_west)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
-        IF (LBC(ieast,isSig12,ng)%acquire) THEN
+        IF (LBC(ieast,isIsig,ng)%acquire) THEN
+          CALL get_ngfld (ng, iNLM, idS11bc(ieast),                     &
+     &                    BRYncid(idS11bc(ieast),ng),                   &
+     &                    nBCfiles(ng), BRY(1,ng), update(1),           &
+     &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
+     &                    BOUNDARY(ng) % sig11G_east)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+          CALL get_ngfld (ng, iNLM, idS22bc(ieast),                     &
+     &                    BRYncid(idS22bc(ieast),ng),                   &
+     &                    nBCfiles(ng), BRY(1,ng), update(1),           &
+     &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
+     &                    BOUNDARY(ng) % sig22G_east)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
           CALL get_ngfld (ng, iNLM, idS12bc(ieast),                     &
      &                    BRYncid(idS12bc(ieast),ng),                   &
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % sig12G_east)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
-        IF (LBC(isouth,isSig12,ng)%acquire) THEN
+        IF (LBC(isouth,isIsig,ng)%acquire) THEN
+          CALL get_ngfld (ng, iNLM, idS11bc(isouth),                    &
+     &                    BRYncid(idS11bc(isouth),ng),                  &
+     &                    nBCfiles(ng), BRY(1,ng), update(1),           &
+     &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
+     &                    BOUNDARY(ng) % sig11G_south)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+          CALL get_ngfld (ng, iNLM, idS22bc(isouth),                    &
+     &                    BRYncid(idS22bc(isouth),ng),                  &
+     &                    nBCfiles(ng), BRY(1,ng), update(1),           &
+     &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
+     &                    BOUNDARY(ng) % sig22G_south)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
           CALL get_ngfld (ng, iNLM, idS12bc(isouth),                    &
      &                    BRYncid(idS12bc(isouth),ng),                  &
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % sig12G_south)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
-        IF (LBC(inorth,isSig12,ng)%acquire) THEN
+        IF (LBC(inorth,isIsig,ng)%acquire) THEN
+          CALL get_ngfld (ng, iNLM, idS11bc(inorth),                    &
+     &                    BRYncid(idS11bc(inorth),ng),                  &
+     &                    nBCfiles(ng), BRY(1,ng), update(1),           &
+     &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
+     &                    BOUNDARY(ng) % sig11G_north)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+          CALL get_ngfld (ng, iNLM, idS22bc(inorth),                    &
+     &                    BRYncid(idS22bc(inorth),ng),                  &
+     &                    nBCfiles(ng), BRY(1,ng), update(1),           &
+     &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
+     &                    BOUNDARY(ng) % sig22G_north)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
           CALL get_ngfld (ng, iNLM, idS12bc(inorth),                    &
      &                    BRYncid(idS12bc(inorth),ng),                  &
      &                    nBCfiles(ng), BRY(1,ng), update(1),           &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
      &                    BOUNDARY(ng) % sig12G_north)
-          IF (FoundError(exit_flag, NoError, __LINE__,                  &
-     &               __FILE__)) RETURN
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
       END IF
 #  endif
@@ -1693,8 +1623,7 @@
      &                  GRID(ng) % rmask,                               &
 #   endif
      &                  CLIMA(ng) % aiclmG)
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &               __FILE__)) RETURN
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         CALL get_2dfld (ng, iNLM, idHIclm, CLMncid(idHIclm,ng),         &
      &                  nCLMfiles(ng), CLM(1,ng), update(1),            &
      &                  LBi, UBi, LBj, UBj, 2, 1,                       &
@@ -1702,8 +1631,7 @@
      &                  GRID(ng) % rmask,                               &
 #   endif
      &                  CLIMA(ng) % hiclmG)
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &               __FILE__)) RETURN
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         CALL get_2dfld (ng, iNLM, idHSNclm, CLMncid(idHSNclm,ng),       &
      &                  nCLMfiles(ng), CLM(1,ng), update(1),            &
      &                  LBi, UBi, LBj, UBj, 2, 1,                       &
@@ -1711,8 +1639,7 @@
      &                  GRID(ng) % rmask,                               &
 #   endif
      &                  CLIMA(ng) % hsnclmG)
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &               __FILE__)) RETURN
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
       END IF
 #  endif
 
@@ -1725,8 +1652,7 @@
      &                  GRID(ng) % rmask,                               &
 #  endif
      &                  CLIMA(ng) % sig11clmG)
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &               __FILE__)) RETURN
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         CALL get_2dfld (ng, iNLM, idS12clm, CLMncid(idS12clm,ng),       &
      &                  nCLMfiles(ng), CLM(1,ng), update(1),            &
      &                  LBi, UBi, LBj, UBj, 2, 1,                       &
@@ -1734,8 +1660,7 @@
      &                  GRID(ng) % rmask,                               &
 #  endif
      &                  CLIMA(ng) % sig12clmG)
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &               __FILE__)) RETURN
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         CALL get_2dfld (ng, iNLM, idS22clm, CLMncid(idS22clm,ng),       &
      &                  nCLMfiles(ng), CLM(1,ng), update(1),            &
      &                  LBi, UBi, LBj, UBj, 2, 1,                       &
@@ -1743,8 +1668,7 @@
      &                  GRID(ng) % rmask,                               &
 #  endif
      &                  CLIMA(ng) % sig22clmG)
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &               __FILE__)) RETURN
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
       END IF
 # endif
 
@@ -1757,8 +1681,7 @@
      &                  GRID(ng) % rmask,                               &
 #   endif
      &                  CLIMA(ng) % uiclmG)
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &               __FILE__)) RETURN
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         CALL get_2dfld (ng, iNLM, idVIclm, CLMncid(idVIclm,ng),         &
      &                  nCLMfiles(ng), CLM(1,ng), update(1),            &
      &                  LBi, UBi, LBj, UBj, 2, 1,                       &
@@ -1766,8 +1689,7 @@
      &                  GRID(ng) % rmask,                               &
 #   endif
      &                  CLIMA(ng) % viclmG)
-        IF (FoundError(exit_flag, NoError, __LINE__,                    &
-     &               __FILE__)) RETURN
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
       END IF
 #  endif
 # endif

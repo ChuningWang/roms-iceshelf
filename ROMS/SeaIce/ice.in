@@ -74,15 +74,12 @@
 !
 !                   1       2       3       4
 
-  LBC(isAice)  ==   Clo     Per     Clo     Per     ! ice concentration
-  LBC(isHice)  ==   Clo     Per     Clo     Per     ! ice thickness
-  LBC(isHsno)  ==   Clo     Per     Clo     Per     ! snow thickness
-  LBC(isTice)  ==   Clo     Per     Clo     Per     ! ice temperature
-  LBC(isSig11) ==   Clo     Per     Clo     Per     ! sigma-11
-  LBC(isSig12) ==   Clo     Per     Clo     Per     ! sigma-12
-  LBC(isSig22) ==   Clo     Per     Clo     Per     ! sigma-22
   LBC(isUice)  ==   Clo     Per     Clo     Per     ! ice U-momentum
   LBC(isVice)  ==   Clo     Per     Clo     Per     ! ice V-momentum
+  LBC(isAice)  ==   Clo     Per     Clo     Per     ! ice concentration
+  LBC(isHice)  ==   Clo     Per     Clo     Per     ! ice/snow thickness
+  LBC(isTice)  ==   Clo     Per     Clo     Per     ! ice temperature
+  LBC(isIsig)  ==   Clo     Per     Clo     Per     ! ice stress
 
 ! Maximum number of iterations to achieve convergence of the nonlinear
 ! ice dynamics solution
