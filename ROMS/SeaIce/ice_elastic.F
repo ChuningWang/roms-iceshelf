@@ -239,7 +239,7 @@
       real(r8), intent(in) :: tauaiu(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: tauaiv(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: chu_iw(LBi:UBi,LBj:UBj)
-#  endif
+# endif
 
 ! Local variable definitions
 !
@@ -334,11 +334,16 @@
 # else
 #  ifdef ICESHELF
           IF (zice(i-1,j).eq.0.0_r8.and.zice(i,j).eq.0.0_r8.and.        &
-     &             zice(i-1,j+1)+zice(i,j+1).ne.0.0_r8) THEN
+     &        zice(i-1,j+1)+zice(i,j+1).ne.0.0_r8) THEN
             f1 = 0.5_r8*(sig12(i,j,lienw)+sig12(i-1,j,lienw))
-#  endif
+          ELSE
             f1 = 0.25_r8*(sig12(i  ,j  ,lienw)+sig12(i  ,j+1,lienw) +   &
      &                    sig12(i-1,j+1,lienw)+sig12(i-1,j  ,lienw))
+          END IF
+#  else
+          f1 = 0.25_r8*(sig12(i  ,j  ,lienw)+sig12(i  ,j+1,lienw) +     &
+     &                  sig12(i-1,j+1,lienw)+sig12(i-1,j  ,lienw))
+#  endif
 # endif
 
 # ifdef MASKING
@@ -372,8 +377,18 @@
      &                    sig12(i-1,j-1,lienw)+sig12(i  ,j-1,lienw))
           END IF
 # else
+#  ifdef ICESHELF
+          IF (zice(i-1,j).eq.0.0_r8.and.zice(i,j).eq.0.0_r8.and.        &
+     &        zice(i-1,j-1)+zice(i,j-1).ne.0.0_r8) then
+            f2 = 0.5_r8*(sig12(i,j,lienw)+sig12(i-1,j,lienw))
+          ELSE
+            f2 = 0.25_r8*(sig12(i  ,j  ,lienw)+sig12(i-1,j  ,lienw) +   &
+     &                    sig12(i-1,j-1,lienw)+sig12(i  ,j-1,lienw))
+          END IF
+#  else
           f2 = 0.25_r8*(sig12(i  ,j  ,lienw)+sig12(i-1,j  ,lienw) +     &
      &                  sig12(i-1,j-1,lienw)+sig12(i  ,j-1,lienw))
+#  endif
 # endif
 !
            s2 = (f1-f2)*pnu
@@ -575,8 +590,18 @@
      &                    sig12(i+1,j-1,lienw)+sig12(i  ,j-1,lienw))
           END IF
 # else
+#  ifdef ICESHELF
+          IF (zice(i,j-1).eq.0.0_r8.and.zice(i,j).eq.0.0_r8.and.        &
+     &        zice(i+1,j-1)+zice(i+1,j).ne.0.0_r8) THEN
+            f1 = 0.5_r8*(sig12(i,j,lienw)+sig12(i,j-1,lienw))
+          ELSE
+            f1 = 0.25_r8*(sig12(i  ,j  ,lienw)+sig12(i+1,j  ,lienw) +   &
+     &                    sig12(i+1,j-1,lienw)+sig12(i  ,j-1,lienw))
+          END IF
+#  else
           f1 = 0.25_r8*(sig12(i  ,j  ,lienw)+sig12(i+1,j  ,lienw) +     &
      &                  sig12(i+1,j-1,lienw)+sig12(i  ,j-1,lienw))
+#  endif
 # endif
 
 # ifdef MASKING
@@ -610,8 +635,18 @@
      &                    sig12(i-1,j-1,lienw)+sig12(i  ,j-1,lienw))
           END IF
 # else
+#  ifdef ICESHELF
+          IF (zice(i,j-1).eq.0.0_r8.and.zice(i,j).eq.0.0_r8.and.        &
+     &        zice(i-1,j-1)+zice(i-1,j).ne.0.0_r8) then
+            f2 = 0.5_r8*(sig12(i,j,lienw)+sig12(i,j-1,lienw))
+          ELSE
+            f2 = 0.25_r8*(sig12(i  ,j  ,lienw)+sig12(i-1,j  ,lienw) +   &
+     &                    sig12(i-1,j-1,lienw)+sig12(i  ,j-1,lienw))
+          END IF
+#  else
           f2 = 0.25_r8*(sig12(i  ,j  ,lienw)+sig12(i-1,j  ,lienw) +     &
      &                  sig12(i-1,j-1,lienw)+sig12(i  ,j-1,lienw))
+#  endif
 # endif
           s2 = (f1-f2)*pmv
           vforce = s1+s2
