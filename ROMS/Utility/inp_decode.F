@@ -1652,9 +1652,11 @@
               S(ib,ifield,igrid)%Shchepetkin = .TRUE.
               S(ib,ifield,igrid)%acquire = .TRUE.
               S(ib,isFsur,igrid)%acquire = .TRUE.
+#ifdef ICE_MODEL
             CASE ('MIX')
               S(ib,ifield,igrid)%mixed = .TRUE.
               S(ib,ifield,igrid)%acquire = .TRUE.
+#endif
             CASE DEFAULT
               IF (Master) THEN
                 WRITE (stdout,10) TRIM(Vinp(ib)), TRIM(line)
