@@ -483,8 +483,8 @@
       integer  :: idIsSb        ! Salinity at base of the ice shelf
       integer  :: idIsDrft      ! iceshelf draft
       integer  :: idIsVol       ! iceshelf refreezed draft
-      integer  :: idSOFs        ! salt overflux
-      integer  :: idSOFh        ! heat overflux
+      integer  :: idIsSOFs      ! salt overflux
+      integer  :: idIsSOFh      ! heat overflux
 #endif
 !
 !  Last used variable ID counter.
