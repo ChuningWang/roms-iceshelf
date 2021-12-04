@@ -59,6 +59,7 @@
 !
 ! Switches to turn ice model on/off of each nested grid.
 !
+# ifdef ICE_MODEL
             CASE ('Lice')
               Npts=load_l(Nval, Cval, Ngrids, Lice)
 !
@@ -147,7 +148,7 @@
             CASE ('T0DEG')
               Npts=load_r(Nval, Rval, 1, Rvalue)
               t0deg=Rvalue(1)
-# ifdef ICE_LANDFAST
+#  ifdef ICE_LANDFAST
             CASE ('LF_K1')
               Npts=load_r(Nval, Rval, 1, Rvalue)
               lf_k1=Rvalue(1)
@@ -157,7 +158,7 @@
             CASE ('LF_U0')
               Npts=load_r(Nval, Rval, 1, Rvalue)
               lf_u0=Rvalue(1)
-# endif
+#  endif
 !
 ! Nudging options.
 !
@@ -173,6 +174,7 @@
               Npts=load_l(Nval, Cval, Ngrids, LnudgeAICLM)
             CASE ('LnudgeSICLM')
               Npts=load_l(Nval, Cval, Ngrids, LnudgeSICLM)
+# endif
 !
 ! Output options.
 !
@@ -184,6 +186,7 @@
       exit_flag=4
       RETURN
   20  CLOSE (inp)
+# ifdef ICE_MODEL
 !
 ! Set ice time step to ocean time step
 !
@@ -196,16 +199,17 @@
 !-----------------------------------------------------------------------
 !
       DO ng=1,Ngrids
-# ifndef ANA_MICLIMA
+#  ifndef ANA_MICLIMA
         IF (LmiCLM(ng)) CLM_FILE(ng)=.TRUE.
-# endif
-# ifndef ANA_AICLIMA
+#  endif
+#  ifndef ANA_AICLIMA
         IF (LaiCLM(ng)) CLM_FILE(ng)=.TRUE.
-# endif
-# ifndef ANA_SICLIMA
+#  endif
+#  ifndef ANA_SICLIMA
         IF (LsiCLM(ng)) CLM_FILE(ng)=.TRUE.
-# endif
+#  endif
       END DO
+# endif
 !
 !-----------------------------------------------------------------------
 !  Report input parameters.
@@ -213,6 +217,7 @@
 !
       IF (Master.and.Lwrite) THEN
         DO ng=1,Ngrids
+# ifdef ICE_MODEL
           IF (.not. Lice(ng)) RETURN
           WRITE (out,40) ng
           WRITE(out,*) 'Ice time step = ocean time step'
@@ -256,14 +261,14 @@
      &          'Latent_heat of sublimation.'
           WRITE (out,60) t0deg, 'T0DEG',                                &
      &          'Zero degrees Celsius in degrees Kelvin.'
-# ifdef ICE_LANDFAST
+#  ifdef ICE_LANDFAST
           WRITE (out,60) lf_k1, 'LF_K1',                                &
      &          'Landfast ice tunable k1.'
           WRITE (out,60) lf_k2, 'LF_K2',                                &
      &          'Landfast ice tunable k2.'
           WRITE (out,60) lf_u0, 'LF_U0',                                &
      &          'Landfast ice minimal velocity.'
-# endif
+#  endif
 
           IF (LmiCLM(ng)) THEN
             WRITE (out,170) LmiCLM(ng), 'LmiCLM',                       &
@@ -307,6 +312,7 @@
             WRITE (out,170) LnudgeSICLM(ng), 'LnudgeSICLM',             &
      &          'Turning OFF nudging of ice stress climatology.'
           END IF
+# endif
 
 #include "read_icepar_print.h"
         END DO
