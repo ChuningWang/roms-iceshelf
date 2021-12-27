@@ -3070,12 +3070,12 @@
 #else
       IF (ncid.ne.FLT(ng)%ncid) THEN
 #endif
-#if defined ICESHELF && !(defined ICESHELF_MORPH)
+#if !(defined SED_MORPH && defined SEDIMENT)
 !
-!  Ice draft.
+!  Bathymetry.
 !
-        Vinfo( 1)='zice'
-        Vinfo( 2)='ice draft at RHO-points'
+        Vinfo( 1)='h'
+        Vinfo( 2)='bathymetry at RHO-points'
         Vinfo( 3)='meter'
         Vinfo(14)='bath, scalar'
         Vinfo(22)='coordinates'
@@ -3090,12 +3090,12 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 #endif
-#if !(defined SED_MORPH && defined SEDIMENT)
+#if defined ICESHELF && !(defined ICESHELF_MORPH)
 !
-!  Bathymetry.
+!  Ice draft.
 !
-        Vinfo( 1)='h'
-        Vinfo( 2)='bathymetry at RHO-points'
+        Vinfo( 1)='zice'
+        Vinfo( 2)='ice draft at RHO-points'
         Vinfo( 3)='meter'
         Vinfo(14)='bath, scalar'
         Vinfo(22)='coordinates'
@@ -6508,7 +6508,7 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 # endif
-#if defined ICESHELF && !(defined ICESHELF_MORPH)
+# if defined ICESHELF && !(defined ICESHELF_MORPH)
 !
 !  Ice draft.
 !
@@ -6527,7 +6527,7 @@
      &                   2, t2dgrd, Aval, Vinfo, ncname)
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
-#endif
+# endif
 !
 !  Coriolis Parameter.
 !

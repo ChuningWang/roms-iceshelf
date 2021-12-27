@@ -430,38 +430,38 @@
       real(r8), intent(out) :: svstr(LBi:UBi,LBj:UBj)
 
 #  ifdef ICE_MODEL
-      real(r8), intent(in) :: ai(LBi:,LBj:,:)
-      real(r8), intent(in) :: hi(LBi:,LBj:,:)
-      real(r8), intent(out) :: rfaci(LBi:,LBj:)
-      real(r8), intent(out) :: sustr_aw(LBi:,LBj:)
-      real(r8), intent(out) :: svstr_aw(LBi:,LBj:)
-      real(r8), intent(out) :: qao_n(LBi:,LBj:)
-      real(r8), intent(out) :: tau_aix_n(LBi:,LBj:)
-      real(r8), intent(out) :: tau_aiy_n(LBi:,LBj:)
+      real(r8), intent(in) :: ai(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(in) :: hi(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(out) :: rfaci(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: sustr_aw(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: svstr_aw(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: qao_n(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: tau_aix_n(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: tau_aiy_n(LBi:UBi,LBj:UBj)
 
 #   ifdef ICE_THERMO
-      real(r8), intent(in) :: hsn(LBi:,LBj:,:)
-      real(r8), intent(in) :: tis(LBi:,LBj:)
+      real(r8), intent(in) :: hsn(LBi:UBi,LBj:UBj, 2)
+      real(r8), intent(in) :: tis(LBi:UBi,LBj:UBj)
 #    ifdef ICE_SNOWFALL
-      real(r8), intent(in) :: snow(LBi:,LBj:)
+      real(r8), intent(in) :: snow(LBi:UBi,LBj:UBj)
 #    endif
-      real(r8), intent(out) :: qai_n(LBi:,LBj:)
-      real(r8), intent(out) :: sr_in_i(LBi:,LBj:)
-      real(r8), intent(out) :: sr_th_i(LBi:,LBj:)
-      real(r8), intent(out) :: qswi_n(LBi:,LBj:)
-      real(r8), intent(out) :: coef_ice_heat(LBi:,LBj:)
-      real(r8), intent(out) :: rhs_ice_heat(LBi:,LBj:)
-      real(r8), intent(out) :: snow_n(LBi:,LBj:)
+      real(r8), intent(out) :: qai_n(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: sr_in_i(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: sr_th_i(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: qswi_n(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: coef_ice_heat(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: rhs_ice_heat(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: snow_n(LBi:UBi,LBj:UBj)
 #   endif
 
 #   ifdef ICE_ALBEDO
 #    ifdef ICE_CCSM_SHORTWAVE
-      real(r8), intent(in) :: frswpen(LBi:,LBj:)
+      real(r8), intent(in) :: frswpen(LBi:UBi,LBj:UBj)
 #    endif
-      real(r8), intent(inout) :: alb(LBi:,LBj:)
-      real(r8), intent(inout) :: alb_i(LBi:,LBj:)
+      real(r8), intent(inout) :: alb(LBi:UBi,LBj:UBj)
+      real(r8), intent(inout) :: alb_i(LBi:UBi,LBj:UBj)
 #     ifdef ICE_ALB_DIRDIFF
-      real(r8), intent(inout) :: cawdir(LBi:,LBj:)
+      real(r8), intent(inout) :: cawdir(LBi:UBi,LBj:UBj)
 #    endif
 #   endif
 
