@@ -417,6 +417,7 @@
 !
 !  Ice variables.
 !
+      integer  :: idsnow        ! snowfall rate
       integer  :: idIuice       ! ice U-veloicty
       integer  :: idIvice       ! ice V-veloicty
       integer  :: idIuiceE      ! ice eastward velocity
@@ -2235,6 +2236,8 @@
               idMOMf=varid
 #endif
 #ifdef ICE_MODEL
+            CASE ('idsnow')
+              idsnow=varid
             CASE ('idIuice')
               idIuice=varid
             CASE ('idIvice')

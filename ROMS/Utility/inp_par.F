@@ -222,6 +222,17 @@
         END DO
       END IF
 #endif
+#if defined ICE_MODEL || defined ICESHELF
+!
+!-----------------------------------------------------------------------
+!  Read in ice model input parameters.
+!-----------------------------------------------------------------------
+!
+      OPEN (26, FILE=TRIM(iparnam), FORM='formatted', STATUS='old')
+
+      CALL read_IcePar (26, out, Lwrite)
+      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+#endif
 #ifdef BIOLOGY
 !
 !-----------------------------------------------------------------------
@@ -850,17 +861,6 @@
      &            /,'                TileSize(',i1,') = ',i7,/)
         END IF
       END DO
-#endif
-#if defined ICE_MODEL || defined ICESHELF
-!
-!-----------------------------------------------------------------------
-!  Read in ice model input parameters.
-!-----------------------------------------------------------------------
-!
-      OPEN (26, FILE=TRIM(iparnam), FORM='formatted', STATUS='old')
-
-      CALL read_IcePar (26, out, Lwrite)
-      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 #endif
 
 #if defined FOUR_DVAR || defined VERIFICATION
