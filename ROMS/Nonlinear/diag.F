@@ -241,9 +241,9 @@
      &             u(i+1,j,k,idia)*u(i+1,j,k,idia)+                     &
      &             v(i,j  ,k,idia)*v(i,j  ,k,idia)+                     &
      &             v(i,j+1,k,idia)*v(i,j+1,k,idia)
-     &                  0.25_r8*u2v2
 # ifdef ICESHELF
               ke2d(i,j)=(zeta(i,j,krhs)+h(i,j)-ABS(zice(i,j)))*         &
+     &                  0.25_r8*u2v2
 # else
               ke2d(i,j)=ke2d(i,j)+                                      &
      &                  Hz(i,j,k)*0.25_r8*u2v2

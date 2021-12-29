@@ -1343,19 +1343,13 @@
         isTsur(i)=ic
       END DO
 # endif
-      isWvel=ic+1
+      ic=ic+1
+      isWvel=ic
+#endif
 #ifdef ICE_MODEL
 !
 !  Set IDs for state ice LBC variables.
 !
-# ifdef SOLVE3D
-      ic=5+MT
-#  if defined GLS_MIXING || defined MY25_MIXING
-      ic=ic+1
-#  endif
-# else
-      ic=3
-# endif
       isUice=ic+1
       isVice=ic+2
       isAice=ic+3
