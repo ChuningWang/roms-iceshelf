@@ -102,10 +102,6 @@
 
               CDAI == 3.0d-3
 
-! Slipperiness parameter for ice: 1.0 (free slip) or -1.0 (no slip)
-
-            GAMMA2 = 1.0d0
-
 ! Density of air [kg/m3]
 
            RHO_AIR = 1.267d0

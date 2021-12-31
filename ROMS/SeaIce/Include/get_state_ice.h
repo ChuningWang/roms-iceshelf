@@ -1015,7 +1015,7 @@
         DO itrc=1,NAT
           IF (get_var(idTsur(itrc))) THEN
             foundit=find_string(var_name, n_var,                        &
-     &                          TRIM(Vname(1,idTsur(itrc))), vindex)
+     &                          TRIM(Vname(1,idTsur(itrc))), varid)
             IF (foundit) THEN
               gtype=var_flag(varid)*r2dvar
               scale=1.0_dp
@@ -1055,16 +1055,16 @@
 #  endif
                 END IF
               END IF
-            END IF
-          ELSE
-            IF (Master) THEN
-              WRITE (stdout,80) string, TRIM(Vname(1,idTsur(itrc))),    &
-     &                          TRIM(ncname)
-            END IF
-            exit_flag=4
-            IF (FoundError(exit_flag, nf90_noerr,                       &
-     &                     __LINE__, MyFile)) THEN
-              RETURN
+            ELSE
+              IF (Master) THEN
+                WRITE (stdout,80) string, TRIM(Vname(1,idTsur(itrc))),  &
+     &                            TRIM(ncname)
+              END IF
+              exit_flag=4
+              IF (FoundError(exit_flag, nf90_noerr,                     &
+     &                       __LINE__, MyFile)) THEN
+                RETURN
+              END IF
             END IF
           END IF
         END DO
@@ -1292,7 +1292,7 @@
         DO itrc=NAT+1, NT(ng)
           IF (get_var(idIsTrc(itrc))) THEN
             foundit=find_string(var_name, n_var,                        &
-     &                          TRIM(Vname(1,idIsTrc(itrc))), vindex)
+     &                          TRIM(Vname(1,idIsTrc(itrc))), varid)
             IF (foundit) THEN
               gtype=var_flag(varid)*r2dvar
               scale=1.0_dp
@@ -1332,16 +1332,16 @@
 #  endif
                 END IF
               END IF
-            END IF
-          ELSE
-            IF (Master) THEN
-              WRITE (stdout,80) string, TRIM(Vname(1,idIsTrc(itrc))),   &
-     &                          TRIM(ncname)
-            END IF
-            exit_flag=4
-            IF (FoundError(exit_flag, nf90_noerr,                       &
-     &                     __LINE__, MyFile)) THEN
-              RETURN
+            ELSE
+              IF (Master) THEN
+                WRITE (stdout,80) string, TRIM(Vname(1,idIsTrc(itrc))), &
+     &                            TRIM(ncname)
+              END IF
+              exit_flag=4
+              IF (FoundError(exit_flag, nf90_noerr,                     &
+     &                       __LINE__, MyFile)) THEN
+                RETURN
+              END IF
             END IF
           END IF
         END DO

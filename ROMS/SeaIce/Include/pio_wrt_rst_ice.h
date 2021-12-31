@@ -707,7 +707,12 @@
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     FORCES(ng)%stflx_save,                       &
+#   ifdef WET_DRY
+     &                     FORCES(ng)%stflx_save(:,:,itrc),             &
+     &                     SetFillVal = .FALSE.)
+#   else
+     &                     FORCES(ng)%stflx_save(:,:,itrc))
+#   endif
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idTsur(itrc))),             &

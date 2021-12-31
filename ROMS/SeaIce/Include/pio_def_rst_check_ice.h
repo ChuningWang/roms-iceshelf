@@ -231,8 +231,8 @@
      &                                    TRIM(ncname)
             exit_flag=3
             RETURN
-          RETURN
-        END IF
+          END IF
+        END DO
         IF (.not.got_var(idUsms)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idUsms)),          &
      &                                  TRIM(ncname)
