@@ -610,9 +610,9 @@
 #   endif
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idTsur(itrc),ng),r8)
-          status=def_var(ng, iNLM, RST(ng)%ncid,                        &
-     &                   RST(ng)%Vid(idTsur(itrc)),                     &
-     &                   NF_FRST, nvd3, sr2dgrd, Aval, Vinfo, ncname)
+          status=def_var(ng, iNLM, RST(ng)%pioFile,                     &
+     &                   RST(ng)%pioVar(idTsur(itrc))%vd,               &
+     &                   PIO_FRST, nvd3, sr2dgrd, Aval, Vinfo, ncname)
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END DO
 
@@ -766,9 +766,9 @@
 #   endif
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIsTrc(itrc),ng),r8)
-          status=def_var(ng, iNLM, RST(ng)%ncid,                        &
-     &                   RST(ng)%Vid(idIsTrc(itrc)),                    &
-     &                   NF_FRST, nvd3, sr2dgrd, Aval, Vinfo, ncname)
+          status=def_var(ng, iNLM, RST(ng)%pioFile,                     &
+     &                   RST(ng)%pioVar(idIsTrc(itrc))%vd,              &
+     &                   PIO_FRST, nvd3, sr2dgrd, Aval, Vinfo, ncname)
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END DO
 
