@@ -68,6 +68,7 @@
       USE dateclock_mod,   ONLY : caldate
 !
       USE bc_2d_mod, ONLY : bc_r2d_tile
+      USE exchange_2d_mod
 # ifdef DISTRIBUTE
       USE mp_exchange_mod, ONLY : mp_exchange2d
 # endif
