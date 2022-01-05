@@ -1321,10 +1321,10 @@
 !
 !  Sensible and latent heat flux correction
 !
-          SHeat(i,j) = SHeat(i,j)*(1-ai(i,j,listp)) +                   &
-     &                 qsh_i     *   ai(i,j,listp)
-          LHeat(i,j) = LHeat(i,j)*(1-ai(i,j,listp)) +                   &
-     &                 qlh_i     *   ai(i,j,listp)
+          SHeat(i,j) = SHeat(i,j)*(1.0_r8-ai(i,j,listp)) +              &
+     &                 qsh_i     *        ai(i,j,listp)
+          LHeat(i,j) = LHeat(i,j)*(1.0_r8-ai(i,j,listp)) +              &
+     &                 qlh_i     *        ai(i,j,listp)
 # endif
         END DO
       END DO
