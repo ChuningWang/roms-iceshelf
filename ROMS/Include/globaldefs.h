@@ -1160,7 +1160,7 @@
      defined ALBEDO)      || \
     (defined BULK_FLUXES  && \
      defined LONGWAVE)    || \
-    defined ICE_ALB_DIRDIFF \
+    defined ICE_ALB_DIRDIFF || \
     defined ECOSIM
 # define CLOUDS
 #endif
