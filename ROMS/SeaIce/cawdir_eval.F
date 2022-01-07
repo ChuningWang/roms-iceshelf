@@ -38,6 +38,7 @@
      &                     GRID(ng) % rmask,                            &
 # endif
      &                     GRID(ng) % latr,                             &
+     &                     GRID(ng) % lonr,                             &
 # ifdef CLOUDS
      &                     FORCES(ng) % cloud,                          &
 # endif
@@ -55,7 +56,7 @@
 # ifdef MASKING
      &                     rmask,                                       &
 # endif
-     &                     latr,                                        &
+     &                     latr, lonr                                   &
 # ifdef CLOUDS
      &                     cloud,                                       &
 # endif
@@ -84,6 +85,7 @@
       real(r8), intent(in) :: rmask(LBi:,LBj:)
 #  endif
       real(r8), intent(in) :: latr(LBi:,LBj:)
+      real(r8), intent(in) :: lonr(LBi:,LBj:)
 #  ifdef CLOUDS
       real(r8), intent(in) :: cloud(LBi:,LBj:)
 #  endif
@@ -93,6 +95,7 @@
       real(r8), intent(in) :: rmask(LBi:UBi,LBj:UBj)
 #  endif
       real(r8), intent(in) :: latr(LBi:UBi,LBj:UBj)
+      real(r8), intent(in) :: lonr(LBi:UBi,LBj:UBj)
 #  ifdef CLOUDS
       real(r8), intent(in) :: cloud(LBi:UBi,LBj:UBj)
 #  endif
@@ -108,7 +111,7 @@
       real(r8) :: absh2o, s0caw, day, dangle
       real(r8) :: decli, sundv, cc, intpol
       real(r8) :: sin2, cos2, stot, sads, bioday
-      real(r8) :: biohr, hangle, cosz, srad
+      real(r8) :: biohr, hangle, langle, cosz, srad
       real(r8) :: sdir, sdif, altdeg, cfac, ssurf
       real(r8) :: albdir, rlat, yday
 
@@ -210,6 +213,16 @@
             biohr=bioday*86400._r8
             biohr=MOD(biohr+43200._r8,86400._r8)
             hangle=pi2*biohr/86400._r8
+# ifdef ICE_ALB_GREGORIAN
+!
+! add a correction term to correct the time difference between Gregorian
+!   time and local time.
+!
+!   CW 2022-01-07
+!
+            langle=pi2*MOD(lonr(i,j), 360._r8)/360._r8
+            hangle=hangle + langle
+# endif
 !
 ! cosine of the zenith angle
 !
@@ -217,7 +230,7 @@
 !
 ! extraterrestrial radiation
 !
-            srad =s0caw*sundv*cosz
+            srad=s0caw*sundv*cosz
 !
 ! direct radiation component
 !
