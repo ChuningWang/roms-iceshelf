@@ -747,7 +747,7 @@
           ELSE
 #  ifdef ICE_ALBEDO
 #   ifdef ICE_ALB_DIRDIFF
-            cawdif = 1.0_r8-albw_d
+            cawdif = 1._r8-albw_d
             transw = cawdir(i,j)*(1.0_r8-cloud(i,j))+cawdif*cloud(i,j)
 #   else
             transw = 1.0_r8-alb(i,j)
