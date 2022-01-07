@@ -56,7 +56,7 @@
 # ifdef MASKING
      &                             rmask,                               &
 # endif
-     &                             latr, lonr                           &
+     &                             latr, lonr,                          &
 # ifdef CLOUDS
      &                             cloud,                               &
 # endif
