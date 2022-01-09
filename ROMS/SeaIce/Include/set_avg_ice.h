@@ -648,11 +648,11 @@
         IF (Aout(idIuice,ng)) THEN
           DO j=JstrR,JendR
             DO i=Istr,IendR 
-              AVERAGE(ng)%avgui(i,j)=AVERAGE(ng)%avgui(i,j)+      &
+              AVERAGE(ng)%avgui(i,j)=AVERAGE(ng)%avgui(i,j)+            &
 #   ifdef WET_DRY
-     &                                   GRID(ng)%umask_full(i,j)*      &
+     &                               GRID(ng)%umask_full(i,j)*          &
 #   endif
-     &                                   ICE(ng)%ui(i,j,Iout)
+     &                               ICE(ng)%ui(i,j,Iout)
             END DO
           END DO
         END IF
@@ -660,11 +660,11 @@
         IF (Aout(idIvice,ng)) THEN
           DO j=Jstr,JendR 
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgvi(i,j)=AVERAGE(ng)%avgvi(i,j)+      &
+              AVERAGE(ng)%avgvi(i,j)=AVERAGE(ng)%avgvi(i,j)+            &
 #   ifdef WET_DRY
-     &                                   GRID(ng)%vmask_full(i,j)*      &
+     &                               GRID(ng)%vmask_full(i,j)*          &
 #   endif
-     &                                   ICE(ng)%vi(i,j,Iout)
+     &                               ICE(ng)%vi(i,j,Iout)
             END DO
           END DO
         END IF
@@ -686,11 +686,11 @@
         IF (Aout(idIaice,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgai(i,j)=AVERAGE(ng)%avgai(i,j)+      &
+              AVERAGE(ng)%avgai(i,j)=AVERAGE(ng)%avgai(i,j)+            &
 #   ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                               GRID(ng)%rmask_full(i,j)*          &
 #   endif
-     &                                   ICE(ng)%ai(i,j,Iout)
+     &                               ICE(ng)%ai(i,j,Iout)
             END DO
           END DO
         END IF
@@ -698,11 +698,11 @@
         IF (Aout(idIhice,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avghi(i,j)=AVERAGE(ng)%avghi(i,j)+      &
+              AVERAGE(ng)%avghi(i,j)=AVERAGE(ng)%avghi(i,j)+            &
 #   ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                               GRID(ng)%rmask_full(i,j)*          &
 #   endif
-     &                                   ICE(ng)%hi(i,j,Iout)
+     &                               ICE(ng)%hi(i,j,Iout)
             END DO
           END DO
         END IF
@@ -710,11 +710,11 @@
         IF (Aout(idIhsno,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avghsn(i,j)=AVERAGE(ng)%avghsn(i,j)+      &
+              AVERAGE(ng)%avghsn(i,j)=AVERAGE(ng)%avghsn(i,j)+          &
 #   ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                GRID(ng)%rmask_full(i,j)*         &
 #   endif
-     &                                   ICE(ng)%hsn(i,j,Iout)
+     &                                ICE(ng)%hsn(i,j,Iout)
             END DO
           END DO
         END IF
@@ -722,7 +722,7 @@
         IF (Aout(idIagei,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgageice(i,j)=AVERAGE(ng)%avgageice(i,j)+      &
+              AVERAGE(ng)%avgageice(i,j)=AVERAGE(ng)%avgageice(i,j)+    &
 #   ifdef WET_DRY
      &                                   GRID(ng)%rmask_full(i,j)*      &
 #   endif
@@ -734,11 +734,11 @@
         IF (Aout(idItice,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgtis(i,j)=AVERAGE(ng)%avgtis(i,j)+      &
+              AVERAGE(ng)%avgtis(i,j)=AVERAGE(ng)%avgtis(i,j)+          &
 #   ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                GRID(ng)%rmask_full(i,j)*         &
 #   endif
-     &                                   ICE(ng)%tis(i,j)
+     &                                ICE(ng)%tis(i,j)
             END DO
           END DO
         END IF
@@ -746,11 +746,11 @@
         IF (Aout(idItmid,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgti(i,j)=AVERAGE(ng)%avgti(i,j)+      &
+              AVERAGE(ng)%avgti(i,j)=AVERAGE(ng)%avgti(i,j)+            &
 #   ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                               GRID(ng)%rmask_full(i,j)*          &
 #   endif
-     &                                   ICE(ng)%ti(i,j,Iout)
+     &                               ICE(ng)%ti(i,j,Iout)
             END DO
           END DO
         END IF
@@ -758,11 +758,11 @@
         IF (Aout(idIt2ic,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgt2(i,j)=AVERAGE(ng)%avgt2(i,j)+      &
+              AVERAGE(ng)%avgt2(i,j)=AVERAGE(ng)%avgt2(i,j)+            &
 #   ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                               GRID(ng)%rmask_full(i,j)*          &
 #   endif
-     &                                   ICE(ng)%t2(i,j)
+     &                               ICE(ng)%t2(i,j)
             END DO
           END DO
         END IF
@@ -772,9 +772,9 @@
             DO i=IstrR,IendR
               AVERAGE(ng)%avgsig11(i,j)=AVERAGE(ng)%avgsig11(i,j)+      &
 #   ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                  GRID(ng)%rmask_full(i,j)*       &
 #   endif
-     &                                   ICE(ng)%sig11(i,j,Iout)
+     &                                  ICE(ng)%sig11(i,j,Iout)
             END DO
           END DO
         END IF
@@ -784,9 +784,9 @@
             DO i=IstrR,IendR
               AVERAGE(ng)%avgsig12(i,j)=AVERAGE(ng)%avgsig12(i,j)+      &
 #   ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                  GRID(ng)%rmask_full(i,j)*       &
 #   endif
-     &                                   ICE(ng)%sig12(i,j,Iout)
+     &                                  ICE(ng)%sig12(i,j,Iout)
             END DO
           END DO
         END IF
@@ -796,9 +796,9 @@
             DO i=IstrR,IendR
               AVERAGE(ng)%avgsig22(i,j)=AVERAGE(ng)%avgsig22(i,j)+      &
 #   ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                  GRID(ng)%rmask_full(i,j)*       &
 #   endif
-     &                                   ICE(ng)%sig22(i,j,Iout)
+     &                                  ICE(ng)%sig22(i,j,Iout)
             END DO
           END DO
         END IF
@@ -806,11 +806,11 @@
         IF (Aout(idIutau,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgutau_iw(i,j)=AVERAGE(ng)%avgutau_iw(i,j)+      &
+              AVERAGE(ng)%avgutau_iw(i,j)=AVERAGE(ng)%avgutau_iw(i,j)+  &
 #   ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                    GRID(ng)%rmask_full(i,j)*     &
 #   endif
-     &                                   ICE(ng)%utau_iw(i,j)
+     &                                    ICE(ng)%utau_iw(i,j)
             END DO
           END DO
         END IF
@@ -818,7 +818,7 @@
         IF (Aout(idImchu,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgchu_iw(i,j)=AVERAGE(ng)%avgchu_iw(i,j)+      &
+              AVERAGE(ng)%avgchu_iw(i,j)=AVERAGE(ng)%avgchu_iw(i,j)+    &
 #   ifdef WET_DRY
      &                                   GRID(ng)%rmask_full(i,j)*      &
 #   endif
@@ -830,11 +830,11 @@
         IF (Aout(idIt0mk,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgt0mk(i,j)=AVERAGE(ng)%avgt0mk(i,j)+      &
+              AVERAGE(ng)%avgt0mk(i,j)=AVERAGE(ng)%avgt0mk(i,j)+        &
 #   ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                 GRID(ng)%rmask_full(i,j)*        &
 #   endif
-     &                                   ICE(ng)%t0mk(i,j)
+     &                                 ICE(ng)%t0mk(i,j)
             END DO
           END DO
         END IF
@@ -842,11 +842,11 @@
         IF (Aout(idIs0mk,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgs0mk(i,j)=AVERAGE(ng)%avgs0mk(i,j)+      &
+              AVERAGE(ng)%avgs0mk(i,j)=AVERAGE(ng)%avgs0mk(i,j)+        &
 #   ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                 GRID(ng)%rmask_full(i,j)*        &
 #   endif
-     &                                   ICE(ng)%s0mk(i,j)
+     &                                 ICE(ng)%s0mk(i,j)
             END DO
           END DO
         END IF
@@ -854,7 +854,7 @@
         IF (Aout(idImflx,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgiomflx(i,j)=AVERAGE(ng)%avgiomflx(i,j)+      &
+              AVERAGE(ng)%avgiomflx(i,j)=AVERAGE(ng)%avgiomflx(i,j)+    &
 #   ifdef WET_DRY
      &                                   GRID(ng)%rmask_full(i,j)*      &
 #   endif
@@ -866,11 +866,11 @@
         IF (Aout(idIwfr,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgwfr(i,j)=AVERAGE(ng)%avgwfr(i,j)+        &
+              AVERAGE(ng)%avgwfr(i,j)=AVERAGE(ng)%avgwfr(i,j)+          &
 #   ifdef WET_DRY
-     &                                  GRID(ng)%rmask_full(i,j)*       &
+     &                                GRID(ng)%rmask_full(i,j)*         &
 #   endif
-     &                                  ICE(ng)%wfr(i,j)
+     &                                ICE(ng)%wfr(i,j)
             END DO
           END DO
         END IF
@@ -878,11 +878,11 @@
         IF (Aout(idIwai,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgwai(i,j)=AVERAGE(ng)%avgwai(i,j)+        &
+              AVERAGE(ng)%avgwai(i,j)=AVERAGE(ng)%avgwai(i,j)+          &
 #   ifdef WET_DRY
-     &                                  GRID(ng)%rmask_full(i,j)*       &
+     &                                GRID(ng)%rmask_full(i,j)*         &
 #   endif
-     &                                  ICE(ng)%wai(i,j)
+     &                                ICE(ng)%wai(i,j)
             END DO
           END DO
         END IF
@@ -890,11 +890,11 @@
         IF (Aout(idIwao,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgwao(i,j)=AVERAGE(ng)%avgwao(i,j)+        &
+              AVERAGE(ng)%avgwao(i,j)=AVERAGE(ng)%avgwao(i,j)+          &
 #   ifdef WET_DRY
-     &                                  GRID(ng)%rmask_full(i,j)*       &
+     &                                GRID(ng)%rmask_full(i,j)*         &
 #   endif
-     &                                  ICE(ng)%wao(i,j)
+     &                                ICE(ng)%wao(i,j)
             END DO
           END DO
         END IF
@@ -902,11 +902,11 @@
         IF (Aout(idIwio,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgwio(i,j)=AVERAGE(ng)%avgwio(i,j)+        &
+              AVERAGE(ng)%avgwio(i,j)=AVERAGE(ng)%avgwio(i,j)+          &
 #   ifdef WET_DRY
-     &                                  GRID(ng)%rmask_full(i,j)*       &
+     &                                GRID(ng)%rmask_full(i,j)*         &
 #   endif
-     &                                  ICE(ng)%wio(i,j)
+     &                                ICE(ng)%wio(i,j)
             END DO
           END DO
         END IF
@@ -914,11 +914,11 @@
         IF (Aout(idIwro,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgwro(i,j)=AVERAGE(ng)%avgwro(i,j)+        &
+              AVERAGE(ng)%avgwro(i,j)=AVERAGE(ng)%avgwro(i,j)+          &
 #   ifdef WET_DRY
-     &                                  GRID(ng)%rmask_full(i,j)*       &
+     &                                GRID(ng)%rmask_full(i,j)*         &
 #   endif
-     &                                  ICE(ng)%wro(i,j)
+     &                                ICE(ng)%wro(i,j)
             END DO
           END DO
         END IF
@@ -926,11 +926,11 @@
         IF (Aout(idIwdiv,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgwdiv(i,j)=AVERAGE(ng)%avgwdiv(i,j)+      &
+              AVERAGE(ng)%avgwdiv(i,j)=AVERAGE(ng)%avgwdiv(i,j)+        &
 #   ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                 GRID(ng)%rmask_full(i,j)*        &
 #   endif
-     &                                   ICE(ng)%wdiv(i,j)
+     &                                 ICE(ng)%wdiv(i,j)
             END DO
           END DO
         END IF
@@ -940,11 +940,11 @@
         IF (Aout(idIalbe,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgalb(i,j)=AVERAGE(ng)%avgalb(i,j)+      &
+              AVERAGE(ng)%avgalb(i,j)=AVERAGE(ng)%avgalb(i,j)+          &
 #     ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                GRID(ng)%rmask_full(i,j)*         &
 #     endif
-     &                                   FORCES(ng)%alb(i,j)
+     &                                FORCES(ng)%alb(i,j)
             END DO
           END DO
         END IF
@@ -954,9 +954,9 @@
             DO i=IstrR,IendR
               AVERAGE(ng)%avgalb_i(i,j)=AVERAGE(ng)%avgalb_i(i,j)+      &
 #     ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                  GRID(ng)%rmask_full(i,j)*       &
 #     endif
-     &                                   FORCES(ng)%alb_i(i,j)
+     &                                  FORCES(ng)%alb_i(i,j)
             END DO
           END DO
         END IF
@@ -967,9 +967,9 @@
             DO i=IstrR,IendR
               AVERAGE(ng)%avgfrswp(i,j)=AVERAGE(ng)%avgfrswp(i,j)+      &
 #      ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                  GRID(ng)%rmask_full(i,j)*       &
 #      endif
-     &                                   FORCES(ng)%frswp(i,j)
+     &                                  FORCES(ng)%frswp(i,j)
             END DO
           END DO
         END IF
@@ -981,9 +981,9 @@
             DO i=IstrR,IendR
               AVERAGE(ng)%avgrfaci(i,j)=AVERAGE(ng)%avgrfaci(i,j)+      &
 #    ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                  GRID(ng)%rmask_full(i,j)*       &
 #    endif
-     &                                   ICE(ng)%rfaci(i,j)
+     &                                  ICE(ng)%rfaci(i,j)
             END DO
           END DO
         END IF
@@ -993,9 +993,9 @@
             DO i=IstrR,IendR
               AVERAGE(ng)%avglr_dn(i,j)=AVERAGE(ng)%avglr_dn(i,j)+      &
 #    ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                  GRID(ng)%rmask_full(i,j)*       &
 #    endif
-     &                                   FORCES(ng)%lr_dn(i,j)
+     &                                  FORCES(ng)%lr_dn(i,j)
             END DO
           END DO
         END IF
@@ -1005,9 +1005,9 @@
             DO i=IstrR,IendR
               AVERAGE(ng)%avgsr_dn(i,j)=AVERAGE(ng)%avgsr_dn(i,j)+      &
 #    ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                  GRID(ng)%rmask_full(i,j)*       &
 #    endif
-     &                                   FORCES(ng)%sr_dn(i,j)
+     &                                  FORCES(ng)%sr_dn(i,j)
             END DO
           END DO
         END IF
@@ -1017,9 +1017,9 @@
             DO i=IstrR,IendR
               AVERAGE(ng)%avglat_i(i,j)=AVERAGE(ng)%avglat_i(i,j)+      &
 #    ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                  GRID(ng)%rmask_full(i,j)*       &
 #    endif
-     &                                   FORCES(ng)%lat_i(i,j)
+     &                                  FORCES(ng)%lat_i(i,j)
             END DO
           END DO
         END IF
@@ -1029,9 +1029,9 @@
             DO i=IstrR,IendR
               AVERAGE(ng)%avgsen_i(i,j)=AVERAGE(ng)%avgsen_i(i,j)+      &
 #    ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                  GRID(ng)%rmask_full(i,j)*       &
 #    endif
-     &                                   FORCES(ng)%sen_i(i,j)
+     &                                  FORCES(ng)%sen_i(i,j)
             END DO
           END DO
         END IF
@@ -1039,11 +1039,11 @@
         IF (Aout(idIlrup,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avglr_up_i(i,j)=AVERAGE(ng)%avglr_up_i(i,j)+      &
+              AVERAGE(ng)%avglr_up_i(i,j)=AVERAGE(ng)%avglr_up_i(i,j)+  &
 #    ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                    GRID(ng)%rmask_full(i,j)*     &
 #    endif
-     &                                   FORCES(ng)%lr_up_i(i,j)
+     &                                    FORCES(ng)%lr_up_i(i,j)
             END DO
           END DO
         END IF
@@ -1051,11 +1051,11 @@
         IF (Aout(idIsrup,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsr_up_i(i,j)=AVERAGE(ng)%avgsr_up_i(i,j)+      &
+              AVERAGE(ng)%avgsr_up_i(i,j)=AVERAGE(ng)%avgsr_up_i(i,j)+  &
 #    ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                    GRID(ng)%rmask_full(i,j)*     &
 #    endif
-     &                                   FORCES(ng)%sr_up_i(i,j)
+     &                                    FORCES(ng)%sr_up_i(i,j)
             END DO
           END DO
         END IF
@@ -1063,11 +1063,11 @@
         IF (Aout(idIsrin,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsr_in_i(i,j)=AVERAGE(ng)%avgsr_in_i(i,j)+      &
+              AVERAGE(ng)%avgsr_in_i(i,j)=AVERAGE(ng)%avgsr_in_i(i,j)+  &
 #    ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                    GRID(ng)%rmask_full(i,j)*     &
 #    endif
-     &                                   FORCES(ng)%sr_in_i(i,j)
+     &                                    FORCES(ng)%sr_in_i(i,j)
             END DO
           END DO
         END IF
@@ -1075,11 +1075,11 @@
         IF (Aout(idIsrth,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsr_th_i(i,j)=AVERAGE(ng)%avgsr_th_i(i,j)+      &
+              AVERAGE(ng)%avgsr_th_i(i,j)=AVERAGE(ng)%avgsr_th_i(i,j)+  &
 #    ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                    GRID(ng)%rmask_full(i,j)*     &
 #    endif
-     &                                   FORCES(ng)%sr_th_i(i,j)
+     &                                    FORCES(ng)%sr_th_i(i,j)
             END DO
           END DO
         END IF
@@ -1087,11 +1087,11 @@
         IF (Aout(idIsfI,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgssflx_i(i,j)=AVERAGE(ng)%avgssflx_i(i,j)+        &
+              AVERAGE(ng)%avgssflx_i(i,j)=AVERAGE(ng)%avgssflx_i(i,j)+  &
 #    ifdef WET_DRY
-     &                                  GRID(ng)%rmask_full(i,j)*       &
+     &                                    GRID(ng)%rmask_full(i,j)*     &
 #    endif
-     &                                  FORCES(ng)%ssflx_i(i,j)
+     &                                    FORCES(ng)%ssflx_i(i,j)
             END DO
           END DO
         END IF
@@ -1099,11 +1099,11 @@
         IF (Aout(idIsfL,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgssflx_l(i,j)=AVERAGE(ng)%avgssflx_l(i,j)+        &
+              AVERAGE(ng)%avgssflx_l(i,j)=AVERAGE(ng)%avgssflx_l(i,j)+  &
 #    ifdef WET_DRY
-     &                                  GRID(ng)%rmask_full(i,j)*       &
+     &                                    GRID(ng)%rmask_full(i,j)*     &
 #    endif
-     &                                  FORCES(ng)%ssflx_l(i,j)
+     &                                    FORCES(ng)%ssflx_l(i,j)
             END DO
           END DO
         END IF
@@ -1111,7 +1111,7 @@
         IF (Aout(idIqao,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgqao_n(i,j)=AVERAGE(ng)%avgqao_n(i,j)+        &
+              AVERAGE(ng)%avgqao_n(i,j)=AVERAGE(ng)%avgqao_n(i,j)+      &
 #    ifdef WET_DRY
      &                                  GRID(ng)%rmask_full(i,j)*       &
 #    endif
@@ -1123,7 +1123,7 @@
         IF (Aout(idIqai,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgqai_n(i,j)=AVERAGE(ng)%avgqai_n(i,j)+        &
+              AVERAGE(ng)%avgqai_n(i,j)=AVERAGE(ng)%avgqai_n(i,j)+      &
 #    ifdef WET_DRY
      &                                  GRID(ng)%rmask_full(i,j)*       &
 #    endif
@@ -1135,7 +1135,7 @@
         IF (Aout(idIqio,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgqio_n(i,j)=AVERAGE(ng)%avgqio_n(i,j)+        &
+              AVERAGE(ng)%avgqio_n(i,j)=AVERAGE(ng)%avgqio_n(i,j)+      &
 #    ifdef WET_DRY
      &                                  GRID(ng)%rmask_full(i,j)*       &
 #    endif
@@ -1147,7 +1147,7 @@
         IF (Aout(idIqi2,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgqi2_n(i,j)=AVERAGE(ng)%avgqi2_n(i,j)+        &
+              AVERAGE(ng)%avgqi2_n(i,j)=AVERAGE(ng)%avgqi2_n(i,j)+      &
 #    ifdef WET_DRY
      &                                  GRID(ng)%rmask_full(i,j)*       &
 #    endif
@@ -1159,7 +1159,7 @@
         IF (Aout(idIsnoi,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsnoice(i,j)=AVERAGE(ng)%avgsnoice(i,j)+      &
+              AVERAGE(ng)%avgsnoice(i,j)=AVERAGE(ng)%avgsnoice(i,j)+    &
 #    ifdef WET_DRY
      &                                   GRID(ng)%rmask_full(i,j)*      &
 #    endif
@@ -1174,11 +1174,11 @@
         IF (Aout(idIsMr,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgm(i,j)=AVERAGE(ng)%avgm(i,j)+        &
+              AVERAGE(ng)%avgm(i,j)=AVERAGE(ng)%avgm(i,j)+              &
 #   ifdef WET_DRY
-     &                                  GRID(ng)%rmask_full(i,j)*       &
+     &                              GRID(ng)%rmask_full(i,j)*           &
 #   endif
-     &                                  ICESHELFVAR(ng)%m(i,j)
+     &                              ICESHELFVAR(ng)%m(i,j)
             END DO
           END DO
         END IF
@@ -1187,7 +1187,7 @@
         IF (Aout(idIsTs,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgTstar(i,j)=AVERAGE(ng)%avgTstar(i,j)+        &
+              AVERAGE(ng)%avgTstar(i,j)=AVERAGE(ng)%avgTstar(i,j)+      &
 #    ifdef WET_DRY
      &                                  GRID(ng)%rmask_full(i,j)*       &
 #    endif
@@ -1199,7 +1199,7 @@
         IF (Aout(idIsUs,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgUstar(i,j)=AVERAGE(ng)%avgUstar(i,j)+        &
+              AVERAGE(ng)%avgUstar(i,j)=AVERAGE(ng)%avgUstar(i,j)+      &
 #    ifdef WET_DRY
      &                                  GRID(ng)%rmask_full(i,j)*       &
 #    endif
@@ -1211,11 +1211,11 @@
         IF (Aout(idIsTb,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgTb(i,j)=AVERAGE(ng)%avgTb(i,j)+        &
+              AVERAGE(ng)%avgTb(i,j)=AVERAGE(ng)%avgTb(i,j)+            &
 #    ifdef WET_DRY
-     &                                  GRID(ng)%rmask_full(i,j)*       &
+     &                               GRID(ng)%rmask_full(i,j)*          &
 #    endif
-     &                                  ICESHELFVAR(ng)%Tb(i,j)
+     &                               ICESHELFVAR(ng)%Tb(i,j)
             END DO
           END DO
         END IF
@@ -1223,11 +1223,11 @@
         IF (Aout(idIsSb,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgSb(i,j)=AVERAGE(ng)%avgSb(i,j)+        &
+              AVERAGE(ng)%avgSb(i,j)=AVERAGE(ng)%avgSb(i,j)+            &
 #    ifdef WET_DRY
-     &                                  GRID(ng)%rmask_full(i,j)*       &
+     &                               GRID(ng)%rmask_full(i,j)*          &
 #    endif
-     &                                  ICESHELFVAR(ng)%Sb(i,j)
+     &                               ICESHELFVAR(ng)%Sb(i,j)
             END DO
           END DO
         END IF
@@ -1237,11 +1237,11 @@
         IF (Aout(idIsDrft,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgzice(i,j)=AVERAGE(ng)%avgzice(i,j)+    &
+              AVERAGE(ng)%avgzice(i,j)=AVERAGE(ng)%avgzice(i,j)+        &
 #    ifdef WET_DRY
-     &                                    GRID(ng)%rmask_full(i,j)*     &
+     &                                 GRID(ng)%rmask_full(i,j)*        &
 #    endif
-     &                                    GRID(ng)%zice(i,j)
+     &                                 GRID(ng)%zice(i,j)
             END DO
           END DO
         END IF
@@ -1251,11 +1251,11 @@
         IF (Aout(idIsSOFs,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgSOFs(i,j)=AVERAGE(ng)%avgSOFs(i,j)+    &
+              AVERAGE(ng)%avgSOFs(i,j)=AVERAGE(ng)%avgSOFs(i,j)+        &
 #    ifdef WET_DRY
-     &                                    GRID(ng)%rmask_full(i,j)*     &
+     &                                 GRID(ng)%rmask_full(i,j)*        &
 #    endif
-     &                                    ICESHELFVAR(ng)%SOFs(i,j)
+     &                                 ICESHELFVAR(ng)%SOFs(i,j)
             END DO
           END DO
         END IF
@@ -1263,11 +1263,11 @@
         IF (Aout(idIsSOFh,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgSOFh(i,j)=AVERAGE(ng)%avgSOFh(i,j)+    &
+              AVERAGE(ng)%avgSOFh(i,j)=AVERAGE(ng)%avgSOFh(i,j)+        &
 #    ifdef WET_DRY
-     &                                    GRID(ng)%rmask_full(i,j)*     &
+     &                                 GRID(ng)%rmask_full(i,j)*        &
 #    endif
-     &                                    ICESHELFVAR(ng)%SOFh(i,j)
+     &                                 ICESHELFVAR(ng)%SOFh(i,j)
             END DO
           END DO
         END IF
@@ -1284,12 +1284,50 @@
      &     (MOD(iic(ng)-1,nAVG(ng)).eq.0).and.                          &
      &     ((iic(ng).ne.ntstart(ng)).or.(nrrec(ng).eq.0))).or.          &
      &    ((iic(ng).ge.ntsAVG(ng)).and.(nAVG(ng).eq.1))) THEN
+        IF (DOMAIN(ng)%SouthWest_Test(tile)) THEN
+          IF (nAVG(ng).eq.1) THEN
+            AVGtime(ng)=time(ng)
+          ELSE
+            AVGtime(ng)=AVGtime(ng)+REAL(nAVG(ng),r8)*dt(ng)
+          END IF
+        END IF
+!
+!  Set time-averaged factors for each C-grid variable type. Notice that
+!  the I- and J-ranges are all grid types are the same for convinience.
+# ifdef WET_DRY
+!  In wetting and drying, the sums are devided by the number of times
+!  that each qrid point is wet.
+# endif
+!
+# ifdef WET_DRY
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            pfac(i,j)=1.0_r8/MAX(1.0_r8, GRID(ng)%pmask_avg(i,j))
+            rfac(i,j)=1.0_r8/MAX(1.0_r8, GRID(ng)%rmask_avg(i,j))
+            ufac(i,j)=1.0_r8/MAX(1.0_r8, GRID(ng)%umask_avg(i,j))
+            vfac(i,j)=1.0_r8/MAX(1.0_r8, GRID(ng)%vmask_avg(i,j))
+          END DO
+        END DO
+# else
+        fac=1.0_r8/REAL(nAVG(ng),r8)
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            pfac(i,j)=fac
+            rfac(i,j)=fac
+            ufac(i,j)=fac
+            vfac(i,j)=fac
+          END DO
+        END DO
+# endif
+!
+!  Process state variables.
+!
 #  ifdef ICE_MODEL
         IF (Aout(idIuice,ng)) THEN
           DO j=JstrR,JendR
             DO i=Istr,IendR 
-              AVERAGE(ng)%avgui(i,j)=ufac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgui(i,j)
+              AVERAGE(ng)%avgui(i,j)=ufac(i,j)*                         &
+     &                               AVERAGE(ng)%avgui(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1309,8 +1347,8 @@
         IF (Aout(idIvice,ng)) THEN
           DO j=Jstr,JendR 
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgvi(i,j)=vfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgvi(i,j)
+              AVERAGE(ng)%avgvi(i,j)=vfac(i,j)*                         &
+     &                               AVERAGE(ng)%avgvi(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1357,8 +1395,8 @@
         IF (Aout(idIaice,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgai(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgai(i,j)
+              AVERAGE(ng)%avgai(i,j)=rfac(i,j)*                         &
+     &                               AVERAGE(ng)%avgai(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1378,8 +1416,8 @@
         IF (Aout(idIhice,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avghi(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avghi(i,j)
+              AVERAGE(ng)%avghi(i,j)=rfac(i,j)*                         &
+     &                               AVERAGE(ng)%avghi(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1399,8 +1437,8 @@
         IF (Aout(idIhsno,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avghsn(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avghsn(i,j)
+              AVERAGE(ng)%avghsn(i,j)=rfac(i,j)*                        &
+     &                                AVERAGE(ng)%avghsn(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1420,8 +1458,8 @@
         IF (Aout(idIagei,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgageice(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgageice(i,j)
+              AVERAGE(ng)%avgageice(i,j)=rfac(i,j)*                     &
+     &                                   AVERAGE(ng)%avgageice(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1441,8 +1479,8 @@
         IF (Aout(idItice,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgtis(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgtis(i,j)
+              AVERAGE(ng)%avgtis(i,j)=rfac(i,j)*                        &
+     &                                AVERAGE(ng)%avgtis(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1462,8 +1500,8 @@
         IF (Aout(idItmid,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgti(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgti(i,j)
+              AVERAGE(ng)%avgti(i,j)=rfac(i,j)*                         &
+     &                               AVERAGE(ng)%avgti(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1483,8 +1521,8 @@
         IF (Aout(idIt2ic,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgt2(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgt2(i,j)
+              AVERAGE(ng)%avgt2(i,j)=rfac(i,j)*                         &
+     &                               AVERAGE(ng)%avgt2(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1567,8 +1605,8 @@
         IF (Aout(idIutau,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgutau_iw(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgutau_iw(i,j)
+              AVERAGE(ng)%avgutau_iw(i,j)=rfac(i,j)*                    &
+     &                                    AVERAGE(ng)%avgutau_iw(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1588,8 +1626,8 @@
         IF (Aout(idImchu,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgchu_iw(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgchu_iw(i,j)
+              AVERAGE(ng)%avgchu_iw(i,j)=rfac(i,j)*                     &
+     &                                   AVERAGE(ng)%avgchu_iw(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1609,8 +1647,8 @@
         IF (Aout(idIt0mk,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgt0mk(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgt0mk(i,j)
+              AVERAGE(ng)%avgt0mk(i,j)=rfac(i,j)*                       &
+     &                                 AVERAGE(ng)%avgt0mk(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1630,8 +1668,8 @@
         IF (Aout(idIs0mk,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgs0mk(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgs0mk(i,j)
+              AVERAGE(ng)%avgs0mk(i,j)=rfac(i,j)*                       &
+     &                                 AVERAGE(ng)%avgs0mk(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1651,8 +1689,8 @@
         IF (Aout(idImflx,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgiomflx(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgiomflx(i,j)
+              AVERAGE(ng)%avgiomflx(i,j)=rfac(i,j)*                     &
+     &                                   AVERAGE(ng)%avgiomflx(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1672,8 +1710,8 @@
         IF (Aout(idIwfr,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgwfr(i,j)=rfac(i,j)*                       &
-     &                                 AVERAGE(ng)%avgwfr(i,j)
+              AVERAGE(ng)%avgwfr(i,j)=rfac(i,j)*                        &
+     &                                AVERAGE(ng)%avgwfr(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1693,8 +1731,8 @@
         IF (Aout(idIwai,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgwai(i,j)=rfac(i,j)*                       &
-     &                                 AVERAGE(ng)%avgwai(i,j)
+              AVERAGE(ng)%avgwai(i,j)=rfac(i,j)*                        &
+     &                                AVERAGE(ng)%avgwai(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1714,8 +1752,8 @@
         IF (Aout(idIwao,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgwao(i,j)=rfac(i,j)*                       &
-     &                                 AVERAGE(ng)%avgwao(i,j)
+              AVERAGE(ng)%avgwao(i,j)=rfac(i,j)*                        &
+     &                                AVERAGE(ng)%avgwao(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1735,8 +1773,8 @@
         IF (Aout(idIwio,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgwio(i,j)=rfac(i,j)*                       &
-     &                                 AVERAGE(ng)%avgwio(i,j)
+              AVERAGE(ng)%avgwio(i,j)=rfac(i,j)*                        &
+     &                                AVERAGE(ng)%avgwio(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1756,8 +1794,8 @@
         IF (Aout(idIwro,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgwro(i,j)=rfac(i,j)*                       &
-     &                                 AVERAGE(ng)%avgwro(i,j)
+              AVERAGE(ng)%avgwro(i,j)=rfac(i,j)*                        &
+     &                                AVERAGE(ng)%avgwro(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1777,8 +1815,8 @@
         IF (Aout(idIwdiv,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgwdiv(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgwdiv(i,j)
+              AVERAGE(ng)%avgwdiv(i,j)=rfac(i,j)*                       &
+     &                                 AVERAGE(ng)%avgwdiv(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1800,8 +1838,8 @@
         IF (Aout(idIalbe,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgalb(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgalb(i,j)
+              AVERAGE(ng)%avgalb(i,j)=rfac(i,j)*                        &
+     &                                AVERAGE(ng)%avgalb(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1971,8 +2009,8 @@
         IF (Aout(idIlrup,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avglr_up_i(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avglr_up_i(i,j)
+              AVERAGE(ng)%avglr_up_i(i,j)=rfac(i,j)*                    &
+     &                                    AVERAGE(ng)%avglr_up_i(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -1992,8 +2030,8 @@
         IF (Aout(idIsrup,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsr_up_i(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgsr_up_i(i,j)
+              AVERAGE(ng)%avgsr_up_i(i,j)=rfac(i,j)*                    &
+     &                                    AVERAGE(ng)%avgsr_up_i(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -2013,8 +2051,8 @@
         IF (Aout(idIsrin,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsr_in_i(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgsr_in_i(i,j)
+              AVERAGE(ng)%avgsr_in_i(i,j)=rfac(i,j)*                    &
+     &                                    AVERAGE(ng)%avgsr_in_i(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -2034,8 +2072,8 @@
         IF (Aout(idIsrth,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsr_th_i(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgsr_th_i(i,j)
+              AVERAGE(ng)%avgsr_th_i(i,j)=rfac(i,j)*                    &
+     &                                    AVERAGE(ng)%avgsr_th_i(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -2055,8 +2093,8 @@
         IF (Aout(idIsfI,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgssflx_i(i,j)=rfac(i,j)*                       &
-     &                                 AVERAGE(ng)%avgssflx_i(i,j)
+              AVERAGE(ng)%avgssflx_i(i,j)=rfac(i,j)*                    &
+     &                                    AVERAGE(ng)%avgssflx_i(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -2076,8 +2114,8 @@
         IF (Aout(idIsfL,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgssflx_l(i,j)=rfac(i,j)*                       &
-     &                                 AVERAGE(ng)%avgssflx_l(i,j)
+              AVERAGE(ng)%avgssflx_l(i,j)=rfac(i,j)*                    &
+     &                                    AVERAGE(ng)%avgssflx_l(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -2097,8 +2135,8 @@
         IF (Aout(idIqao,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgqao_n(i,j)=rfac(i,j)*                       &
-     &                                 AVERAGE(ng)%avgqao_n(i,j)
+              AVERAGE(ng)%avgqao_n(i,j)=rfac(i,j)*                      &
+     &                                  AVERAGE(ng)%avgqao_n(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -2118,8 +2156,8 @@
         IF (Aout(idIqai,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgqai_n(i,j)=rfac(i,j)*                       &
-     &                                 AVERAGE(ng)%avgqai_n(i,j)
+              AVERAGE(ng)%avgqai_n(i,j)=rfac(i,j)*                      &
+     &                                  AVERAGE(ng)%avgqai_n(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -2139,8 +2177,8 @@
         IF (Aout(idIqio,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgqio_n(i,j)=rfac(i,j)*                       &
-     &                                 AVERAGE(ng)%avgqio_n(i,j)
+              AVERAGE(ng)%avgqio_n(i,j)=rfac(i,j)*                      &
+     &                                  AVERAGE(ng)%avgqio_n(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -2160,8 +2198,8 @@
         IF (Aout(idIqi2,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgqi2_n(i,j)=rfac(i,j)*                       &
-     &                                 AVERAGE(ng)%avgqi2_n(i,j)
+              AVERAGE(ng)%avgqi2_n(i,j)=rfac(i,j)*                      &
+     &                                  AVERAGE(ng)%avgqi2_n(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -2181,8 +2219,8 @@
         IF (Aout(idIsnoi,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsnoice(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgsnoice(i,j)
+              AVERAGE(ng)%avgsnoice(i,j)=rfac(i,j)*                     &
+     &                                   AVERAGE(ng)%avgsnoice(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -2205,8 +2243,8 @@
         IF (Aout(idIsMr,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgm(i,j)=rfac(i,j)*                       &
-     &                                 AVERAGE(ng)%avgm(i,j)
+              AVERAGE(ng)%avgm(i,j)=rfac(i,j)*                          &
+     &                              AVERAGE(ng)%avgm(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -2227,8 +2265,8 @@
         IF (Aout(idIsTs,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgTstar(i,j)=rfac(i,j)*                       &
-     &                                 AVERAGE(ng)%avgTstar(i,j)
+              AVERAGE(ng)%avgTstar(i,j)=rfac(i,j)*                      &
+     &                                  AVERAGE(ng)%avgTstar(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -2248,8 +2286,8 @@
         IF (Aout(idIsUs,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgUstar(i,j)=rfac(i,j)*                       &
-     &                                 AVERAGE(ng)%avgUstar(i,j)
+              AVERAGE(ng)%avgUstar(i,j)=rfac(i,j)*                      &
+     &                                  AVERAGE(ng)%avgUstar(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -2269,8 +2307,8 @@
         IF (Aout(idIsTb,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgTb(i,j)=rfac(i,j)*                       &
-     &                                 AVERAGE(ng)%avgTb(i,j)
+              AVERAGE(ng)%avgTb(i,j)=rfac(i,j)*                         &
+     &                               AVERAGE(ng)%avgTb(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -2290,8 +2328,8 @@
         IF (Aout(idIsSb,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgSb(i,j)=rfac(i,j)*                       &
-     &                                 AVERAGE(ng)%avgSb(i,j)
+              AVERAGE(ng)%avgSb(i,j)=rfac(i,j)*                         &
+     &                               AVERAGE(ng)%avgSb(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -2313,8 +2351,8 @@
         IF (Aout(idIsDrft,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgzice(i,j)=rfac(i,j)*                     &
-     &                                   AVERAGE(ng)%avgzice(i,j)
+              AVERAGE(ng)%avgzice(i,j)=rfac(i,j)*                       &
+     &                                 AVERAGE(ng)%avgzice(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -2336,8 +2374,8 @@
         IF (Aout(idIsSOFs,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgSOFs(i,j)=rfac(i,j)*                     &
-     &                                   AVERAGE(ng)%avgSOFs(i,j)
+              AVERAGE(ng)%avgSOFs(i,j)=rfac(i,j)*                       &
+     &                                 AVERAGE(ng)%avgSOFs(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
@@ -2357,8 +2395,8 @@
         IF (Aout(idIsSOFh,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgSOFh(i,j)=rfac(i,j)*                     &
-     &                                   AVERAGE(ng)%avgSOFh(i,j)
+              AVERAGE(ng)%avgSOFh(i,j)=rfac(i,j)*                       &
+     &                                 AVERAGE(ng)%avgSOFh(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
