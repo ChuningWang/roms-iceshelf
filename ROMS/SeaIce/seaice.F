@@ -39,7 +39,7 @@
       implicit none
 
       integer :: tile
-      integer :: ig, ng, nl, my_ievp, nelas
+      integer :: ig, ng, nl, my_ievp
       real(r8), parameter :: dt_large = 1.0E+23_r8
 
       NEST_LAYER : DO nl=1,NestLayers
@@ -76,14 +76,13 @@
 
         DO ig=1,GridsInLayer(nl)
           ng=GridNumber(ig,nl)
-          nelas = nevp(ng)
 
           liuol(ng) = liunw(ng)
           liunw(ng) = 3-liuol(ng)
 
           dte(ng) = dtice(ng)/FLOAT(nevp(ng))
 
-          DO my_ievp=1,nelas
+          DO my_ievp=1,nevp(ng)
 
             lieol(ng) = lienw(ng)
             lienw(ng) = 3-lieol(ng)

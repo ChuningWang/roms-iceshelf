@@ -8,6 +8,9 @@
      &     (MOD(iic(ng)-1,nAVG(ng)).eq.1)).or.                          &
      &    ((iic(ng).ge.ntsAVG(ng)).and.(nAVG(ng).eq.1)).or.             &
      &    ((nrrec(ng).gt.0).and.(iic(ng).eq.ntstart(ng)))) THEN
+!
+!  Initialize state variables.
+!
 #  ifdef ICE_MODEL
         IF (Aout(idIuice,ng)) THEN
           DO j=JstrR,JendR
@@ -645,6 +648,9 @@
 !
       ELSE IF (iic(ng).gt.ntsAVG(ng)) THEN
 #  ifdef ICE_MODEL
+!
+!  Accumulate state variables.
+!
         IF (Aout(idIuice,ng)) THEN
           DO j=JstrR,JendR
             DO i=Istr,IendR 
@@ -1284,41 +1290,6 @@
      &     (MOD(iic(ng)-1,nAVG(ng)).eq.0).and.                          &
      &     ((iic(ng).ne.ntstart(ng)).or.(nrrec(ng).eq.0))).or.          &
      &    ((iic(ng).ge.ntsAVG(ng)).and.(nAVG(ng).eq.1))) THEN
-        IF (DOMAIN(ng)%SouthWest_Test(tile)) THEN
-          IF (nAVG(ng).eq.1) THEN
-            AVGtime(ng)=time(ng)
-          ELSE
-            AVGtime(ng)=AVGtime(ng)+REAL(nAVG(ng),r8)*dt(ng)
-          END IF
-        END IF
-!
-!  Set time-averaged factors for each C-grid variable type. Notice that
-!  the I- and J-ranges are all grid types are the same for convinience.
-# ifdef WET_DRY
-!  In wetting and drying, the sums are devided by the number of times
-!  that each qrid point is wet.
-# endif
-!
-# ifdef WET_DRY
-        DO j=JstrR,JendR
-          DO i=IstrR,IendR
-            pfac(i,j)=1.0_r8/MAX(1.0_r8, GRID(ng)%pmask_avg(i,j))
-            rfac(i,j)=1.0_r8/MAX(1.0_r8, GRID(ng)%rmask_avg(i,j))
-            ufac(i,j)=1.0_r8/MAX(1.0_r8, GRID(ng)%umask_avg(i,j))
-            vfac(i,j)=1.0_r8/MAX(1.0_r8, GRID(ng)%vmask_avg(i,j))
-          END DO
-        END DO
-# else
-        fac=1.0_r8/REAL(nAVG(ng),r8)
-        DO j=JstrR,JendR
-          DO i=IstrR,IendR
-            pfac(i,j)=fac
-            rfac(i,j)=fac
-            ufac(i,j)=fac
-            vfac(i,j)=fac
-          END DO
-        END DO
-# endif
 !
 !  Process state variables.
 !
