@@ -89,6 +89,10 @@
 #   include <ana_ice.h>
 #  endif
 
+#  if defined ANA_ICE_ADVANCED
+#   include <ana_ice_advanced.h>
+#  endif
+
 #  ifdef ANA_AIOBC
 #   include <ana_aiobc.h>
 #  endif

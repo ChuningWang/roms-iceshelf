@@ -1147,7 +1147,7 @@
     defined ANA_HIOBC   || defined ANA_TIOBC   || \
     defined ANA_SIGOBC  || defined ANA_MIOBC   || \
     defined ANA_AICLIMA || defined ANA_SICLIMA || \
-    defined ANA_MICLIMA
+    defined ANA_MICLIMA || defined ANA_ICE_ADVANCED
 # define ANALYTICAL
 #endif
 
