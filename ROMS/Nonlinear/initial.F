@@ -375,7 +375,8 @@
       END DO
 #endif
 
-#if defined ICE_MODEL && defined ANA_ICE
+#ifdef ICE_MODEL
+# ifdef ANA_ICE
 !
 !  Analytical initial conditions for sea ice.
 !
@@ -387,6 +388,16 @@
 !$OMP BARRIER
         END IF
       END DO
+# elif defined ANA_ICE_ADVANCED
+      DO ng=1,Ngrids
+        IF (nrrec(ng).eq.0) THEN
+          DO tile=first_tile(ng),last_tile(ng),+1
+            CALL ana_ice_advanced (ng, TILE, iNLM)
+          END DO
+!$OMP BARRIER
+        END IF
+      END DO
+# endif
 #endif
 
 #if defined ANA_PASSIVE && defined SOLVE3D
