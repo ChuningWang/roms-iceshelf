@@ -21,7 +21,7 @@
                 ioDesc => ioDesc_sp_rubar(ng)
               END IF
               status=nf_fread3d(ng, IDmod, ncname, pioFile,             &
-     &                          Vname(1,idFsur), my_pioVar,             &
+     &                          Vname(1,idIuice), my_pioVar,            &
      &                          InpRec, ioDesc, Vsize,                  &
      &                          LBi, UBi, LBj, UBj, 1, 2,               &
      &                          Fscl, Fmin, Fmax,                       &
@@ -43,7 +43,7 @@
                 ioDesc => ioDesc_sp_u2dvar(ng)
               END IF
               status=nf_fread2d(ng, IDmod, ncname, pioFile,             &
-     &                          Vname(1,idFsur), my_pioVar,             &
+     &                          Vname(1,idIuice), my_pioVar,            &
      &                          InpRec, ioDesc, Vsize,                  &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          Fscl, Fmin, Fmax,                       &
@@ -106,7 +106,7 @@
                 ioDesc => ioDesc_sp_rvbar(ng)
               END IF
               status=nf_fread3d(ng, IDmod, ncname, pioFile,             &
-     &                          Vname(1,idFsur), my_pioVar,             &
+     &                          Vname(1,idIvice), my_pioVar,            &
      &                          InpRec, ioDesc, Vsize,                  &
      &                          LBi, UBi, LBj, UBj, 1, 2,               &
      &                          Fscl, Fmin, Fmax,                       &
@@ -128,7 +128,7 @@
                 ioDesc => ioDesc_sp_v2dvar(ng)
               END IF
               status=nf_fread2d(ng, IDmod, ncname, pioFile,             &
-     &                          Vname(1,idFsur), my_pioVar,             &
+     &                          Vname(1,idIvice), my_pioVar,            &
      &                          InpRec, ioDesc, Vsize,                  &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          Fscl, Fmin, Fmax,                       &
@@ -191,7 +191,7 @@
                 ioDesc => ioDesc_sp_rzeta(ng)
               END IF
               status=nf_fread3d(ng, IDmod, ncname, pioFile,             &
-     &                          Vname(1,idFsur), my_pioVar,             &
+     &                          Vname(1,idIaice), my_pioVar,            &
      &                          InpRec, ioDesc, Vsize,                  &
      &                          LBi, UBi, LBj, UBj, 1, 2,               &
      &                          Fscl, Fmin, Fmax,                       &
@@ -213,7 +213,7 @@
                 ioDesc => ioDesc_sp_r2dvar(ng)
               END IF
               status=nf_fread2d(ng, IDmod, ncname, pioFile,             &
-     &                          Vname(1,idFsur), my_pioVar,             &
+     &                          Vname(1,idIaice), my_pioVar,            &
      &                          InpRec, ioDesc, Vsize,                  &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          Fscl, Fmin, Fmax,                       &
@@ -276,7 +276,7 @@
                 ioDesc => ioDesc_sp_rzeta(ng)
               END IF
               status=nf_fread3d(ng, IDmod, ncname, pioFile,             &
-     &                          Vname(1,idFsur), my_pioVar,             &
+     &                          Vname(1,idIhice), my_pioVar,            &
      &                          InpRec, ioDesc, Vsize,                  &
      &                          LBi, UBi, LBj, UBj, 1, 2,               &
      &                          Fscl, Fmin, Fmax,                       &
@@ -298,7 +298,7 @@
                 ioDesc => ioDesc_sp_r2dvar(ng)
               END IF
               status=nf_fread2d(ng, IDmod, ncname, pioFile,             &
-     &                          Vname(1,idFsur), my_pioVar,             &
+     &                          Vname(1,idIhice), my_pioVar,            &
      &                          InpRec, ioDesc, Vsize,                  &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          Fscl, Fmin, Fmax,                       &
@@ -361,7 +361,7 @@
                 ioDesc => ioDesc_sp_rzeta(ng)
               END IF
               status=nf_fread3d(ng, IDmod, ncname, pioFile,             &
-     &                          Vname(1,idFsur), my_pioVar,             &
+     &                          Vname(1,idIhsno), my_pioVar,            &
      &                          InpRec, ioDesc, Vsize,                  &
      &                          LBi, UBi, LBj, UBj, 1, 2,               &
      &                          Fscl, Fmin, Fmax,                       &
@@ -383,7 +383,7 @@
                 ioDesc => ioDesc_sp_r2dvar(ng)
               END IF
               status=nf_fread2d(ng, IDmod, ncname, pioFile,             &
-     &                          Vname(1,idFsur), my_pioVar,             &
+     &                          Vname(1,idIhsno), my_pioVar,            &
      &                          InpRec, ioDesc, Vsize,                  &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          Fscl, Fmin, Fmax,                       &
@@ -446,7 +446,7 @@
                 ioDesc => ioDesc_sp_rzeta(ng)
               END IF
               status=nf_fread3d(ng, IDmod, ncname, pioFile,             &
-     &                          Vname(1,idFsur), my_pioVar,             &
+     &                          Vname(1,idIagei), my_pioVar,            &
      &                          InpRec, ioDesc, Vsize,                  &
      &                          LBi, UBi, LBj, UBj, 1, 2,               &
      &                          Fscl, Fmin, Fmax,                       &
@@ -468,7 +468,7 @@
                 ioDesc => ioDesc_sp_r2dvar(ng)
               END IF
               status=nf_fread2d(ng, IDmod, ncname, pioFile,             &
-     &                          Vname(1,idFsur), my_pioVar,             &
+     &                          Vname(1,idIagei), my_pioVar,            &
      &                          InpRec, ioDesc, Vsize,                  &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          Fscl, Fmin, Fmax,                       &
@@ -530,7 +530,7 @@
               ioDesc => ioDesc_sp_r2dvar(ng)
             END IF
             status=nf_fread2d(ng, IDmod, ncname, pioFile,               &
-     &                        Vname(1,idFsur), my_pioVar,               &
+     &                        Vname(1,idItice), my_pioVar,              &
      &                        InpRec, ioDesc, Vsize,                    &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        Fscl, Fmin, Fmax,                         &
@@ -592,7 +592,7 @@
                 ioDesc => ioDesc_sp_rzeta(ng)
               END IF
               status=nf_fread3d(ng, IDmod, ncname, pioFile,             &
-     &                          Vname(1,idFsur), my_pioVar,             &
+     &                          Vname(1,idItmid), my_pioVar,            &
      &                          InpRec, ioDesc, Vsize,                  &
      &                          LBi, UBi, LBj, UBj, 1, 2,               &
      &                          Fscl, Fmin, Fmax,                       &
@@ -614,7 +614,7 @@
                 ioDesc => ioDesc_sp_r2dvar(ng)
               END IF
               status=nf_fread2d(ng, IDmod, ncname, pioFile,             &
-     &                          Vname(1,idFsur), my_pioVar,             &
+     &                          Vname(1,idItmid), my_pioVar,            &
      &                          InpRec, ioDesc, Vsize,                  &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          Fscl, Fmin, Fmax,                       &
@@ -677,7 +677,7 @@
                 ioDesc => ioDesc_sp_rzeta(ng)
               END IF
               status=nf_fread3d(ng, IDmod, ncname, pioFile,             &
-     &                          Vname(1,idFsur), my_pioVar,             &
+     &                          Vname(1,idIsg11), my_pioVar,            &
      &                          InpRec, ioDesc, Vsize,                  &
      &                          LBi, UBi, LBj, UBj, 1, 2,               &
      &                          Fscl, Fmin, Fmax,                       &
@@ -699,7 +699,7 @@
                 ioDesc => ioDesc_sp_r2dvar(ng)
               END IF
               status=nf_fread2d(ng, IDmod, ncname, pioFile,             &
-     &                          Vname(1,idFsur), my_pioVar,             &
+     &                          Vname(1,idIsg11), my_pioVar,            &
      &                          InpRec, ioDesc, Vsize,                  &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          Fscl, Fmin, Fmax,                       &
@@ -762,7 +762,7 @@
                 ioDesc => ioDesc_sp_rzeta(ng)
               END IF
               status=nf_fread3d(ng, IDmod, ncname, pioFile,             &
-     &                          Vname(1,idFsur), my_pioVar,             &
+     &                          Vname(1,idIsg12), my_pioVar,            &
      &                          InpRec, ioDesc, Vsize,                  &
      &                          LBi, UBi, LBj, UBj, 1, 2,               &
      &                          Fscl, Fmin, Fmax,                       &
@@ -784,7 +784,7 @@
                 ioDesc => ioDesc_sp_r2dvar(ng)
               END IF
               status=nf_fread2d(ng, IDmod, ncname, pioFile,             &
-     &                          Vname(1,idFsur), my_pioVar,             &
+     &                          Vname(1,idIsg12), my_pioVar,            &
      &                          InpRec, ioDesc, Vsize,                  &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          Fscl, Fmin, Fmax,                       &
@@ -847,7 +847,7 @@
                 ioDesc => ioDesc_sp_rzeta(ng)
               END IF
               status=nf_fread3d(ng, IDmod, ncname, pioFile,             &
-     &                          Vname(1,idFsur), my_pioVar,             &
+     &                          Vname(1,idIsg22), my_pioVar,            &
      &                          InpRec, ioDesc, Vsize,                  &
      &                          LBi, UBi, LBj, UBj, 1, 2,               &
      &                          Fscl, Fmin, Fmax,                       &
@@ -869,7 +869,7 @@
                 ioDesc => ioDesc_sp_r2dvar(ng)
               END IF
               status=nf_fread2d(ng, IDmod, ncname, pioFile,             &
-     &                          Vname(1,idFsur), my_pioVar,             &
+     &                          Vname(1,idIsg22), my_pioVar,            &
      &                          InpRec, ioDesc, Vsize,                  &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          Fscl, Fmin, Fmax,                       &
@@ -931,7 +931,7 @@
               ioDesc => ioDesc_sp_r2dvar(ng)
             END IF
             status=nf_fread2d(ng, IDmod, ncname, pioFile,               &
-     &                        Vname(1,idFsur), my_pioVar,               &
+     &                        Vname(1,idIutau), my_pioVar,              &
      &                        InpRec, ioDesc, Vsize,                    &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        Fscl, Fmin, Fmax,                         &
@@ -992,7 +992,7 @@
               ioDesc => ioDesc_sp_r2dvar(ng)
             END IF
             status=nf_fread2d(ng, IDmod, ncname, pioFile,               &
-     &                        Vname(1,idFsur), my_pioVar,               &
+     &                        Vname(1,idImchu), my_pioVar,              &
      &                        InpRec, ioDesc, Vsize,                    &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        Fscl, Fmin, Fmax,                         &
@@ -1053,7 +1053,7 @@
               ioDesc => ioDesc_sp_r2dvar(ng)
             END IF
             status=nf_fread2d(ng, IDmod, ncname, pioFile,               &
-     &                        Vname(1,idFsur), my_pioVar,               &
+     &                        Vname(1,idIt0mk), my_pioVar,              &
      &                        InpRec, ioDesc, Vsize,                    &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        Fscl, Fmin, Fmax,                         &
@@ -1114,7 +1114,7 @@
               ioDesc => ioDesc_sp_r2dvar(ng)
             END IF
             status=nf_fread2d(ng, IDmod, ncname, pioFile,               &
-     &                        Vname(1,idFsur), my_pioVar,               &
+     &                        Vname(1,idIs0mk), my_pioVar,              &
      &                        InpRec, ioDesc, Vsize,                    &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        Fscl, Fmin, Fmax,                         &
@@ -1244,7 +1244,7 @@
               ioDesc => ioDesc_sp_r2dvar(ng)
             END IF
             status=nf_fread2d(ng, IDmod, ncname, pioFile,               &
-     &                        Vname(1,idFsur), my_pioVar,               &
+     &                        Vname(1,idUsms), my_pioVar,               &
      &                        InpRec, ioDesc, Vsize,                    &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        Fscl, Fmin, Fmax,                         &
@@ -1305,7 +1305,7 @@
               ioDesc => ioDesc_sp_r2dvar(ng)
             END IF
             status=nf_fread2d(ng, IDmod, ncname, pioFile,               &
-     &                        Vname(1,idFsur), my_pioVar,               &
+     &                        Vname(1,idVsms), my_pioVar,               &
      &                        InpRec, ioDesc, Vsize,                    &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        Fscl, Fmin, Fmax,                         &
@@ -1370,7 +1370,7 @@
               ioDesc => ioDesc_sp_r2dvar(ng)
             END IF
             status=nf_fread2d(ng, IDmod, ncname, pioFile,               &
-     &                        Vname(1,idFsur), my_pioVar,               &
+     &                        Vname(1,idIsDrft), my_pioVar,             &
      &                        InpRec, ioDesc, Vsize,                    &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        Fscl, Fmin, Fmax,                         &
@@ -1433,7 +1433,7 @@
               ioDesc => ioDesc_sp_r2dvar(ng)
             END IF
             status=nf_fread2d(ng, IDmod, ncname, pioFile,               &
-     &                        Vname(1,idFsur), my_pioVar,               &
+     &                        Vname(1,idIsVol), my_pioVar,              &
      &                        InpRec, ioDesc, Vsize,                    &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        Fscl, Fmin, Fmax,                         &
@@ -1532,16 +1532,16 @@
 #   endif
                 END IF
               END IF
-            END IF
-          ELSE
-            IF (Master) THEN
-              WRITE (stdout,80) string, TRIM(Vname(1,idIsTrc(itrc))),   &
-     &                          TRIM(ncname)
-            END IF
-            exit_flag=4
-            IF (FoundError(exit_flag, PIO_noerr,                        &
-     &                     __LINE__, MyFile)) THEN
-              RETURN
+            ELSE
+              IF (Master) THEN
+                WRITE (stdout,80) string, TRIM(Vname(1,idIsTrc(itrc))), &
+     &                            TRIM(ncname)
+              END IF
+              exit_flag=4
+              IF (FoundError(exit_flag, PIO_noerr,                      &
+     &                       __LINE__, MyFile)) THEN
+                RETURN
+              END IF
             END IF
           END IF
         END DO
