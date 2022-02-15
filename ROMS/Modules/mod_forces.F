@@ -482,7 +482,7 @@
 # endif
 # ifdef ICE_LANDFAST_CLM
           real(r8), pointer :: fastice_clm(:,:)
-#  ifndef ANA_ICE
+#  ifndef ANA_LFICE
           real(r8), pointer :: fastice_clmG(:,:,:)
 #  endif
 # endif
@@ -491,7 +491,7 @@
           real(r8), pointer :: alb(:,:)
           real(r8), pointer :: alb_i(:,:)
 #   ifdef ICE_ALB_CSIM
-          real(r8), pointer :: frswpen(:,:)
+          real(r8), pointer :: frswp(:,:)
 #   endif
 #   ifdef ICE_ALB_DIRDIFF
           real(r8), pointer :: cawdir(:,:)
@@ -1036,7 +1036,7 @@
 # if defined ICE_LANDFAST_CLM
       allocate ( FORCES(ng) % fastice_clm(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-#  ifndef ANA_ICE
+#  ifndef ANA_LFICE
       allocate ( FORCES(ng) % fastice_clmG(LBi:UBi,LBj:UBj,2) )
       Dmem(ng)=Dmem(ng)+2.0_r8*size2d
 #  endif
@@ -1048,7 +1048,7 @@
       allocate ( FORCES(ng) % alb_i(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
 #   ifdef ICE_ALB_CSIM
-      allocate ( FORCES(ng) % frswpen(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % frswp(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
 #   endif
 #   ifdef ICE_ALB_DIRDIFF
@@ -1622,7 +1622,7 @@
       IF (.not.destroy(ng, FORCES(ng)%fastice_clim, MyFile,             &
      &                 __LINE__, 'FORCES(ng)%fastice_clim')) RETURN
 
-#   ifndef ANA_ICE
+#   ifndef ANA_LFICE
       IF (.not.destroy(ng, FORCES(ng)%fastice_climG, MyFile,            &
      &                 __LINE__, 'FORCES(ng)%fastice_climG')) RETURN
 #   endif
@@ -1637,8 +1637,8 @@
      &                 __LINE__, 'FORCES(ng)%alb_i')) RETURN
 #    ifdef ICE_ALB_CSIM
 
-      IF (.not.destroy(ng, FORCES(ng)%frswpen, MyFile,                  &
-     &                 __LINE__, 'FORCES(ng)%frswpen')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%frswp, MyFile,                    &
+     &                 __LINE__, 'FORCES(ng)%frswp')) RETURN
 #    endif
 #    ifdef ICE_ALB_DIRDIFF
 
@@ -2160,7 +2160,7 @@
 # endif
 # if defined ICE_LANDFAST_CLM
             FORCES(ng) % fastice_clm(i,j) = IniVal
-#  ifndef ANA_ICE
+#  ifndef ANA_LFICE
             FORCES(ng) % fastice_clmG(i,j,1) = IniVal
             FORCES(ng) % fastice_clmG(i,j,2) = IniVal
 #  endif
@@ -2170,7 +2170,7 @@
             FORCES(ng) % alb(i,j) = IniVal
             FORCES(ng) % alb_i(i,j) = IniVal
 #   ifdef ICE_ALB_CSIM
-            FORCES(ng) % frswpen(i,j) = IniVal
+            FORCES(ng) % frswp(i,j) = IniVal
 #   endif
 #   ifdef ICE_ALB_DIRDIFF
             FORCES(ng) % cawdir(i,j) = IniVal

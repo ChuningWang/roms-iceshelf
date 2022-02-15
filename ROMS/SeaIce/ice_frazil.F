@@ -207,6 +207,16 @@
                 t(i,j,k,nnew,isalt) = t(i,j,k,nnew,isalt) *             &
      &            (1.0_r8 + gamma_k)
               END IF
+!
+! Sanity check.
+!
+              IF (wfr(i,j) .lt. 0.0_r8) THEN
+                WRITE(stdout,*) 'Trouble in ice_frazil', i, j, k,       &
+       &         t(i,j,k,nnew,itemp), t(i,j,k,nnew,isalt),              &
+       &         t_fr, wfr(i,j), gamma_k, Hz(i,j,k)
+                exit_flag = 10
+              END IF
+!
 # ifdef T_PASSIVE
               cff = delta_wfr*ice_dens/(rho0+rho(i,j,k))
               DO itrc=NAT+1,NT(ng)
@@ -220,13 +230,6 @@
           END DO
 !
           wfr(i,j) = wfr(i,j)/dt(ng)
-          IF (wfr(i,j) .lt. 0.0_r8) THEN
-            WRITE(stdout,*) 'Trouble in ice_frazil', i, j, k,           &
-     &       t(i,j,k,nnew,itemp), t(i,j,k,nnew,isalt),                  &
-     &       t_fr, wfr(i,j), gamma_k, Hz(i,j,k)
-            exit_flag = 10
-          END IF
-!
         END DO
       END DO
 !

@@ -1227,7 +1227,7 @@
 # endif
 
 # ifdef ICE_MODEL
-# if defined ICE_LANDFAST_CLM && !defined ANA_ICE
+# if defined ICE_LANDFAST_CLM && !defined ANA_LFICE
 !
 ! Landfast ice climatology.
 !
@@ -1541,7 +1541,7 @@
       END IF
 #  endif
 
-#  ifndef ANA_SIGOBC
+#  ifndef ANA_SIGIOBC
       IF (.not.(RefinedGrid(ng).and.RefineScale(ng).gt.0)) THEN
         IF (LBC(iwest,isIsig,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idS11bc(iwest),                     &

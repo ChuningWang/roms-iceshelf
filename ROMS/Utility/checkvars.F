@@ -242,42 +242,33 @@
 !  Determine ice model fields to read from input NetCDF file.
 !-----------------------------------------------------------------------
 !
-# ifdef ANA_ICE
+# ifdef ANA_AICE
         IF (nrrec(ng).ne.0) THEN
           get_var(idIaice)=.TRUE.
-          get_var(idIhice)=.TRUE.
-          get_var(idIuice)=.TRUE.
-          get_var(idIvice)=.TRUE.
-          get_var(idIhsno)=.TRUE.
-          get_var(idIagei)=.TRUE.
-          get_var(idItice)=.TRUE.
-          get_var(idItmid)=.TRUE.
-          get_var(idIsg11)=.TRUE.
-          get_var(idIsg22)=.TRUE.
-          get_var(idIsg12)=.TRUE.
-          get_var(idIutau)=.TRUE.
-          get_var(idImchu)=.TRUE.
-          get_var(idIs0mk)=.TRUE.
-          get_var(idIt0mk)=.TRUE.
-#  ifdef PERFECT_RESTART
-          DO itrc=1,NAT
-            get_var(idTsur(itrc))=.TRUE.
-          END DO
-          get_var(idUsms)=.TRUE.
-          get_var(idVsms)=.TRUE.
-#  endif
-        END IF
+        ENDIF
 # else
         get_var(idIaice)=.TRUE.
-        get_var(idIhice)=.TRUE.
-#  ifdef ANA_ICE_ADVANCED
+# endif
+# ifdef ANA_HICE
         IF (nrrec(ng).ne.0) THEN
-          get_var(idIuice)=.TRUE.
-          get_var(idIvice)=.TRUE.
+          get_var(idIhice)=.TRUE.
           get_var(idIhsno)=.TRUE.
-          get_var(idIagei)=.TRUE.
+        ENDIF
+# else
+        get_var(idIhice)=.TRUE.
+        get_var(idIhsno)=.TRUE.
+# endif
+# ifdef ANA_TICE
+        IF (nrrec(ng).ne.0) THEN
           get_var(idItice)=.TRUE.
           get_var(idItmid)=.TRUE.
+        ENDIF
+# else
+        get_var(idItice)=.TRUE.
+        get_var(idItmid)=.TRUE.
+# endif
+# ifdef ANA_SIGICE
+        IF (nrrec(ng).ne.0) THEN
           get_var(idIsg11)=.TRUE.
           get_var(idIsg22)=.TRUE.
           get_var(idIsg12)=.TRUE.
@@ -285,21 +276,9 @@
           get_var(idImchu)=.TRUE.
           get_var(idIs0mk)=.TRUE.
           get_var(idIt0mk)=.TRUE.
-#   ifdef PERFECT_RESTART
-          DO itrc=1,NAT
-            get_var(idTsur(itrc))=.TRUE.
-          END DO
-          get_var(idUsms)=.TRUE.
-          get_var(idVsms)=.TRUE.
-#   endif
-        END IF
-#  else
-        get_var(idIuice)=.TRUE.
-        get_var(idIvice)=.TRUE.
-        get_var(idIhsno)=.TRUE.
-        get_var(idIagei)=.TRUE.
-        get_var(idItice)=.TRUE.
-        get_var(idItmid)=.TRUE.
+          get_var(idIagei)=.TRUE.
+        ENDIF
+# else
         get_var(idIsg11)=.TRUE.
         get_var(idIsg22)=.TRUE.
         get_var(idIsg12)=.TRUE.
@@ -307,7 +286,18 @@
         get_var(idImchu)=.TRUE.
         get_var(idIs0mk)=.TRUE.
         get_var(idIt0mk)=.TRUE.
-#   ifdef PERFECT_RESTART
+        get_var(idIagei)=.TRUE.
+# endif
+# ifdef ANA_MICE
+        IF (nrrec(ng).ne.0) THEN
+          get_var(idIuice)=.TRUE.
+          get_var(idIvice)=.TRUE.
+        ENDIF
+# else
+        get_var(idIuice)=.TRUE.
+        get_var(idIvice)=.TRUE.
+# endif
+# ifdef PERFECT_RESTART
         IF (nrrec(ng).ne.0) THEN
           DO itrc=1,NAT
             get_var(idTsur(itrc))=.TRUE.
@@ -315,8 +305,6 @@
           get_var(idUsms)=.TRUE.
           get_var(idVsms)=.TRUE.
         END IF
-#   endif
-#  endif
 # endif
 #endif
 #ifdef ICESHELF
@@ -1250,42 +1238,33 @@
 !  Determine ice model fields to read from input NetCDF file.
 !-----------------------------------------------------------------------
 !
-#  ifdef ANA_ICE
+#  ifdef ANA_AICE
         IF (nrrec(ng).ne.0) THEN
           get_var(idIaice)=.TRUE.
-          get_var(idIhice)=.TRUE.
-          get_var(idIuice)=.TRUE.
-          get_var(idIvice)=.TRUE.
-          get_var(idIhsno)=.TRUE.
-          get_var(idIagei)=.TRUE.
-          get_var(idItice)=.TRUE.
-          get_var(idItmid)=.TRUE.
-          get_var(idIsg11)=.TRUE.
-          get_var(idIsg22)=.TRUE.
-          get_var(idIsg12)=.TRUE.
-          get_var(idIutau)=.TRUE.
-          get_var(idImchu)=.TRUE.
-          get_var(idIs0mk)=.TRUE.
-          get_var(idIt0mk)=.TRUE.
-#   ifdef PERFECT_RESTART
-          DO itrc=1,NAT
-            get_var(idTsur(itrc))=.TRUE.
-          END DO
-          get_var(idUsms)=.TRUE.
-          get_var(idVsms)=.TRUE.
-#   endif
-        END IF
+        ENDIF
 #  else
         get_var(idIaice)=.TRUE.
-        get_var(idIhice)=.TRUE.
-#   ifdef ANA_ICE_ADVANCED
+#  endif
+#  ifdef ANA_HICE
         IF (nrrec(ng).ne.0) THEN
-          get_var(idIuice)=.TRUE.
-          get_var(idIvice)=.TRUE.
+          get_var(idIhice)=.TRUE.
           get_var(idIhsno)=.TRUE.
-          get_var(idIagei)=.TRUE.
+        ENDIF
+#  else
+        get_var(idIhice)=.TRUE.
+        get_var(idIhsno)=.TRUE.
+#  endif
+#  ifdef ANA_TICE
+        IF (nrrec(ng).ne.0) THEN
           get_var(idItice)=.TRUE.
           get_var(idItmid)=.TRUE.
+        ENDIF
+#  else
+        get_var(idItice)=.TRUE.
+        get_var(idItmid)=.TRUE.
+#  endif
+#  ifdef ANA_SIGICE
+        IF (nrrec(ng).ne.0) THEN
           get_var(idIsg11)=.TRUE.
           get_var(idIsg22)=.TRUE.
           get_var(idIsg12)=.TRUE.
@@ -1293,21 +1272,9 @@
           get_var(idImchu)=.TRUE.
           get_var(idIs0mk)=.TRUE.
           get_var(idIt0mk)=.TRUE.
-#    ifdef PERFECT_RESTART
-          DO itrc=1,NAT
-            get_var(idTsur(itrc))=.TRUE.
-          END DO
-          get_var(idUsms)=.TRUE.
-          get_var(idVsms)=.TRUE.
-#    endif
-        END IF
-#   else
-        get_var(idIuice)=.TRUE.
-        get_var(idIvice)=.TRUE.
-        get_var(idIhsno)=.TRUE.
-        get_var(idIagei)=.TRUE.
-        get_var(idItice)=.TRUE.
-        get_var(idItmid)=.TRUE.
+          get_var(idIagei)=.TRUE.
+        ENDIF
+#  else
         get_var(idIsg11)=.TRUE.
         get_var(idIsg22)=.TRUE.
         get_var(idIsg12)=.TRUE.
@@ -1315,7 +1282,18 @@
         get_var(idImchu)=.TRUE.
         get_var(idIs0mk)=.TRUE.
         get_var(idIt0mk)=.TRUE.
-#    ifdef PERFECT_RESTART
+        get_var(idIagei)=.TRUE.
+#  endif
+#  ifdef ANA_MICE
+        IF (nrrec(ng).ne.0) THEN
+          get_var(idIuice)=.TRUE.
+          get_var(idIvice)=.TRUE.
+        ENDIF
+#  else
+        get_var(idIuice)=.TRUE.
+        get_var(idIvice)=.TRUE.
+#  endif
+#  ifdef PERFECT_RESTART
         IF (nrrec(ng).ne.0) THEN
           DO itrc=1,NAT
             get_var(idTsur(itrc))=.TRUE.
@@ -1323,8 +1301,6 @@
           get_var(idUsms)=.TRUE.
           get_var(idVsms)=.TRUE.
         END IF
-#    endif
-#   endif
 #  endif
 # endif
 # ifdef ICESHELF

@@ -659,7 +659,7 @@
           real(r8), pointer :: tiG_north(:,:)
 # endif
 
-# ifndef ANA_SIGOBC
+# ifndef ANA_SIGIOBC
           real(r8), pointer :: sig11G_west(:,:)
           real(r8), pointer :: sig11G_east(:,:)
           real(r8), pointer :: sig11G_south(:,:)
@@ -2080,7 +2080,7 @@
         Dmem(ng)=Dmem(ng)+Xsize*2
       END IF
 # endif
-# ifndef ANA_SIGOBC
+# ifndef ANA_SIGIOBC
 !
       IF (LBC(iwest,isIsig,ng)%acquire) THEN
         allocate ( BOUNDARY(ng) % sig11G_west(LBj:UBj,2) )
@@ -3412,7 +3412,7 @@
      &                   __LINE__, 'BOUNDARY(ng)%tiG_north')) RETURN
       END IF
 #  endif
-#  ifndef ANA_SIGOBC
+#  ifndef ANA_SIGIOBC
 !
       IF (LBC(iwest,isIsig,ng)%acquire) THEN
         IF (.not.destroy(ng, BOUNDARY(ng)%sig11G_west, MyFile,          &
@@ -3908,7 +3908,7 @@
           BOUNDARY(ng) % tiG_west = IniVal
         END IF
 # endif
-# ifndef ANA_SIGOBC
+# ifndef ANA_SIGIOBC
         IF (DOMAIN(ng)%NorthWest_Test(tile).and.                        &
      &      LBC(iwest,isIsig,ng)%acquire) THEN
           BOUNDARY(ng) % sig11G_west = IniVal
@@ -3974,7 +3974,7 @@
           BOUNDARY(ng) % tiG_east = IniVal
         END IF
 # endif
-# ifndef ANA_SIGOBC
+# ifndef ANA_SIGIOBC
         IF (DOMAIN(ng)%SouthEast_Test(tile).and.                        &
      &      LBC(ieast,isIsig,ng)%acquire) THEN
           BOUNDARY(ng) % sig11G_east = IniVal
@@ -4040,7 +4040,7 @@
           BOUNDARY(ng) % tiG_south = IniVal
         END IF
 # endif
-# ifndef ANA_SIGOBC
+# ifndef ANA_SIGIOBC
         IF (DOMAIN(ng)%SouthWest_Test(tile).and.                        &
      &      LBC(isouth,isIsig,ng)%acquire) THEN
           BOUNDARY(ng) % sig11G_south = IniVal
@@ -4106,7 +4106,7 @@
           BOUNDARY(ng) % tiG_north = IniVal
         END IF
 # endif
-# ifndef ANA_SIGOBC
+# ifndef ANA_SIGIOBC
         IF (DOMAIN(ng)%NorthEast_Test(tile).and.                        &
      &      LBC(inorth,isIsig,ng)%acquire) THEN
           BOUNDARY(ng) % sig11G_north = IniVal

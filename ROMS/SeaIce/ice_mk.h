@@ -283,7 +283,7 @@
       real(r8), intent(out) :: ssflx_i(LBi:,LBj:)
       real(r8), intent(out) :: qio_n(LBi:,LBj:)
       real(r8), intent(out) :: qi2_n(LBi:,LBj:)
-      real(r8), intent(out) :: snoice(LBi:,LBj:)
+      real(r8), intent(inout) :: snoice(LBi:,LBj:)
 #endif
       real(r8), intent(in) :: sustr(LBi:,LBj:)
       real(r8), intent(in) :: svstr(LBi:,LBj:)
@@ -338,7 +338,7 @@
       real(r8), intent(out) :: ssflx_i(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: qio_n(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: qi2_n(LBi:UBi,LBj:UBj)
-      real(r8), intent(out) :: snoice(LBi:UBi,LBj:UBj)
+      real(r8), intent(inout) :: snoice(LBi:UBi,LBj:UBj)
 #endif
       real(r8), intent(in) :: sustr(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: svstr(LBi:UBi,LBj:UBj)

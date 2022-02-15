@@ -85,12 +85,24 @@
 #ifdef ANALYTICAL
 
 # ifdef ICE_MODEL
-#  if defined ANA_ICE
-#   include <ana_ice.h>
+#  ifdef ANA_AICE
+#   include <ana_aice.h>
 #  endif
 
-#  if defined ANA_ICE_ADVANCED
-#   include <ana_ice_advanced.h>
+#  ifdef ANA_HICE
+#   include <ana_hice.h>
+#  endif
+
+#  ifdef ANA_TICE
+#   include <ana_tice.h>
+#  endif
+
+#  ifdef ANA_SIGICE
+#   include <ana_sigice.h>
+#  endif
+
+#  ifdef ANA_MICE
+#   include <ana_mice.h>
 #  endif
 
 #  ifdef ANA_AIOBC
@@ -105,8 +117,8 @@
 #   include <ana_tiobc.h>
 #  endif
 
-#  ifdef ANA_SIGOBC
-#   include <ana_sigobc.h>
+#  ifdef ANA_SIGIOBC
+#   include <ana_sigiobc.h>
 #  endif
 
 #  ifdef ANA_MIOBC

@@ -57,7 +57,7 @@
      &                  ICE(ng) % tis,                                  &
 # endif
 # ifdef ICE_ALB_CSIM
-     &                  FORCES(ng) % frswpen,                           &
+     &                  FORCES(ng) % frswp,                             &
 # endif
      &                  FORCES(ng) % alb)
 # ifdef PROFILE
@@ -79,7 +79,7 @@
      &                        hsn, tis,                                 &
 # endif
 # ifdef ICE_ALB_CSIM
-     &                        frswpen,                                  &
+     &                        frswp,                                    &
 # endif
      &                        alb)
 !***********************************************************************
@@ -112,7 +112,7 @@
       real(r8), intent(in) :: tis(LBi:,LBj:)
 #  endif
 #  ifdef ICE_ALB_CSIM
-      real(r8), intent(out) :: frswpen(LBi:,LBj:)
+      real(r8), intent(out) :: frswp(LBi:,LBj:)
 #  endif
       real(r8), intent(out) :: alb(LBi:,LBj:)
 
@@ -128,7 +128,7 @@
       real(r8), intent(in) :: tis(LBi:UBi,LBj:UBj)
 #  endif
 #  ifdef ICE_ALB_CSIM
-      real(r8), intent(out) :: frswpen(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: frswp(LBi:UBi,LBj:UBj)
 #  endif
       real(r8), intent(out) :: alb(LBi:UBi,LBj:UBj)
 # endif
@@ -360,9 +360,9 @@
             alb_i(i,j) = fv*alvn + (1.0_r8-fv)*alin
 !
 ! Penetrating fraction of total incident SW
-! (penetrating SW SW_in_ice = frswpen*SW)
+! (penetrating SW SW_in_ice = frswp*SW)
 !
-            frswpen(i,j) = (1.0_r8-alvni)*(1.0_r8-asnow)*i0vis*fv
+            frswp(i,j) = (1.0_r8-alvni)*(1.0_r8-asnow)*i0vis*fv
 !
 ! Note: We assume that only the visual part incident on snow-uncovered
 !       ice can penetrate through the surface layer (if not reflected)
@@ -372,7 +372,7 @@
 !
 ! This should be arbitrary
 !
-            frswpen(i,j) = (1.0_r8-alb_w)*i0vis*fv
+            frswp(i,j) = (1.0_r8-alb_w)*i0vis*fv
           ENDIF
 # else
           cff1 = alb_s_wet - alb_s_dry
@@ -420,7 +420,7 @@
 # ifdef ICE_ALB_CSIM
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
-     &                          frswpen)
+     &                          frswp)
 # endif
       END IF
 # ifdef DISTRIBUTE
@@ -434,7 +434,7 @@
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints,                                 &
      &                    EWperiodic(ng), NSperiodic(ng),               &
-     &                    frswpen)
+     &                    frswp)
 #  endif
 # endif
 

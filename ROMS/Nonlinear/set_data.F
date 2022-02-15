@@ -1608,8 +1608,8 @@
         END IF
 #  endif
 !
-#  ifdef ANA_SIGOBC
-        CALL ana_sigobc (ng, tile, iNLM)
+#  ifdef ANA_SIGIOBC
+        CALL ana_sigiobc (ng, tile, iNLM)
 #  else
         IF (DOMAIN(ng)%SouthWest_Test(tile)) THEN
           IF (LBC(iwest,isIsig,ng)%acquire) THEN
@@ -1707,7 +1707,7 @@
       IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
       FORCES(ng)%alb_i = FORCES(ng)%alb
 #  endif
-#  if defined ICE_LANDFAST_CLM && !defined ANA_ICE
+#  if defined ICE_LANDFAST_CLM && !defined ANA_LFICE
 !
 !  Set landfast ice.
 !

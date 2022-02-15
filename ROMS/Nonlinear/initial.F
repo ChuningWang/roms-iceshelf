@@ -375,31 +375,6 @@
       END DO
 #endif
 
-#ifdef ICE_MODEL
-# ifdef ANA_ICE
-!
-!  Analytical initial conditions for sea ice.
-!
-      DO ng=1,Ngrids
-        IF (nrrec(ng).eq.0) THEN
-          DO tile=first_tile(ng),last_tile(ng),+1
-            CALL ana_ice (ng, TILE, iNLM)
-          END DO
-!$OMP BARRIER
-        END IF
-      END DO
-# elif defined ANA_ICE_ADVANCED
-      DO ng=1,Ngrids
-        IF (nrrec(ng).eq.0) THEN
-          DO tile=first_tile(ng),last_tile(ng),+1
-            CALL ana_ice_advanced (ng, TILE, iNLM)
-          END DO
-!$OMP BARRIER
-        END IF
-      END DO
-# endif
-#endif
-
 #if defined ANA_PASSIVE && defined SOLVE3D
 !
 !  Analytical initial conditions for inert passive tracers.
@@ -475,6 +450,62 @@
           time(ng)=io_time                   ! needed for shared-memory
         END IF
       END DO
+#endif
+
+#ifdef ICE_MODEL
+!
+!  Analytical initial conditions for sea ice.
+!
+# ifdef ANA_AICE
+      DO ng=1,Ngrids
+        IF (nrrec(ng).eq.0) THEN
+          DO tile=first_tile(ng),last_tile(ng),+1
+            CALL ana_aice (ng, tile, iNLM)
+          END DO
+!$OMP BARRIER
+        END IF
+      END DO
+# endif
+# ifdef ANA_HICE
+      DO ng=1,Ngrids
+        IF (nrrec(ng).eq.0) THEN
+          DO tile=first_tile(ng),last_tile(ng),+1
+            CALL ana_hice (ng, tile, iNLM)
+          END DO
+!$OMP BARRIER
+        END IF
+      END DO
+# endif
+# ifdef ANA_TICE
+      DO ng=1,Ngrids
+        IF (nrrec(ng).eq.0) THEN
+          DO tile=first_tile(ng),last_tile(ng),+1
+            CALL ana_tice (ng, tile, iNLM)
+          END DO
+!$OMP BARRIER
+        END IF
+      END DO
+# endif
+# ifdef ANA_SIGICE
+      DO ng=1,Ngrids
+        IF (nrrec(ng).eq.0) THEN
+          DO tile=first_tile(ng),last_tile(ng),+1
+            CALL ana_sigice (ng, tile, iNLM)
+          END DO
+!$OMP BARRIER
+        END IF
+      END DO
+# endif
+# ifdef ANA_MICE
+      DO ng=1,Ngrids
+        IF (nrrec(ng).eq.0) THEN
+          DO tile=first_tile(ng),last_tile(ng),+1
+            CALL ana_mice (ng, tile, iNLM)
+          END DO
+!$OMP BARRIER
+        END IF
+      END DO
+# endif
 #endif
 
 #ifdef WET_DRY

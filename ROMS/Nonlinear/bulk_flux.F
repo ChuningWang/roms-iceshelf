@@ -162,7 +162,7 @@
 #  endif
 #  ifdef ICE_ALBEDO
 #   ifdef ICE_CCSM_SHORTWAVE
-     &                     FORCES(ng) % frswpen,                        &
+     &                     FORCES(ng) % frswp,                          &
 #   endif
      &                     FORCES(ng) % alb,                            &
      &                     FORCES(ng) % alb_i,                          &
@@ -239,7 +239,7 @@
 #  endif
 #  ifdef ICE_ALBEDO
 #   ifdef ICE_CCSM_SHORTWAVE
-     &                           frswpen,                               &
+     &                           frswp,                                 &
 #   endif
      &                           alb,                                   &
      &                           alb_i,                                 &
@@ -358,7 +358,7 @@
 
 #   ifdef ICE_ALBEDO
 #    ifdef ICE_CCSM_SHORTWAVE
-      real(r8), intent(in) :: frswpen(LBi:,LBj:)
+      real(r8), intent(in) :: frswp(LBi:,LBj:)
 #    endif
       real(r8), intent(inout) :: alb(LBi:,LBj:)
       real(r8), intent(inout) :: alb_i(LBi:,LBj:)
@@ -456,7 +456,7 @@
 
 #   ifdef ICE_ALBEDO
 #    ifdef ICE_CCSM_SHORTWAVE
-      real(r8), intent(in) :: frswpen(LBi:UBi,LBj:UBj)
+      real(r8), intent(in) :: frswp(LBi:UBi,LBj:UBj)
 #    endif
       real(r8), intent(inout) :: alb(LBi:UBi,LBj:UBj)
       real(r8), intent(inout) :: alb_i(LBi:UBi,LBj:UBj)
@@ -696,10 +696,10 @@
 !  Note: ICE_ALB_CSIM option is activated if ICE_CCSM_SHORTWAVE is (see
 !        globaldefs.h, albedo.F)
 !
-            i0frac(i,j) = frswpen(i,j)
+            i0frac(i,j) = frswp(i,j)
 !
 !  Note: The attenuation due to snow is here accounted for in
-!        i0frac=frswpen, which uses asnow (see albedo.F)
+!        i0frac=frswp, which uses asnow (see albedo.F)
 !
             cff1 = kappav*ice_thick
 #  else
@@ -1238,7 +1238,7 @@
 !
 !  Modified PWA 14/03/2019 to account for ICE_CCSM_SHORTWAVE option
 !
-!  Penetrating SW = frswpen*SW (W/m2 ice)
+!  Penetrating SW = frswp*SW (W/m2 ice)
 !
             sr_th_i(i,j) = qswi_n(i,j) * i0frac(i,j)
             sr_in_i(i,j) = sr_in_i(i,j) - sr_th_i(i,j)

@@ -1143,11 +1143,13 @@
 ** Ice analytical fields
 */
 
-#if defined ANA_ICE     || defined ANA_AIOBC   || \
-    defined ANA_HIOBC   || defined ANA_TIOBC   || \
-    defined ANA_SIGOBC  || defined ANA_MIOBC   || \
+#if defined ANA_AICE    || defined ANA_AIOBC   || \
+    defined ANA_HICE    || defined ANA_HIOBC   || \
+    defined ANA_TICE    || defined ANA_TIOBC   || \
+    defined ANA_SIGICE  || defined ANA_SIGIOBC || \
+    defined ANA_MICE    || defined ANA_MIOBC   || \
     defined ANA_AICLIMA || defined ANA_SICLIMA || \
-    defined ANA_MICLIMA || defined ANA_ICE_ADVANCED
+    defined ANA_MICLIMA
 # define ANALYTICAL
 #endif
 

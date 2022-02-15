@@ -16,7 +16,7 @@
         Vinfo(24)='_FillValue'
         Aval(6)=spval
 #  else
-        Vinfo(20)='mask_rho'
+        Vinfo(20)='mask_u'
 #  endif
 # endif
         Vinfo(22)='coordinates'
@@ -24,10 +24,10 @@
 # ifdef PERFECT_RESTART
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIuice),    &
 #  ifdef WET_DRY
-     &                 NF_FRST, nvd4, u2dgrd, Aval, Vinfo, ncname,      &
+     &                 NF_FRST, nvd4, ru2dgrd, Aval, Vinfo, ncname,     &
      &                 SetFillVal = .FALSE.)
 #  else
-     &                 NF_FRST, nvd4, u2dgrd, Aval, Vinfo, ncname)
+     &                 NF_FRST, nvd4, ru2dgrd, Aval, Vinfo, ncname)
 #  endif
 # else
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIuice),    &
@@ -54,7 +54,7 @@
         Vinfo(24)='_FillValue'
         Aval(6)=spval
 #  else
-        Vinfo(20)='mask_rho'
+        Vinfo(20)='mask_v'
 #  endif
 # endif
         Vinfo(22)='coordinates'
@@ -62,10 +62,10 @@
 # ifdef PERFECT_RESTART
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIvice),    &
 #  ifdef WET_DRY
-     &                 NF_FRST, nvd4, v2dgrd, Aval, Vinfo, ncname,      &
+     &                 NF_FRST, nvd4, rv2dgrd, Aval, Vinfo, ncname,     &
      &                 SetFillVal = .FALSE.)
 #  else
-     &                 NF_FRST, nvd4, v2dgrd, Aval, Vinfo, ncname)
+     &                 NF_FRST, nvd4, rv2dgrd, Aval, Vinfo, ncname)
 #  endif
 # else
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIvice),    &
@@ -100,10 +100,10 @@
 # ifdef PERFECT_RESTART
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIaice),    &
 #  ifdef WET_DRY
-     &                 NF_FRST, nvd4, t2dgrd, Aval, Vinfo, ncname,      &
+     &                 NF_FRST, nvd4,  r2dgrd, Aval, Vinfo, ncname,     &
      &                 SetFillVal = .FALSE.)
 #  else
-     &                 NF_FRST, nvd4, t2dgrd, Aval, Vinfo, ncname)
+     &                 NF_FRST, nvd4,  r2dgrd, Aval, Vinfo, ncname)
 #  endif
 # else
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIaice),    &
@@ -138,10 +138,10 @@
 # ifdef PERFECT_RESTART
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIhice),    &
 #  ifdef WET_DRY
-     &                 NF_FRST, nvd4, t2dgrd, Aval, Vinfo, ncname,      &
+     &                 NF_FRST, nvd4,  r2dgrd, Aval, Vinfo, ncname,     &
      &                 SetFillVal = .FALSE.)
 #  else
-     &                 NF_FRST, nvd4, t2dgrd, Aval, Vinfo, ncname)
+     &                 NF_FRST, nvd4,  r2dgrd, Aval, Vinfo, ncname)
 #  endif
 # else
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIhice),    &
@@ -176,10 +176,10 @@
 # ifdef PERFECT_RESTART
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIhsno),    &
 #  ifdef WET_DRY
-     &                 NF_FRST, nvd4, t2dgrd, Aval, Vinfo, ncname,      &
+     &                 NF_FRST, nvd4,  r2dgrd, Aval, Vinfo, ncname,     &
      &                 SetFillVal = .FALSE.)
 #  else
-     &                 NF_FRST, nvd4, t2dgrd, Aval, Vinfo, ncname)
+     &                 NF_FRST, nvd4,  r2dgrd, Aval, Vinfo, ncname)
 #  endif
 # else
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIhsno),    &
@@ -214,10 +214,10 @@
 # ifdef PERFECT_RESTART
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIagei),    &
 #  ifdef WET_DRY
-     &                 NF_FRST, nvd4, t2dgrd, Aval, Vinfo, ncname,      &
+     &                 NF_FRST, nvd4,  r2dgrd, Aval, Vinfo, ncname,     &
      &                 SetFillVal = .FALSE.)
 #  else
-     &                 NF_FRST, nvd4, t2dgrd, Aval, Vinfo, ncname)
+     &                 NF_FRST, nvd4,  r2dgrd, Aval, Vinfo, ncname)
 #  endif
 # else
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIagei),    &
@@ -280,10 +280,10 @@
 # ifdef PERFECT_RESTART
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idItmid),    &
 #  ifdef WET_DRY
-     &                 NF_FRST, nvd4, t2dgrd, Aval, Vinfo, ncname,      &
+     &                 NF_FRST, nvd4,  r2dgrd, Aval, Vinfo, ncname,     &
      &                 SetFillVal = .FALSE.)
 #  else
-     &                 NF_FRST, nvd4, t2dgrd, Aval, Vinfo, ncname)
+     &                 NF_FRST, nvd4,  r2dgrd, Aval, Vinfo, ncname)
 #  endif
 # else
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idItmid),    &
@@ -318,10 +318,10 @@
 # ifdef PERFECT_RESTART
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIsg11),    &
 #  ifdef WET_DRY
-     &                 NF_FRST, nvd4, t2dgrd, Aval, Vinfo, ncname,      &
+     &                 NF_FRST, nvd4,  r2dgrd, Aval, Vinfo, ncname,     &
      &                 SetFillVal = .FALSE.)
 #  else
-     &                 NF_FRST, nvd4, t2dgrd, Aval, Vinfo, ncname)
+     &                 NF_FRST, nvd4,  r2dgrd, Aval, Vinfo, ncname)
 #  endif
 # else
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIsg11),    &
@@ -356,10 +356,10 @@
 # ifdef PERFECT_RESTART
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIsg12),    &
 #  ifdef WET_DRY
-     &                 NF_FRST, nvd4, t2dgrd, Aval, Vinfo, ncname,      &
+     &                 NF_FRST, nvd4,  r2dgrd, Aval, Vinfo, ncname,     &
      &                 SetFillVal = .FALSE.)
 #  else
-     &                 NF_FRST, nvd4, t2dgrd, Aval, Vinfo, ncname)
+     &                 NF_FRST, nvd4,  r2dgrd, Aval, Vinfo, ncname)
 #  endif
 # else
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIsg12),    &
@@ -394,10 +394,10 @@
 # ifdef PERFECT_RESTART
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIsg22),    &
 #  ifdef WET_DRY
-     &                 NF_FRST, nvd4, t2dgrd, Aval, Vinfo, ncname,      &
+     &                 NF_FRST, nvd4,  r2dgrd, Aval, Vinfo, ncname,     &
      &                 SetFillVal = .FALSE.)
 #  else
-     &                 NF_FRST, nvd4, t2dgrd, Aval, Vinfo, ncname)
+     &                 NF_FRST, nvd4,  r2dgrd, Aval, Vinfo, ncname)
 #  endif
 # else
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIsg22),    &
