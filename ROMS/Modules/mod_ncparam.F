@@ -2711,7 +2711,7 @@
                   varid=varid-1
                   DO i=1,NPT
                     varid=varid+1
-                    idItrc(inert(i))=varid
+                    idIsTrc(inert(i))=varid
                     DO ng=1,Ngrids
                       Fscale(varid,ng)=scale
                       Iinfo(1,varid,ng)=gtype

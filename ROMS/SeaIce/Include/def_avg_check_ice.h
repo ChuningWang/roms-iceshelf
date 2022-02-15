@@ -182,7 +182,7 @@
           END IF
         END DO
 !
-!  Check if station variables are available in input NetCDF file.
+!  Check if variables are available in input NetCDF file.
 !
 #  ifdef ICE_MODEL
         IF (.not.got_var(idIuice).and.Aout(idIuice,ng)) THEN

@@ -464,7 +464,7 @@
         END IF
       END IF
 !
-!  Write out ice groth/melt rate of ice-air.
+!  Write out ice growth/melt rate of ice-air.
 !
       IF (Aout(idIwai,ng)) THEN
         scale=1.0_dp
@@ -487,7 +487,7 @@
         END IF
       END IF
 !
-!  Write out ice groth/melt rate of leads.
+!  Write out ice growth/melt rate of leads.
 !
       IF (Aout(idIwao,ng)) THEN
         scale=1.0_dp
@@ -510,7 +510,7 @@
         END IF
       END IF
 !
-!  Write out ice groth/melt rate of ice-ocean.
+!  Write out ice growth/melt rate of ice-ocean.
 !
       IF (Aout(idIwio,ng)) THEN
         scale=1.0_dp

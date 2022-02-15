@@ -871,7 +871,12 @@
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
+#   ifdef WET_DRY
      &                     ICESHELFVAR(ng)%istrc,                       &
+     &                     SetFillVal = .FALSE.)
+#   else
+     &                     ICESHELFVAR(ng)%istrc)
+#   endif
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIsTrc(itrc))),             &

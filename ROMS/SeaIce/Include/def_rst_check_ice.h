@@ -85,15 +85,15 @@
 # endif
 # if defined ICESHELF && defined ICESHELF_TRACER
           DO itrc=NAT+1,NT(ng)
-            IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idItrc(itrc)))) THEN
-              got_var(idItrc(itrc))=.TRUE.
-              RST(ng)%Vid(idItrc(itrc))=var_id(i)
+            IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsTrc(itrc)))) THEN
+              got_var(idIsTrc(itrc))=.TRUE.
+              RST(ng)%Vid(idIsTrc(itrc))=var_id(i)
             END IF
           END DO
 # endif
         END DO
 !
-!  Check if station variables are available in input NetCDF file.
+!  Check if variables are available in input NetCDF file.
 !
 # ifdef ICE_MODEL
         IF (.not.got_var(idIuice)) THEN
@@ -231,8 +231,8 @@
      &                                    TRIM(ncname)
             exit_flag=3
             RETURN
-          RETURN
-        END IF
+          END IF
+        END DO
 #  endif
 # endif
 #endif
