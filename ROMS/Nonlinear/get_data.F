@@ -512,7 +512,7 @@
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
       END IF
 
-#  ifdef ICE_SNOWFALL
+#  if defined ICE_MODEL && defined ICE_SNOWFALL
 !
 !  Snow fall rate.
 !
@@ -1227,7 +1227,7 @@
 # endif
 
 # ifdef ICE_MODEL
-# if defined ICE_LANDFAST_CLM && !defined ANA_LFICE
+#  if defined ICE_LANDFAST_CLM && !defined ANA_LFICE
 !
 ! Landfast ice climatology.
 !
@@ -1347,9 +1347,9 @@
         IF (LBC(iwest,isAice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idAibc(iwest),                      &
      &                    BRYncid(idAibc(iwest),ng),                    &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idAibc(iwest),ng),                 &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
@@ -1359,9 +1359,9 @@
         IF (LBC(ieast,isAice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idAibc(ieast),                      &
      &                    BRYncid(idAibc(ieast),ng),                    &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idAibc(ieast),ng),                 &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
@@ -1371,9 +1371,9 @@
         IF (LBC(isouth,isAice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idAibc(isouth),                     &
      &                    BRYncid(idAibc(isouth),ng),                   &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idAibc(isouth),ng),                &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
@@ -1383,9 +1383,9 @@
         IF (LBC(inorth,isAice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idAibc(inorth),                     &
      &                    BRYncid(idAibc(inorth),ng),                   &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idAibc(inorth),ng),                &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
@@ -1400,9 +1400,9 @@
         IF (LBC(iwest,isHice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idHibc(iwest),                      &
      &                    BRYncid(idHibc(iwest),ng),                    &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idHibc(iwest),ng),                 &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
@@ -1410,9 +1410,9 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
           CALL get_ngfld (ng, iNLM, idHsnbc(iwest),                     &
      &                    BRYncid(idHsnbc(iwest),ng),                   &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idHsnbc(iwest),ng),                &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
@@ -1422,9 +1422,9 @@
         IF (LBC(ieast,isHice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idHibc(ieast),                      &
      &                    BRYncid(idHibc(ieast),ng),                    &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idHibc(ieast),ng),                 &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
@@ -1432,9 +1432,9 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
           CALL get_ngfld (ng, iNLM, idHsnbc(ieast),                     &
      &                    BRYncid(idHsnbc(ieast),ng),                   &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idHsnbc(ieast),ng),                &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
@@ -1444,9 +1444,9 @@
         IF (LBC(isouth,isHice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idHibc(isouth),                     &
      &                    BRYncid(idHibc(isouth),ng),                   &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idHibc(isouth),ng),                &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
@@ -1454,9 +1454,9 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
           CALL get_ngfld (ng, iNLM, idHsnbc(isouth),                    &
      &                    BRYncid(idHsnbc(isouth),ng),                  &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idHsnbc(isouth),ng),               &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
@@ -1466,9 +1466,9 @@
         IF (LBC(inorth,isHice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idHibc(inorth),                     &
      &                    BRYncid(idHibc(inorth),ng),                   &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idHibc(inorth),ng),                &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
@@ -1476,9 +1476,9 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
           CALL get_ngfld (ng, iNLM, idHsnbc(inorth),                    &
      &                    BRYncid(idHsnbc(inorth),ng),                  &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idHsnbc(inorth),ng),               &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
@@ -1493,9 +1493,9 @@
         IF (LBC(iwest,isTice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idTibc(iwest),                      &
      &                    BRYncid(idTibc(iwest),ng),                    &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idTibc(iwest),ng),                 &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
@@ -1505,9 +1505,9 @@
         IF (LBC(ieast,isTice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idTibc(ieast),                      &
      &                    BRYncid(idTibc(ieast),ng),                    &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idTibc(ieast),ng),                 &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
@@ -1517,9 +1517,9 @@
         IF (LBC(isouth,isTice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idTibc(isouth),                     &
      &                    BRYncid(idTibc(isouth),ng),                   &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idTibc(isouth),ng),                &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
@@ -1529,9 +1529,9 @@
         IF (LBC(inorth,isTice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idTibc(inorth),                     &
      &                    BRYncid(idTibc(inorth),ng),                   &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idTibc(inorth),ng),                &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
@@ -1546,9 +1546,9 @@
         IF (LBC(iwest,isIsig,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idS11bc(iwest),                     &
      &                    BRYncid(idS11bc(iwest),ng),                   &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idS11bc(iwest),ng),                &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
@@ -1556,9 +1556,9 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
           CALL get_ngfld (ng, iNLM, idS22bc(iwest),                     &
      &                    BRYncid(idS22bc(iwest),ng),                   &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idS22bc(iwest),ng),                &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
@@ -1566,9 +1566,9 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
           CALL get_ngfld (ng, iNLM, idS12bc(iwest),                     &
      &                    BRYncid(idS12bc(iwest),ng),                   &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idS12bc(iwest),ng),                &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
@@ -1578,9 +1578,9 @@
         IF (LBC(ieast,isIsig,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idS11bc(ieast),                     &
      &                    BRYncid(idS11bc(ieast),ng),                   &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idS11bc(ieast),ng),                &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
@@ -1588,9 +1588,9 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
           CALL get_ngfld (ng, iNLM, idS22bc(ieast),                     &
      &                    BRYncid(idS22bc(ieast),ng),                   &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idS22bc(ieast),ng),                &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
@@ -1598,9 +1598,9 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
           CALL get_ngfld (ng, iNLM, idS12bc(ieast),                     &
      &                    BRYncid(idS12bc(ieast),ng),                   &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idS12bc(ieast),ng),                &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    JLB, JUB, 1, 2, 0, Mm(ng)+1, 1,               &
@@ -1610,9 +1610,9 @@
         IF (LBC(isouth,isIsig,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idS11bc(isouth),                    &
      &                    BRYncid(idS11bc(isouth),ng),                  &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idS11bc(isouth),ng),               &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
@@ -1620,9 +1620,9 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
           CALL get_ngfld (ng, iNLM, idS22bc(isouth),                    &
      &                    BRYncid(idS22bc(isouth),ng),                  &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idS22bc(isouth),ng),               &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
@@ -1630,9 +1630,9 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
           CALL get_ngfld (ng, iNLM, idS12bc(isouth),                    &
      &                    BRYncid(idS12bc(isouth),ng),                  &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idS12bc(isouth),ng),               &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
@@ -1642,9 +1642,9 @@
         IF (LBC(inorth,isIsig,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idS11bc(inorth),                    &
      &                    BRYncid(idS11bc(inorth),ng),                  &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idS11bc(inorth),ng),               &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
@@ -1652,9 +1652,9 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
           CALL get_ngfld (ng, iNLM, idS22bc(inorth),                    &
      &                    BRYncid(idS22bc(inorth),ng),                  &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idS22bc(inorth),ng),               &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
@@ -1662,9 +1662,9 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
           CALL get_ngfld (ng, iNLM, idS12bc(inorth),                    &
      &                    BRYncid(idS12bc(inorth),ng),                  &
-# if defined PIO_LIB && defined DISTRIBUTE
+#   if defined PIO_LIB && defined DISTRIBUTE
      &                    BRYpioFile(idS12bc(inorth),ng),               &
-# endif
+#   endif
      &                    nBCfiles(ng), BRY(1,ng),                      &
      &                    recordless, update(1),                        &
      &                    ILB, IUB, 1, 2, 0, Lm(ng)+1, 1,               &
