@@ -413,80 +413,6 @@
       integer  :: id2dRV        ! 2D relative vorticity
       integer  :: id3dPV        ! 3D potential vorticity
       integer  :: id3dRV        ! 3D relative vorticity
-#ifdef ICE_MODEL
-!
-!  Ice variables.
-!
-      integer  :: idsnow        ! snowfall rate
-      integer  :: idIuice       ! ice U-veloicty
-      integer  :: idIvice       ! ice V-veloicty
-      integer  :: idIuiceE      ! ice eastward velocity
-      integer  :: idIviceN      ! ice northward velocity
-      integer  :: idIaice       ! ice coverage
-      integer  :: idIhice       ! ice thickness
-      integer  :: idIhsno       ! snow thickness
-      integer  :: idIagei       ! age of sea ice (time since formation)
-      integer  :: idItice       ! temperature of ice/snow surface
-      integer  :: idItmid       ! interior ice temperature
-      integer  :: idIt2ic       ! top of ice temperature
-      integer  :: idIutau       ! ice-water friction velocity
-      integer  :: idImchu       ! ice-water momentum transfer coef.
-      integer  :: idIs0mk       ! S of molecular sub-layer under ice
-      integer  :: idIt0mk       ! T of molecular sub-layer under ice
-      integer  :: idIwfr        ! frazil ice growth rate
-      integer  :: idIwai        ! ice growth/melt rate
-      integer  :: idIwao        ! ice growth/melt rate
-      integer  :: idIwio        ! ice growth/melt rate
-      integer  :: idIwro        ! ice pond runoff
-      integer  :: idIwdiv       ! ice advective change
-      integer  :: idImflx       ! ice-ocean mass flux
-      integer  :: idIsig        ! internal ice stress
-      integer  :: idIsg11       ! internal ice stress component 11
-      integer  :: idIsg22       ! internal ice stress component 22
-      integer  :: idIsg12       ! internal ice stress component 12
-      integer  :: idAIclm       ! ice concentration climatology
-      integer  :: idHIclm       ! ice thickness climatology
-      integer  :: idHSNclm      ! ice thickness climatology
-      integer  :: idS11clm      ! ice sigma11 climatology
-      integer  :: idS12clm      ! ice sigma12 climatology
-      integer  :: idS22clm      ! ice sigma22 climatology
-      integer  :: idUIclm       ! ice u-velocity climatology
-      integer  :: idVIclm       ! ice v-velocity climatology
-      integer  :: idFastIce     ! landfast ice extent
-!
-!  Ice diagnostics.
-!
-      integer  :: idIalbe       ! shortwave albedo
-      integer  :: idIalbI       ! shortwave albedo of ice
-      integer  :: idIfrsw       ! fraction of sw penetrating into ice
-      integer  :: idIrfac       ! reduction fac of near-IR SW under ice
-      integer  :: idIlrdn       ! downward longwave
-      integer  :: idIsrdn       ! downward shortwave
-      integer  :: idIlatI       ! latent heat flux over ice
-      integer  :: idIsenI       ! sensible heat flux over ice
-      integer  :: idIlrup       ! upward longwave from ice
-      integer  :: idIsrup       ! upward shortwave from ice
-      integer  :: idIsrin       ! upward shortwave from ice
-      integer  :: idIsrth       ! shortwave through ice
-      integer  :: idIsfI        ! salt flux from ice
-      integer  :: idIsfL        ! salt flux from leads
-      integer  :: idIqao        ! heat flux in leads
-      integer  :: idIqai        ! heat flux ice to atmosphere
-      integer  :: idIqio        ! heat flux ocean to ice
-      integer  :: idIqi2        ! heat flux ocean to ice
-      integer  :: idIsnoi       ! snow-ice conversion
-#endif
-#ifdef ICESHELF
-      integer  :: idIsMr        ! iceshelf melt rate
-      integer  :: idIsTs        ! Temperature at base of the ice shelf
-      integer  :: idIsUs        ! Temperature at base of the ice shelf
-      integer  :: idIsTb        ! Temperature at base of the ice shelf
-      integer  :: idIsSb        ! Salinity at base of the ice shelf
-      integer  :: idIsDrft      ! iceshelf draft
-      integer  :: idIsVol       ! iceshelf refreezed draft
-      integer  :: idIsSOFs      ! salt overflux
-      integer  :: idIsSOFh      ! heat overflux
-#endif
 !
 !  Last used variable ID counter.
 !
@@ -503,9 +429,6 @@
       integer, allocatable :: idTnud(:)    ! tracers nudge coefficient
       integer, allocatable :: idTsur(:)    ! surface flux for tracers
       integer, allocatable :: idTtlf(:)    ! tracers impulse forcing
-#ifdef ICESHELF
-      integer, allocatable :: idIsTrc(:)   ! iceshelf tracers
-#endif
 !
 !  Boundary conditions identification indices.
 !
@@ -514,23 +437,6 @@
       integer  :: idV2bc(4)      ! 2D V-velocity boundary conditions
       integer  :: idV3bc(4)      ! 3D V-velocity boundary conditions
       integer  :: idZbry(4)      ! free-surface boundary conditions
-#ifdef ICE_MODEL
-!
-!  Ice Boundary conditions identification indicess.
-!
-      integer  :: idUibc(4)      ! ice U-velocity boundary conditions
-      integer  :: idVibc(4)      ! ice V-velocity boundary conditions
-      integer  :: idAibc(4)      ! ice concentration boundary conditions
-      integer  :: idHibc(4)      ! ice thickness boundary conditions
-      integer  :: idHsnbc(4)     ! snow thickness boundary conditions
-      integer  :: idTibc(4)      ! ice interior temp. boundary conditions
-      integer  :: idApdbc(4)     ! surface melt water boundary conditions
-      integer  :: idHpdbc(4)     ! surface melt water boundary conditions
-      integer  :: idAgeicebc(4)  ! ice age boundary conditions
-      integer  :: idS11bc(4)     ! ice stress Sig11 boundary conditions
-      integer  :: idS22bc(4)     ! ice stress Sig22 boundary conditions
-      integer  :: idS12bc(4)     ! ice stress Sig12 boundary conditions
-#endif
 !
 !  Time-averaged quadratic terms IDs.
 !
@@ -592,17 +498,6 @@
       integer  :: isBu3d                    ! 3D U-variables
       integer  :: isBv3d                    ! 3D V-variables
       integer  :: isBw3d                    ! 3D W-variables
-#ifdef ICE_MODEL
-!
-!  State variables indices for ice.
-!
-      integer  :: isUice                    ! ice U-velocity
-      integer  :: isVice                    ! ice V-velocity
-      integer  :: isAice                    ! ice concentration
-      integer  :: isHice                    ! ice/snow thickness
-      integer  :: isTice                    ! ice temperature
-      integer  :: isIsig                    ! ice stress
-#endif
 !
 !  Input lateral boundary, climatology, and forcing NetCDF files IDs
 !  for each processing field. It facilitates the multi-file option:
@@ -683,6 +578,112 @@
 !
       character (len=80 ) :: git_rev, svn_rev
       character (len=256) :: git_url, svn_url
+#ifdef ICE_MODEL
+!
+!  Ice variables.
+!
+      integer  :: idsnow        ! snowfall rate
+      integer  :: idIuice       ! ice U-veloicty
+      integer  :: idIvice       ! ice V-veloicty
+      integer  :: idIuiceE      ! ice eastward velocity
+      integer  :: idIviceN      ! ice northward velocity
+      integer  :: idIaice       ! ice coverage
+      integer  :: idIhice       ! ice thickness
+      integer  :: idIhsno       ! snow thickness
+      integer  :: idIagei       ! age of sea ice (time since formation)
+      integer  :: idItice       ! temperature of ice/snow surface
+      integer  :: idItmid       ! interior ice temperature
+      integer  :: idIt2ic       ! top of ice temperature
+      integer  :: idIutau       ! ice-water friction velocity
+      integer  :: idImchu       ! ice-water momentum transfer coef.
+      integer  :: idIs0mk       ! S of molecular sub-layer under ice
+      integer  :: idIt0mk       ! T of molecular sub-layer under ice
+      integer  :: idIwfr        ! frazil ice growth rate
+      integer  :: idIwai        ! ice growth/melt rate
+      integer  :: idIwao        ! ice growth/melt rate
+      integer  :: idIwio        ! ice growth/melt rate
+      integer  :: idIwro        ! ice pond runoff
+      integer  :: idIwdiv       ! ice advective change
+      integer  :: idImflx       ! ice-ocean mass flux
+      integer  :: idIsig        ! internal ice stress
+      integer  :: idIsg11       ! internal ice stress component 11
+      integer  :: idIsg22       ! internal ice stress component 22
+      integer  :: idIsg12       ! internal ice stress component 12
+      integer  :: idAIclm       ! ice concentration climatology
+      integer  :: idHIclm       ! ice thickness climatology
+      integer  :: idHSNclm      ! ice thickness climatology
+      integer  :: idS11clm      ! ice sigma11 climatology
+      integer  :: idS12clm      ! ice sigma12 climatology
+      integer  :: idS22clm      ! ice sigma22 climatology
+      integer  :: idUIclm       ! ice u-velocity climatology
+      integer  :: idVIclm       ! ice v-velocity climatology
+      integer  :: idFastIce     ! landfast ice extent
+!
+!  Ice diagnostics.
+!
+      integer  :: idIalbe       ! shortwave albedo
+      integer  :: idIalbI       ! shortwave albedo of ice
+      integer  :: idIfrsw       ! fraction of sw penetrating into ice
+      integer  :: idIrfac       ! reduction fac of near-IR SW under ice
+      integer  :: idIlrdn       ! downward longwave
+      integer  :: idIsrdn       ! downward shortwave
+      integer  :: idIlatI       ! latent heat flux over ice
+      integer  :: idIsenI       ! sensible heat flux over ice
+      integer  :: idIlrup       ! upward longwave from ice
+      integer  :: idIsrup       ! upward shortwave from ice
+      integer  :: idIsrin       ! upward shortwave from ice
+      integer  :: idIsrth       ! shortwave through ice
+      integer  :: idIsfI        ! salt flux from ice
+      integer  :: idIsfL        ! salt flux from leads
+      integer  :: idIqao        ! heat flux in leads
+      integer  :: idIqai        ! heat flux ice to atmosphere
+      integer  :: idIqio        ! heat flux ocean to ice
+      integer  :: idIqi2        ! heat flux ocean to ice
+      integer  :: idIsnoi       ! snow-ice conversion
+!
+!  Ice Boundary conditions identification indicess.
+!
+      integer  :: idUibc(4)      ! ice U-velocity boundary conditions
+      integer  :: idVibc(4)      ! ice V-velocity boundary conditions
+      integer  :: idAibc(4)      ! ice concentration boundary conditions
+!
+      integer  :: idHibc(4)      ! ice thickness boundary conditions
+      integer  :: idHsnbc(4)     ! snow thickness boundary conditions
+      integer  :: idTibc(4)      ! ice interior temp. boundary conditions
+      integer  :: idApdbc(4)     ! surface melt water boundary conditions
+      integer  :: idHpdbc(4)     ! surface melt water boundary conditions
+      integer  :: idAgeicebc(4)  ! ice age boundary conditions
+      integer  :: idS11bc(4)     ! ice stress Sig11 boundary conditions
+      integer  :: idS22bc(4)     ! ice stress Sig22 boundary conditions
+      integer  :: idS12bc(4)     ! ice stress Sig12 boundary conditions
+!
+!  State variables indices for ice.
+!
+      integer  :: isUice                    ! ice U-velocity
+      integer  :: isVice                    ! ice V-velocity
+      integer  :: isAice                    ! ice concentration
+      integer  :: isHice                    ! ice/snow thickness
+      integer  :: isTice                    ! ice temperature
+      integer  :: isIsig                    ! ice stress
+#endif
+#ifdef ICESHELF
+!
+!  Iceshelf variables.
+!
+      integer  :: idIsMr        ! iceshelf melt rate
+      integer  :: idIsTs        ! Temperature at base of the ice shelf
+      integer  :: idIsUs        ! Temperature at base of the ice shelf
+      integer  :: idIsTb        ! Temperature at base of the ice shelf
+      integer  :: idIsSb        ! Salinity at base of the ice shelf
+      integer  :: idIsDrft      ! iceshelf draft
+      integer  :: idIsVol       ! iceshelf refreezed draft
+      integer  :: idIsSOFs      ! salt overflux
+      integer  :: idIsSOFh      ! heat overflux
+!
+!  Iceshelf tracer variables.
+!
+      integer, allocatable :: idIsTrc(:)   ! iceshelf tracers
+#endif
 !
       CONTAINS
 !
@@ -862,12 +863,6 @@
         allocate ( idRtrc(MT) )
         Dmem(1)=Dmem(1)+REAL(MT,r8)
       END IF
-#ifdef ICESHELF
-      IF (.not.allocated(idIsTrc)) THEN
-        allocate ( idIsTrc(MT) )
-        Dmem(1)=Dmem(1)+REAL(MT,r8)
-      END IF
-#endif
       IF (.not.allocated(idsurT)) THEN
         allocate ( idsurT(MT) )
         Dmem(1)=Dmem(1)+REAL(MT,r8)
@@ -1080,6 +1075,13 @@
       IF (.not.associated(Dinfo)) THEN
         allocate ( Dinfo(2,NV,Ngrids) )
         Dmem(1)=Dmem(1)+2.0_r8*REAL(NV*Ngrids,r8)
+      END IF
+#endif
+
+#ifdef ICESHELF
+      IF (.not.allocated(idIsTrc)) THEN
+        allocate ( idIsTrc(MT) )
+        Dmem(1)=Dmem(1)+REAL(MT,r8)
       END IF
 #endif
 !
@@ -2241,245 +2243,10 @@
             CASE ('idMOMf')
               idMOMf=varid
 #endif
-#ifdef ICE_MODEL
-            CASE ('idsnow')
-              idsnow=varid
-            CASE ('idIuice')
-              idIuice=varid
-            CASE ('idIvice')
-              idIvice=varid
-            CASE ('idIuiceE')
-              idIuiceE=varid
-            CASE ('idIviceN')
-              idIviceN=varid
-            CASE ('idIaice')
-              idIaice=varid
-            CASE ('idIhice')
-              idIhice=varid
-            CASE ('idIhsno')
-              idIhsno=varid
-            CASE ('idItice')
-              idItice=varid
-            CASE ('idItmid')
-              idItmid=varid
-            CASE ('idIt2ic')
-              idIt2ic=varid
-            CASE ('idIutau')
-              idIutau=varid
-            CASE ('idImchu')
-              idImchu=varid
-            CASE ('idIs0mk')
-              idIs0mk=varid
-            CASE ('idIt0mk')
-              idIt0mk=varid
-            CASE ('idIwfr')
-              idIwfr=varid
-            CASE ('idIwai')
-              idIwai=varid
-            CASE ('idIwao')
-              idIwao=varid
-            CASE ('idIwio')
-              idIwio=varid
-            CASE ('idIwro')
-              idIwro=varid
-            CASE ('idIwdiv')
-              idIwdiv=varid
-            CASE ('idIagei')
-              idIagei=varid
-            CASE ('idImflx')
-              idImflx=varid
-            CASE ('idIsig')
-              idIsig=varid
-            CASE ('idIsg11')
-              idIsg11=varid
-            CASE ('idIsg22')
-              idIsg22=varid
-            CASE ('idIsg12')
-              idIsg12=varid
-            CASE ('idAIclm')
-              idAIclm=varid
-            CASE ('idHIclm')
-              idHIclm=varid
-            CASE ('idHSNclm')
-              idHSNclm=varid
-            CASE ('idS11clm')
-              idS11clm=varid
-            CASE ('idS12clm')
-              idS12clm=varid
-            CASE ('idS22clm')
-              idS22clm=varid
-            CASE ('idUIclm')
-              idUIclm=varid
-            CASE ('idVIclm')
-              idVIclm=varid
-            CASE ('idFastIce')
-              idFastIce=varid
-            CASE ('idIalbe')
-              idIalbe=varid
-            CASE ('idIalbI')
-              idIalbI=varid
-            CASE ('idIlrdn')
-              idIlrdn=varid
-            CASE ('idIsrdn')
-              idIsrdn=varid
-            CASE ('idIlatI')
-              idIlatI=varid
-            CASE ('idIsenI')
-              idIsenI=varid
-            CASE ('idIlrup')
-              idIlrup=varid
-            CASE ('idIsrup')
-              idIsrup=varid
-            CASE ('idIsrin')
-              idIsrin=varid
-            CASE ('idIsrth')
-              idIsrth=varid
-            CASE ('idIsfI')
-              idIsfI=varid
-            CASE ('idIsfL')
-              idIsfL=varid
-            CASE ('idIqao')
-              idIqao=varid
-            CASE ('idIqai')
-              idIqai=varid
-            CASE ('idIqio')
-              idIqio=varid
-            CASE ('idIqi2')
-              idIqi2=varid
-            CASE ('idIsnoi')
-              idIsnoi=varid
-            CASE ('idIfrsw')
-              idIfrsw=varid
-            CASE ('idIrfac')
-              idIrfac=varid
-            CASE ('idAibc(iwest)')
-              idAibc(iwest)=varid
-            CASE ('idAibc(ieast)')
-              idAibc(ieast)=varid
-            CASE ('idAibc(isouth)')
-              idAibc(isouth)=varid
-            CASE ('idAibc(inorth)')
-              idAibc(inorth)=varid
-            CASE ('idHibc(iwest)')
-              idHibc(iwest)=varid
-            CASE ('idHibc(ieast)')
-              idHibc(ieast)=varid
-            CASE ('idHibc(isouth)')
-              idHibc(isouth)=varid
-            CASE ('idHibc(inorth)')
-              idHibc(inorth)=varid
-            CASE ('idHsnbc(iwest)')
-              idHsnbc(iwest)=varid
-            CASE ('idHsnbc(ieast)')
-              idHsnbc(ieast)=varid
-            CASE ('idHsnbc(isouth)')
-              idHsnbc(isouth)=varid
-            CASE ('idHsnbc(inorth)')
-              idHsnbc(inorth)=varid
-            CASE ('idTibc(iwest)')
-              idTibc(iwest)=varid
-            CASE ('idTibc(ieast)')
-              idTibc(ieast)=varid
-            CASE ('idTibc(isouth)')
-              idTibc(isouth)=varid
-            CASE ('idTibc(inorth)')
-              idTibc(inorth)=varid
-            CASE ('idApdbc(iwest)')
-              idApdbc(iwest)=varid
-            CASE ('idApdbc(ieast)')
-              idApdbc(ieast)=varid
-            CASE ('idApdbc(isouth)')
-              idApdbc(isouth)=varid
-            CASE ('idApdbc(inorth)')
-              idApdbc(inorth)=varid
-            CASE ('idHpdbc(iwest)')
-              idHpdbc(iwest)=varid
-            CASE ('idHpdbc(ieast)')
-              idHpdbc(ieast)=varid
-            CASE ('idHpdbc(isouth)')
-              idHpdbc(isouth)=varid
-            CASE ('idHpdbc(inorth)')
-              idHpdbc(inorth)=varid
-            CASE ('idAgeicebc(iwest)')
-              idAgeicebc(iwest)=varid
-            CASE ('idAgeicebc(ieast)')
-              idAgeicebc(ieast)=varid
-            CASE ('idAgeicebc(isouth)')
-              idAgeicebc(isouth)=varid
-            CASE ('idAgeicebc(inorth)')
-              idAgeicebc(inorth)=varid
-            CASE ('idUibc(iwest)')
-              idUibc(iwest)=varid
-            CASE ('idUibc(ieast)')
-              idUibc(ieast)=varid
-            CASE ('idUibc(isouth)')
-              idUibc(isouth)=varid
-            CASE ('idUibc(inorth)')
-              idUibc(inorth)=varid
-            CASE ('idVibc(iwest)')
-              idVibc(iwest)=varid
-            CASE ('idVibc(ieast)')
-              idVibc(ieast)=varid
-            CASE ('idVibc(isouth)')
-              idVibc(isouth)=varid
-            CASE ('idVibc(inorth)')
-              idVibc(inorth)=varid
-            CASE ('idS11bc(iwest)')
-              idS11bc(iwest)=varid
-            CASE ('idS11bc(ieast)')
-              idS11bc(ieast)=varid
-            CASE ('idS11bc(isouth)')
-              idS11bc(isouth)=varid
-            CASE ('idS11bc(inorth)')
-              idS11bc(inorth)=varid
-            CASE ('idS22bc(iwest)')
-              idS22bc(iwest)=varid
-            CASE ('idS22bc(ieast)')
-              idS22bc(ieast)=varid
-            CASE ('idS22bc(isouth)')
-              idS22bc(isouth)=varid
-            CASE ('idS22bc(inorth)')
-              idS22bc(inorth)=varid
-            CASE ('idS12bc(iwest)')
-              idS12bc(iwest)=varid
-            CASE ('idS12bc(ieast)')
-              idS12bc(ieast)=varid
-            CASE ('idS12bc(isouth)')
-              idS12bc(isouth)=varid
-            CASE ('idS12bc(inorth)')
-              idS12bc(inorth)=varid
-#endif
-#ifdef ICESHELF
-            CASE ('idIsMr')
-              idIsMr=varid
-            CASE ('idIsTs')
-              idIsTs=varid
-            CASE ('idIsUs')
-              idIsUs=varid
-            CASE ('idIsTb')
-              idIsTb=varid
-            CASE ('idIsSb')
-              idIsSb=varid
-            CASE ('idIsDrft')
-              idIsDrft=varid
-            CASE ('idIsVol')
-              idIsVol=varid
-            CASE ('idIsSOFs')
-              idIsSOFs=varid
-            CASE ('idIsSOFh')
-              idIsSOFh=varid
-            CASE ('idIsTrc(itemp)')
-              idIsTrc(itemp)=varid
-# ifdef SALINITY
-            CASE ('idIsTrc(isalt)')
-              idIsTrc(isalt)=varid
-# endif
-# ifdef T_PASSIVE
-            CASE ('idIsTrc(inert(i))')
-              load=.TRUE.
-# endif
-#endif
 
+#if defined ICE_MODEL || defined ICESHELF
+# include <ice_var.h>
+#endif
 #ifdef BIOLOGY
 # if defined BIO_FENNEL
 #  include <fennel_var.h>
