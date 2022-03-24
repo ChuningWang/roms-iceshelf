@@ -674,7 +674,7 @@
           TseaK(i)=TseaC(i)+273.16_r8
           rhoSea(i)=rho(i,j,N(ng))+1000.0_r8
           RH=Hair(i,j)
-# ifdef ICE_THERMO
+# if defined ICE_MODEL && defined ICE_THERMO
 !
 !  Modified PWA 25/09/2019 to allow correction of SRad for ice and
 !   correction of srflx for ice/snow albedo. Note that qswi is corrected
@@ -1108,8 +1108,13 @@
           cff=Qair(i)*Hlv(i,j)/(blk_Rgas*TairK(i)*TairK(i))
           wet_bulb=1.0_r8/(1.0_r8+0.622_r8*(cff*Hlv(i,j)*diffw)/        &
      &                                     (blk_Cpa*diffh))
+# if defined ICE_MODEL && defined ICE_SNOWFALL
+          Hsr=(rain(i,j)+snow(i,j))*wet_bulb*blk_Cpw*                   &
+     &        ((TseaC(i)-TairC(i))+(Qsea(i)-Q(i))*Hlv(i,j)/blk_Cpa)
+# else
           Hsr=rain(i,j)*wet_bulb*blk_Cpw*                               &
      &        ((TseaC(i)-TairC(i))+(Qsea(i)-Q(i))*Hlv(i,j)/blk_Cpa)
+# endif
 # ifndef REGCM_COUPLING
           SHeat(i,j)=(Hs+Hsr)
 # endif

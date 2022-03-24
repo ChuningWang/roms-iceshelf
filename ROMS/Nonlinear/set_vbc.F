@@ -291,9 +291,9 @@
         DO i=IstrR,IendR
           stflx(i,j,itemp)=stflx(i,j,itemp)+                            &
      &                     dqdt(i,j)*(t(i,j,N(ng),nrhs,itemp)-sst(i,j))
-#  ifdef ICE_MODEL
+#   ifdef ICE_MODEL
           qao_n(i,j) = -stflx(i,j,itemp) * rho0 * Cp
-#  endif
+#   endif
         END DO
       END DO
 #  endif
