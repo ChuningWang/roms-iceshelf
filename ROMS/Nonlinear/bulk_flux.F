@@ -1108,13 +1108,8 @@
           cff=Qair(i)*Hlv(i,j)/(blk_Rgas*TairK(i)*TairK(i))
           wet_bulb=1.0_r8/(1.0_r8+0.622_r8*(cff*Hlv(i,j)*diffw)/        &
      &                                     (blk_Cpa*diffh))
-# if defined ICE_MODEL && defined ICE_SNOWFALL
-          Hsr=(rain(i,j)+snow(i,j))*wet_bulb*blk_Cpw*                   &
-     &        ((TseaC(i)-TairC(i))+(Qsea(i)-Q(i))*Hlv(i,j)/blk_Cpa)
-# else
           Hsr=rain(i,j)*wet_bulb*blk_Cpw*                               &
      &        ((TseaC(i)-TairC(i))+(Qsea(i)-Q(i))*Hlv(i,j)/blk_Cpa)
-# endif
 # ifndef REGCM_COUPLING
           SHeat(i,j)=(Hs+Hsr)
 # endif
@@ -1288,7 +1283,7 @@
 !
           cff     = Q(i)/(1.0_r8+Q(i))
           vap_p_i = slp*cff/(0.62197 + cff)
-#   ifdef LONGWAVE
+#   if defined LONGWAVE
           qlwi = emmiss*StefBo*(TairK(i)**4)*                           &
      &           (0.39_r8-0.005_r8*SQRT(vap_p_i))*                      &
      &           (1.0_r8-0.65_r8*cloud(i,j)) -                          &
@@ -1326,6 +1321,7 @@
 !
 !  Sensible and latent heat flux correction
 !
+          LRad(i,j) = LRad(i,j)*(1.0_r8-ai(i,j,listp))
           SHeat(i,j) = SHeat(i,j)*(1.0_r8-ai(i,j,listp)) +              &
      &                 qsh_i     *        ai(i,j,listp)
           LHeat(i,j) = LHeat(i,j)*(1.0_r8-ai(i,j,listp)) +              &
