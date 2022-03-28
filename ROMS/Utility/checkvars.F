@@ -269,24 +269,19 @@
 # endif
 # ifdef ANA_SIGICE
         IF (nrrec(ng).ne.0) THEN
-          get_var(idIsg11)=.TRUE.
-          get_var(idIsg22)=.TRUE.
-          get_var(idIsg12)=.TRUE.
-          get_var(idIutau)=.TRUE.
-          get_var(idImchu)=.TRUE.
-          get_var(idIs0mk)=.TRUE.
-          get_var(idIt0mk)=.TRUE.
-          get_var(idIagei)=.TRUE.
-        ENDIF
-# else
+# endif
         get_var(idIsg11)=.TRUE.
         get_var(idIsg22)=.TRUE.
         get_var(idIsg12)=.TRUE.
+# ifndef ICE_MOM_BULK
         get_var(idIutau)=.TRUE.
         get_var(idImchu)=.TRUE.
+# endif
         get_var(idIs0mk)=.TRUE.
         get_var(idIt0mk)=.TRUE.
         get_var(idIagei)=.TRUE.
+# ifdef ANA_SIGICE
+        ENDIF
 # endif
 # ifdef ANA_MICE
         IF (nrrec(ng).ne.0) THEN
@@ -975,6 +970,7 @@
         exit_flag=2
         RETURN
       END IF
+# ifndef ICE_MOM_BULK
       IF (.not.have_var(idIutau).and.get_var(idIutau)) THEN
         IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIutau)),   &
      &                                TRIM(ncname)
@@ -987,6 +983,7 @@
         exit_flag=2
         RETURN
       END IF
+# endif
       IF (.not.have_var(idIs0mk).and.get_var(idIs0mk)) THEN
         IF (Master) WRITE (stdout,10) string, TRIM(Vname(1,idIs0mk)),   &
      &                                TRIM(ncname)
@@ -1265,24 +1262,19 @@
 #  endif
 #  ifdef ANA_SIGICE
         IF (nrrec(ng).ne.0) THEN
-          get_var(idIsg11)=.TRUE.
-          get_var(idIsg22)=.TRUE.
-          get_var(idIsg12)=.TRUE.
-          get_var(idIutau)=.TRUE.
-          get_var(idImchu)=.TRUE.
-          get_var(idIs0mk)=.TRUE.
-          get_var(idIt0mk)=.TRUE.
-          get_var(idIagei)=.TRUE.
-        ENDIF
-#  else
+#  endif
         get_var(idIsg11)=.TRUE.
         get_var(idIsg22)=.TRUE.
         get_var(idIsg12)=.TRUE.
+# ifndef ICE_MOM_BULK
         get_var(idIutau)=.TRUE.
         get_var(idImchu)=.TRUE.
+# endif
         get_var(idIs0mk)=.TRUE.
         get_var(idIt0mk)=.TRUE.
         get_var(idIagei)=.TRUE.
+#  ifdef ANA_SIGICE
+        ENDIF
 #  endif
 #  ifdef ANA_MICE
         IF (nrrec(ng).ne.0) THEN
@@ -1982,6 +1974,7 @@
         exit_flag=2
         RETURN
       END IF
+#  ifndef ICE_MOM_BULK
       IF (.not.have_var(idIutau).and.get_var(idIutau)) THEN
         IF (Master) WRITE (stdout,10) string,                           &
      &                                TRIM(Vname(1,idIutau)),           &
@@ -1996,6 +1989,7 @@
         exit_flag=2
         RETURN
       END IF
+#  endif
       IF (.not.have_var(idIs0mk).and.get_var(idIs0mk)) THEN
         IF (Master) WRITE (stdout,10) string,                           &
      &                                TRIM(Vname(1,idIs0mk)),           &

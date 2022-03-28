@@ -914,6 +914,7 @@
             END IF
           END IF
         END IF
+#  ifndef ICE_MOM_BULK
 !
 !  Read in ice-water friction velocity.
 !
@@ -935,15 +936,15 @@
      &                        InpRec, ioDesc, Vsize,                    &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        Fscl, Fmin, Fmax,                         &
-#  ifdef MASKING
+#   ifdef MASKING
      &                        GRID(ng) % rmask,                         &
-#  endif
-#  ifdef CHECKSUM
+#   endif
+#   ifdef CHECKSUM
      &                        ICE(ng) % utau_iw,                        &
      &                        checksum = Fhash)
-#  else
+#   else
      &                        ICE(ng) % utau_iw)
-#  endif
+#   endif
             IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
               IF (Master) THEN
                 WRITE (stdout,60) string, TRIM(Vname(1,idIutau)),       &
@@ -954,12 +955,12 @@
               RETURN
             ELSE
               IF (Master) THEN
-#  ifdef CHECKSUM
+#   ifdef CHECKSUM
                 WRITE (stdout,70) TRIM(Vname(2,idIutau)), Fmin, Fmax,   &
      &                            Fhash
-#  else
+#   else
                 WRITE (stdout,70) TRIM(Vname(2,idIutau)), Fmin, Fmax
-#  endif
+#   endif
 
               END IF
             END IF
@@ -996,15 +997,15 @@
      &                        InpRec, ioDesc, Vsize,                    &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        Fscl, Fmin, Fmax,                         &
-#  ifdef MASKING
+#   ifdef MASKING
      &                        GRID(ng) % rmask,                         &
-#  endif
-#  ifdef CHECKSUM
+#   endif
+#   ifdef CHECKSUM
      &                        ICE(ng) % chu_iw,                         &
      &                        checksum = Fhash)
-#  else
+#   else
      &                        ICE(ng) % chu_iw)
-#  endif
+#   endif
             IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
               IF (Master) THEN
                 WRITE (stdout,60) string, TRIM(Vname(1,idImchu)),       &
@@ -1015,12 +1016,12 @@
               RETURN
             ELSE
               IF (Master) THEN
-#  ifdef CHECKSUM
+#   ifdef CHECKSUM
                 WRITE (stdout,70) TRIM(Vname(2,idImchu)), Fmin, Fmax,   &
      &                            Fhash
-#  else
+#   else
                 WRITE (stdout,70) TRIM(Vname(2,idImchu)), Fmin, Fmax
-#  endif
+#   endif
 
               END IF
             END IF
@@ -1036,6 +1037,7 @@
             END IF
           END IF
         END IF
+#  endif
 !
 !  Read in temperature of molecular sublayer under ice.
 !
@@ -1187,7 +1189,7 @@
      &                          GRID(ng) % rmask,                       &
 #   endif
 #   ifdef CHECKSUM
-     &                          FORCES(ng)% stflx_save(:,:,itrc),       &
+     &                          FORCES(ng)% stflx_save(:,:,itrc),          &
      &                          checksum = Fhash)
 #   else
      &                          FORCES(ng)% stflx_save(:,:,itrc))
