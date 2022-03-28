@@ -540,18 +540,10 @@
             cot = cpi - frln*sice(i,j)*hfus/(ti(i,j,linew)-eps)**2
 !           enthal(i,j,1) = brnfr(i,j) * (hfus + cpw*ti(i,j,linew)) +   &
 !    &                      (1 - brnfr(i,j)) * cpi * ti(i,j,linew)
-#if defined ICE_BULK_FLUXES
-            ti(i,j,linew) = ti(i,j,linew) +                             &
-     &        dtice(ng)/(rhoice(ng)*ice_thick(i,j)*cot)*                &
-     &        (2._r8*alph(i,j)/ice_thick(i,j)*                          &
-     &        (t0mk(i,j) + (tis(i,j) - (2._r8+coa(i,j))*ti(i,j,linew))/ &
-     &                     (1._r8+coa(i,j))) + sr_in_i(i,j))
-#else
             ti(i,j,linew) = ti(i,j,linew) + dtice(ng)*(                 &
      &        2._r8*alph(i,j)/(rhoice(ng)*ice_thick(i,j)**2*cot)*       &
      &        (t0mk(i,j) + (tis(i,j) - (2._r8+coa(i,j))*ti(i,j,linew))/ &
      &                     (1._r8+coa(i,j))))
-#endif
             ti(i,j,linew) = MAX(ti(i,j,linew),-35._r8)
             ti(i,j,linew) = MIN(ti(i,j,linew),-eps)
 !           brnfr(i,j) = frln*sice(i,j)/MIN(ti(i,j,linew),-eps)
