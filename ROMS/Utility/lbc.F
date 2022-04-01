@@ -1048,6 +1048,10 @@
             string(ibry,ng)='Reduced    '
           ELSE IF (S(ibry,ifield,ng)%Shchepetkin) THEN
             string(ibry,ng)='Shchepetkin'
+#ifdef ICE_MODEL
+          ELSE IF (S(ibry,ifield,ng)%mixed) THEN
+            string(ibry,ng)='Mixed      '
+#endif
           END IF
         END DO
       END DO

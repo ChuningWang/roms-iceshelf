@@ -1240,9 +1240,11 @@
      &                FORCES(ng) % fastice_clmG)
       IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 #  endif
-
+!
+! Ice model variables open boundary conditions.
+!
 #  ifndef ANA_MIOBC
-      IF (.not.(RefinedGrid(ng).and.RefineScale(ng).gt.0)) THEN
+      IF (LprocessOBC(ng)) THEN
         IF (LBC(iwest,isUice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idUibc(iwest),                      &
      &                    BRYncid(idUibc(iwest),ng),                    &
@@ -1343,7 +1345,7 @@
 #  endif
 
 #  ifndef ANA_AIOBC
-      IF (.not.(RefinedGrid(ng).and.RefineScale(ng).gt.0)) THEN
+      IF (LprocessOBC(ng)) THEN
         IF (LBC(iwest,isAice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idAibc(iwest),                      &
      &                    BRYncid(idAibc(iwest),ng),                    &
@@ -1396,7 +1398,7 @@
 #  endif
 
 #  ifndef ANA_HIOBC
-      IF (.not.(RefinedGrid(ng).and.RefineScale(ng).gt.0)) THEN
+      IF (LprocessOBC(ng)) THEN
         IF (LBC(iwest,isHice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idHibc(iwest),                      &
      &                    BRYncid(idHibc(iwest),ng),                    &
@@ -1489,7 +1491,7 @@
 #  endif
 
 #  ifndef ANA_TIOBC
-      IF (.not.(RefinedGrid(ng).and.RefineScale(ng).gt.0)) THEN
+      IF (LprocessOBC(ng)) THEN
         IF (LBC(iwest,isTice,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idTibc(iwest),                      &
      &                    BRYncid(idTibc(iwest),ng),                    &
@@ -1542,7 +1544,7 @@
 #  endif
 
 #  ifndef ANA_SIGIOBC
-      IF (.not.(RefinedGrid(ng).and.RefineScale(ng).gt.0)) THEN
+      IF (LprocessOBC(ng)) THEN
         IF (LBC(iwest,isIsig,ng)%acquire) THEN
           CALL get_ngfld (ng, iNLM, idS11bc(iwest),                     &
      &                    BRYncid(idS11bc(iwest),ng),                   &

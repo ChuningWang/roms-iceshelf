@@ -1094,8 +1094,15 @@
               FSobc_in (ng,ibry)=obcfac(ng)*Znudg(ng)
             END IF
 !
+#ifdef ICE_MODEL
+            IF (LBC(ibry,isUbar,ng)%nudging.or.                         &
+     &          LBC(ibry,isVbar,ng)%nudging.or.                         &
+     &          LBC(ibry,isUice,ng)%nudging.or.                         &
+     &          LBC(ibry,isVice,ng)%nudging) THEN
+#else
             IF (LBC(ibry,isUbar,ng)%nudging.or.                         &
      &          LBC(ibry,isVbar,ng)%nudging) THEN
+#endif
               M2obc_out(ng,ibry)=M2nudg(ng)
               M2obc_in (ng,ibry)=obcfac(ng)*M2nudg(ng)
             END IF
@@ -1113,6 +1120,14 @@
                 Tobc_in (itrc,ng,ibry)=obcfac(ng)*Tnudg(itrc,ng)
               END IF
             END DO
+# ifdef ICE_MODEL
+            IF (LBC(ibry,isTice,ng)%nudging.or.                         &
+     &          LBC(ibry,isAice,ng)%nudging.or.                         &
+     &          LBC(ibry,isHice,ng)%nudging.or.) THEN
+              Tobc_out(1,ng,ibry)=Tnudg(1,ng)
+              Tobc_in (1,ng,ibry)=obcfac(ng)*Tnudg(1,ng)
+            END IF
+# endif
 #endif
           END DO
         END IF
