@@ -1123,7 +1123,7 @@
 # ifdef ICE_MODEL
             IF (LBC(ibry,isTice,ng)%nudging.or.                         &
      &          LBC(ibry,isAice,ng)%nudging.or.                         &
-     &          LBC(ibry,isHice,ng)%nudging.or.) THEN
+     &          LBC(ibry,isHice,ng)%nudging) THEN
               Tobc_out(1,ng,ibry)=Tnudg(1,ng)
               Tobc_in (1,ng,ibry)=obcfac(ng)*Tnudg(1,ng)
             END IF
