@@ -2,12 +2,13 @@
       MODULE ice_thermo_mod
 #ifdef ICE_THERMO
 !
-!=======================================================================
+!=================================================== W. Paul Budgell ===
 !  Copyright (c) 2002-2021 The ROMS/TOMS Group                         !
 !================================================== Hernan G. Arango ===
 !                                                                      !
-!  This routine computes the ice thermodynamic growth and decay        !
-!  term. Currently the only option is the Mellor-Kantha formulation.   !
+!  This subroutine evaluates the ice thermodynamic growth and decay    !
+!  term based on  Mellor and Kantha (1989) and Parkinson and           !
+!  Washington (1979)                                                   !
 !                                                                      !
 !=======================================================================
 !

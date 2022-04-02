@@ -1,5 +1,5 @@
 #include "cppdefs.h"
-      MODULE i2d_bc_mod
+      MODULE i2dbc_mod
 #ifdef ICE_MODEL
 ! 
 !=======================================================================
@@ -16,31 +16,45 @@
       implicit none
 !
       PRIVATE
-      PUBLIC i2d_ice_bc
-      PUBLIC i2d_sig_bc
-      PUBLIC i2d_bc_tile
-
+      PUBLIC  :: i2dbc_ice
+      PUBLIC  :: i2dbc_tice
+      PUBLIC  :: i2dbc_sig
+!
       CONTAINS
 !
 !***********************************************************************
-      SUBROUTINE i2d_ice_bc (ng, tile, model,                           &
-     &                       LBi, UBi, LBj, UBj,                        &
-     &                       IminS, ImaxS, JminS, JmaxS,                &
-     &                       liold, linew)
+      SUBROUTINE i2dbc_ice (ng, tile,                                   &
+     &                      LBi, UBi, LBj, UBj,                         &
+     &                      IminS, ImaxS, JminS, JmaxS,                 &
+     &                      liold, linew,                               &
+     &                      ui, vi, ai, hi, hsn)
 !***********************************************************************
 !
       USE mod_param
       USE mod_ncparam
-      USE mod_ice
       USE mod_boundary
       USE mod_scalars
 !
 !  Imported variable declarations.
 !
-      integer, intent(in) :: ng, tile, model
+      integer, intent(in) :: ng, tile
       integer, intent(in) :: LBi, UBi, LBj, UBj
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
       integer, intent(in) :: liold, linew
+
+# ifdef ASSUMED_SHAPE
+      real(r8), intent(in)    :: ui(LBi:,LBj:,:)
+      real(r8), intent(in)    :: vi(LBi:,LBj:,:)
+      real(r8), intent(inout) :: ai(LBi:,LBj:,:)
+      real(r8), intent(inout) :: hi(LBi:,LBj:,:)
+      real(r8), intent(inout) :: hsn(LBi:,LBj:,:)
+# else
+      real(r8), intent(in)    :: ui(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(in)    :: vi(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: ai(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: hi(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: hsn(LBi:UBi,LBj:UBj,2)
+# endif
 !
 !  Local variable declarations.
 !
@@ -74,13 +88,13 @@
         END DO
       END IF
 !
-      CALL i2d_bc_tile (ng, tile, model,                                &
-     &                  LBi, UBi, LBj, UBj,                             &
-     &                  IminS, ImaxS, JminS, JmaxS,                     &
-     &                  liold, linew,                                   &
-     &                  a_west, a_east, a_north, a_south,               &
-     &                  ICE(ng)%ui, ICE(ng)%vi, ICE(ng)%ai,             &
-     &                  LBC(:,isAice,ng))
+      CALL i2dbc_tile (ng, tile,                                        &
+     &                 LBi, UBi, LBj, UBj,                              &
+     &                 IminS, ImaxS, JminS, JmaxS,                      &
+     &                 liold, linew,                                    &
+     &                 ui, vi, ai,                                      &
+     &                 a_west, a_east, a_north, a_south,                &
+     &                 LBC(:,isAice,ng))
 !
       IF (LBC(iwest,isHice,ng)%acquire) THEN
         DO j=Jstr,Jend+1
@@ -103,13 +117,13 @@
         END DO
       END IF
 !
-      CALL i2d_bc_tile (ng, tile, model,                                &
-     &                  LBi, UBi, LBj, UBj,                             &
-     &                  IminS, ImaxS, JminS, JmaxS,                     &
-     &                  liold, linew,                                   &
-     &                  a_west, a_east, a_north, a_south,               &
-     &                  ICE(ng)%ui, ICE(ng)%vi, ICE(ng)%hi,             &
-     &                  LBC(:,isHice,ng))
+      CALL i2dbc_tile (ng, tile,                                        &
+     &                 LBi, UBi, LBj, UBj,                              &
+     &                 IminS, ImaxS, JminS, JmaxS,                      &
+     &                 liold, linew,                                    &
+     &                 ui, vi, hi,                                      &
+     &                 a_west, a_east, a_north, a_south,                &
+     &                 LBC(:,isHice,ng))
 !
       IF (LBC(iwest,isHice,ng)%acquire) THEN
         DO j=Jstr,Jend+1
@@ -132,122 +146,342 @@
         END DO
       END IF
 !
-      CALL i2d_bc_tile (ng, tile, model,                                &
-     &                  LBi, UBi, LBj, UBj,                             &
-     &                  IminS, ImaxS, JminS, JmaxS,                     &
-     &                  liold, linew,                                   &
-     &                  a_west, a_east, a_north, a_south,               &
-     &                  ICE(ng)%ui, ICE(ng)%vi, ICE(ng)%hsn,            &
-     &                  LBC(:,isHice,ng))
+      CALL i2dbc_tile (ng, tile,                                        &
+     &                 LBi, UBi, LBj, UBj,                              &
+     &                 IminS, ImaxS, JminS, JmaxS,                      &
+     &                 liold, linew,                                    &
+     &                 ui, vi, hsn,                                     &
+     &                 a_west, a_east, a_north, a_south,                &
+     &                 LBC(:,isHice,ng))
 !
-      END SUBROUTINE i2d_ice_bc
+      END SUBROUTINE i2dbc_ice
 !
 !***********************************************************************
-      SUBROUTINE i2d_sig_bc (ng, tile, model,                           &
+      SUBROUTINE i2dbc_tice (ng, tile,                                  &
      &                       LBi, UBi, LBj, UBj,                        &
      &                       IminS, ImaxS, JminS, JmaxS,                &
-     &                       liold, linew)
+     &                       liold, linew,                              &
+     &                       ui, vi, hi, ti, enthalpi)
 !***********************************************************************
 !
       USE mod_param
       USE mod_ncparam
-      USE mod_ice
       USE mod_boundary
       USE mod_scalars
+      USE mod_grid
 !
 !  Imported variable declarations.
 !
-      integer, intent(in) :: ng, tile, model
+      integer, intent(in) :: ng, tile
       integer, intent(in) :: LBi, UBi, LBj, UBj
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
       integer, intent(in) :: liold, linew
+
+# ifdef ASSUMED_SHAPE
+      real(r8), intent(in)    :: ui(LBi:,LBj:,:)
+      real(r8), intent(in)    :: vi(LBi:,LBj:,:)
+      real(r8), intent(in)    :: hi(LBi:,LBj:,:)
+      real(r8), intent(inout) :: ti(LBi:,LBj:,:)
+      real(r8), intent(inout) :: enthalpi(LBi:,LBj:,:)
+# else
+      real(r8), intent(in)    :: ui(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(in)    :: vi(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(in)    :: hi(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: ti(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: enthalpi(LBi:UBi,LBj:UBj,2)
+# endif
 !
 !  Local variable declarations.
 !
       integer :: i, j
 !
-      real(r8), dimension(LBj:UBj,1:3) :: a_west
-      real(r8), dimension(LBj:UBj,1:3) :: a_east
-      real(r8), dimension(LBi:UBi,1:3) :: a_north
-      real(r8), dimension(LBi:UBi,1:3) :: a_south
+      real(r8), dimension(LBj:UBj) :: a_west
+      real(r8), dimension(LBj:UBj) :: a_east
+      real(r8), dimension(LBi:UBi) :: a_north
+      real(r8), dimension(LBi:UBi) :: a_south
+!
+#include "set_bounds.h"
+!
+      IF (LBC(iwest,isTice,ng)%acquire) THEN
+        DO j=Jstr,Jend+1
+          a_west(j) = BOUNDARY(ng)%hi_west(j)*BOUNDARY(ng)%ti_west(j)
+        END DO
+      END IF
+      IF (LBC(ieast,isTice,ng)%acquire) THEN
+        DO j=Jstr,Jend+1
+          a_east(j) = BOUNDARY(ng)%hi_east(j)*BOUNDARY(ng)%ti_east(j)
+        END DO
+      END IF
+      IF (LBC(inorth,isTice,ng)%acquire) THEN
+        DO i=Istr,Iend+1
+          a_north(i) = BOUNDARY(ng)%hi_north(i)*BOUNDARY(ng)%ti_north(i)
+        END DO
+      END IF
+      IF (LBC(isouth,isTice,ng)%acquire) THEN
+        DO i=Istr,Iend+1
+          a_south(i) = BOUNDARY(ng)%hi_south(i)*BOUNDARY(ng)%ti_south(i)
+        END DO
+      END IF
+!
+      CALL i2dbc_tile (ng, tile,                                        &
+     &                 LBi, UBi, LBj, UBj,                              &
+     &                 IminS, ImaxS, JminS, JmaxS,                      &
+     &                 liold, linew,                                    &
+     &                 ui, vi, enthalpi,                                &
+     &                 a_west, a_east, a_north, a_south,                &
+     &                 LBC(:,isTice,ng))
+!
+!  Determine ice temperature boundary conditions.
+!
+      IF (DOMAIN(ng)%Western_Edge(tile)) THEN
+!
+        IF (LBC(iwest,isTice,ng)%clamped) THEN
+          DO j=Jstr,Jend
+            IF (LBC_apply(ng)%west(j)) THEN
+              ti(Istr-1,j,linew)=BOUNDARY(ng)%ti_west(j)
+# ifdef MASKING
+              ti(Istr-1,j,linew)=ti(Istr-1,j,linew)*                    &
+     &                           GRID(ng)%rmask(Istr-1,j)
+# endif
+            END IF
+          END DO
+        ELSE
+          DO j=Jstr,Jend
+            IF (LBC_apply(ng)%west(j)) THEN
+              ti(Istr-1,j,linew)=enthalpi(Istr-1,j,linew)/              &
+     &                           MAX(hi(Istr-1,j,linew),1.0E-6_r8)
+# ifdef MASKING
+              ti(Istr-1,j,linew)=ti(Istr-1,j,linew)*                    &
+     &                           GRID(ng)%rmask(Istr-1,j)
+# endif
+            END IF
+          END DO
+        END IF
+!
+        IF (LBC(ieast,isTice,ng)%clamped) THEN
+          DO j=Jstr,Jend
+            IF (LBC_apply(ng)%east(j)) THEN
+              ti(Iend+1,j,linew)=BOUNDARY(ng)%ti_east(j)
+# ifdef MASKING
+              ti(Iend+1,j,linew)=ti(Iend+1,j,linew)*                    &
+     &                           GRID(ng)%rmask(Iend+1,j)
+# endif
+            END IF
+          END DO
+        ELSE
+          DO j=Jstr,Jend
+            IF (LBC_apply(ng)%east(j)) THEN
+              ti(Iend+1,j,linew)=enthalpi(Iend+1,j,linew)/              &
+     &                           MAX(hi(Iend+1,j,linew),1.0E-6_r8)
+# ifdef MASKING
+              ti(Iend+1,j,linew)=ti(Iend+1,j,linew)*                    &
+     &                           GRID(ng)%rmask(Iend+1,j)
+# endif
+            END IF
+          END DO
+        END IF
+!
+        IF (LBC(isouth,isTice,ng)%clamped) THEN
+          DO i=Istr,Iend
+            IF (LBC_apply(ng)%south(i)) THEN
+              ti(i,Jstr-1,linew)=BOUNDARY(ng)%ti_south(i)
+# ifdef MASKING
+              ti(i,Jstr-1,linew)=ti(i,Jstr-1,linew)*                    &
+     &                           GRID(ng)%rmask(i,Jstr-1)
+# endif
+            END IF
+          END DO
+        ELSE
+          DO i=Istr,Iend
+            IF (LBC_apply(ng)%south(i)) THEN
+              ti(i,Jstr-1,linew)=enthalpi(i,Jstr-1,linew)/              &
+     &                           MAX(hi(i,Jstr-1,linew),1.0E-6_r8)
+# ifdef MASKING
+              ti(i,Jstr-1,linew)=ti(i,Jstr-1,linew)*                    &
+     &                           GRID(ng)%rmask(i,Jstr-1)
+# endif
+            END IF
+          END DO
+        END IF
+!
+        IF (LBC(inorth,isTice,ng)%clamped) THEN
+          DO i=Istr,Iend
+            IF (LBC_apply(ng)%north(i)) THEN
+              ti(i,Jend+1,linew)=BOUNDARY(ng)%ti_north(i)
+# ifdef MASKING
+              ti(i,Jend+1,linew)=ti(i,Jend+1,linew)*                    &
+     &                           GRID(ng)%rmask(i,Jend+1)
+# endif
+            END IF
+          END DO
+        ELSE
+          DO i=Istr,Iend
+            IF (LBC_apply(ng)%north(i)) THEN
+              ti(i,Jend+1,linew)=enthalpi(i,Jend+1,linew)/              &
+     &                           MAX(hi(i,Jend+1,linew),1.0E-6_r8)
+# ifdef MASKING
+              ti(i,Jend+1,linew)=ti(i,Jend+1,linew)*                    &
+     &                           GRID(ng)%rmask(i,Jend+1)
+# endif
+            END IF
+          END DO
+        END IF
+!
+      END IF
+!
+      END SUBROUTINE i2dbc_tice
+!
+!***********************************************************************
+      SUBROUTINE i2dbc_sig (ng, tile,                                   &
+     &                      LBi, UBi, LBj, UBj,                         &
+     &                      IminS, ImaxS, JminS, JmaxS,                 &
+     &                      liold, linew,                               &
+     &                      ui, vi, sig11, sig22, sig12)
+!***********************************************************************
+!
+      USE mod_param
+      USE mod_ncparam
+      USE mod_boundary
+      USE mod_scalars
+!
+!  Imported variable declarations.
+!
+      integer, intent(in) :: ng, tile
+      integer, intent(in) :: LBi, UBi, LBj, UBj
+      integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
+      integer, intent(in) :: liold, linew
+
+# ifdef ASSUMED_SHAPE
+      real(r8), intent(in)    :: ui(LBi:,LBj:,:)
+      real(r8), intent(in)    :: vi(LBi:,LBj:,:)
+      real(r8), intent(inout) :: sig11(LBi:,LBj:,:)
+      real(r8), intent(inout) :: sig22(LBi:,LBj:,:)
+      real(r8), intent(inout) :: sig12(LBi:,LBj:,:)
+# else
+      real(r8), intent(in)    :: ui(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(in)    :: vi(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: sig11(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: sig22(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: sig12(LBi:UBi,LBj:UBj,2)
+# endif
+!
+!  Local variable declarations.
+!
+      integer :: i, j
+!
+      real(r8), dimension(LBj:UBj) :: a_west
+      real(r8), dimension(LBj:UBj) :: a_east
+      real(r8), dimension(LBi:UBi) :: a_north
+      real(r8), dimension(LBi:UBi) :: a_south
 !
 #include "set_bounds.h"
 !
       IF (LBC(iwest,isIsig,ng)%acquire) THEN
         DO j=Jstr,Jend+1
-          a_west(j,1) = BOUNDARY(ng)%sig11_west(j)
-          a_west(j,2) = BOUNDARY(ng)%sig22_west(j)
-          a_west(j,3) = BOUNDARY(ng)%sig12_west(j)
+          a_west(j) = BOUNDARY(ng)%sig11_west(j)
         END DO
       END IF
       IF (LBC(ieast,isIsig,ng)%acquire) THEN
         DO j=Jstr,Jend+1
-          a_east(j,1) = BOUNDARY(ng)%sig11_east(j)
-          a_east(j,2) = BOUNDARY(ng)%sig22_east(j)
-          a_east(j,3) = BOUNDARY(ng)%sig12_east(j)
+          a_east(j) = BOUNDARY(ng)%sig11_east(j)
         END DO
       END IF
       IF (LBC(inorth,isIsig,ng)%acquire) THEN
         DO i=Istr,Iend+1
-          a_north(i,1) = BOUNDARY(ng)%sig11_north(i)
-          a_north(i,2) = BOUNDARY(ng)%sig22_north(i)
-          a_north(i,3) = BOUNDARY(ng)%sig12_north(i)
+          a_north(i) = BOUNDARY(ng)%sig11_north(i)
         END DO
       END IF
       IF (LBC(isouth,isIsig,ng)%acquire) THEN
         DO i=Istr,Iend+1
-          a_south(i,1) = BOUNDARY(ng)%sig11_south(i)
-          a_south(i,2) = BOUNDARY(ng)%sig22_south(i)
-          a_south(i,3) = BOUNDARY(ng)%sig12_south(i)
+          a_south(i) = BOUNDARY(ng)%sig11_south(i)
         END DO
       END IF
 !
-      CALL i2d_bc_tile (ng, tile, model,                                &
-     &                  LBi, UBi, LBj, UBj,                             &
-     &                  IminS, ImaxS, JminS, JmaxS,                     &
-     &                  liold, linew,                                   &
-     &                  a_west(:,1), a_east(:,1),                       &
-     &                  a_north(:,1), a_south(:,1),                     &
-     &                  ICE(ng)%ui, ICE(ng)%vi, ICE(ng)%sig11,          &
-     &                  LBC(:,isIsig,ng))
-      CALL i2d_bc_tile (ng, tile, model,                                &
-     &                  LBi, UBi, LBj, UBj,                             &
-     &                  IminS, ImaxS, JminS, JmaxS,                     &
-     &                  liold, linew,                                   &
-     &                  a_west(:,2), a_east(:,2),                       &
-     &                  a_north(:,2), a_south(:,2),                     &
-     &                  ICE(ng)%ui, ICE(ng)%vi, ICE(ng)%sig22,          &
-     &                  LBC(:,isIsig,ng))
-      CALL i2d_bc_tile (ng, tile, model,                                &
-     &                  LBi, UBi, LBj, UBj,                             &
-     &                  IminS, ImaxS, JminS, JmaxS,                     &
-     &                  liold, linew,                                   &
-     &                  a_west(:,3), a_east(:,3),                       &
-     &                  a_north(:,3), a_south(:,3),                     &
-     &                  ICE(ng)%ui, ICE(ng)%vi, ICE(ng)%sig12,          &
-     &                  LBC(:,isIsig,ng))
-      END SUBROUTINE i2d_sig_bc
+      CALL i2dbc_tile (ng, tile,                                        &
+     &                 LBi, UBi, LBj, UBj,                              &
+     &                 IminS, ImaxS, JminS, JmaxS,                      &
+     &                 liold, linew,                                    &
+     &                 ui, vi, sig11,                                   &
+     &                 a_west, a_east, a_north, a_south,                &
+     &                 LBC(:,isIsig,ng))
+!
+      IF (LBC(iwest,isIsig,ng)%acquire) THEN
+        DO j=Jstr,Jend+1
+          a_west(j) = BOUNDARY(ng)%sig22_west(j)
+        END DO
+      END IF
+      IF (LBC(ieast,isIsig,ng)%acquire) THEN
+        DO j=Jstr,Jend+1
+          a_east(j) = BOUNDARY(ng)%sig22_east(j)
+        END DO
+      END IF
+      IF (LBC(inorth,isIsig,ng)%acquire) THEN
+        DO i=Istr,Iend+1
+          a_north(i) = BOUNDARY(ng)%sig22_north(i)
+        END DO
+      END IF
+      IF (LBC(isouth,isIsig,ng)%acquire) THEN
+        DO i=Istr,Iend+1
+          a_south(i) = BOUNDARY(ng)%sig22_south(i)
+        END DO
+      END IF
+!
+      CALL i2dbc_tile (ng, tile,                                        &
+     &                 LBi, UBi, LBj, UBj,                              &
+     &                 IminS, ImaxS, JminS, JmaxS,                      &
+     &                 liold, linew,                                    &
+     &                 ui, vi, sig22,                                   &
+     &                 a_west, a_east, a_north, a_south,                &
+     &                 LBC(:,isIsig,ng))
+!
+      IF (LBC(iwest,isIsig,ng)%acquire) THEN
+        DO j=Jstr,Jend+1
+          a_west(j) = BOUNDARY(ng)%sig12_west(j)
+        END DO
+      END IF
+      IF (LBC(ieast,isIsig,ng)%acquire) THEN
+        DO j=Jstr,Jend+1
+          a_east(j) = BOUNDARY(ng)%sig12_east(j)
+        END DO
+      END IF
+      IF (LBC(inorth,isIsig,ng)%acquire) THEN
+        DO i=Istr,Iend+1
+          a_north(i) = BOUNDARY(ng)%sig12_north(i)
+        END DO
+      END IF
+      IF (LBC(isouth,isIsig,ng)%acquire) THEN
+        DO i=Istr,Iend+1
+          a_south(i) = BOUNDARY(ng)%sig12_south(i)
+        END DO
+      END IF
+!
+      CALL i2dbc_tile (ng, tile,                                        &
+     &                 LBi, UBi, LBj, UBj,                              &
+     &                 IminS, ImaxS, JminS, JmaxS,                      &
+     &                 liold, linew,                                    &
+     &                 ui, vi, sig12,                                   &
+     &                 a_west, a_east, a_north, a_south,                &
+     &                 LBC(:,isIsig,ng))
+      END SUBROUTINE i2dbc_sig
 !
 !***********************************************************************
-      SUBROUTINE i2d_bc_tile (ng, tile, model,                          &
-     &                        LBi, UBi, LBj, UBj,                       &
-     &                        IminS, ImaxS, JminS, JmaxS,               &
-     &                        liold, linew,                             &
-     &                        ai_west, ai_east, ai_north, ai_south,     &
-     &                        ui, vi, ai, S)
+      SUBROUTINE i2dbc_tile (ng, tile,                                  &
+     &                       LBi, UBi, LBj, UBj,                        &
+     &                       IminS, ImaxS, JminS, JmaxS,                &
+     &                       liold, linew,                              &
+     &                       ui, vi, ai,                                &
+     &                       ai_west, ai_east, ai_north, ai_south,      &
+     &                       S)
 !***********************************************************************
 !
       USE mod_param
       USE mod_boundary
       USE mod_grid
       USE mod_scalars
-
-      implicit none
-
 !
 !  Imported variable declarations.
 !
-      integer, intent(in) :: ng, tile, model
+      integer, intent(in) :: ng, tile
       integer, intent(in) :: LBi, UBi, LBj, UBj
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
       integer, intent(in) :: liold, linew
@@ -273,19 +507,13 @@
 !
 !  Local variable declarations.
 !
-      integer :: i, j, know
+      integer :: i, j
       real(r8), parameter :: eps = 1.0E-20_r8
       real(r8) :: Ce, Cx, cff, dTde, dTdt, dTdx, tau
 
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: grad
 
 #include "set_bounds.h"
-!
-!-----------------------------------------------------------------------
-!  Set time-indices
-!-----------------------------------------------------------------------
-!
-        know=liold
 !
 !-----------------------------------------------------------------------
 !  Lateral boundary conditions at the western edge.
@@ -297,21 +525,21 @@
 !
         IF (S(iwest)%radiation) THEN
           DO j=Jstr,Jend+1
-            grad(Istr-1,j)=ai(Istr-1,j,know)-ai(Istr-1,j-1,know)
-            grad(Istr,j)=ai(Istr,j,know)-ai(Istr,j-1,know)
+            grad(Istr-1,j)=ai(Istr-1,j,liold)-ai(Istr-1,j-1,liold)
+            grad(Istr  ,j)=ai(Istr  ,j,liold)-ai(Istr  ,j-1,liold)
 # ifdef MASKING
             grad(Istr-1,j)=grad(Istr-1,j)*GRID(ng)%vmask(Istr-1,j)
-            grad(Istr,j)=grad(Istr,j)*GRID(ng)%vmask(Istr,j)
+            grad(Istr  ,j)=grad(Istr  ,j)*GRID(ng)%vmask(Istr  ,j)
 # endif
           END DO
           DO j=Jstr,Jend
             IF (LBC_apply(ng)%west(j)) THEN
-              dTdt=ai(Istr,j,know)-ai(Istr  ,j,linew)
+              dTdt=ai(Istr,j,liold)-ai(Istr  ,j,linew)
               dTdx=ai(Istr,j,linew)-ai(Istr+1,j,linew)
 
               IF (S(iwest)%nudging) THEN
                 IF ((dTdt*dTdx).lt.0.0_r8) THEN
-                  tau=Tobc_in(1,ng,iwest)
+                  tau=Tobc_in (1,ng,iwest)
                 ELSE
                   tau=Tobc_out(1,ng,iwest)
                 END IF
@@ -319,7 +547,8 @@
               END IF
 
               IF ((dTdt*dTdx).lt.0.0_r8) dTdt=0.0_r8
-              IF ((dTdt*(grad(Istr,j)+grad(Istr,j+1))).gt.0.0_r8) THEN
+              IF ((dTdt*(grad(Istr,j  )+                                &
+     &                   grad(Istr,j+1))).gt.0.0_r8) THEN
                 dTde=grad(Istr,j  )
               ELSE
                 dTde=grad(Istr,j+1)
@@ -331,14 +560,14 @@
 # else
               Ce=0.0_r8
 # endif
-              ai(Istr-1,j,linew)=(cff*ai(Istr-1,j,know)+                &
+              ai(Istr-1,j,linew)=(cff*ai(Istr-1,j,liold)+               &
      &                            Cx *ai(Istr  ,j,linew)-               &
      &                            MAX(Ce,0.0_r8)*grad(Istr-1,j  )-      &
      &                            MIN(Ce,0.0_r8)*grad(Istr-1,j+1))/     &
      &                           (cff+Cx)
               IF (S(iwest)%nudging) THEN
                 ai(Istr-1,j,linew)=ai(Istr-1,j,linew)+                  &
-     &                             tau*(ai_west(j)-ai(Istr-1,j,know))
+     &                             tau*(ai_west(j)-ai(Istr-1,j,liold))
               END IF
 # ifdef MASKING
               ai(Istr-1,j,linew)=ai(Istr-1,j,linew)*                    &
@@ -402,21 +631,21 @@
 !
         IF (S(ieast)%radiation) THEN
           DO j=Jstr,Jend+1
-            grad(Iend,j)=ai(Iend,j,know)-ai(Iend,j-1,know)
-            grad(Iend+1,j)=ai(Iend+1,j,know)-ai(Iend+1,j-1,know)
+            grad(Iend  ,j)=ai(Iend  ,j,liold)-ai(Iend  ,j-1,liold)
+            grad(Iend+1,j)=ai(Iend+1,j,liold)-ai(Iend+1,j-1,liold)
 # ifdef MASKING
-            grad(Iend,j)=grad(Iend,j)*GRID(ng)%vmask(Iend  ,j)
+            grad(Iend  ,j)=grad(Iend  ,j)*GRID(ng)%vmask(Iend  ,j)
             grad(Iend+1,j)=grad(Iend+1,j)*GRID(ng)%vmask(Iend+1,j)
 # endif
           END DO
           DO j=Jstr,Jend
             IF (LBC_apply(ng)%east(j)) THEN
-              dTdt=ai(Iend,j,know)-ai(Iend  ,j,linew)
+              dTdt=ai(Iend,j,liold)-ai(Iend  ,j,linew)
               dTdx=ai(Iend,j,linew)-ai(Iend-1,j,linew)
 
               IF (S(ieast)%nudging) THEN
                 IF ((dTdt*dTdx).lt.0.0_r8) THEN
-                  tau=Tobc_in(1,ng,ieast)
+                  tau=Tobc_in (1,ng,ieast)
                 ELSE
                   tau=Tobc_out(1,ng,ieast)
                 END IF
@@ -424,7 +653,8 @@
               END IF
 
               IF ((dTdt*dTdx).lt.0.0_r8) dTdt=0.0_r8
-              IF ((dTdt*(grad(Iend,j)+grad(Iend,j+1))).gt.0.0_r8) THEN
+              IF ((dTdt*(grad(Iend,j  )+                                &
+     &                   grad(Iend,j+1))).gt.0.0_r8) THEN
                 dTde=grad(Iend,j  )
               ELSE
                 dTde=grad(Iend,j+1)
@@ -436,14 +666,14 @@
 # else
               Ce=0.0_r8
 # endif
-              ai(Iend+1,j,linew)=(cff*ai(Iend+1,j,know)+                &
+              ai(Iend+1,j,linew)=(cff*ai(Iend+1,j,liold)+               &
      &                            Cx *ai(Iend  ,j,linew)-               &
      &                            MAX(Ce,0.0_r8)*grad(Iend+1,j  )-      &
      &                            MIN(Ce,0.0_r8)*grad(Iend+1,j+1))/     &
      &                           (cff+Cx)
               IF (S(ieast)%nudging) THEN
                 ai(Iend+1,j,linew)=ai(Iend+1,j,linew)+                  &
-     &                             tau*(ai_east(j)-ai(Iend+1,j,know))
+     &                             tau*(ai_east(j)-ai(Iend+1,j,liold))
               END IF
 # ifdef MASKING
               ai(Iend+1,j,linew)=ai(Iend+1,j,linew)*                    &
@@ -507,21 +737,21 @@
 !
         IF (S(isouth)%radiation) THEN
           DO i=Istr,Iend+1
-            grad(i,Jstr)=ai(i,Jstr,know)-ai(i-1,Jstr,know)
-            grad(i,Jstr-1)=ai(i,Jstr-1,know)-ai(i-1,Jstr-1,know)
+            grad(i,Jstr  )=ai(i,Jstr  ,liold)-ai(i-1,Jstr  ,liold)
+            grad(i,Jstr-1)=ai(i,Jstr-1,liold)-ai(i-1,Jstr-1,liold)
 # ifdef MASKING
-            grad(i,Jstr)=grad(i,Jstr)*GRID(ng)%umask(i,Jstr)
+            grad(i,Jstr  )=grad(i,Jstr  )*GRID(ng)%umask(i,Jstr  )
             grad(i,Jstr-1)=grad(i,Jstr-1)*GRID(ng)%umask(i,Jstr-1)
 # endif
           END DO
           DO i=Istr,Iend
             IF (LBC_apply(ng)%south(i)) THEN
-              dTdt=ai(i,Jstr,know)-ai(i,Jstr  ,linew)
+              dTdt=ai(i,Jstr,liold)-ai(i,Jstr  ,linew)
               dTde=ai(i,Jstr,linew)-ai(i,Jstr+1,linew)
 
               IF (S(isouth)%nudging) THEN
                 IF ((dTdt*dTde).lt.0.0_r8) THEN
-                  tau=Tobc_in(1,ng,isouth)
+                  tau=Tobc_in (1,ng,isouth)
                 ELSE
                   tau=Tobc_out(1,ng,isouth)
                 END IF
@@ -529,7 +759,8 @@
               END IF
 
               IF ((dTdt*dTde).lt.0.0_r8) dTdt=0.0_r8
-              IF ((dTdt*(grad(i,Jstr)+grad(i+1,Jstr))).gt.0.0_r8) THEN
+              IF ((dTdt*(grad(i  ,Jstr)+                                &
+     &                   grad(i+1,Jstr))).gt.0.0_r8) THEN
                 dTdx=grad(i  ,Jstr)
               ELSE
                 dTdx=grad(i+1,Jstr)
@@ -541,14 +772,14 @@
               Cx=0.0_r8
 # endif
               Ce=dTdt*dTde
-              ai(i,Jstr-1,linew)=(cff*ai(i,Jstr-1,know)+                &
+              ai(i,Jstr-1,linew)=(cff*ai(i,Jstr-1,liold)+               &
      &                            Ce *ai(i,Jstr  ,linew)-               &
      &                            MAX(Cx,0.0_r8)*grad(i  ,Jstr-1)-      &
      &                            MIN(Cx,0.0_r8)*grad(i+1,Jstr-1))/     &
      &                           (cff+Ce)
               IF (S(isouth)%nudging) THEN
                 ai(i,Jstr-1,linew)=ai(i,Jstr-1,linew)+                  &
-     &                             tau*(ai_south(i)-ai(i,Jstr-1,know))
+     &                             tau*(ai_south(i)-ai(i,Jstr-1,liold))
               END IF
 # ifdef MASKING
               ai(i,Jstr-1,linew)=ai(i,Jstr-1,linew)*                    &
@@ -612,21 +843,21 @@
 !
         IF (S(inorth)%radiation) THEN
           DO i=Istr,Iend+1
-            grad(i,Jend)=ai(i,Jend,know)-ai(i-1,Jend,know)
-            grad(i,Jend+1)=ai(i,Jend+1,know)-ai(i-1,Jend+1,know)
+            grad(i,Jend  )=ai(i,Jend  ,liold)-ai(i-1,Jend  ,liold)
+            grad(i,Jend+1)=ai(i,Jend+1,liold)-ai(i-1,Jend+1,liold)
 # ifdef MASKING
-            grad(i,Jend)=grad(i,Jend)*GRID(ng)%umask(i,Jend)
+            grad(i,Jend  )=grad(i,Jend  )*GRID(ng)%umask(i,Jend  )
             grad(i,Jend+1)=grad(i,Jend+1)*GRID(ng)%umask(i,Jend+1)
 # endif
           END DO
           DO i=Istr,Iend
             IF (LBC_apply(ng)%north(i)) THEN
-              dTdt=ai(i,Jend,know)-ai(i,Jend  ,linew)
+              dTdt=ai(i,Jend,liold)-ai(i,Jend  ,linew)
               dTde=ai(i,Jend,linew)-ai(i,Jend-1,linew)
 
               IF (S(inorth)%nudging) THEN
                 IF ((dTdt*dTde).lt.0.0_r8) THEN
-                  tau=Tobc_in(1,ng,inorth)
+                  tau=Tobc_in (1,ng,inorth)
                 ELSE
                   tau=Tobc_out(1,ng,inorth)
                 END IF
@@ -634,7 +865,8 @@
               END IF
 
               IF ((dTdt*dTde).lt.0.0_r8) dTdt=0.0_r8
-              IF ((dTdt*(grad(i,Jend)+grad(i+1,Jend))).gt.0.0_r8) THEN
+              IF ((dTdt*(grad(i  ,Jend)+                                &
+     &                   grad(i+1,Jend))).gt.0.0_r8) THEN
                 dTdx=grad(i  ,Jend)
               ELSE
                 dTdx=grad(i+1,Jend)
@@ -646,14 +878,14 @@
               Cx=0.0_r8
 # endif
               Ce=dTdt*dTde
-              ai(i,Jend+1,linew)=(cff*ai(i,Jend+1,know)+                &
+              ai(i,Jend+1,linew)=(cff*ai(i,Jend+1,liold)+               &
      &                            Ce *ai(i,Jend  ,linew)-               &
      &                            MAX(Cx,0.0_r8)*grad(i  ,Jend+1)-      &
      &                            MIN(Cx,0.0_r8)*grad(i+1,Jend+1))/     &
      &                           (cff+Ce)
               IF (S(inorth)%nudging) THEN
                 ai(i,Jend+1,linew)=ai(i,Jend+1,linew)+                  &
-     &                             tau*(ai_north(i)-ai(i,Jend+1,know))
+     &                             tau*(ai_north(i)-ai(i,Jend+1,liold))
               END IF
 # ifdef MASKING
               ai(i,Jend+1,linew)=ai(i,Jend+1,linew)*                    &
@@ -742,6 +974,6 @@
         END IF
       END IF
       RETURN
-      END SUBROUTINE i2d_bc_tile
+      END SUBROUTINE i2dbc_tile
 #endif
-      END MODULE i2d_bc_mod
+      END MODULE i2dbc_mod

@@ -2,12 +2,15 @@
       MODULE ice_advect_mod
 #ifdef ICE_ADVECT
 !
-!=======================================================================
+!=================================================== W. Paul Budgell ===
 !  Copyright (c) 2002-2020 The ROMS/TOMS Group                         !
 !================================================== Hernan G. Arango ===
 !                                                                      !
-!  This routine computes the advection of the ice tracer fields.       !
-!  Currently, the only option is to use the MPDATA advection scheme.   !
+!  This subroutine performs advection of ice using one of 2 options:   !
+!  (1) Smolarkiewicz second-order upwind scheme.                       !
+!      Reference:                                                      !
+!      Smolarkiewicz and Grabowski (1990)                              !
+!  (2) MPDATA advection scheme.                                        !
 !                                                                      !
 !=======================================================================
 !

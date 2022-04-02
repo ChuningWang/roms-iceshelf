@@ -36,6 +36,7 @@
 !
       CALL tibc_tile (ng, tile, model,                                  &
      &                LBi, UBi, LBj, UBj,                               &
+     &                IminS, ImaxS, JminS, JmaxS,                       &
      &                liold(ng), linew(ng),                             &
      &                ICE(ng) % ui, ICE(ng) % vi, ICE(ng) % hi,         &
      &                ICE(ng) % ti, ICE(ng) % enthalpi)
@@ -46,6 +47,7 @@
 !***********************************************************************
       SUBROUTINE tibc_tile (ng, tile, model,                            &
      &                      LBi, UBi, LBj, UBj,                         &
+     &                      IminS, ImaxS, JminS, JmaxS,                 &
      &                      liold, linew,                               &
      &                      ui, vi, hi,                                 &
      &                      ti, enthalpi)
@@ -63,6 +65,7 @@
 !
       integer, intent(in) :: ng, tile, model
       integer, intent(in) :: LBi, UBi, LBj, UBj
+      integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
       integer, intent(in) :: liold, linew
 
 # ifdef ASSUMED_SHAPE
@@ -82,19 +85,13 @@
 !
 !  Local variable declarations.
 !
-      integer :: i, j, know
+      integer :: i, j
       real(r8), parameter :: eps = 1.0E-20_r8
       real(r8) :: Ce, Cx, cff, dTde, dTdt, dTdx, tau
 
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: grad
 
 #include "set_bounds.h"
-!
-!-----------------------------------------------------------------------
-!  Set time-indices
-!-----------------------------------------------------------------------
-!
-        know=liold
 !
 !-----------------------------------------------------------------------
 !  Lateral boundary conditions at the western edge.
@@ -106,10 +103,10 @@
 !
         IF (LBC(iwest,isTice,ng)%radiation) THEN
           DO j=Jstr,Jend+1
-            grad(Istr-1,j)=enthalpi(Istr-1,j  ,know) -                  &
-     &                     enthalpi(Istr-1,j-1,know)
-            grad(Istr  ,j)=enthalpi(Istr  ,j  ,know) -                  &
-     &                     enthalpi(Istr  ,j-1,know)
+            grad(Istr-1,j)=enthalpi(Istr-1,j  ,liold) -                 &
+     &                     enthalpi(Istr-1,j-1,liold)
+            grad(Istr  ,j)=enthalpi(Istr  ,j  ,liold) -                 &
+     &                     enthalpi(Istr  ,j-1,liold)
 # ifdef MASKING
             grad(Istr-1,j)=grad(Istr-1,j)*GRID(ng)%vmask(Istr-1,j)
             grad(Istr  ,j)=grad(Istr  ,j)*GRID(ng)%vmask(Istr  ,j)
@@ -117,7 +114,7 @@
           END DO
           DO j=Jstr,Jend
             IF (LBC_apply(ng)%west(j)) THEN
-              dTdt=enthalpi(Istr,j,know )-enthalpi(Istr  ,j,linew)
+              dTdt=enthalpi(Istr,j,liold)-enthalpi(Istr  ,j,linew)
               dTdx=enthalpi(Istr,j,linew)-enthalpi(Istr+1,j,linew)
 
               IF (LBC(iwest,isTice,ng)%nudging) THEN
@@ -144,7 +141,7 @@
               Ce=0.0_r8
 # endif
               enthalpi(Istr-1,j,linew)=                                 &
-     &          (cff*enthalpi(Istr-1,j,know)+                           &
+     &          (cff*enthalpi(Istr-1,j,liold)+                          &
      &           Cx *enthalpi(Istr  ,j,linew)-                          &
      &           MAX(Ce,0.0_r8)*grad(Istr-1,j  )-                       &
      &           MIN(Ce,0.0_r8)*grad(Istr-1,j+1))/                      &
@@ -152,7 +149,7 @@
               IF (LBC(iwest,isTice,ng)%nudging) THEN
                 enthalpi(Istr-1,j,linew)=enthalpi(Istr-1,j,linew)+      &
      &            tau*(BOUNDARY(ng)%hi_west(j)*BOUNDARY(ng)%ti_west(j)- &
-     &                 enthalpi(Istr-1,j,know))
+     &                 enthalpi(Istr-1,j,liold))
               END IF
               ti(Istr-1,j,linew)=enthalpi(Istr-1,j,linew)/              &
      &                           MAX(hi(Istr-1,j,linew),1.0E-6_r8)
@@ -247,10 +244,10 @@
 !
         IF (LBC(ieast,isTice,ng)%radiation) THEN
           DO j=Jstr,Jend+1
-            grad(Iend  ,j)=enthalpi(Iend  ,j  ,know) -                  &
-     &                     enthalpi(Iend  ,j-1,know)
-            grad(Iend+1,j)=enthalpi(Iend+1,j  ,know) -                  &
-     &                     enthalpi(Iend+1,j-1,know)
+            grad(Iend  ,j)=enthalpi(Iend  ,j  ,liold) -                 &
+     &                     enthalpi(Iend  ,j-1,liold)
+            grad(Iend+1,j)=enthalpi(Iend+1,j  ,liold) -                 &
+     &                     enthalpi(Iend+1,j-1,liold)
 # ifdef MASKING
             grad(Iend  ,j)=grad(Iend  ,j)*GRID(ng)%vmask(Iend  ,j)
             grad(Iend+1,j)=grad(Iend+1,j)*GRID(ng)%vmask(Iend+1,j)
@@ -258,7 +255,7 @@
           END DO
           DO j=Jstr,Jend
             IF (LBC_apply(ng)%east(j)) THEN
-              dTdt=enthalpi(Iend,j,know )-enthalpi(Iend  ,j,linew)
+              dTdt=enthalpi(Iend,j,liold )-enthalpi(Iend  ,j,linew)
               dTdx=enthalpi(Iend,j,linew)-enthalpi(Iend-1,j,linew)
 
               IF (LBC(ieast,isTice,ng)%nudging) THEN
@@ -285,7 +282,7 @@
               Ce=0.0_r8
 # endif
               enthalpi(Iend+1,j,linew)=                                 &
-     &          (cff*enthalpi(Iend+1,j,know)+                           &
+     &          (cff*enthalpi(Iend+1,j,liold)+                          &
      &           Cx *enthalpi(Iend  ,j,linew)-                          &
      &           MAX(Ce,0.0_r8)*grad(Iend+1,j  )-                       &
      &           MIN(Ce,0.0_r8)*grad(Iend+1,j+1))/                      &
@@ -293,7 +290,7 @@
               IF (LBC(ieast,isTice,ng)%nudging) THEN
                 enthalpi(Iend+1,j,linew)=enthalpi(Iend+1,j,linew)+      &
      &            tau*(BOUNDARY(ng)%hi_east(j)*BOUNDARY(ng)%ti_east(j)- &
-     &                 enthalpi(Iend+1,j,know))
+     &                 enthalpi(Iend+1,j,liold))
               END IF
               ti(Iend+1,j,linew)=enthalpi(Iend+1,j,linew)/              &
      &                           MAX(hi(Iend+1,j,linew),1.0E-6_r8)
@@ -388,10 +385,10 @@
 !
         IF (LBC(isouth,isTice,ng)%radiation) THEN
           DO i=Istr,Iend+1
-            grad(i,Jstr  )=enthalpi(i  ,Jstr  ,know) -                  &
-     &                     enthalpi(i-1,Jstr  ,know)
-            grad(i,Jstr-1)=enthalpi(i  ,Jstr-1,know) -                  &
-     &                     enthalpi(i-1,Jstr-1,know)
+            grad(i,Jstr  )=enthalpi(i  ,Jstr  ,liold) -                 &
+     &                     enthalpi(i-1,Jstr  ,liold)
+            grad(i,Jstr-1)=enthalpi(i  ,Jstr-1,liold) -                 &
+     &                     enthalpi(i-1,Jstr-1,liold)
 #ifdef MASKING
             grad(i,Jstr  )=grad(i,Jstr  )*GRID(ng)%umask(i,Jstr  )
             grad(i,Jstr-1)=grad(i,Jstr-1)*GRID(ng)%umask(i,Jstr-1)
@@ -399,7 +396,7 @@
           END DO
           DO i=Istr,Iend
             IF (LBC_apply(ng)%south(i)) THEN
-              dTdt=enthalpi(i,Jstr,know )-enthalpi(i,Jstr  ,linew)
+              dTdt=enthalpi(i,Jstr,liold)-enthalpi(i,Jstr  ,linew)
               dTde=enthalpi(i,Jstr,linew)-enthalpi(i,Jstr+1,linew)
 
               IF (LBC(isouth,isTice,ng)%nudging) THEN
@@ -426,7 +423,7 @@
 # endif
               Ce=dTdt*dTde
               enthalpi(i,Jstr-1,linew)=                                 &
-     &          (cff*enthalpi(i,Jstr-1,know)+                           &
+     &          (cff*enthalpi(i,Jstr-1,liold)+                          &
      &           Ce *enthalpi(i,Jstr  ,linew)-                          &
      &           MAX(Cx,0.0_r8)*grad(i  ,Jstr-1)-                       &
      &           MIN(Cx,0.0_r8)*grad(i+1,Jstr-1))/                      &
@@ -434,7 +431,8 @@
               IF (LBC(isouth,isTice,ng)%nudging) THEN
                 enthalpi(i,Jstr-1,linew)=enthalpi(i,Jstr-1,linew)+      &
      &            tau*(BOUNDARY(ng)%hi_south(j)*                        &
-     &                 BOUNDARY(ng)%ti_south(j)-enthalpi(i,Jstr-1,know))
+     &                 BOUNDARY(ng)%ti_south(j)-                        &
+     &                 enthalpi(i,Jstr-1,liold))
               END IF
               ti(i,Jstr-1,linew)=enthalpi(i,Jstr-1,linew)/              &
      &                           MAX(hi(i,Jstr-1,linew),1.0E-6_r8)
@@ -529,10 +527,10 @@
 !
         IF (LBC(inorth,isTice,ng)%radiation) THEN
           DO i=Istr,Iend+1
-            grad(i,Jend  )=enthalpi(i  ,Jend  ,know) -                  &
-     &                     enthalpi(i-1,Jend  ,know)
-            grad(i,Jend+1)=enthalpi(i  ,Jend+1,know) -                  &
-     &                     enthalpi(i-1,Jend+1,know)
+            grad(i,Jend  )=enthalpi(i  ,Jend  ,liold) -                 &
+     &                     enthalpi(i-1,Jend  ,liold)
+            grad(i,Jend+1)=enthalpi(i  ,Jend+1,liold) -                 &
+     &                     enthalpi(i-1,Jend+1,liold)
 # ifdef MASKING
             grad(i,Jend  )=grad(i,Jend  )*GRID(ng)%umask(i,Jend  )
             grad(i,Jend+1)=grad(i,Jend+1)*GRID(ng)%umask(i,Jend+1)
@@ -540,7 +538,7 @@
           END DO
           DO i=Istr,Iend
             IF (LBC_apply(ng)%north(i)) THEN
-              dTdt=enthalpi(i,Jend,know )-enthalpi(i,Jend  ,linew)
+              dTdt=enthalpi(i,Jend,liold)-enthalpi(i,Jend  ,linew)
               dTde=enthalpi(i,Jend,linew)-enthalpi(i,Jend-1,linew)
 
               IF (LBC(inorth,isTice,ng)%nudging) THEN
@@ -566,7 +564,7 @@
 # endif
               Ce=dTdt*dTde
               enthalpi(i,Jend+1,linew)=                                 &
-     &          (cff*enthalpi(i,Jend+1,know)+                           &
+     &          (cff*enthalpi(i,Jend+1,liold)+                          &
      &           Ce *enthalpi(i,Jend  ,linew)-                          &
      &           MAX(Cx,0.0_r8)*grad(i  ,Jend+1)-                       &
      &           MIN(Cx,0.0_r8)*grad(i+1,Jend+1))/                      &
@@ -574,14 +572,15 @@
               IF (LBC(inorth,isTice,ng)%nudging) THEN
                 enthalpi(i,Jend+1,linew)=enthalpi(i,Jend+1,linew)+      &
      &            tau*(BOUNDARY(ng)%hi_north(j)*                        &
-     &                 BOUNDARY(ng)%ti_north(j)-enthalpi(i,Jend+1,know))
+     &                 BOUNDARY(ng)%ti_north(j)-                        &
+     &                 enthalpi(i,Jend+1,liold))
               END IF
               ti(i,Jend+1,linew)=enthalpi(i,Jend+1,linew)/              &
      &                           MAX(hi(i,Jend+1,linew),1.0E-6_r8)
 # ifdef MASKING
               enthalpi(i,Jend+1,linew)=enthalpi(i,Jend+1,linew)*        &
      &                                 GRID(ng)%rmask(i,Jend+1)
-              hi(i,Jend+1,linew)=hi(i,Jend+1,linew)*                    &
+              ti(i,Jend+1,linew)=ti(i,Jend+1,linew)*                    &
      &                           GRID(ng)%rmask(i,Jend+1)
 # endif
             END IF

@@ -71,7 +71,7 @@
 !
 !  Local variable declarations.
 !
-      integer :: i, Imax, Imin, j, know
+      integer :: i, Imax, Imin, j
       real(r8), parameter :: eps = 1.0E-20_r8
       real(r8) :: Ce, Cx
       real(r8) :: cff, dUde, dUdt, dUdx, phi, tau
@@ -79,12 +79,6 @@
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: grad
 
 # include "set_bounds.h"
-!
-!-----------------------------------------------------------------------
-!  Set time-indices
-!-----------------------------------------------------------------------
-!
-        know=liuol
 !
 !-----------------------------------------------------------------------
 !  Lateral boundary conditions at the western edge.
@@ -96,19 +90,17 @@
 !
         IF (LBC(iwest,isUice,ng)%radiation) THEN
           DO j=Jstr,Jend+1
-            grad(Istr  ,j)=ui(Istr  ,j  ,know)-                         &
-     &                     ui(Istr  ,j-1,know)
-            grad(Istr+1,j)=ui(Istr+1,j  ,know)-                         &
-     &                     ui(Istr+1,j-1,know)
+            grad(Istr  ,j)=ui(Istr  ,j  ,liuol)-ui(Istr  ,j-1,liuol)
+            grad(Istr+1,j)=ui(Istr+1,j  ,liuol)-ui(Istr+1,j-1,liuol)
           END DO
           DO j=Jstr,Jend
             IF (LBC_apply(ng)%west(j)) THEN
-              dUdt=ui(Istr+1,j,know)-ui(Istr+1,j,liunw)
+              dUdt=ui(Istr+1,j,liuol)-ui(Istr+1,j,liunw)
               dUdx=ui(Istr+1,j,liunw)-ui(Istr+2,j,liunw)
 
               IF (LBC(iwest,isUice,ng)%nudging) THEN
                 IF ((dUdt*dUdx).lt.0.0_r8) THEN
-                  tau=M2obc_in(ng,iwest)
+                  tau=M2obc_in (ng,iwest)
                 ELSE
                   tau=M2obc_out(ng,iwest)
                 END IF
@@ -133,7 +125,7 @@
 # else
               Ce=0.0_r8
 # endif
-              ui(Istr,j,liunw)=(cff*ui(Istr  ,j,know)+                  &
+              ui(Istr,j,liunw)=(cff*ui(Istr  ,j,liuol)+                 &
      &                          Cx *ui(Istr+1,j,liunw)-                 &
      &                          MAX(Ce,0.0_r8)*grad(Istr,j  )-          &
      &                          MIN(Ce,0.0_r8)*grad(Istr,j+1)) /        &
@@ -147,7 +139,7 @@
 # else
                 ui(Istr,j,liunw)=ui(Istr,j,liunw)+                      &
      &                           tau*(BOUNDARY(ng)%ui_west(j)-          &
-     &                           ui(Istr,j,know))
+     &                           ui(Istr,j,liuol))
 # endif
               END IF
 # ifdef MASKING
@@ -204,19 +196,17 @@
 !
         IF (LBC(ieast,isUice,ng)%radiation) THEN
           DO j=Jstr,Jend+1
-            grad(Iend  ,j)=ui(Iend  ,j  ,know)-                         &
-     &                     ui(Iend  ,j-1,know)
-            grad(Iend+1,j)=ui(Iend+1,j  ,know)-                         &
-     &                     ui(Iend+1,j-1,know)
+            grad(Iend  ,j)=ui(Iend  ,j  ,liuol)-ui(Iend  ,j-1,liuol)
+            grad(Iend+1,j)=ui(Iend+1,j  ,liuol)-ui(Iend+1,j-1,liuol)
           END DO
           DO j=Jstr,Jend
             IF (LBC_apply(ng)%east(j)) THEN
-              dUdt=ui(Iend,j,know)-ui(Iend  ,j,liunw)
+              dUdt=ui(Iend,j,liuol)-ui(Iend  ,j,liunw)
               dUdx=ui(Iend,j,liunw)-ui(Iend-1,j,liunw)
 
               IF (LBC(ieast,isUice,ng)%nudging) THEN
                 IF ((dUdt*dUdx).lt.0.0_r8) THEN
-                  tau=M2obc_in(ng,ieast)
+                  tau=M2obc_in (ng,ieast)
                 ELSE
                   tau=M2obc_out(ng,ieast)
                 END IF
@@ -241,7 +231,7 @@
 # else
               Ce=0.0_r8
 # endif
-              ui(Iend+1,j,liunw)=(cff*ui(Iend+1,j,know)+                &
+              ui(Iend+1,j,liunw)=(cff*ui(Iend+1,j,liuol)+               &
      &                            Cx *ui(Iend  ,j,liunw)-               &
      &                            MAX(Ce,0.0_r8)*grad(Iend+1,j  )-      &
      &                            MIN(Ce,0.0_r8)*grad(Iend+1,j+1)) /    &
@@ -255,7 +245,7 @@
 # else
                 ui(Iend+1,j,liunw)=ui(Iend+1,j,liunw)+                  &
      &                             tau*(BOUNDARY(ng)%ui_east(j)-        &
-     &                             ui(Iend+1,j,know))
+     &                             ui(Iend+1,j,liuol))
 # endif
               END IF
 # ifdef MASKING
@@ -312,19 +302,17 @@
 !
         IF (LBC(isouth,isUice,ng)%radiation) THEN
           DO i=IstrU-1,Iend
-            grad(i,Jstr-1)=ui(i+1,Jstr-1,know)-                         &
-     &                     ui(i  ,Jstr-1,know)
-            grad(i,Jstr  )=ui(i+1,Jstr  ,know)-                         &
-     &                     ui(i  ,Jstr  ,know)
+            grad(i,Jstr-1)=ui(i+1,Jstr-1,liuol)-ui(i  ,Jstr-1,liuol)
+            grad(i,Jstr  )=ui(i+1,Jstr  ,liuol)-ui(i  ,Jstr  ,liuol)
           END DO
           DO i=IstrU,Iend
             IF (LBC_apply(ng)%south(i)) THEN
-              dUdt=ui(i,Jstr,know)-ui(i,Jstr  ,liunw)
+              dUdt=ui(i,Jstr,liuol)-ui(i,Jstr  ,liunw)
               dUde=ui(i,Jstr,liunw)-ui(i,Jstr+1,liunw)
 
               IF (LBC(isouth,isUice,ng)%nudging) THEN
                 IF ((dUdt*dUde).lt.0.0_r8) THEN
-                  tau=M2obc_in(ng,isouth)
+                  tau=M2obc_in (ng,isouth)
                 ELSE
                   tau=M2obc_out(ng,isouth)
                 END IF
@@ -349,7 +337,7 @@
               Cx=0.0_r8
 # endif
               Ce=dUdt*dUde
-              ui(i,Jstr-1,liunw)=(cff*ui(i,Jstr-1,know)+                &
+              ui(i,Jstr-1,liunw)=(cff*ui(i,Jstr-1,liuol)+               &
      &                            Ce *ui(i,Jstr  ,liunw)-               &
      &                            MAX(Cx,0.0_r8)*grad(i-1,Jstr-1)-      &
      &                            MIN(Cx,0.0_r8)*grad(i  ,Jstr-1)) /    &
@@ -363,7 +351,7 @@
 # else
                 ui(i,Jstr-1,liunw)=ui(i,Jstr-1,liunw)+                  &
      &                             tau*(BOUNDARY(ng)%ui_south(i)-       &
-     &                                  ui(i,Jstr-1,know))
+     &                                  ui(i,Jstr-1,liuol))
 # endif
               END IF
 # ifdef MASKING
@@ -432,19 +420,17 @@
 !
         IF (LBC(inorth,isUice,ng)%radiation) THEN
           DO i=IstrU-1,Iend
-            grad(i,Jend  )=ui(i+1,Jend  ,know)-                         &
-     &                     ui(i  ,Jend  ,know)
-            grad(i,Jend+1)=ui(i+1,Jend+1,know)-                         &
-     &                     ui(i  ,Jend+1,know)
+            grad(i,Jend  )=ui(i+1,Jend  ,liuol)-ui(i  ,Jend  ,liuol)
+            grad(i,Jend+1)=ui(i+1,Jend+1,liuol)-ui(i  ,Jend+1,liuol)
           END DO
           DO i=IstrU,Iend
             IF (LBC_apply(ng)%north(i)) THEN
-              dUdt=ui(i,Jend,know)-ui(i,Jend  ,liunw)
+              dUdt=ui(i,Jend,liuol)-ui(i,Jend  ,liunw)
               dUde=ui(i,Jend,liunw)-ui(i,Jend-1,liunw)
 
               IF (LBC(inorth,isUice,ng)%nudging) THEN
                 IF ((dUdt*dUde).lt.0.0_r8) THEN
-                  tau=M2obc_in(ng,inorth)
+                  tau=M2obc_in (ng,inorth)
                 ELSE
                   tau=M2obc_out(ng,inorth)
                 END IF
@@ -469,7 +455,7 @@
               Cx=0.0_r8
 # endif
               Ce=dUdt*dUde
-              ui(i,Jend+1,liunw)=(cff*ui(i,Jend+1,know)+                &
+              ui(i,Jend+1,liunw)=(cff*ui(i,Jend+1,liuol)+               &
      &                            Ce *ui(i,Jend  ,liunw)-               &
      &                            MAX(Cx,0.0_r8)*grad(i-1,Jend+1)-      &
      &                            MIN(Cx,0.0_r8)*grad(i  ,Jend+1)) /    &
@@ -482,7 +468,7 @@
 # else
                 ui(i,Jend+1,liunw)=ui(i,Jend+1,liunw)+                  &
      &                             tau*(BOUNDARY(ng)%ui_north(i)-       &
-     &                                  ui(i,Jend+1,know))
+     &                                  ui(i,Jend+1,liuol))
 # endif
               END IF
 # ifdef MASKING
@@ -549,8 +535,8 @@
         IF (DOMAIN(ng)%SouthWest_Corner(tile)) THEN
           IF (LBC_apply(ng)%south(Istr  ).and.                          &
      &        LBC_apply(ng)%west (Jstr-1)) THEN
-            ui(Istr,Jstr-1,liunw)=0.5_r8*(ui(Istr+1,Jstr-1,liunw)+      &
-     &                                    ui(Istr  ,Jstr  ,liunw))
+            ui(Istr  ,Jstr-1,liunw)=0.5_r8*(ui(Istr+1,Jstr-1,liunw)+    &
+     &                                      ui(Istr  ,Jstr  ,liunw))
           END IF
         END IF
         IF (DOMAIN(ng)%SouthEast_Corner(tile)) THEN
@@ -563,8 +549,8 @@
         IF (DOMAIN(ng)%NorthWest_Corner(tile)) THEN
           IF (LBC_apply(ng)%north(Istr  ).and.                          &
      &        LBC_apply(ng)%west (Jend+1)) THEN
-            ui(Istr,Jend+1,liunw)=0.5_r8*(ui(Istr  ,Jend  ,liunw)+      &
-     &                                    ui(Istr+1,Jend+1,liunw))
+            ui(Istr  ,Jend+1,liunw)=0.5_r8*(ui(Istr  ,Jend  ,liunw)+    &
+     &                                      ui(Istr+1,Jend+1,liunw))
           END IF
         END IF
         IF (DOMAIN(ng)%NorthEast_Corner(tile)) THEN
@@ -578,5 +564,4 @@
       RETURN
       END SUBROUTINE uibc_tile
 #endif
-
       END MODULE uibc_mod

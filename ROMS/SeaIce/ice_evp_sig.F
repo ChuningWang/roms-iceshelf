@@ -74,7 +74,7 @@
       USE mp_exchange_mod, ONLY : mp_exchange2d
 #endif
 !
-      USE i2d_bc_mod, ONLY : i2d_sig_bc
+      USE i2dbc_mod, ONLY : i2dbc_sig
 !
       implicit none
 !
@@ -201,10 +201,11 @@
         END DO
       END DO
 !
-      CALL i2d_sig_bc (ng, tile, iNLM,                                  &
-     &                 LBi, UBi, LBj, UBj,                              &
-     &                 IminS, ImaxS, JminS, JmaxS,                      &
-     &                 lieol, lienw)
+      CALL i2dbc_sig (ng, tile,                                         &
+     &                LBi, UBi, LBj, UBj,                               &
+     &                IminS, ImaxS, JminS, JmaxS,                       &
+     &                lieol, lienw,                                     &
+     &                uie, vie, sig11, sig22, sig12)
 !
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
         CALL exchange_r2d_tile (ng, tile,                               &

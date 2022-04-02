@@ -1,16 +1,8 @@
-     SUBROUTINE ice_thermo (ng, tile)
 !
-!*************************************************** W. Paul Budgell ***
-!  Copyright (c) 2002-2021 ROMS/TOMS Group                             !
-!************************************************** Hernan G. Arango ***
-!                                                                      !
-!  This subroutine evaluates the ice thermodynamic growth and decay    !
-!  term based on  Mellor and Kantha (1989) and Parkinson and           !
-!  Washington (1979)                                                   !
-!                                                                      !
+!***********************************************************************
+      SUBROUTINE ice_thermo (ng, tile)
 !***********************************************************************
 !
-
       USE mod_param
       USE mod_grid
       USE mod_ocean
@@ -20,17 +12,19 @@
 #ifdef ICE_SHALLOW_LIMIT
       USE mod_coupling
 #endif
-
-      implicit none
-
+!
       integer, intent(in) :: ng, tile
-
+!
 #include "tile.h"
-
+!
 #ifdef PROFILE
       CALL wclock_on (ng, iNLM, 92, __LINE__, __FILE__)
 #endif
-
+!
+!-----------------------------------------------------------------------
+!  Calculate ice thermodynamics.
+!-----------------------------------------------------------------------
+!
       CALL ice_thermo_tile (ng, tile,                                   &
      &                      LBi, UBi, LBj, UBj,                         &
      &                      IminS, ImaxS, JminS, JmaxS,                 &
@@ -131,6 +125,8 @@
      &                            stflx)
 !***********************************************************************
 !
+!-----------------------------------------------------------------------
+!
 !  Original comment:
 !      beregner varmefluxer og produskjonsrater
 !      og oppdaterer tis (t3 i mellor et.al.)
@@ -216,8 +212,8 @@
 !            wro(i,j)            -  production rate of surface runoff
 !            t2(i,j)             -  temperature at ice/snow interface
 !
-!***********************************************************************
-
+!-----------------------------------------------------------------------
+!
       USE mod_param
       USE mod_ncparam
       USE mod_scalars
@@ -225,8 +221,7 @@
 !
       USE bc_2d_mod, ONLY : bc_r2d_tile
 !
-      USE i2d_bc_mod, ONLY : i2d_ice_bc
-      USE tibc_mod, ONLY : tibc_tile
+      USE i2dbc_mod, ONLY : i2dbc_ice, i2dbc_tice
       USE mod_clima
 !
       USE exchange_2d_mod, ONLY : exchange_r2d_tile
@@ -358,12 +353,12 @@
       integer :: i, j
       integer :: iday
       real(r8) :: hour, cff
-
+!
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: b2d
-
+!
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: alph
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: ws
-
+!
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: temp_top
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: salt_top
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: sice
@@ -383,11 +378,11 @@
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: chs
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: ai_old
 !     real(r8), dimension(IminS:ImaxS,JminS:JmaxS,2) :: enthal
-
+!
       real(r8) :: tfrz
       real(r8) :: cot
       real(r8) :: ai_tmp
-
+!
       real(r8), parameter :: eps = 1.E-4_r8
       real(r8), parameter :: prt = 13._r8
       real(r8), parameter :: prs = 2432._r8
@@ -404,7 +399,7 @@
       real(r8), parameter :: cpw = 3990.0_r8            ! [J kg-1 K-1]
       real(r8), parameter :: rhocpr = 0.2448205E-6_r8   ! [m s2 K kg-1]
       real(r8), parameter :: ykf = 3.14_r8
-
+!
       real(r8) :: corfac
       real(r8) :: hicehinv  ! 1./(0.5*ice_thick)
       real(r8) :: z0
@@ -418,7 +413,7 @@
       real(r8) :: d1
       real(r8) :: d2i
       real(r8) :: d3
-
+!
 #ifdef ICE_SHALLOW_LIMIT
       real(r8) :: hh
       real(r8) :: clear
@@ -427,9 +422,9 @@
 #ifdef ICE_CONVSNOW
       real(r8) :: hstar
 #endif
-
+!
 #include "set_bounds.h"
-
+!
       CALL caldate(tdays(ng), dd_i=iday, h_dp=hour)
       DO j = Jstr,Jend
         DO i = Istr,Iend
@@ -453,8 +448,8 @@
       DO j = Jstr,Jend
         DO i = Istr,Iend
           utau(i,j) = sqrt(sqrt(                                        &
-     &                  (0.5_r8*(sustr(i,j)+sustr(i+1,j)))**2 +         &
-     &                  (0.5_r8*(svstr(i,j)+svstr(i,j+1)))**2))
+     &                (0.5_r8*(sustr(i,j)+sustr(i+1,j  )))**2 +         &
+     &                (0.5_r8*(svstr(i,j)+svstr(i  ,j+1)))**2))
           utau(i,j) = MAX(utau(i,j),0.0001_r8)
         END DO
       END DO
@@ -514,14 +509,12 @@
           b2d(i,j) = 2.0_r8*alph(i,j) /                                 &
      &               ((ice_thick(i,j)+eps)*(1._r8+coa(i,j)))
           coef_ice_heat(i,j) = coef_ice_heat(i,j) + b2d(i,j)
-
+!
           IF (ai(i,j,linew) .gt. min_a(ng)) THEN
-
 !
 !  Downward conductivity term, assuming the ocean at the freezing point
 !
-            rhs_ice_heat(i,j) = rhs_ice_heat(i,j) +                     &
-     &                          b2d(i,j)*ti(i,j,linew)
+            rhs_ice_heat(i,j) = rhs_ice_heat(i,j)+b2d(i,j)*ti(i,j,linew)
             tis(i,j) = rhs_ice_heat(i,j)/coef_ice_heat(i,j)
             tis(i,j) = MAX(tis(i,j),-45._r8)
           ELSE
@@ -543,9 +536,9 @@
             ti(i,j,linew) = ti(i,j,linew) + dtice(ng)*(                 &
      &        2._r8*alph(i,j)/(rhoice(ng)*ice_thick(i,j)**2*cot)*       &
      &        (t0mk(i,j) + (tis(i,j) - (2._r8+coa(i,j))*ti(i,j,linew))/ &
-     &                     (1._r8+coa(i,j))))
+     &         (1._r8+coa(i,j))))
             ti(i,j,linew) = MAX(ti(i,j,linew),-35._r8)
-            ti(i,j,linew) = MIN(ti(i,j,linew),-eps)
+            ti(i,j,linew) = MIN(ti(i,j,linew),-eps   )
 !           brnfr(i,j) = frln*sice(i,j)/MIN(ti(i,j,linew),-eps)
 !           enthal(i,j,2) = brnfr(i,j) * (hfus + cpw*ti(i,j,linew)) +   &
 !    &                      (1 - brnfr(i,j)) * cpi * ti(i,j,linew)
@@ -560,8 +553,8 @@
           IF (ai(i,j,linew) .gt. min_a(ng)) THEN
             t2(i,j) = (tis(i,j)+coa(i,j)*ti(i,j,linew))/(1._r8+coa(i,j))
             hicehinv = 2._r8/ice_thick(i,j)
-            qi2(i,j) = alph(i,j)*(ti(i,j,linew)-t2(i,j))*hicehinv
-            qio(i,j) = alph(i,j)*(t0mk(i,j)-ti(i,j,linew))*hicehinv
+            qi2(i,j) = alph(i,j)*(ti(i,j,linew)-t2(i,j)      )*hicehinv
+            qio(i,j) = alph(i,j)*(t0mk(i,j)    -ti(i,j,linew))*hicehinv
           END IF
 !
 !  Compute net heat flux from ice to atmosphere - Mellor and Kantha (7)
@@ -673,7 +666,7 @@
             hsn(i,j,linew) = 0.0_r8
 #else
             hsn(i,j,linew) = hsn(i,j,linew) +                           &
-     &        (ai(i,j,linew)*(-wsm(i,j)+ws(i,j)))*dtice(ng)
+     &        ai(i,j,linew)*(ws(i,j)-wsm(i,j))*dtice(ng)
             hsn(i,j,linew) = MAX(0.0_r8,hsn(i,j,linew))
 #endif
           END IF
@@ -730,10 +723,11 @@
      &             (1._r8-ai(i,j,linew))*wao(i,j)
 !
             s0mk(i,j) =                                                 &
-     &        (chs(i,j)*salt_top(i,j) + (ai(i,j,linew)*wro(i,j) -       &
-     &         xtot)*sice(i,j)) /                                       &
-     &        (chs(i,j) + ai(i,j,linew)*wro(i,j) - xtot -               &
-     &         (1._r8-ai(i,j,linew))*stflx(i,j,isalt))
+     &        (chs(i,j)*salt_top(i,j) +                                 &
+     &         (       ai(i,j,linew) *wro(i,j) - xtot)*sice(i,j)) /     &
+     &        (chs(i,j) +                                               &
+     &                 ai(i,j,linew) *wro(i,j) - xtot -                 &
+     &          (1._r8-ai(i,j,linew))*stflx(i,j,isalt))
             IF (s0mk(i,j) < 0.0) s0mk(i,j) = salt_top(i,j)
             s0mk(i,j) = MIN(MAX(s0mk(i,j),0._r8),60._r8)
             t0mk(i,j) = frln*s0mk(i,j)
@@ -798,7 +792,7 @@
 #endif
 #ifdef ICE_DIAGS
             ssflx_i(i,j) = (xtot-ai(i,j,linew)*wro(i,j))*               &
-     &                      (salt_top(i,j)-sice(i,j))*fac_sf
+     &                     (salt_top(i,j)-sice(i,j))*fac_sf
 #endif
 #ifdef ICESHELF
           ELSE
@@ -884,14 +878,14 @@
 !
 !  Case 1 - new ice
 !
-          IF (ageice(i,j,linew).le.0.0_r8                               &
-     &        .and.hi(i,j,linew).gt.min_h(ng)) THEN
+          IF (ageice(i,j,linew).le.0.0_r8 .and.                         &
+     &            hi(i,j,linew).gt.min_h(ng)) THEN
             ageice(i,j,linew)=dtice(ng)/86400._r8
 !
 !  Case 2 - existing ice gets older
 !
-          ELSEIF(ageice(i,j,linew).gt.0.0_r8                            &
-     &           .and.hi(i,j,linew).gt.min_h(ng)) THEN
+          ELSEIF(ageice(i,j,linew).gt.0.0_r8 .and.                      &
+     &               hi(i,j,linew).gt.min_h(ng)) THEN
             ageice(i,j,linew) = ageice(i,j,linew)+dtice(ng)/86400._r8
 !
 !  Case 3 - all ice in cell melted or is open water and stays open water
@@ -940,14 +934,17 @@
      &                  LBi, UBi, LBj, UBj,                             &
      &                  stflx(:,:,itemp))
 !
-      CALL i2d_ice_bc (ng, tile, iNLM,                                  &
+      CALL i2dbc_ice  (ng, tile,                                        &
      &                 LBi, UBi, LBj, UBj,                              &
      &                 IminS, ImaxS, JminS, JmaxS,                      &
-     &                 liold, linew)
+     &                 liold, linew,                                    &
+     &                 ui, vi, ai, hi, hsn)
 !
-      CALL tibc_tile (ng, tile, iNLM,                                   &
-     &                LBi, UBi, LBj, UBj, liold, linew,                 &
-     &                ui, vi, hi, ti, enthalpi)
+      CALL i2dbc_tice (ng, tile,                                        &
+     &                 LBi, UBi, LBj, UBj,                              &
+     &                 IminS, ImaxS, JminS, JmaxS,                      &
+     &                 liold, linew,                                    &
+     &                 ui, vi, hi, ti, enthalpi)
 !
       CALL bc_r2d_tile (ng, tile,                                       &
      &                  LBi, UBi, LBj, UBj,                             &

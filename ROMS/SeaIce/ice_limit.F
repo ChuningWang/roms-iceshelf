@@ -60,8 +60,7 @@
       USE mod_ncparam
       USE mod_scalars
 !
-      USE i2d_bc_mod, ONLY : i2d_ice_bc
-      USE tibc_mod, ONLY : tibc_tile
+      USE i2dbc_mod, ONLY : i2dbc_ice, i2dbc_tice
 !
       USE exchange_2d_mod, ONLY : exchange_r2d_tile
 # ifdef DISTRIBUTE
@@ -117,15 +116,17 @@
         END DO
       END DO
 !
-      CALL i2d_ice_bc (ng, tile, iNLM,                                  &
+      CALL i2dbc_ice  (ng, tile,                                        &
      &                 LBi, UBi, LBj, UBj,                              &
      &                 IminS, ImaxS, JminS, JmaxS,                      &
-     &                 liold, linew)
+     &                 liold, linew,                                    &
+     &                 ui, vi, ai, hi, hsn)
 !
-      CALL tibc_tile (ng, tile, iNLM,                                   &
-     &                LBi, UBi, LBj, UBj,                               &
-     &                liold, linew,                                     &
-     &                ui, vi, hi, ti, enthalpi)
+      CALL i2dbc_tice (ng, tile,                                        &
+     &                 LBi, UBi, LBj, UBj,                              &
+     &                 IminS, ImaxS, JminS, JmaxS,                      &
+     &                 liold, linew,                                    &
+     &                 ui, vi, hi, ti, enthalpi)
 !
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
         CALL exchange_r2d_tile (ng, tile,                               &

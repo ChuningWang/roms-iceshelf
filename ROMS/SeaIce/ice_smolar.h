@@ -1,19 +1,13 @@
-       SUBROUTINE ice_advect (ng, tile)
 !
-!*************************************************** W. Paul Budgell ***
-!  Copyright (c) 2002-2021 The ROMS/TOMS Group                         !
-!************************************************** Hernan G. Arango ***
-!                                                                      !
-!  This subroutine performs advection of ice scalars using the         !
-!  Smolarkiewicz second-order upwind scheme.                           !
-!  Reference:                                                          !
-!  Smolarkiewicz and Grabowski (1990)                                  !
+!***********************************************************************
+      SUBROUTINE ice_advect (ng, tile)
 !***********************************************************************
 !
       USE mod_param
-
-      implicit none
-
+      USE mod_grid
+      USE mod_ice
+      USE mod_stepping
+!
       integer, intent(in) :: ng, tile
 !
 #include "tile.h"
@@ -26,9 +20,40 @@
 !  Advect the ice concentration.
 ! ---------------------------------------------------------------------
 !
-      CALL ice_advect_tile (ng, tile,                               &
-     &                      LBi, UBi, LBj, UBj,                     &
-     &                      IminS, ImaxS, JminS, JmaxS)
+      CALL ice_advect_tile (ng, tile,                                   &
+     &                      LBi, UBi, LBj, UBj,                         &
+     &                      IminS, ImaxS, JminS, JmaxS,                 &
+     &                      linew(ng), liold(ng), liunw(ng),            &
+#ifdef MASKING
+     &                      GRID(ng) % rmask,                           &
+     &                      GRID(ng) % umask,                           &
+     &                      GRID(ng) % vmask,                           &
+#endif
+#ifdef WET_DRY
+     &                      GRID(ng) % rmask_wet,                       &
+     &                      GRID(ng) % umask_wet,                       &
+     &                      GRID(ng) % vmask_wet,                       &
+#endif
+#ifdef ICESHELF
+     &                      GRID(ng) % zice,                            &
+#endif
+#ifndef ICE_UPWIND
+     &                      GRID(ng) % pm,                              &
+     &                      GRID(ng) % pn,                              &
+#endif
+     &                      GRID(ng) % on_u,                            &
+     &                      GRID(ng) % om_v,                            &
+     &                      GRID(ng) % omn,                             &
+     &                      ICE(ng) % ui,                               &
+     &                      ICE(ng) % vi,                               &
+     &                      ICE(ng) % ai,                               &
+     &                      ICE(ng) % hi,                               &
+     &                      ICE(ng) % hsn,                              &
+     &                      ICE(ng) % ti,                               &
+     &                      ICE(ng) % ageice,                           &
+     &                      ICE(ng) % enthalpi,                         &
+     &                      ICE(ng) % hage,                             &
+     &                      ICE(ng) % wdiv)
 #ifdef PROFILE
       CALL wclock_off (ng, iNLM, 95, __LINE__, __FILE__)
 #endif
@@ -36,24 +61,38 @@
       RETURN
       END SUBROUTINE ice_advect
 !
-      SUBROUTINE ice_advect_tile (ng, tile,                         &
-     &                            LBi, UBi, LBj, UBj,               &
-     &                            IminS, ImaxS, JminS, JmaxS)
-
+!***********************************************************************
+      SUBROUTINE ice_advect_tile (ng, tile,                             &
+     &                            LBi, UBi, LBj, UBj,                   &
+     &                            IminS, ImaxS, JminS, JmaxS,           &
+     &                            linew, liold, liunw,                  &
+#ifdef MASKING
+     &                            rmask, umask, vmask,                  &
+#endif
+#ifdef WET_DRY
+     &                            rmask_wet, umask_wet, vmask_wet,      &
+#endif
+#ifdef ICESHELF
+     &                            zice,                                 &
+#endif
+#ifndef ICE_UPWIND
+     &                            pm, pn,                               &
+#endif
+     &                            on_u, om_v, omn,                      &
+     &                            ui, vi,                               &
+     &                            ai, hi, hsn,                          &
+     &                            ti, ageice, enthalpi, hage,           &
+     &                            wdiv)
+!***********************************************************************
+!
       USE mod_param
-      USE mod_ncparam
-      USE mod_grid
-      USE mod_ocean
-      USE mod_ice
-      USE mod_forces
       USE mod_scalars
-      USE mod_stepping
+!
       USE exchange_2d_mod, ONLY : exchange_r2d_tile
 #ifdef DISTRIBUTE
       USE mp_exchange_mod, ONLY : mp_exchange2d
 #endif
-      USE i2d_bc_mod, ONLY : i2d_ice_bc
-      USE tibc_mod, ONLY : tibc_tile
+      USE i2dbc_mod, ONLY : i2dbc_ice, i2dbc_tice
       USE bc_2d_mod, ONLY : bc_r2d_tile
 !
       implicit none
@@ -63,11 +102,75 @@
       integer, intent(in) :: ng, tile
       integer, intent(in) :: LBi, UBi, LBj, UBj
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
+      integer, intent(in) :: linew, liold, liunw
+
+#ifdef ASSUMED_SHAPE
+# ifdef MASKING
+      real(r8), intent(in) :: rmask(LBi:,LBj:)
+      real(r8), intent(in) :: umask(LBi:,LBj:)
+      real(r8), intent(in) :: vmask(LBi:,LBj:)
+# endif
+# ifdef WET_DRY
+      real(r8), intent(in) :: rmask_wet(LBi:,LBj:)
+      real(r8), intent(in) :: umask_wet(LBi:,LBj:)
+      real(r8), intent(in) :: vmask_wet(LBi:,LBj:)
+# endif
+# ifdef ICESHELF
+      real(r8), intent(in) :: zice(LBi:,LBj:)
+# endif
+# ifndef ICE_UPWIND
+      real(r8), intent(in) :: pm(LBi:,LBj:)
+      real(r8), intent(in) :: pn(LBi:,LBj:)
+# endif
+      real(r8), intent(in) :: on_u(LBi:,LBj:)
+      real(r8), intent(in) :: om_v(LBi:,LBj:)
+      real(r8), intent(in) :: omn(LBi:,LBj:)
+      real(r8), intent(in) :: ui(LBi:,LBj:,:)
+      real(r8), intent(in) :: vi(LBi:,LBj:,:)
+      real(r8), intent(inout) :: ai(LBi:,LBj:,:)
+      real(r8), intent(inout) :: hi(LBi:,LBj:,:)
+      real(r8), intent(inout) :: hsn(LBi:,LBj:,:)
+      real(r8), intent(inout) :: ti(LBi:,LBj:,:)
+      real(r8), intent(inout) :: ageice(LBi:,LBj:,:)
+      real(r8), intent(inout) :: enthalpi(LBi:,LBj:,:)
+      real(r8), intent(inout) :: hage(LBi:,LBj:,:)
+      real(r8), intent(inout) :: wdiv(LBi:,LBj:)
+#else
+# ifdef MASKING
+      real(r8), intent(in) :: rmask(LBi:UBi,LBj:UBj)
+      real(r8), intent(in) :: umask(LBi:UBi,LBj:UBj)
+      real(r8), intent(in) :: vmask(LBi:UBi,LBj:UBj)
+# endif
+# ifdef WET_DRY
+      real(r8), intent(in) :: rmask_wet(LBi:UBi,LBj:UBj)
+      real(r8), intent(in) :: umask_wet(LBi:UBi,LBj:UBj)
+      real(r8), intent(in) :: vmask_wet(LBi:UBi,LBj:UBj)
+# endif
+# ifdef ICESHELF
+      real(r8), intent(in) :: zice(LBi:UBi,LBj:UBj)
+# endif
+# ifndef ICE_UPWIND
+      real(r8), intent(in) :: pm(LBi:UBi,LBj:UBj)
+      real(r8), intent(in) :: pn(LBi:UBi,LBj:UBj)
+# endif
+      real(r8), intent(in) :: on_u(LBi:UBi,LBj:UBj)
+      real(r8), intent(in) :: om_v(LBi:UBi,LBj:UBj)
+      real(r8), intent(in) :: omn(LBi:UBi,LBj:UBj)
+      real(r8), intent(in) :: ui(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(in) :: vi(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: ai(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: hi(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: hsn(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: ti(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: ageice(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: enthalpi(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: hage(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: wdiv(LBi:UBi,LBj:UBj)
+#endif
 !
 !  Local variables
 !
       integer :: i, j
-      real(r8) :: wrk(LBi:UBi, LBj:UBj, 2)
 !
 #include "set_bounds.h"
 !
@@ -78,30 +181,21 @@
       CALL ice_adv_var_tile (ng, tile,                                  &
      &                       LBi, UBi, LBj, UBj,                        &
      &                       IminS, ImaxS, JminS, JmaxS,                &
-     &                       nrhs(ng), linew(ng), liold(ng), liunw(ng), &
+     &                       linew, liold, liunw,                       &
 #ifdef MASKING
-     &                       GRID(ng) % rmask,                          &
-     &                       GRID(ng) % umask,                          &
-     &                       GRID(ng) % vmask,                          &
+     &                       rmask, umask, vmask,                       &
 #endif
 #ifdef WET_DRY
-     &                       GRID(ng) % rmask_wet,                      &
-     &                       GRID(ng) % umask_wet,                      &
-     &                       GRID(ng) % vmask_wet,                      &
+     &                       rmask_wet, umask_wet, vmask_wet,           &
 #endif
 #ifdef ICESHELF
-     &                       GRID(ng) % zice,                           &
+     &                       zice,                                      &
 #endif
 #ifndef ICE_UPWIND
-     &                       GRID(ng) % pm,                             &
-     &                       GRID(ng) % pn,                             &
+     &                       pm, pn,                                    &
 #endif
-     &                       GRID(ng) % on_u,                           &
-     &                       GRID(ng) % om_v,                           &
-     &                       GRID(ng) % omn,                            &
-     &                       ICE(ng) % ui,                              &
-     &                       ICE(ng) % vi,                              &
-     &                       ICE(ng) % ai)
+     &                       on_u, om_v, omn,                           &
+     &                       ui, vi, ai)
 !
 ! ---------------------------------------------------------------------
 !  Advect the ice thickness.
@@ -110,30 +204,21 @@
       CALL ice_adv_var_tile (ng, tile,                                  &
      &                       LBi, UBi, LBj, UBj,                        &
      &                       IminS, ImaxS, JminS, JmaxS,                &
-     &                       nrhs(ng), linew(ng), liold(ng), liunw(ng), &
+     &                       linew, liold, liunw,                       &
 #ifdef MASKING
-     &                       GRID(ng) % rmask,                          &
-     &                       GRID(ng) % umask,                          &
-     &                       GRID(ng) % vmask,                          &
+     &                       rmask, umask, vmask,                       &
 #endif
 #ifdef WET_DRY
-     &                       GRID(ng) % rmask_wet,                      &
-     &                       GRID(ng) % umask_wet,                      &
-     &                       GRID(ng) % vmask_wet,                      &
+     &                       rmask_wet, umask_wet, vmask_wet,           &
 #endif
 #ifdef ICESHELF
-     &                       GRID(ng) % zice,                           &
+     &                       zice,                                      &
 #endif
 #ifndef ICE_UPWIND
-     &                       GRID(ng) % pm,                             &
-     &                       GRID(ng) % pn,                             &
+     &                       pm, pn,                                    &
 #endif
-     &                       GRID(ng) % on_u,                           &
-     &                       GRID(ng) % om_v,                           &
-     &                       GRID(ng) % omn,                            &
-     &                       ICE(ng) % ui,                              &
-     &                       ICE(ng) % vi,                              &
-     &                       ICE(ng) % hi)
+     &                       on_u, om_v, omn,                           &
+     &                       ui, vi, hi)
 !
 ! ---------------------------------------------------------------------
 !  Advect the snow thickness.
@@ -143,30 +228,21 @@
       CALL ice_adv_var_tile (ng, tile,                                  &
      &                       LBi, UBi, LBj, UBj,                        &
      &                       IminS, ImaxS, JminS, JmaxS,                &
-     &                       nrhs(ng), linew(ng), liold(ng), liunw(ng), &
-# ifdef MASKING
-     &                       GRID(ng) % rmask,                          &
-     &                       GRID(ng) % umask,                          &
-     &                       GRID(ng) % vmask,                          &
-# endif
-# ifdef WET_DRY
-     &                       GRID(ng) % rmask_wet,                      &
-     &                       GRID(ng) % umask_wet,                      &
-     &                       GRID(ng) % vmask_wet,                      &
-# endif
-# ifdef ICESHELF
-     &                       GRID(ng) % zice,                           &
-# endif
-# ifndef ICE_UPWIND
-     &                       GRID(ng) % pm,                             &
-     &                       GRID(ng) % pn,                             &
-# endif
-     &                       GRID(ng) % on_u,                           &
-     &                       GRID(ng) % om_v,                           &
-     &                       GRID(ng) % omn,                            &
-     &                       ICE(ng) % ui,                              &
-     &                       ICE(ng) % vi,                              &
-     &                       ICE(ng) % hsn)
+     &                       linew, liold, liunw,                       &
+#ifdef MASKING
+     &                       rmask, umask, vmask,                       &
+#endif
+#ifdef WET_DRY
+     &                       rmask_wet, umask_wet, vmask_wet,           &
+#endif
+#ifdef ICESHELF
+     &                       zice,                                      &
+#endif
+#ifndef ICE_UPWIND
+     &                       pm, pn,                                    &
+#endif
+     &                       on_u, om_v, omn,                           &
+     &                       ui, vi, hsn)
 !
 ! ---------------------------------------------------------------------
 !  Advect the interior ice temperature.
@@ -175,30 +251,21 @@
       CALL ice_adv_var_tile (ng, tile,                                  &
      &                       LBi, UBi, LBj, UBj,                        &
      &                       IminS, ImaxS, JminS, JmaxS,                &
-     &                       nrhs(ng), linew(ng), liold(ng), liunw(ng), &
-# ifdef MASKING
-     &                       GRID(ng) % rmask,                          &
-     &                       GRID(ng) % umask,                          &
-     &                       GRID(ng) % vmask,                          &
-# endif
-# ifdef WET_DRY
-     &                       GRID(ng) % rmask_wet,                      &
-     &                       GRID(ng) % umask_wet,                      &
-     &                       GRID(ng) % vmask_wet,                      &
-# endif
-# ifdef ICESHELF
-     &                       GRID(ng) % zice,                           &
-# endif
-# ifndef ICE_UPWIND
-     &                       GRID(ng) % pm,                             &
-     &                       GRID(ng) % pn,                             &
-# endif
-     &                       GRID(ng) % on_u,                           &
-     &                       GRID(ng) % om_v,                           &
-     &                       GRID(ng) % omn,                            &
-     &                       ICE(ng) % ui,                              &
-     &                       ICE(ng) % vi,                              &
-     &                       ICE(ng) % enthalpi)
+     &                       linew, liold, liunw,                       &
+#ifdef MASKING
+     &                       rmask, umask, vmask,                       &
+#endif
+#ifdef WET_DRY
+     &                       rmask_wet, umask_wet, vmask_wet,           &
+#endif
+#ifdef ICESHELF
+     &                       zice,                                      &
+#endif
+#ifndef ICE_UPWIND
+     &                       pm, pn,                                    &
+#endif
+     &                       on_u, om_v, omn,                           &
+     &                       ui, vi, enthalpi)
 !
 ! ---------------------------------------------------------------------
 !  Advect the ice age.
@@ -207,31 +274,21 @@
       CALL ice_adv_var_tile (ng, tile,                                  &
      &                       LBi, UBi, LBj, UBj,                        &
      &                       IminS, ImaxS, JminS, JmaxS,                &
-     &                       nrhs(ng), linew(ng), liold(ng), liunw(ng), &
-# ifdef MASKING
-     &                       GRID(ng) % rmask,                          &
-     &                       GRID(ng) % umask,                          &
-     &                       GRID(ng) % vmask,                          &
-# endif
-# ifdef WET_DRY
-     &                       GRID(ng) % rmask_wet,                      &
-     &                       GRID(ng) % umask_wet,                      &
-     &                       GRID(ng) % vmask_wet,                      &
-# endif
-# ifdef ICESHELF
-     &                       GRID(ng) % zice,                           &
-# endif
-# ifndef ICE_UPWIND
-     &                       GRID(ng) % pm,                             &
-     &                       GRID(ng) % pn,                             &
-# endif
-     &                       GRID(ng) % on_u,                           &
-     &                       GRID(ng) % om_v,                           &
-     &                       GRID(ng) % omn,                            &
-     &                       ICE(ng) % ui,                              &
-     &                       ICE(ng) % vi,                              &
-     &                       ICE(ng) % hage)
-
+     &                       linew, liold, liunw,                       &
+#ifdef MASKING
+     &                       rmask, umask, vmask,                       &
+#endif
+#ifdef WET_DRY
+     &                       rmask_wet, umask_wet, vmask_wet,           &
+#endif
+#ifdef ICESHELF
+     &                       zice,                                      &
+#endif
+#ifndef ICE_UPWIND
+     &                       pm, pn,                                    &
+#endif
+     &                       on_u, om_v, omn,                           &
+     &                       ui, vi, hage)
 !
 ! ---------------------------------------------------------------------
 !  Compute other variables.
@@ -242,25 +299,24 @@
 !
 !  Ice divergence.
 !
-          ICE(ng)%wdiv(i,j) = (ICE(ng)%hi(i,j,linew(ng))-               &
-       &                       ICE(ng)%hi(i,j,liold(ng)))/dt(ng)
+          wdiv(i,j) = (hi(i,j,linew)-hi(i,j,liold))/dt(ng)
 !
 !  Ice interior temperature.
 !
-          ICE(ng)%ti(i,j,linew(ng)) = ICE(ng)%enthalpi(i,j,linew(ng)) / &
-       &    MAX(ICE(ng)%hi(i,j,linew(ng)),1.0E-6_r8)
-          IF (ICE(ng)%hi(i,j,linew(ng)).le.min_h(ng)) THEN
-            ICE(ng)%enthalpi(i,j,linew(ng)) = 0.0_r8
-            ICE(ng)%ti(i,j,linew(ng)) = 0.0_r8
+          ti(i,j,linew) = enthalpi(i,j,linew) / &
+       &                  MAX(hi(i,j,linew),1.0E-6_r8)
+          IF (hi(i,j,linew).le.min_h(ng)) THEN
+            enthalpi(i,j,linew) = 0.0_r8
+            ti(i,j,linew) = 0.0_r8
           END IF
 !
 !  Ice age.
 !
-          ICE(ng)%ageice(i,j,linew(ng)) = ICE(ng)%hage(i,j,linew(ng)) / &
-     &      MAX(ICE(ng)%hi(i,j,linew(ng)),1.0E-6_r8)
-          IF (ICE(ng)%hi(i,j,linew(ng)).le.min_h(ng)) THEN
-            ICE(ng)%hage(i,j,linew(ng)) = 0.0_r8
-            ICE(ng)%ageice(i,j,linew(ng)) = 0.0_r8
+          ageice(i,j,linew) = hage(i,j,linew) / &
+     &                        MAX(hi(i,j,linew),1.0E-6_r8)
+          IF (hi(i,j,linew).le.min_h(ng)) THEN
+            hage(i,j,linew) = 0.0_r8
+            ageice(i,j,linew) = 0.0_r8
           END IF
         END DO
       END DO
@@ -271,48 +327,49 @@
 !
 !  Set lateral boundary conditions.
 !
-      CALL i2d_ice_bc (ng, tile, iNLM,                                  &
+      CALL i2dbc_ice  (ng, tile,                                        &
      &                 LBi, UBi, LBj, UBj,                              &
      &                 IminS, ImaxS, JminS, JmaxS,                      &
-     &                 liold(ng), linew(ng))
+     &                 liold, linew,                                    &
+     &                 ui, vi, ai, hi, hsn)
 !
-      CALL tibc_tile (ng, tile, iNLM,                                   &
-     &                LBi, UBi, LBj, UBj,                               &
-     &                liold(ng), linew(ng),                             &
-     &                ICE(ng)%ui, ICE(ng)%vi, ICE(ng)%hi,               &
-     &                ICE(ng)%ti, ICE(ng)%enthalpi)
+      CALL i2dbc_tice (ng, tile,                                        &
+     &                 LBi, UBi, LBj, UBj,                              &
+     &                 IminS, ImaxS, JminS, JmaxS,                      &
+     &                 liold, linew,                                    &
+     &                 ui, vi, hi, ti, enthalpi)
 !
       CALL bc_r2d_tile (ng, tile,                                       &
      &                  LBi, UBi, LBj, UBj,                             &
-     &                  ICE(ng)%ageice(:,:,linew(ng)))
+     &                  ageice(:,:,linew))
       CALL bc_r2d_tile (ng, tile,                                       &
      &                  LBi, UBi, LBj, UBj,                             &
-     &                  ICE(ng)%hage(:,:,linew(ng)))
+     &                  hage(:,:,linew))
 !
 !  Apply periodic boundary conditions.
 !
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
-     &                          ICE(ng)%ai(:,:,linew(ng)))
+     &                          ai(:,:,linew))
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
-     &                          ICE(ng)%hi(:,:,linew(ng)))
+     &                          hi(:,:,linew))
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
-     &                          ICE(ng)%hsn(:,:,linew(ng)))
+     &                          hsn(:,:,linew))
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
-     &                          ICE(ng)%ti(:,:,linew(ng)))
+     &                          ti(:,:,linew))
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
-     &                          ICE(ng)%enthalpi(:,:,linew(ng)))
+     &                          enthalpi(:,:,linew))
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
-     &                          ICE(ng)%ageice(:,:,linew(ng)))
+     &                          ageice(:,:,linew))
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
-     &                          ICE(ng)%hage(:,:,linew(ng)))
+     &                          hage(:,:,linew))
       END IF
 # ifdef DISTRIBUTE
 !
@@ -321,16 +378,12 @@
       CALL mp_exchange2d (ng, tile, iNLM, 3,                            &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
-     &                    ICE(ng)%ai(:,:,linew(ng)),                    &
-     &                    ICE(ng)%hi(:,:,linew(ng)),                    &
-     &                    ICE(ng)%hsn(:,:,linew(ng)))
+     &                    ai(:,:,linew), hi(:,:,linew), hsn(:,:,linew))
       CALL mp_exchange2d (ng, tile, iNLM, 4,                            &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
-     &                    ICE(ng)%ti(:,:,linew(ng)),                    &
-     &                    ICE(ng)%enthalpi(:,:,linew(ng)),              &
-     &                    ICE(ng)%ageice(:,:,linew(ng)),                &
-     &                    ICE(ng)%hage(:,:,linew(ng)))
+     &                    ti(:,:,linew), enthalpi(:,:,linew),           &
+     &                    ageice(:,:,linew), hage(:,:,linew))
 # endif
 #endif
       RETURN
@@ -340,7 +393,7 @@
       SUBROUTINE ice_adv_var_tile (ng, tile,                            &
      &                             LBi, UBi, LBj, UBj,                  &
      &                             IminS, ImaxS, JminS, JmaxS,          &
-     &                             nrhs, linew, liold, liunw,           &
+     &                             linew, liold, liunw,                 &
 #ifdef MASKING
      &                             rmask, umask, vmask,                 &
 #endif
@@ -367,7 +420,7 @@
       integer, intent(in) :: ng, tile
       integer, intent(in) :: LBi, UBi, LBj, UBj
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
-      integer, intent(in) :: nrhs, linew, liold, liunw
+      integer, intent(in) :: linew, liold, liunw
 
 #ifdef ASSUMED_SHAPE
 # ifdef MASKING
@@ -445,14 +498,14 @@
         Imin=Istr-1
         Imax=Iend+1
       ELSE
-        Imin=MAX(Istr-1,1)
+        Imin=MAX(Istr-1,1     )
         Imax=MIN(Iend+1,Lm(ng))
       END IF
       IF (NSperiodic(ng)) THEN
         Jmin=Jstr-1
         Jmax=Jend+1
       ELSE
-        Jmin=MAX(Jstr-1,1)
+        Jmin=MAX(Jstr-1,1     )
         Jmax=MIN(Jend+1,Mm(ng))
       END IF
 #else
@@ -486,8 +539,8 @@
 !
           ar(i,j)=1.0_r8/omn(i,j)
           aif(i,j)=scr(i,j,liold) -                                     &
-     &      dtice(ng)*(aflxu(i+1,j) - aflxu(i,j) +                      &
-     &                 aflxv(i,j+1) - aflxv(i,j))*ar(i,j)
+     &      dtice(ng)*(aflxu(i+1,j  ) - aflxu(i,j) +                    &
+     &                 aflxv(i  ,j+1) - aflxv(i,j))*ar(i,j)
 #ifdef MASKING
           aif(i,j) = aif(i,j)*rmask(i,j)
 #endif
@@ -517,12 +570,12 @@
       IF (.not.NSperiodic(ng)) THEN
         IF (DOMAIN(ng)%Southern_Edge(tile)) THEN
           DO i=Imin,Imax
-             aif(i,Jstr-1)=aif(i,Jstr)
+            aif(i,Jstr-1)=aif(i,Jstr)
           END DO
         END IF
         IF (DOMAIN(ng)%Northern_Edge(tile)) THEN
           DO i=Imin,Imax
-             aif(i,Jend+1)=aif(i,Jend)
+            aif(i,Jend+1)=aif(i,Jend)
           END DO
         END IF
       END IF
@@ -587,7 +640,7 @@
           Cu_crss=0.5*dtice(ng)*0.0625 *                                &
      &      (pn(i-1,j+1)+pn(i,j+1)+pn(i-1,j-1)+pn(i,j-1)) *             &
      &      (vi(i-1,j+1,liunw)+vi(i,j+1,liunw)+                         &
-     &       vi(i-1,j,liunw)+vi(i,j,liunw))
+     &       vi(i-1,j  ,liunw)+vi(i,j  ,liunw))
 
           uspeed=rateu*(ABS(ui(i,j,liunw))-Cu*ui(i,j,liunw)) -          &
      &           rateyiu*Cu_crss*ui(i,j,liunw)
@@ -612,7 +665,7 @@
 
           Cu_crss=0.5*dtice(ng)*0.0625 *                                &
      &      (pm(i+1,j)+pm(i+1,j-1)+pm(i-1,j)+pm(i-1,j-1)) *             &
-     &      (ui(i,j,liunw)+ui(i+1,j,liunw)+                             &
+     &      (ui(i,j  ,liunw)+ui(i+1,j  ,liunw)+                         &
      &       ui(i,j-1,liunw)+ui(i+1,j-1,liunw))
 
           vspeed=ratev*(ABS(vi(i,j,liunw))-Cu*vi(i,j,liunw)) -          &
