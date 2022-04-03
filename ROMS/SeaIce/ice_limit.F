@@ -42,6 +42,7 @@
      &                     ICE(ng) % ai,                                &
      &                     ICE(ng) % hi,                                &
      &                     ICE(ng) % hsn,                               &
+     &                     ICE(ng) % ageice,                            &
      &                     ICE(ng) % ti,                                &
      &                     ICE(ng) % enthalpi)
 !
@@ -53,7 +54,8 @@
      &                           LBi, UBi, LBj, UBj,                    &
      &                           IminS, ImaxS, JminS, JmaxS,            &
      &                           liold, linew,                          &
-     &                           ui, vi, ai, hi, hsn, ti, enthalpi)
+     &                           ui, vi, ai, hi, hsn, ageice,           &
+     &                           ti, enthalpi)
 !***********************************************************************
 !
       USE mod_param
@@ -82,6 +84,7 @@
       real(r8), intent(inout) :: ai(LBi:,LBj:,:)
       real(r8), intent(inout) :: hi(LBi:,LBj:,:)
       real(r8), intent(inout) :: hsn(LBi:,LBj:,:)
+      real(r8), intent(inout) :: ageice(LBi:,LBj:,:)
       real(r8), intent(inout) :: ti(LBi:,LBj:,:)
       real(r8), intent(inout) :: enthalpi(LBi:,LBj:,:)
 # else
@@ -90,6 +93,7 @@
       real(r8), intent(inout) :: ai(LBi:UBi,LBj:UBj,2)
       real(r8), intent(inout) :: hi(LBi:UBi,LBj:UBj,2)
       real(r8), intent(inout) :: hsn(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: ageice(LBi:UBi,LBj:UBj,2)
       real(r8), intent(inout) :: ti(LBi:UBi,LBj:UBj,2)
       real(r8), intent(inout) :: enthalpi(LBi:UBi,LBj:UBj,2)
 # endif
@@ -106,12 +110,15 @@
           ai(i,j,linew) = MAX(ai(i,j,linew),0.0_r8)
           hi(i,j,linew) = MAX(hi(i,j,linew),0.0_r8)
           hsn(i,j,linew) = MAX(hsn(i,j,linew),0.0_r8)
-          ti(i,j,linew) = MAX(ti(i,j,linew),-70.0_r8)
-          IF (ai(i,j,linew) .le. min_a(ng) .or. hi(i,j,linew) .le.      &
-     &       0.0_r8) THEN
+          ageice(i,j,linew) =                                           &
+     &      MIN(0.0_r8,ageice(i,j,liold)+dtice(ng)/86400._r8)
+          ti(i,j,linew) = MAX(ti(i,j,linew),-50.0_r8)
+          IF (ai(i,j,linew) .le. min_a(ng) .or.                         &
+     &        hi(i,j,linew) .le. 0.0_r8) THEN
             ai(i,j,linew) = 0.0_r8
             hi(i,j,linew) = 0.0_r8
             hsn(i,j,linew) = 0.0_r8
+            ageice(i,j,linew) = 0.0_r8
           END IF
         END DO
       END DO
