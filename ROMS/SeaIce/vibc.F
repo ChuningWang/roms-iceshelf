@@ -85,10 +85,10 @@
 !-----------------------------------------------------------------------
 !
       IF (DOMAIN(ng)%Western_Edge(tile)) THEN
-        IF (LBC(iwest,isVice,ng)%radiation) THEN
 !
 !  Western edge, implicit upstream radiation condition.
 !
+        IF (LBC(iwest,isVice,ng)%radiation) THEN
           DO j=JstrV-1,Jend
             grad(Istr-1,j)=vi(Istr-1,j+1,liuol)-vi(Istr-1,j  ,liuol)
             grad(Istr  ,j)=vi(Istr  ,j+1,liuol)-vi(Istr  ,j  ,liuol)
@@ -171,6 +171,19 @@
 # ifdef MASKING
               vi(Istr-1,j,liunw)=vi(Istr-1,j,liunw)*                    &
      &                           GRID(ng)%vmask(Istr-1,j)
+# endif
+            END IF
+          END DO
+!
+!  Western edge, gradient boundary condition.
+!
+        ELSE IF (LBC(iwest,isVice,ng)%mixed) THEN
+          DO j=JstrV,Jend
+            IF (LBC_apply(ng)%west(j)) THEN
+              vi(Istr-1,j,liunw)=vi(Istr,j,liunw)
+# ifdef MASKING
+              vi(Istr-1,j,liunw)=vi(Istr-1,j,liunw)*                    &
+     &                           GRID(ng)%rmask(Istr-1,j)
 # endif
             END IF
           END DO
@@ -293,6 +306,19 @@
             END IF
           END DO
 !
+!  Eastern edge, gradient boundary condition.
+!
+        ELSE IF (LBC(ieast,isVice,ng)%mixed) THEN
+          DO j=JstrV,Jend
+            IF (LBC_apply(ng)%east(j)) THEN
+              vi(Iend+1,j,liunw)=vi(Iend,j,liunw)
+# ifdef MASKING
+              vi(Iend+1,j,liunw)=vi(Iend+1,j,liunw)*                    &
+     &                           GRID(ng)%rmask(Iend+1,j)
+# endif
+            END IF
+          END DO
+!
 !  Eastern edge, closed boundary condition: free slip (gamma2=1)  or
 !                                           no   slip (gamma2=-1).
 !
@@ -411,6 +437,23 @@
             END IF
           END DO
 !
+!  Southern edge, clamped on inflow, gradient on outflow.
+!
+        ELSE IF (LBC(isouth,isVice,ng)%mixed) THEN
+          DO i=Istr,Iend
+            IF (LBC_apply(ng)%south(i)) THEN
+              IF (vi(i,Jstr+1,liunw).ge.0._r8) THEN
+                vi(i,Jstr,liunw)=BOUNDARY(ng)%vi_south(i)
+              ELSE
+                vi(i,Jstr,liunw)=vi(i,Jstr+1,liunw)
+              END IF
+# ifdef MASKING
+              vi(i,Jstr,liunw)=vi(i,Jstr,liunw)*                        &
+     &                         GRID(ng)%rmask(i,Jstr)
+# endif
+            END IF
+          END DO
+!
 !  Southern edge, closed boundary condition.
 !
         ELSE IF (LBC(isouth,isVice,ng)%closed) THEN
@@ -512,6 +555,23 @@
 # ifdef MASKING
               vi(i,Jend+1,liunw)=vi(i,Jend+1,liunw)*                    &
      &                           GRID(ng)%vmask(i,Jend+1)
+# endif
+            END IF
+          END DO
+!
+!  Northern edge, clamped on inflow, gradient on outflow.
+!
+        ELSE IF (LBC(inorth,isVice,ng)%mixed) THEN
+          DO i=Istr,Iend
+            IF (LBC_apply(ng)%north(i)) THEN
+              IF (vi(i,Jend,liunw).le.0._r8) THEN
+                vi(i,Jend+1,liunw)=BOUNDARY(ng)%vi_north(i)
+              ELSE
+                vi(i,Jend+1,liunw)=vi(i,Jend,liunw)
+              END IF
+# ifdef MASKING
+              vi(i,Jend+1,liunw)=vi(i,Jend+1,liunw)*                    &
+     &                           GRID(ng)%rmask(i,Jend+1)
 # endif
             END IF
           END DO

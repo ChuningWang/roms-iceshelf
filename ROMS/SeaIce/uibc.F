@@ -175,6 +175,23 @@
             END IF
           END DO
 !
+!  Western edge, clamped on inflow, gradient on outflow.
+!
+        ELSE IF (LBC(iwest,isUice,ng)%mixed) THEN
+          DO j=Jstr,Jend
+            IF (LBC_apply(ng)%west(j)) THEN
+              IF (ui(Istr+1,j,liunw).ge.0._r8) THEN
+                ui(Istr,j,liunw)=ui(Istr+1,j,liunw)
+              ELSE
+                ui(Istr,j,liunw)=BOUNDARY(ng)%ui_west(j)
+              END IF
+# ifdef MASKING
+              ui(Istr,j,liunw)=ui(Istr,j,liunw)*                        &
+     &                         GRID(ng)%umask(Istr,j)
+# endif
+            END IF
+          END DO
+!
 !  Western edge, closed boundary condition.
 !
         ELSE IF (LBC(iwest,isUice,ng)%closed) THEN
@@ -281,6 +298,23 @@
             END IF
           END DO
 !
+!  Eastern edge, clamped on inflow, gradient on outflow.
+!
+        ELSE IF (LBC(ieast,isUice,ng)%mixed) THEN
+          DO j=Jstr,Jend
+            IF (LBC_apply(ng)%east(j)) THEN
+              IF (ui(Iend,j,liunw).le.0._r8) THEN
+                ui(Iend+1,j,liunw)=BOUNDARY(ng)%ui_east(j)
+              ELSE
+                ui(Iend+1,j,liunw)=ui(Iend,j,liunw)
+              END IF
+# ifdef MASKING
+              ui(Iend+1,j,liunw)=ui(Iend+1,j,liunw)*                    &
+     &                           GRID(ng)%rmask(Iend+1,j)
+# endif
+            END IF
+          END DO
+!
 !  Eastern edge, closed boundary condition.
 !
         ELSE IF (LBC(ieast,isUice,ng)%closed) THEN
@@ -383,6 +417,19 @@
 # ifdef MASKING
               ui(i,Jstr-1,liunw)=ui(i,Jstr-1,liunw)*                    &
      &                           GRID(ng)%umask(i,Jstr-1)
+# endif
+            END IF
+          END DO
+!
+!  Southern edge, gradient boundary condition.
+!
+        ELSE IF (LBC(isouth,isUice,ng)%mixed) THEN
+          DO i=IstrU,Iend
+            IF (LBC_apply(ng)%south(i)) THEN
+              ui(i,Jstr-1,liunw)=ui(i,Jstr,liunw)
+# ifdef MASKING
+              ui(i,Jstr-1,liunw)=ui(i,Jstr-1,liunw)*                    &
+     &                           GRID(ng)%rmask(i,Jstr-1)
 # endif
             END IF
           END DO
@@ -500,6 +547,19 @@
 # ifdef MASKING
               ui(i,Jend+1,liunw)=ui(i,Jend+1,liunw)*                    &
      &                           GRID(ng)%umask(i,Jend+1)
+# endif
+            END IF
+          END DO
+!
+!  Northern edge, gradient boundary condition.
+!
+        ELSE IF (LBC(inorth,isUice,ng)%mixed) THEN
+          DO i=IstrU,Iend
+            IF (LBC_apply(ng)%north(i)) THEN
+              ui(i,Jend+1,liunw)=ui(i,Jend,liunw)
+# ifdef MASKING
+              ui(i,Jend+1,liunw)=ui(i,Jend+1,liunw)*                    &
+     &                           GRID(ng)%rmask(i,Jend+1)
 # endif
             END IF
           END DO
