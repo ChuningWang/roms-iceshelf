@@ -55,7 +55,7 @@
      &                   LBi, UBi, LBj, UBj,                            &
      &                   IminS, ImaxS, JminS, JmaxS,                    &
      &                   nrhs(ng),                                      &
-#  ifdef ICE_MODEL
+#  ifdef ICE_NO_SCORRECTION
      &                   liold(ng),                                     &
 #  endif
      &                   GRID(ng) % Hz,                                 &
@@ -87,7 +87,9 @@
      &                   FORCES(ng) % bvstr,                            &
 #  endif
 #  ifdef ICE_MODEL
+#   ifdef ICE_NO_SCORRECTION
      &                   ICE(ng) % ai,                                  &
+#   endif
      &                   FORCES(ng) % qao_n,                            &
 #  endif
      &                   FORCES(ng) % stflux,                           &
@@ -106,7 +108,7 @@
      &                         LBi, UBi, LBj, UBj,                      &
      &                         IminS, ImaxS, JminS, JmaxS,              &
      &                         nrhs,                                    &
-#  ifdef ICE_MODEL
+#  ifdef ICE_NO_SCORRECTION
      &                         liold,                                   &
 #  endif
      &                         Hz,                                      &
@@ -134,7 +136,9 @@
      &                         bustr, bvstr,                            &
 #  endif
 #  ifdef ICE_MODEL
+#   ifdef ICE_NO_SCORRECTION
      &                         ai,                                      &
+#   endif
      &                         qao_n,                                   &
 #  endif
      &                         stflux, btflux,                          &
@@ -155,7 +159,7 @@
       integer, intent(in) :: LBi, UBi, LBj, UBj
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
       integer, intent(in) :: nrhs
-# ifdef ICE_MODEL
+# ifdef ICE_NO_SCORRECTION
       integer, intent(in) :: liold
 # endif
 !
@@ -191,7 +195,9 @@
       real(r8), intent(inout) :: bvstr(LBi:,LBj:)
 #   endif
 #   ifdef ICE_MODEL
+#    ifdef ICE_NO_SCORRECTION
       real(r8), intent(in) :: ai(LBi:,LBj:,:)
+#    endif
       real(r8), intent(inout) :: qao_n(LBi:,LBj:)
 #   endif
       real(r8), intent(inout) :: stflx(LBi:,LBj:,:)
@@ -228,7 +234,9 @@
       real(r8), intent(inout) :: bvstr(LBi:UBi,LBj:UBj)
 #   endif
 #   ifdef ICE_MODEL
+#    ifdef ICE_NO_SCORRECTION
       real(r8), intent(in) :: ai(LBi:UBi,LBj:UBj,2)
+#    endif
       real(r8), intent(inout) :: qao_n(LBi:UBi,LBj:UBj)
 #   endif
       real(r8), intent(inout) :: stflx(LBi:UBi,LBj:UBj,NT(ng))
@@ -282,9 +290,6 @@
       DO j=JstrR,JendR
         DO i=IstrR,IendR
           stflx(i,j,itemp)=stflx(i,j,itemp)+                            &
-#   ifdef ICE_MODEL
-     &                     (1.0_r8 - ai(i,j,liold))*                    &
-#   endif
      &                     dqdt(i,j)*(t(i,j,N(ng),nrhs,itemp)-sst(i,j))
 #   ifdef ICE_MODEL
           qao_n(i,j) = -stflx(i,j,itemp) * rho0 * Cp
