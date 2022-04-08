@@ -611,7 +611,7 @@
         ELSE IF (S(iwest)%closed) THEN
           DO j=Jstr,Jend
             IF (LBC_apply(ng)%west(j)) THEN
-              ai(Istr-1,j,linew)=ai(Istr,j,linew)
+              ai(Istr-1,j,linew)=0.0_r8
 # ifdef MASKING
               ai(Istr-1,j,linew)=ai(Istr-1,j,linew)*                    &
      &                           GRID(ng)%rmask(Istr-1,j)
@@ -717,7 +717,7 @@
         ELSE IF (S(ieast)%closed) THEN
           DO j=Jstr,Jend
             IF (LBC_apply(ng)%east(j)) THEN
-              ai(Iend+1,j,linew)=ai(Iend,j,linew)
+              ai(Iend+1,j,linew)=0.0_r8
 # ifdef MASKING
               ai(Iend+1,j,linew)=ai(Iend+1,j,linew)*                    &
      &                           GRID(ng)%rmask(Iend+1,j)
@@ -823,7 +823,7 @@
         ELSE IF (S(isouth)%closed) THEN
           DO i=Istr,Iend
             IF (LBC_apply(ng)%south(i)) THEN
-              ai(i,Jstr-1,linew)=ai(i,Jstr,linew)
+              ai(i,Jstr-1,linew)=0.0_r8
 # ifdef MASKING
               ai(i,Jstr-1,linew)=ai(i,Jstr-1,linew)*                    &
      &                           GRID(ng)%rmask(i,Jstr-1)
@@ -929,7 +929,7 @@
         ELSE IF (S(inorth)%closed) THEN
           DO i=Istr,Iend
             IF (LBC_apply(ng)%north(i)) THEN
-              ai(i,Jend+1,linew)=ai(i,Jend,linew)
+              ai(i,Jend+1,linew)=0.0_r8
 # ifdef MASKING
               ai(i,Jend+1,linew)=ai(i,Jend+1,linew)*                    &
      &                           GRID(ng)%rmask(i,Jend+1)
