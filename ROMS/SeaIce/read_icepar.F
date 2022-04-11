@@ -31,7 +31,8 @@
       integer :: Npts, Nval, ng, status
       integer :: igrid, nline
 
-      real(r8) :: Rvalue(1)
+      logical, allocatable       :: Lswitch(:)
+      real(r8)                   :: Rvalue(1)
       real(r8), dimension(nRval) :: Rval
 
       character (len=40)  :: KeyWord
@@ -53,6 +54,9 @@
         READ (inp,'(a)',ERR=10,END=20) line
         status=decode_line(line, KeyWord, Nval, Cval, Rval)
         IF (status.gt.0) THEN
+          IF (.not.allocated(Lswitch)) THEN
+            allocate ( Lswitch(Ngrids) )
+          END IF
           SELECT CASE (TRIM(KeyWord))
 !
 ! Switches to turn ice model on/off of each nested grid.

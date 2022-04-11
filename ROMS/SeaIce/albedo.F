@@ -299,7 +299,7 @@
 !
 ! bare ice, thickness dependence
 !
-            fh = MIN(ATAN(ice_thick*4.0_r8)/ATAN(ahmax*4.0_r8), 1.0_r8)
+            fh = MIN(ATAN(i_thick*4.0_r8)/ATAN(ahmax*4.0_r8), 1.0_r8)
             albo = albw*(1.0_r8-fh)
             alvni = albicev*fh + albo
             alini = albicei*fh + albo

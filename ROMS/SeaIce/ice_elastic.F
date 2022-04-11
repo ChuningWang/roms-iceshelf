@@ -82,7 +82,7 @@
      &                       ICE(ng) % sig12,                           &
      &                       ICE(ng) % tauaiu,                          &
      &                       ICE(ng) % tauaiv,                          &
-     &                       ICE(ng) % chu_iw                           &
+     &                       ICE(ng) % chu_iw,                          &
      &                       ICE(ng) % uie,                             &
      &                       ICE(ng) % vie,                             &
      &                       ICE(ng) % ui,                              &
