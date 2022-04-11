@@ -21,7 +21,5 @@
       CONTAINS
 #  include "ice_mk.h"
 # endif
-
 #endif
-
       END MODULE ice_thermo_mod

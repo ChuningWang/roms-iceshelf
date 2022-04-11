@@ -2,14 +2,14 @@
       MODULE ice_limit_mod
 #ifdef ICE_MODEL
 !
-!============================================== W. Paul Budgell =======!
+!============================================== W. Paul Budgell ========
 !  Copyright (c) 2002-2021 ROMS/TOMS Group                             !
-!============================================== Hernan G. Arango ======!
+!============================================== Hernan G. Arango =======
 !                                                                      !
 !  Limit ice tracer variables, for instance to not allow negative      !
 !  ice concentration or thickness.                                     !
 !                                                                      !
-!======================================================================!
+!=======================================================================
 !
       implicit none
 !
@@ -106,8 +106,7 @@
 !
       DO j=Jstr,Jend
         DO i=Istr,Iend
-          ai(i,j,linew) = MIN(ai(i,j,linew),max_a(ng))
-          ai(i,j,linew) = MAX(ai(i,j,linew),0.0_r8)
+          ai(i,j,linew) = MAX(MIN(ai(i,j,linew),max_a(ng)),0.0_r8)
           hi(i,j,linew) = MAX(hi(i,j,linew),0.0_r8)
           hsn(i,j,linew) = MAX(hsn(i,j,linew),0.0_r8)
           ageice(i,j,linew) =                                           &
@@ -124,31 +123,31 @@
         END DO
       END DO
 !
-      CALL i2dbc_ice  (ng, tile,                                        &
-     &                 LBi, UBi, LBj, UBj,                              &
-     &                 IminS, ImaxS, JminS, JmaxS,                      &
-     &                 liold, linew,                                    &
-     &                 ui, vi, ai, hi, hsn)
+!     CALL i2dbc_ice  (ng, tile,                                        &
+!    &                 LBi, UBi, LBj, UBj,                              &
+!    &                 IminS, ImaxS, JminS, JmaxS,                      &
+!    &                 liold, linew,                                    &
+!    &                 ui, vi, ai, hi, hsn)
 !
-      CALL i2dbc_tice (ng, tile,                                        &
-     &                 LBi, UBi, LBj, UBj,                              &
-     &                 IminS, ImaxS, JminS, JmaxS,                      &
-     &                 liold, linew,                                    &
-     &                 ui, vi, hi, ti, enthalpi)
+!     CALL i2dbc_tice (ng, tile,                                        &
+!    &                 LBi, UBi, LBj, UBj,                              &
+!    &                 IminS, ImaxS, JminS, JmaxS,                      &
+!    &                 liold, linew,                                    &
+!    &                 ui, vi, hi, ti, enthalpi)
 !
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
         CALL exchange_r2d_tile (ng, tile,                               &
-     &                            LBi, UBi, LBj, UBj,                   &
-     &                            ai(:,:,linew))
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          ai(:,:,linew))
         CALL exchange_r2d_tile (ng, tile,                               &
-     &                            LBi, UBi, LBj, UBj,                   &
-     &                            hi(:,:,linew))
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          hi(:,:,linew))
         CALL exchange_r2d_tile (ng, tile,                               &
-     &                            LBi, UBi, LBj, UBj,                   &
-     &                            hsn(:,:,linew))
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          hsn(:,:,linew))
         CALL exchange_r2d_tile (ng, tile,                               &
-     &                            LBi, UBi, LBj, UBj,                   &
-     &                            ti(:,:,linew))
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          ti(:,:,linew))
 !
       END IF
 # ifdef DISTRIBUTE

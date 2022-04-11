@@ -78,11 +78,9 @@
 #ifndef ICE_UPWIND
      &                            pm, pn,                               &
 #endif
-     &                            on_u, om_v, omn,                      &
-     &                            ui, vi,                               &
-     &                            ai, hi, hsn,                          &
-     &                            ti, ageice, enthalpi, hage,           &
-     &                            wdiv)
+     &                            on_u, om_v, omn, ui, vi,              &
+     &                            ai, hi, hsn, ti, ageice,              &
+     &                            enthalpi, hage, wdiv)
 !***********************************************************************
 !
       USE mod_param
@@ -194,8 +192,8 @@
 #ifndef ICE_UPWIND
      &                       pm, pn,                                    &
 #endif
-     &                       on_u, om_v, omn,                           &
-     &                       ui, vi, ai)
+     &                       on_u, om_v, omn, ui, vi,                   &
+     &                       ai)
 !
 ! ---------------------------------------------------------------------
 !  Advect the ice thickness.
@@ -217,8 +215,8 @@
 #ifndef ICE_UPWIND
      &                       pm, pn,                                    &
 #endif
-     &                       on_u, om_v, omn,                           &
-     &                       ui, vi, hi)
+     &                       on_u, om_v, omn, ui, vi,                   &
+     &                       hi)
 !
 ! ---------------------------------------------------------------------
 !  Advect the snow thickness.
@@ -241,8 +239,8 @@
 #ifndef ICE_UPWIND
      &                       pm, pn,                                    &
 #endif
-     &                       on_u, om_v, omn,                           &
-     &                       ui, vi, hsn)
+     &                       on_u, om_v, omn, ui, vi,                   &
+     &                       hsn)
 !
 ! ---------------------------------------------------------------------
 !  Advect the interior ice temperature.
@@ -264,8 +262,8 @@
 #ifndef ICE_UPWIND
      &                       pm, pn,                                    &
 #endif
-     &                       on_u, om_v, omn,                           &
-     &                       ui, vi, enthalpi)
+     &                       on_u, om_v, omn, ui, vi,                   &
+     &                       enthalpi)
 !
 ! ---------------------------------------------------------------------
 !  Advect the ice age.
@@ -287,8 +285,8 @@
 #ifndef ICE_UPWIND
      &                       pm, pn,                                    &
 #endif
-     &                       on_u, om_v, omn,                           &
-     &                       ui, vi, hage)
+     &                       on_u, om_v, omn, ui, vi,                   &
+     &                       hage)
 !
 ! ---------------------------------------------------------------------
 !  Compute other variables.
@@ -299,12 +297,12 @@
 !
 !  Ice divergence.
 !
-          wdiv(i,j) = (hi(i,j,linew)-hi(i,j,liold))/dt(ng)
+          wdiv(i,j) = (hi(i,j,linew) - hi(i,j,liold)) / dt(ng)
 !
 !  Ice interior temperature.
 !
-          ti(i,j,linew) = enthalpi(i,j,linew) / &
-       &                  MAX(hi(i,j,linew),1.0E-6_r8)
+          ti(i,j,linew) = enthalpi(i,j,linew) /                         &
+     &                    MAX(hi(i,j,linew), 1.0E-6_r8)
           IF (hi(i,j,linew).le.min_h(ng)) THEN
             enthalpi(i,j,linew) = 0.0_r8
             ti(i,j,linew) = 0.0_r8
@@ -312,7 +310,7 @@
 !
 !  Ice age.
 !
-          ageice(i,j,linew) = hage(i,j,linew) / &
+          ageice(i,j,linew) = hage(i,j,linew) /                         &
      &                        MAX(hi(i,j,linew),1.0E-6_r8)
           IF (hi(i,j,linew).le.min_h(ng)) THEN
             hage(i,j,linew) = 0.0_r8
@@ -406,8 +404,8 @@
 #ifndef ICE_UPWIND
      &                             pm, pn,                              &
 #endif
-     &                             on_u, om_v, omn,                     &
-     &                             ui, vi, scr)
+     &                             on_u, om_v, omn, ui, vi,             &
+     &                             scr)
 !=======================================================================!
 
       USE mod_param
@@ -421,7 +419,7 @@
       integer, intent(in) :: LBi, UBi, LBj, UBj
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
       integer, intent(in) :: linew, liold, liunw
-
+!
 #ifdef ASSUMED_SHAPE
 # ifdef MASKING
       real(r8), intent(in) :: rmask(LBi:,LBj:)
@@ -485,14 +483,13 @@
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: FE
 
       real(r8), parameter :: epsil = 1.0E-15_r8
-      real(r8), parameter :: add = 3.0E+3_r8
 
       real(r8) :: Cu_crss, Cu
       real(r8) :: rateu, ratev, rateyiu, ratexiv, uspeed, vspeed
       real(r8) :: cff
-
+!
 #include "set_bounds.h"
-
+!
 #ifndef ICE_UPWIND
       IF (EWperiodic(ng)) THEN
         Imin=Istr-1
@@ -623,7 +620,7 @@
      &            (aif(i,j)-aif(i-1,j))
         END DO
       END DO
-
+!
       DO j=Jstr,Jend
         DO i=Istr,Iend+1
           cff = aif(i,j)+aif(i-1,j)
@@ -634,17 +631,17 @@
      &          aif(i-1,j) + FE(i-1,j+1) - FE(i-1,j)
           rateyiu=(FE(i,j+1) + FE(i,j) + FE(i-1,j+1) + FE(i-1,j)) /     &
      &            (SIGN(1._r8, cff)*MAX(epsil, ABS(cff)))
-
+!
           Cu=0.5*dtice(ng)*(pm(i,j)+pm(i-1,j))*ui(i,j,liunw)
-
+!
           Cu_crss=0.5*dtice(ng)*0.0625 *                                &
      &      (pn(i-1,j+1)+pn(i,j+1)+pn(i-1,j-1)+pn(i,j-1)) *             &
      &      (vi(i-1,j+1,liunw)+vi(i,j+1,liunw)+                         &
      &       vi(i-1,j  ,liunw)+vi(i,j  ,liunw))
-
+!
           uspeed=rateu*(ABS(ui(i,j,liunw))-Cu*ui(i,j,liunw)) -          &
      &           rateyiu*Cu_crss*ui(i,j,liunw)
-
+!
           aflxu(i,j)=on_u(i,j)*(MAX(0.,uspeed)*aif(i-1,j) +             &
      &                          MIN(0.,uspeed)*aif(i  ,j))
         END DO
@@ -660,17 +657,17 @@
      &          aif(i,j-1) + FX(i+1,j-1) - FX(i,j-1)
           ratexiv=(FX(i+1,j) + FX(i,j) + FX(i+1,j-1) + FX(i,j-1)) /     &
      &            (SIGN(1._r8, cff)*MAX(epsil, ABS(cff)))
-
+!
           Cu=0.5*dtice(ng)*(pn(i,j)+pn(i,j-1))*vi(i,j,liunw)
-
+!
           Cu_crss=0.5*dtice(ng)*0.0625 *                                &
      &      (pm(i+1,j)+pm(i+1,j-1)+pm(i-1,j)+pm(i-1,j-1)) *             &
      &      (ui(i,j  ,liunw)+ui(i+1,j  ,liunw)+                         &
      &       ui(i,j-1,liunw)+ui(i+1,j-1,liunw))
-
+!
           vspeed=ratev*(ABS(vi(i,j,liunw))-Cu*vi(i,j,liunw)) -          &
      &           ratexiv*Cu_crss*vi(i,j,liunw)
-
+!
           aflxv(i,j)=om_v(i,j)*(MAX(0.,vspeed)*aif(i,j-1) +             &
      &                          MIN(0.,vspeed)*aif(i,j  ))
         END DO
@@ -696,7 +693,7 @@
 
       DO j=Jstr,Jend
         DO i=Istr,Iend
-            scr(i,j,linew) = aif(i,j)
+            scr(i,j,linew)=aif(i,j)
         END DO
       END DO
 !

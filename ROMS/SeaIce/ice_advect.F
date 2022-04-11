@@ -17,7 +17,7 @@
       implicit none
 
       PRIVATE
-      PUBLIC ice_advect
+      PUBLIC  :: ice_advect
 
       CONTAINS
 

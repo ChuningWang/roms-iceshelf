@@ -6,6 +6,64 @@
 !    Licensed under a MIT/X style license                              !
 !    See License_ROMS.txt                                              !
 !=======================================================================
+!                                                                      !
+!  Ice basic states.                                                   !
+!                                                                      !
+!  ui, vi     - [m/s] Ice velocities.                                  !
+!  uie, vie   - [m/s] Ice velocities in elastic steps.                 !
+!  ai         - [non] Sea ice concentration.                           !
+!  hi         - [m]   Sea ice thickness, mean over whole surface.      !
+!  hsn        - [m]   Snow thickness, mean over whole surface.         !
+!  ageice     - [yr]  Sea ice age.                                     !
+!                                                                      !
+!  Mass fluxes.                                                        !
+!                                                                      !
+!  iomflx - [m/s] ice/ocean mass flux.                                 !
+!  wfr    - [m/s] ice frazil growth rate.                              !
+!  wai    - [m/s] air/ice mass flux.                                   !
+!  wao    - [m/s] air/ocean mass flux.                                 !
+!  wio    - [m/s] ice/ocean mass flux.                                 !
+!  wro    - [m/s] ice surface runoff rate.                             !
+!                                                                      !
+!  Ice thermodynamic states.                                           !
+!                                                                      !
+!  tis      - [degC]   Snow top/atmospheric temperature.               !
+!  ti       - [degC]   Ice interior temperature.                       !
+!  t2       - [degC]   Ice/snow interface temperature.                 !
+!  enthalpi - [degC m] Scaled perturbation ice heat content.           !
+!  hage     - [yr m]   Ice age times thickness.                        !
+!                                                                      !
+!  Stress calculation.                                                 !
+!                                                                      !
+!  utau_iw       - [m2/s2] Ice/water momentum flux (stress).           !
+!  chu_iw        - [m/s]   Ice/water friction velocity.                !
+!  spd_iw        - [m's]   Ice/water relative velocity.                !
+!  pice          - [Pa]    Pressure in ice.                            !
+!  zetai         - [m2/s]  Ice bulk viscosity.                         !
+!  eta           - [m2/s]  Ice shear viscosity.                        !
+!  tauaiu        - [m2/s2] Ice/water stress in XI-direction.           !
+!  tauaiv        - [m2/s2] Ice/water stress in ETA-direction.          !
+!                                                                      !
+!  Heat budgets.                                                       !
+!                                                                      !
+!  coef_ice_heat - Gradient coefficient for heat conductivity.         !
+!  rhs_ice_heat  - RHS of ice heat budget equations.                   !
+!  rfaci         - Correction factor for IR over ice.                  !
+!                                                                      !
+!  Other variables.                                                    !
+!                                                                      !
+!  Uwater, Vwater      - [m/s]       Ocean surface velocity.           !
+!  sealev              - [m]         Sea surface height.               !
+!  s0mk, t0mk          - [PSU, degC] Frictional salinity/temperature.  !
+!  sig11, sig12, sig13 - Stress terms.                                 !
+#ifdef ICE_STRENGTH_QUAD
+!  pstar_grid          - Grid dependent pStar values.                  !
+#endif
+#ifdef ICE_LANDFAST
+!  h_loadu, h_loadv    - term (h_u - h_cu)*exp(-C(1-A_u))              !
+#endif
+!                                                                      !
+!=======================================================================
 !
 #ifdef ICE_MODEL
         USE mod_kinds
@@ -32,13 +90,15 @@
           real(r8), pointer :: hi(:,:,:)
           real(r8), pointer :: hsn(:,:,:)
           real(r8), pointer :: ageice(:,:,:)
+          real(r8), pointer :: wdiv(:,:)
+!
           real(r8), pointer :: iomflx(:,:)
           real(r8), pointer :: wfr(:,:)
           real(r8), pointer :: wai(:,:)
           real(r8), pointer :: wao(:,:)
           real(r8), pointer :: wio(:,:)
           real(r8), pointer :: wro(:,:)
-          real(r8), pointer :: wdiv(:,:)
+!
           real(r8), pointer :: tis(:,:)
           real(r8), pointer :: ti(:,:,:)
           real(r8), pointer :: t2(:,:)
@@ -47,15 +107,15 @@
           real(r8), pointer :: utau_iw(:,:)
           real(r8), pointer :: chu_iw(:,:)
           real(r8), pointer :: spd_iw(:,:)
-          real(r8), pointer :: coef_ice_heat(:,:)
-          real(r8), pointer :: rhs_ice_heat(:,:)
           real(r8), pointer :: pice(:,:)
-          real(r8), pointer :: rfaci(:,:)
-!
           real(r8), pointer :: zetai(:,:)
           real(r8), pointer :: eta(:,:)
           real(r8), pointer :: tauaiu(:,:)
           real(r8), pointer :: tauaiv(:,:)
+!
+          real(r8), pointer :: coef_ice_heat(:,:)
+          real(r8), pointer :: rhs_ice_heat(:,:)
+          real(r8), pointer :: rfaci(:,:)
 !
           real(r8), pointer :: uwater(:,:)
           real(r8), pointer :: vwater(:,:)
@@ -126,6 +186,8 @@
       Dmem(ng)=Dmem(ng)+size2d*2
       allocate ( ICE(ng) % ageice(LBi:UBi,LBj:UBj,2) )
       Dmem(ng)=Dmem(ng)+size2d*2
+      allocate ( ICE(ng) % wdiv(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
       allocate ( ICE(ng) % iomflx(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( ICE(ng) % wfr(LBi:UBi,LBj:UBj) )
@@ -137,8 +199,6 @@
       allocate ( ICE(ng) % wio(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( ICE(ng) % wro(LBi:UBi,LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+size2d
-      allocate ( ICE(ng) % wdiv(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( ICE(ng) % tis(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
@@ -156,13 +216,7 @@
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( ICE(ng) % spd_iw(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( ICE(ng) % coef_ice_heat(LBi:UBi,LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+size2d
-      allocate ( ICE(ng) % rhs_ice_heat(LBi:UBi,LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+size2d
       allocate ( ICE(ng) % pice(LBi:UBi,LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+size2d
-      allocate ( ICE(ng) % rfaci(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( ICE(ng) % zetai(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
@@ -171,6 +225,12 @@
       allocate ( ICE(ng) % tauaiu(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( ICE(ng) % tauaiv(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( ICE(ng) % coef_ice_heat(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( ICE(ng) % rhs_ice_heat(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( ICE(ng) % rfaci(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( ICE(ng) % uwater(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
@@ -257,6 +317,9 @@
       IF (.not.destroy(ng, ICE(ng)%ageice, MyFile,                      &
      &                 __LINE__, 'ICE(ng)%ageice')) RETURN
 
+      IF (.not.destroy(ng, ICE(ng)%wdiv, MyFile,                        &
+     &                 __LINE__, 'ICE(ng)%wdiv')) RETURN
+
       IF (.not.destroy(ng, ICE(ng)%iomflx, MyFile,                    &
      &                 __LINE__, 'ICE(ng)%iomflx')) RETURN
 
@@ -274,9 +337,6 @@
 
       IF (.not.destroy(ng, ICE(ng)%wro, MyFile,                         &
      &                 __LINE__, 'ICE(ng)%wro')) RETURN
-
-      IF (.not.destroy(ng, ICE(ng)%wdiv, MyFile,                        &
-     &                 __LINE__, 'ICE(ng)%wdiv')) RETURN
 
       IF (.not.destroy(ng, ICE(ng)%tis, MyFile,                         &
      &                 __LINE__, 'ICE(ng)%tis')) RETURN
@@ -302,17 +362,8 @@
       IF (.not.destroy(ng, ICE(ng)%spd_iw, MyFile,                      &
      &                 __LINE__, 'ICE(ng)%spd_iw')) RETURN
 
-      IF (.not.destroy(ng, ICE(ng)%coef_ice_heat, MyFile,               &
-     &                 __LINE__, 'ICE(ng)%coef_ice_heat')) RETURN
-
-      IF (.not.destroy(ng, ICE(ng)%rhs_ice_heat, MyFile,                &
-     &                 __LINE__, 'ICE(ng)%rhs_ice_heat')) RETURN
-
       IF (.not.destroy(ng, ICE(ng)%pice, MyFile,                        &
      &                 __LINE__, 'ICE(ng)%pice')) RETURN
-
-      IF (.not.destroy(ng, ICE(ng)%rfaci, MyFile,                       &
-     &                 __LINE__, 'ICE(ng)%rfaci')) RETURN
 
       IF (.not.destroy(ng, ICE(ng)%zetai, MyFile,                       &
      &                 __LINE__, 'ICE(ng)%zetai')) RETURN
@@ -325,6 +376,15 @@
 
       IF (.not.destroy(ng, ICE(ng)%tauaiv, MyFile,                      &
      &                 __LINE__, 'ICE(ng)%tauaiv')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%coef_ice_heat, MyFile,               &
+     &                 __LINE__, 'ICE(ng)%coef_ice_heat')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%rhs_ice_heat, MyFile,                &
+     &                 __LINE__, 'ICE(ng)%rhs_ice_heat')) RETURN
+
+      IF (.not.destroy(ng, ICE(ng)%rfaci, MyFile,                       &
+     &                 __LINE__, 'ICE(ng)%rfaci')) RETURN
 
       IF (.not.destroy(ng, ICE(ng)%uwater, MyFile,                      &
      &                 __LINE__, 'ICE(ng)%uwater')) RETURN
@@ -454,13 +514,13 @@
           ICE(ng) % hsn(i,j,2) = IniVal
           ICE(ng) % ageice(i,j,1) = IniVal
           ICE(ng) % ageice(i,j,2) = IniVal
+          ICE(ng) % wdiv(i,j) = IniVal
           ICE(ng) % iomflx(i,j) = IniVal
           ICE(ng) % wfr(i,j) = IniVal
           ICE(ng) % wai(i,j) = IniVal
           ICE(ng) % wao(i,j) = IniVal
           ICE(ng) % wio(i,j) = IniVal
           ICE(ng) % wro(i,j) = IniVal
-          ICE(ng) % wdiv(i,j) = IniVal
           ICE(ng) % tis(i,j) = IniVal
           ICE(ng) % ti(i,j,1) = IniVal
           ICE(ng) % ti(i,j,2) = IniVal
@@ -472,14 +532,14 @@
           ICE(ng) % utau_iw(i,j) = IniVal
           ICE(ng) % chu_iw(i,j) = IniVal
           ICE(ng) % spd_iw(i,j) = IniVal
-          ICE(ng) % coef_ice_heat(i,j) = IniVal
-          ICE(ng) % rhs_ice_heat(i,j) = IniVal
           ICE(ng) % pice(i,j) = IniVal
-          ICE(ng) % rfaci(i,j) = 1.0_r8
-          ICE(ng) % zetai(i,j) = IniVal
           ICE(ng) % eta(i,j) = IniVal
           ICE(ng) % tauaiu(i,j) = IniVal
           ICE(ng) % tauaiv(i,j) = IniVal
+          ICE(ng) % coef_ice_heat(i,j) = IniVal
+          ICE(ng) % rhs_ice_heat(i,j) = IniVal
+          ICE(ng) % rfaci(i,j) = 1.0_r8
+          ICE(ng) % zetai(i,j) = IniVal
           ICE(ng) % uwater(i,j) = IniVal
           ICE(ng) % vwater(i,j) = IniVal
           ICE(ng) % sealev(i,j) = IniVal

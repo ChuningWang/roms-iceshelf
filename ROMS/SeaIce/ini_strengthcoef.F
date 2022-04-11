@@ -2,11 +2,10 @@
       MODULE ini_strengthcoef_mod
 #ifdef ICE_STRENGTH_QUAD
 !
-! svn $Id$
-!================================================== Hernan G. Arango ===
-!  Copyright (c) 2002-2020 The ROMS/TOMS Group                         !
+!=======================================================================
+!  Copyright (c) 2002-2022 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
-!    See License_ROMS.txt                                              !
+!    See License_ROMS.txt                           Hernan G. Arango   !
 !=======================================================================
 !                                                                      !
 !  This routine initializes pstar_grid based on the grid spacing.      !
@@ -14,10 +13,10 @@
 !=======================================================================
 !
       implicit none
-
+!
       PRIVATE
       PUBLIC  :: ini_strengthcoef
-
+!
       CONTAINS
 !
 !***********************************************************************
@@ -26,8 +25,6 @@
 !
       USE mod_param
       USE mod_grid
-      USE mod_ncparam
-      USE mod_scalars
       USE mod_ice
 !
 !  Imported variable declarations.
@@ -36,13 +33,8 @@
 !
 !  Local variable declarations.
 !
-# ifdef SOLVE3D
-      real(r8) :: diffusion2(MT), diffusion4(MT)
-# endif
-      real(r8) :: viscosity2, viscosity4
-!
 #include "tile.h"
-
+!
       CALL ini_strengthcoef_tile (ng, tile, model,                      &
      &                            LBi, UBi, LBj, UBj,                   &
      &                            IminS, ImaxS, JminS, JmaxS,           &
@@ -88,15 +80,11 @@
 !  Local variable declarations.
 !
       integer :: Imin, Imax, Jmin, Jmax
+
       integer :: i, j
       real(r8) :: cff
 
 #include "set_bounds.h"
-!
-!-----------------------------------------------------------------------
-!  Set horizontal, constant, mixing coefficient according to model flag.
-!-----------------------------------------------------------------------
-!
 !
 !-----------------------------------------------------------------------
 !  Scale ice strength according to the grid size. Scale by 1 km.
@@ -105,7 +93,7 @@
       cff=pstar_e(ng)/1000.0_r8
       DO j=JstrT,JendT
         DO i=IstrT,IendT
-          pstar_grid(i,j)=cff*grdscl(i,j)
+          pstar_grid(i,j) = cff*grdscl(i,j)
         END DO
       END DO
 !
@@ -118,7 +106,6 @@
      &                          LBi, UBi, LBj, UBj,                     &
      &                          pstar_grid)
       END IF
-
 # ifdef DISTRIBUTE
       CALL mp_exchange2d (ng, tile, model, 1,                           &
      &                    LBi, UBi, LBj, UBj,                           &
@@ -126,9 +113,8 @@
      &                    EWperiodic(ng), NSperiodic(ng),               &
      &                    pstar_grid)
 # endif
-
+!
       RETURN
       END SUBROUTINE ini_strengthcoef_tile
-
 #endif
       END MODULE ini_strengthcoef_mod

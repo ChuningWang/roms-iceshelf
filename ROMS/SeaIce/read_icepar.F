@@ -31,14 +31,12 @@
       integer :: Npts, Nval, ng, status
       integer :: igrid, nline
 
+      real(r8) :: Rvalue(1)
       real(r8), dimension(nRval) :: Rval
 
-      character (len=40) :: KeyWord
+      character (len=40)  :: KeyWord
       character (len=256) :: line
       character (len=256), dimension(nCval) :: Cval
-      logical, dimension(Ngrids) :: Lswitch
-      real(r8) :: Rvalue(1)
-
 !
 !-----------------------------------------------------------------------
 !  Initialize.
@@ -51,7 +49,7 @@
 !  Read in ice model parameters.
 !-----------------------------------------------------------------------
 !
-      DO WHILE (.true.)
+      DO WHILE (.TRUE.)
         READ (inp,'(a)',ERR=10,END=20) line
         status=decode_line(line, KeyWord, Nval, Cval, Rval)
         IF (status.gt.0) THEN
@@ -218,7 +216,7 @@
       IF (Master.and.Lwrite) THEN
         DO ng=1,Ngrids
 # ifdef ICE_MODEL
-          IF (.not. Lice(ng)) RETURN
+          IF (.not.Lice(ng)) RETURN
           WRITE (out,40) ng
           WRITE(out,*) 'Ice time step = ocean time step'
           WRITE (out,60) dtice(ng), 'DTICE',                            &
@@ -313,13 +311,14 @@
      &          'Turning OFF nudging of ice stress climatology.'
           END IF
 # endif
-
+!
 #include "read_icepar_print.h"
+!
         END DO
       END IF
 
   30  FORMAT (/,' READ_ICEPAR - Error while processing line: ',/,a)
-  40  FORMAT (/,/,' Ice Parameters, Grid: ',i2.2,                   &
+  40  FORMAT (/,/,'      Ice Parameters, Grid: ',i2.2,                  &
      &        /,' ============================',/)
   50  FORMAT (1x,i10,2x,a,t28,a)
   60  FORMAT (1p,e11.4,2x,a,t28,a)

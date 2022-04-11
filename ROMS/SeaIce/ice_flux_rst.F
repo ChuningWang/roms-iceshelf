@@ -12,10 +12,10 @@
 !=======================================================================
 !
       implicit none
-!
+
       PRIVATE
       PUBLIC  :: ice_flux_rst
-!
+
       CONTAINS
 
 # ifdef PERFECT_RESTART
@@ -26,9 +26,9 @@
       USE mod_forces
 
       integer, intent(in) :: ng, tile
-
+!
 #  include "tile.h"
-
+!
 #  ifdef PROFILE
       CALL wclock_on (ng, iNLM, 92, __LINE__, __FILE__)
 #  endif
@@ -43,15 +43,16 @@
 #  ifdef PROFILE
       CALL wclock_off (ng, iNLM, 92, __LINE__, __FILE__)
 #  endif
+!
       RETURN
       END SUBROUTINE ice_flux_rst
 !
 !***********************************************************************
       SUBROUTINE ice_flux_rst_tile (ng, tile,                           &
-     &                        LBi, UBi, LBj, UBj,                       &
-     &                        sustr_save, svstr_save,                   &
-     &                        stflx_save, sustr, svstr,                 &
-     &                        stflx)
+     &                              LBi, UBi, LBj, UBj,                 &
+     &                              sustr_save, svstr_save,             &
+     &                              stflx_save,                         &
+     &                              sustr, svstr, stflx)
 !***********************************************************************
 
       USE mod_param
@@ -79,24 +80,24 @@
       real(r8), intent(out) :: svstr(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: stflx(LBi:UBi,LBj:UBj,NT(ng))
 #  endif
-
+!
 ! Local variable definitions
 !
       integer :: i, j
-
+!
 #  include "set_bounds.h"
-
+!
       DO j=Jstr-1,Jend+1
         DO i=Istr-1,Iend+1
-          sustr(i,j) = sustr_save(i,j)
-          svstr(i,j) = svstr_save(i,j)
+          sustr(i,j  ) = sustr_save(i,j  )
+          svstr(i,j  ) = svstr_save(i,j  )
           stflx(i,j,1) = stflx_save(i,j,1)
 #  ifdef SALINITY
           stflx(i,j,2) = stflx_save(i,j,2)
 #  endif
         END DO
       END DO
-
+!
       RETURN
       END SUBROUTINE ice_flux_rst_tile
 # else

@@ -34,13 +34,13 @@
       USE mod_grid
       USE mod_mixing
       USE mod_ocean
+      USE mod_stepping
 # ifdef ICE_MODEL
       USE mod_ice
 # endif
 # ifdef EVAP_SHALLOW
       USE mod_coupling
 # endif
-      USE mod_stepping
 !
 !  Imported variable declarations.
 !
@@ -155,6 +155,7 @@
 # ifdef PROFILE
       CALL wclock_off (ng, iNLM, 17, __LINE__, __FILE__)
 # endif
+!
       RETURN
       END SUBROUTINE ccsm_flux
 !
@@ -465,7 +466,7 @@
       real(r8), parameter :: Ch = 1.75e-3
       real(r8), parameter :: Ce = 1.75e-3
 !
-! Ratio of molecular weight of water to dry air
+!  Ratio of molecular weight of water to dry air
 !
       real(r8), parameter :: epsilon = 0.622_r8
 
@@ -718,9 +719,9 @@
 !
 # if defined ICE_MODEL
       IF (PerfectRST(ng) .and. iic(ng).eq.ntstart(ng)) THEN
-        listp = liold
+        listp=liold
       ELSE
-        listp = linew
+        listp=linew
       END IF
 # endif
 
@@ -752,8 +753,8 @@
       END DO
 # endif
 
-      Hscale = rho0*Cp
-      Hscale_inv = 1.0_r8/Hscale
+      Hscale=rho0*Cp
+      Hscale_inv=1.0_r8/Hscale
 !
 !  Note that this loop needs to be cleaned of all global arrays for
 !  OpenMP.
@@ -764,20 +765,20 @@
 !  Compute specific humidities (kg/kg).
 !
           IF (Hair(i,j).lt.2.0_r8) THEN  !RH fraction
-            cff=(1.0007_r8+3.46E-6_r8*Pair(i,j))*6.1121_r8*             &
-     &          EXP(17.502_r8*Tair(i,j)/(240.97_r8+Tair(i,j)))
-            cff=cff*Hair(i,j)
-            Qair=0.62197_r8*(cff/(Pair(i,j)-0.378_r8*cff))
+            cff  = (1.0007_r8+3.46E-6_r8*Pair(i,j))*6.1121_r8*          &
+     &             EXP(17.502_r8*Tair(i,j)/(240.97_r8+Tair(i,j)))
+            cff  = cff*Hair(i,j)
+            Qair = 0.62197_r8*(cff/(Pair(i,j)-0.378_r8*cff))
           ELSE  !RH input was actually specific humidity in g/kg
             Qair=Hair(i,j)/1000.0_r8  !Spec Hum (kg/kg)
           END IF
 !
 !--- compute some needed quantities ---
 !
-          vmag = MAX(umin, SQRT( (Uair(i,j)**2 + Vair(i,j)**2)) )
+          vmag     = MAX(umin, SQRT( (Uair(i,j)**2 + Vair(i,j)**2)) )
           TairK(i) = Tair(i,j) + 273.16_r8
-          TseaK = t(i,j,N(ng),nrhs,itemp) + 273.16_r8
-          thvbot = TairK(i) * (1.0 + shr_const_zvir * Qair)
+          TseaK    = t(i,j,N(ng),nrhs,itemp) + 273.16_r8
+          thvbot   = TairK(i) * (1.0 + shr_const_zvir * Qair)
 !
 !  Virtual temp (K)
 !
@@ -818,10 +819,10 @@
 !
 !--- compute stability & evaluate all stability functions ---
 !
-          hol  = shr_const_karman*g*blk_ZT(ng)*                         &
-     &          (tstar/thvbot+qstar/(1.0_r8/shr_const_zvir+Qair))/      &
-     &                     ustar**2
-          hol  = SIGN( MIN(ABS(hol),10.0_r8), hol )
+          hol    = shr_const_karman*g*blk_ZT(ng)*                       &
+     &             (tstar/thvbot+qstar/(1.0_r8/shr_const_zvir+Qair)) /  &
+     &             ustar**2
+          hol    = SIGN( MIN(ABS(hol),10.0_r8), hol )
           stable = 0.5_r8 + SIGN(0.5_r8 , hol)
           xsq    = MAX(SQRT(ABS(1.0_r8 - 16.0_r8*hol)) , 1.0_r8)
           xqq    = SQRT(xsq)
@@ -857,10 +858,10 @@
 !
 !--- compute stability & evaluate all stability functions ---
 !
-          hol  = shr_const_karman*g*blk_ZQ(ng)*                         &
-     &            (tstar/thvbot+qstar/(1.0/shr_const_zvir+Qair))/       &
-     &                         ustar**2
-          hol  = SIGN( MIN(ABS(hol),10.0_r8), hol )
+          hol    = shr_const_karman*g*blk_ZQ(ng)*                       &
+     &             (tstar/thvbot+qstar/(1.0/shr_const_zvir+Qair)) /     &
+     &             ustar**2
+          hol    = SIGN( MIN(ABS(hol),10.0_r8), hol )
           stable = 0.5_r8 + SIGN(0.5_r8 , hol)
           xsq    = MAX(SQRT(ABS(1.0_r8 - 16.0_r8*hol)) , 1.0_r8)
           xqq    = SQRT(xsq)
@@ -928,9 +929,9 @@
 !  Sensible heat flux over ice
 !
           IF (ai(i,j,listp).gt.min_a(ng)) THEN
-            sfc_temp = tis(i,j) + 273.16_r8
+            sfc_temp    = tis(i,j) + 273.16_r8
           ELSE
-            sfc_temp = t(i,j,N(ng),nrhs,itemp) + 273.16_r8
+            sfc_temp    = t(i,j,N(ng),nrhs,itemp) + 273.16_r8
           ENDIF
           qsh_i         = rhoAir(i)*blk_Cpa*Ch*vmag*                    &
      &                    (TairK(i)+0.0098*blk_ZT(ng)-sfc_temp)
@@ -949,9 +950,9 @@
 !
 !  Convert back to Pascal from millibars
 !
-          slp = Pair(i,j)*100._r8
-          cff = 611._r8*10._r8**(9.5_r8*(sfc_temp-273.16_r8)/           &
-     &                           (sfc_temp-7.66_r8))
+          slp    = Pair(i,j)*100._r8
+          cff    = 611._r8*10._r8**(9.5_r8*(sfc_temp-273.16_r8) /       &
+     &                              (sfc_temp-7.66_r8))
           Qsati  = epsilon*cff/(slp-(1._r8-epsilon)*cff)
           dq_i   = Qair-Qsati
           fqlat1 = rhoAir(i)*Ce*vmag
@@ -1049,7 +1050,7 @@
      &           (0.39_r8-0.005_r8*SQRT(vap_p_i))*                      &
      &           (1.0_r8-0.65_r8*cloud(i,j)) -                          &
      &           4._r8*StefBo*emmiss*TairK(i)**3*(sfc_temp-TairK(i))
-
+!
           Coef_Ice(i,j) = Coef_Ice(i,j) +                               &
      &                    4._r8*StefBo*emmiss*TairK(i)**3
           RHS_Ice(i,j)  = RHS_Ice(i,j) -                                &
@@ -1300,8 +1301,8 @@
           sustr(i,j)=sustr(i,j)*umask(i,j)
 # endif
 # ifdef ICE_MODEL
-          sustr_aw(i,j) = sustr(i,j)
-          tau_aix_n(i,j) = Taux_Ice(i,j)
+          sustr_aw(i,j)=sustr(i,j)
+          tau_aix_n(i,j)=Taux_Ice(i,j)
 # endif
         END DO
       END DO
@@ -1314,8 +1315,8 @@
           svstr(i,j)=svstr(i,j)*vmask(i,j)
 # endif
 # ifdef ICE_MODEL
-          svstr_aw(i,j) = svstr(i,j)
-          tau_aiy_n(i,j) = Tauy_Ice(i,j)
+          svstr_aw(i,j)=svstr(i,j)
+          tau_aiy_n(i,j)=Tauy_Ice(i,j)
 # endif
         END DO
       END DO

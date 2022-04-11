@@ -27,9 +27,9 @@
       USE mod_param
       USE mod_ice
       USE mod_stepping
-!
-      integer, intent(in) :: ng, tile
 
+      integer, intent(in) :: ng, tile
+!
 #include "tile.h"
 !
       CALL vibc_tile (ng, tile,                                         &
@@ -77,7 +77,7 @@
       real(r8):: cff, dVde, dVdt, dVdx, tau
 
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: grad
-
+!
 #include "set_bounds.h"
 !
 !-----------------------------------------------------------------------

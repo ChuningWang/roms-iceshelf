@@ -16,7 +16,7 @@
       implicit none
 
       PRIVATE
-      PUBLIC ice_spdiw
+      PUBLIC  :: ice_spdiw
 
       CONTAINS
 !
@@ -26,19 +26,15 @@
 !
       USE mod_param
       USE mod_grid
-      USE mod_forces
       USE mod_ocean
-      USE mod_ice
-      USE mod_coupling
 #  ifdef LMD_SKPP
       USE mod_mixing
 #  endif
+      USE mod_ice
       USE mod_stepping
-!
-      implicit none
-!
-      integer, intent(in) :: ng, tile
 
+      integer, intent(in) :: ng, tile
+!
 # include "tile.h"
 !
 # ifdef PROFILE
@@ -47,8 +43,7 @@
       CALL ice_spdiw_tile (ng, tile,                                    &
      &                     LBi, UBi, LBj, UBj,                          &
      &                     IminS, ImaxS, JminS, JmaxS,                  &
-     &                     nrhs(ng),                                    &
-     &                     liuol(ng),                                   &
+     &                     nrhs(ng), liuol(ng),                         &
      &                     GRID(ng) % z_r,                              &
      &                     GRID(ng) % z_w,                              &
      &                     OCEAN(ng) % u,                               &
@@ -71,16 +66,14 @@
       SUBROUTINE ice_spdiw_tile (ng, tile,                              &
      &                           LBi, UBi, LBj, UBj,                    &
      &                           IminS, ImaxS, JminS, JmaxS,            &
-     &                           nrhs,                                  &
-     &                           liuol,                                 &
+     &                           nrhs, liuol,                           &
      &                           z_r, z_w,                              &
      &                           u, v,                                  &
 # ifdef LMD_SKPP
      &                           hsbl,                                  &
 # endif
      &                           ui, vi,                                &
-     &                           uwater, vwater,                        &
-     &                           spd_iw)
+     &                           uwater, vwater, spd_iw)
 !***********************************************************************
 !
       USE mod_param
@@ -96,8 +89,7 @@
       integer, intent(in) :: ng, tile
       integer, intent(in) :: LBi, UBi, LBj, UBj
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
-      integer, intent(in) :: nrhs
-      integer, intent(in) :: liuol
+      integer, intent(in) :: nrhs, liuol
 
 # ifdef ASSUMED_SHAPE
       real(r8), intent(in) :: z_r(LBi:,LBj:,:)
@@ -130,21 +122,19 @@
 !  Local variable declarations.
 !
       integer :: i, j
-
       integer :: nlio, nbotu, nbotv, k
+
+      real(r8) :: mlio, dml, totml
+
       integer, dimension(IminS:ImaxS,JminS:JmaxS) :: nbot
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: uw
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: vw
-
-      real(r8) :: mlio
-      real(r8) :: dml
-      real(r8) :: totml
-
+!
 # include "set_bounds.h"
-
+!
       DO j=MAX(Jstr-2,0),MIN(Jend+2,Mm(ng)+1)
         DO i=MAX(Istr-2,0),MIN(Iend+2,Lm(ng)+1)
-!         sl_dpth = lmd_epsilon*(z_w(i,j,N(ng))-hsbl(i,j))
+!         sl_dpth = lmd_epsilon*(z_w(i,j,N(ng)) - hsbl(i,j))
 # ifdef LMD_SKPP
 !
 ! hsbl is now a positive quantity
@@ -176,11 +166,11 @@
           DO k=N(ng),nbotu,-1
             nlio = nlio + 1
             dml = 0.5_r8*(z_w(i-1,j,k)-z_w(i-1,j,k-1) +                 &
-     &                    z_w(i,j,k)-z_w(i,j,k-1))
+     &                    z_w(i  ,j,k)-z_w(i  ,j,k-1))
             uw(i,j) = uw(i,j) + u(i,j,k,nrhs)*dml
             totml = totml + dml
           END DO
-          uw(i,j) = uw(i,j)/totml
+          uw(i,j) = uw(i,j) / totml
 !         uw(i,j) = u(i,j,N,nrhs)
         END DO
       END DO
@@ -195,20 +185,20 @@
           DO k=N(ng),nbotv,-1
             nlio = nlio + 1
             dml = 0.5_r8*(z_w(i,j-1,k)-z_w(i,j-1,k-1) +                 &
-     &                    z_w(i,j,k)-z_w(i,j,k-1))
+     &                    z_w(i,j  ,k)-z_w(i,j  ,k-1))
             vw(i,j) = vw(i,j) + v(i,j,k,nrhs)*dml
             totml = totml + dml
           END DO
-          vw(i,j) = vw(i,j)/totml
+          vw(i,j) = vw(i,j) / totml
 !         vw(i,j) = v(i,j,N,nrhs)
         END DO
       END DO
 
       DO j=Jstr,Jend
         DO i=Istr,Iend
-          spd_iw(i,j) = 0.5*SQRT((uw(i,j)-ui(i,j,liuol) +               &
+          spd_iw(i,j) = 0.5*SQRT((uw(i  ,j)-ui(i  ,j,liuol) +           &
      &                            uw(i+1,j)-ui(i+1,j,liuol))**2 +       &
-     &                           (vw(i,j)-vi(i,j,liuol) +               &
+     &                           (vw(i,j  )-vi(i,j  ,liuol) +           &
      &                            vw(i,j+1)-vi(i,j+1,liuol))**2)
         END DO
       END DO
@@ -240,7 +230,7 @@
      &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
      &                    spd_iw, uwater, vwater)
 # endif
-
+!
       RETURN
       END SUBROUTINE ice_spdiw_tile
 #endif

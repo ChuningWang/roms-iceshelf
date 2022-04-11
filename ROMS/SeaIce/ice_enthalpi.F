@@ -11,19 +11,19 @@
 !=======================================================================
 !
       implicit none
-!
+
       PRIVATE
-      PUBLIC ice_enthalpi
-!
+      PUBLIC  :: ice_enthalpi
+
       CONTAINS
 !
+!***********************************************************************
       SUBROUTINE ice_enthalpi (ng, tile)
+!***********************************************************************
 !
       USE mod_param
       USE mod_ice
-!
-      implicit none
-!
+
       integer, intent(in) :: ng, tile
 !
 # include "tile.h"
@@ -45,25 +45,26 @@
 #ifdef PROFILE
       CALL wclock_off (ng, iNLM, 95, __LINE__, __FILE__)
 #endif
+!
       RETURN
       END SUBROUTINE ice_enthalpi
-
+!
+!***********************************************************************
       SUBROUTINE ice_enthalpi_tile (ng, tile,                           &
      &                              LBi, UBi, LBj, UBj,                 &
      &                              IminS, ImaxS, JminS, JmaxS,         &
-     &                              hi, ti, enthalpi)
+     &                              hi, ti,                             &
+     &                              enthalpi)
+!***********************************************************************
 !
       USE mod_param
       USE mod_scalars
       USE mod_stepping
-      USE mod_boundary
 !
       USE exchange_2d_mod, ONLY : exchange_r2d_tile
 # ifdef DISTRIBUTE
       USE mp_exchange_mod, ONLY : mp_exchange2d
 # endif
-!
-      implicit none
 !
 !  Imported variable declarations.
 !
@@ -83,16 +84,14 @@
 !  Local variable declarations.
 !
       integer :: i, j
-
+!
 # include "set_bounds.h"
-
+!
       DO j=JstrT,JendT
         DO i=IstrT,IendT
-          enthalpi(i,j,liold(ng)) = hi(i,j,liold(ng))*                  &
-     &                                      ti(i,j,liold(ng))
-          enthalpi(i,j,linew(ng)) = hi(i,j,linew(ng))*                  &
-     &                                      ti(i,j,linew(ng))
-          IF(hi(i,j,liold(ng)).LE.min_h(ng)) THEN
+          enthalpi(i,j,liold(ng)) = hi(i,j,liold(ng))*ti(i,j,liold(ng))
+          enthalpi(i,j,linew(ng)) = hi(i,j,linew(ng))*ti(i,j,linew(ng))
+          IF(hi(i,j,liold(ng)).le.min_h(ng)) THEN
             enthalpi(i,j,liold(ng)) = 0.0_r8
           END IF
         ENDDO
@@ -118,6 +117,7 @@
      &                      enthalpi(:,:,liold(ng)),                    &
      &                      enthalpi(:,:,linew(ng)))
 # endif
+!
       RETURN
       END SUBROUTINE ice_enthalpi_tile
 #endif

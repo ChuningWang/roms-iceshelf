@@ -3,10 +3,10 @@
 #if defined ICE_ALBEDO && !defined ICE_ALB_FILE
 !
 !svn $Id$
-!================================================== Hernan G. Arango ===
-!  Copyright (c) 2002-2020 The ROMS/TOMS Group                         !
+!=======================================================================
+!  Copyright (c) 2002-2022 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
-!    See License_ROMS.txt                                              !
+!    See License_ROMS.txt                           Hernan G. Arango   !
 !=======================================================================
 !                                                                      !
 !  This routine computes the albedo                                    !
@@ -44,14 +44,12 @@
       CALL albedo_tile (ng, tile,                                       &
      &                  LBi, UBi, LBj, UBj,                             &
      &                  IminS, ImaxS, JminS, JmaxS,                     &
-     &                  liold(ng),                                      &
-     &                  linew(ng),                                      &
+     &                  liold(ng), linew(ng),                           &
 # ifdef ICE_ALB_CURVE
      &                  GRID(ng) % latr,                                &
 # endif
      &                  ICE(ng) % ai,                                   &
      &                  ICE(ng) % hi,                                   &
-     &                  FORCES(ng) % alb_i,                             &
 # ifdef ICE_THERMO
      &                  ICE(ng) % hsn,                                  &
      &                  ICE(ng) % tis,                                  &
@@ -59,6 +57,7 @@
 # ifdef ICE_ALB_CSIM
      &                  FORCES(ng) % frswp,                             &
 # endif
+     &                  FORCES(ng) % alb_i,                             &
      &                  FORCES(ng) % alb)
 # ifdef PROFILE
       CALL wclock_off (ng, iNLM, 17, __LINE__, __FILE__)
@@ -74,14 +73,14 @@
 # ifdef ICE_ALB_CURVE
      &                        latr,                                     &
 # endif
-     &                        ai, hi, alb_i,                            &
+     &                        ai, hi,                                   &
 # ifdef ICE_THERMO
      &                        hsn, tis,                                 &
 # endif
 # ifdef ICE_ALB_CSIM
      &                        frswp,                                    &
 # endif
-     &                        alb)
+     &                        alb_i, alb)
 !***********************************************************************
 !
       USE mod_param
@@ -106,7 +105,6 @@
 #  endif
       real(r8), intent(in) :: ai(LBi:,LBj:,:)
       real(r8), intent(in) :: hi(LBi:,LBj:,:)
-      real(r8), intent(out) :: alb_i(LBi:,LBj:)
 #  ifdef ICE_THERMO
       real(r8), intent(in) :: hsn(LBi:,LBj:,:)
       real(r8), intent(in) :: tis(LBi:,LBj:)
@@ -114,6 +112,7 @@
 #  ifdef ICE_ALB_CSIM
       real(r8), intent(out) :: frswp(LBi:,LBj:)
 #  endif
+      real(r8), intent(out) :: alb_i(LBi:,LBj:)
       real(r8), intent(out) :: alb(LBi:,LBj:)
 
 # else
@@ -122,7 +121,6 @@
 #  endif
       real(r8), intent(in) :: ai(LBi:UBi,LBj:UBj,2)
       real(r8), intent(in) :: hi(LBi:UBi,LBj:UBj,2)
-      real(r8), intent(out) :: alb_i(LBi:UBi,LBj:UBj)
 #  ifdef ICE_THERMO
       real(r8), intent(in) :: hsn(LBi:UBi,LBj:UBj,2)
       real(r8), intent(in) :: tis(LBi:UBi,LBj:UBj)
@@ -130,16 +128,17 @@
 #  ifdef ICE_ALB_CSIM
       real(r8), intent(out) :: frswp(LBi:UBi,LBj:UBj)
 #  endif
+      real(r8), intent(out) :: alb_i(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: alb(LBi:UBi,LBj:UBj)
 # endif
 !
 !  Local variable declarations.
 !
       integer :: i, j, listp
-
-      real(r8) :: cff1, cff2
-      real(r8) :: cff
-# ifdef ICE_ALB_CSIM
+!
+# ifdef ICE_ALB_EC92
+      real(r8) :: albs = 0.83_r8
+# elif defined ICE_ALB_CSIM
 !
 ! DuVivier et al., 2018
 !
@@ -211,42 +210,39 @@
 !
       real(r8), parameter :: i0vis=0.70_r8
 
-      real(r8) :: fhtan, fh, albo, alvni, alini, dTs, fT
+      real(r8) :: fh, albo, alvni, alini, dTs, fT
       real(r8) :: alvns, alins, asnow, alvn, alin
-!
-! Was these values
-!
-!     real(r8), parameter :: alb_i_thick=0.54_r8
-!     real(r8), parameter :: alb_s_dry=0.83_r8
-!     real(r8), parameter :: alb_s_wet=0.70_r8
-!
-! Values from Ungermann et al, 2017
-!
-!     real(r8), parameter :: alb_i_thick=0.71_r8
-!     real(r8), parameter :: alb_s_dry=0.86_r8
-!     real(r8), parameter :: alb_s_wet=0.79_r8
-!
-! Try something intermediate
-!
-!     real(r8), parameter :: alb_i_thick=0.65_r8
-!     real(r8), parameter :: alb_s_dry=0.86_r8
-!     real(r8), parameter :: alb_s_wet=0.72_r8
 # else
       real(r8), parameter :: alb_i_dry=0.65_r8
       real(r8), parameter :: alb_i_wet=0.60_r8
       real(r8), parameter :: alb_s_dry=0.85_r8
       real(r8), parameter :: alb_s_wet=0.72_r8
-# endif
-      real(r8) :: albs, qlwi, qlh_i, qsh_i
-      real(r8) :: le_i, dq_i,fqlat1, slp, Qsati
-      real(r8) :: vap_p_i
-# ifdef ICE_ALB_EC92
-      real(r8) :: albi, albsn, thki_n, thksn_n
-# endif
-      real(r8), parameter :: alb_w=0.06_r8
 !
-      real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: ice_thick
-      real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: snow_thick
+!  Was these values
+!
+!     real(r8), parameter :: alb_i_thick=0.54_r8
+!     real(r8), parameter :: alb_s_dry=0.83_r8
+!     real(r8), parameter :: alb_s_wet=0.70_r8
+!
+!  Values from Ungermann et al, 2017
+!
+!     real(r8), parameter :: alb_i_thick=0.71_r8
+!     real(r8), parameter :: alb_s_dry=0.86_r8
+!     real(r8), parameter :: alb_s_wet=0.79_r8
+!
+!  Try something intermediate
+!
+!     real(r8), parameter :: alb_i_thick=0.65_r8
+!     real(r8), parameter :: alb_s_dry=0.86_r8
+!     real(r8), parameter :: alb_s_wet=0.72_r8
+# endif
+!
+!  Default water albedo
+!
+      real(r8), parameter :: albw=0.06_r8
+!
+      real(r8) :: i_thick, s_thick
+      real(r8) :: cff1, cff2
 
 # include "set_bounds.h"
 !
@@ -261,9 +257,6 @@
       ELSE
         listp = linew
       END IF
-# ifdef ICE_ALB_CSIM
-      fhtan = ATAN(ahmax*4.0_r8)
-# endif
 !
 ! Note that this loop needs to be cleaned of all global arrays for
 ! OpenMP.
@@ -273,29 +266,31 @@
 !
 ! Calculate the ice/snow albedo
 !
-          ice_thick(i,j) = hi(i,j,listp)/(ai(i,j,listp)+0.001)
-          snow_thick(i,j) = hsn(i,j,listp)/(ai(i,j,listp)+0.001)
+          i_thick = hi(i,j,listp)/(ai(i,j,listp)+0.001)
+          s_thick = hsn(i,j,listp)/(ai(i,j,listp)+0.001)
 # ifdef ICE_ALB_EC92
 !
 ! Ice and snow albedo is calculated from Ebert and Curry,1992b
 !
-          albi=0.06_r8
-          IF (ai(i,j,listp) .ge. min_a(ng)) THEN
-            thki_n = ice_thick(i,j)
-            thki_n = MAX(thki_n,0.00001_r8)
-            thksn_n = snow_thick(i,j)
-            albi=0.082409_r8*LOG(thki_n)+0.485472_r8
-            IF (thki_n.ge.1._r8) albi=0.07616_r8*thki_n+0.414492_r8
-            IF (thki_n.ge.2._r8) albi=0.561632_r8
-!
-! Approximated values for albsn(depends on COSZ, but small variation)
-!
-            albsn=0.83_r8
-            alb_i(i,j)=albi
-            IF (hsn(i,j,listp).gt.0._r8) alb_i(i,j)=albsn
+          IF (hsn(i,j,listp).gt.0._r8) THEN
+            alb_i(i,j) = albs
           ELSE
-            alb_i(i,j)=alb_w
-          ENDIF
+!
+! Approximated values for albs (depends on COSZ, but small variation)
+!
+            IF (ai(i,j,listp) .ge. min_a(ng)) THEN
+              i_thick = MAX(i_thick, 0.00001_r8)
+              IF (i_thick.ge.2._r8) THEN
+                alb_i(i,j) = 0.561632_r8
+              ELSE IF (i_thick.ge.1._r8) THEN
+                alb_i(i,j) = 0.07616_r8*i_thick+0.414492_r8
+              ELSE
+                alb_i(i,j) = 0.082409_r8*LOG(i_thick) + 0.485472_r8
+              END IF
+            ELSE
+              alb_i(i,j) = albw
+            END IF
+          END IF
 # elif defined ICE_ALB_CSIM
 !
 ! We follow ice_shortwave.F90/compute_albedos subroutine (CESM2/CICE5.1)
@@ -304,8 +299,8 @@
 !
 ! bare ice, thickness dependence
 !
-            fh = MIN(ATAN(ice_thick(i,j)*4.0_r8)/fhtan, 1.0_r8)
-            albo = alb_w*(1.0_r8-fh)
+            fh = MIN(ATAN(ice_thick*4.0_r8)/ATAN(ahmax*4.0_r8), 1.0_r8)
+            albo = albw*(1.0_r8-fh)
             alvni = albicev*fh + albo
             alini = albicei*fh + albo
 !
@@ -316,24 +311,24 @@
 ! fT=0 for dTs>=dT_melt, =-1 for dTs=0
 !
             fT = MIN(dTs/dT_melt-1.0_r8, 0.0_r8)
-            alvni = MAX(alb_w, alvni - dalb_mlt*fT)
+            alvni = MAX(albw, alvni - dalb_mlt*fT)
 !
 ! Ice albedo decreases with warming, capped by ocean albedo
 !
-            alini = MAX(alb_w, alini - dalb_mlt*fT)
+            alini = MAX(albw, alini - dalb_mlt*fT)
 
-            IF (snow_thick(i,j) > puny) THEN
+            IF (s_thick > puny) THEN
 !
 ! Snow on ice, temperature dependence
 !
-              alvns = MAX(alb_w, albsnowv - dalb_mltv*fT)
-              alins = MAX(alb_w, albsnowi - dalb_mlti*fT)
+              alvns = MAX(albw, albsnowv - dalb_mltv*fT)
+              alins = MAX(albw, albsnowi - dalb_mlti*fT)
 !
 ! Note: the CESM2/CICE5.1 code (ice_shortwave.F90/compute_albedos) does
 !       not impose lower cap here, but it seems safer to do so for the
 !       case of tis>>Timelt (=> fT<<0)
 !
-              asnow = snow_thick(i,j) / (snow_thick(i,j) + snowpatch)
+              asnow = s_thick / (s_thick + snowpatch)
 !
 ! Combined ice/snow visual albedo
 !
@@ -368,11 +363,11 @@
 !       ice can penetrate through the surface layer (if not reflected)
 !
           ELSE
-            alb_i(i,j) = alb_w
+            alb_i(i,j) = albw
 !
 ! This should be arbitrary
 !
-            frswp(i,j) = (1.0_r8-alb_w)*i0vis*fv
+            frswp(i,j) = (1.0_r8-albw)*i0vis*fv
           ENDIF
 # else
           cff1 = alb_s_wet - alb_s_dry
@@ -392,7 +387,7 @@
               ENDIF
             ENDIF
           ELSE
-            alb_i(i,j)=alb_w
+            alb_i(i,j)=albw
           ENDIF
 # endif
 !
@@ -401,7 +396,7 @@
 # ifdef ICE_ALB_CURVE
           alb(i,j) = (0.069_r8 - 0.011_r8*COS(2*deg2rad*latr(i,j)))
 # else
-          alb(i,j)=alb_w
+          alb(i,j) = albw
 # endif
         END DO
       END DO
@@ -437,9 +432,8 @@
      &                    frswp)
 #  endif
 # endif
-
       RETURN
+!
       END SUBROUTINE albedo_tile
 #endif
-
       END module albedo_mod

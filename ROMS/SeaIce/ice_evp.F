@@ -25,8 +25,6 @@
       USE mod_ice
       USE mod_stepping
 !
-      implicit none
-!
       integer, intent(in) :: ng, tile
 !
 # include "tile.h"
@@ -39,20 +37,20 @@
      &                   LBi, UBi, LBj, UBj,                            &
      &                   IminS, ImaxS, JminS, JmaxS,                    &
      &                   liold(ng), lieol(ng), liuol(ng),               &
+     &                   GRID(ng) % pm,                                 &
+     &                   GRID(ng) % pn,                                 &
 # ifdef ICE_OUTFLOW_MASK
      &                   GRID(ng) % mask_outflow,                       &
 # endif
 # ifdef ICE_STRENGTH_QUAD
      &                   ICE(ng) % pstar_grid,                          &
 # endif
-     &                   GRID(ng) % pm,                                 &
-     &                   GRID(ng) % pn,                                 &
+     &                   ICE(ng) % ai,                                  &
+     &                   ICE(ng) % hi,                                  &
      &                   ICE(ng) % ui,                                  &
      &                   ICE(ng) % vi,                                  &
      &                   ICE(ng) % uie,                                 &
      &                   ICE(ng) % vie,                                 &
-     &                   ICE(ng) % ai,                                  &
-     &                   ICE(ng) % hi,                                  &
      &                   ICE(ng) % pice,                                &
      &                   ICE(ng) % zetai,                               &
      &                   ICE(ng) % eta                                  &
@@ -68,17 +66,17 @@
      &                        LBi, UBi, LBj, UBj,                       &
      &                        IminS, ImaxS, JminS, JmaxS,               &
      &                        liold, lieol, liuol,                      &
+     &                        pm, pn,                                   &
 # ifdef ICE_OUTFLOW_MASK
      &                        mask_outflow,                             &
 # endif
 #ifdef ICE_STRENGTH_QUAD
      &                        pstar_grid,                               &
 #endif
-     &                        pm, pn, ui, vi, uie, vie, ai, hi,         &
+     &                        ai, hi, ui, vi, uie, vie,                 &
      &                        pice, zetai, eta)
 !***********************************************************************
 !
-
       USE mod_param
       USE mod_scalars
 !
@@ -96,38 +94,38 @@
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
       integer, intent(in) :: liold, lieol, liuol
 # ifdef ASSUMED_SHAPE
+      real(r8), intent(in) :: pm(LBi:,LBj:)
+      real(r8), intent(in) :: pn(LBi:,LBj:)
 #  ifdef ICE_OUTFLOW_MASK
       real(r8), intent(in) :: mask_outflow(LBi:,LBj:)
 #  endif
 #  ifdef ICE_STRENGTH_QUAD
       real(r8), intent(in) :: pstar_grid(LBi:,LBj:)
 #  endif
-      real(r8), intent(in) :: pm(LBi:,LBj:)
-      real(r8), intent(in) :: pn(LBi:,LBj:)
+      real(r8), intent(in) :: ai(LBi:,LBj:,:)
+      real(r8), intent(in) :: hi(LBi:,LBj:,:)
       real(r8), intent(in) :: ui(LBi:,LBj:,:)
       real(r8), intent(in) :: vi(LBi:,LBj:,:)
       real(r8), intent(inout) :: uie(LBi:,LBj:,:)
       real(r8), intent(inout) :: vie(LBi:,LBj:,:)
-      real(r8), intent(in) :: ai(LBi:,LBj:,:)
-      real(r8), intent(in) :: hi(LBi:,LBj:,:)
       real(r8), intent(out) :: pice(LBi:,LBj:)
       real(r8), intent(out) :: zetai(LBi:,LBj:)
       real(r8), intent(out) :: eta(LBi:,LBj:)
 # else
+      real(r8), intent(in) :: pm(LBi:UBi,LBj:UBj)
+      real(r8), intent(in) :: pn(LBi:UBi,LBj:UBj)
 #  ifdef ICE_OUTFLOW_MASK
       real(r8), intent(in) :: mask_outflow(LBi:UBi,LBj:UBj)
 #  endif
 #  ifdef ICE_STRENGTH_QUAD
       real(r8), intent(in) :: pstar_grid(LBi:UBi,LBj:UBj)
 #  endif
-      real(r8), intent(in) :: pm(LBi:UBi,LBj:UBj)
-      real(r8), intent(in) :: pn(LBi:UBi,LBj:UBj)
+      real(r8), intent(in) :: ai(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(in) :: hi(LBi:UBi,LBj:UBj,2)
       real(r8), intent(in) :: ui(LBi:UBi,LBj:UBj,2)
       real(r8), intent(in) :: vi(LBi:UBi,LBj:UBj,2)
       real(r8), intent(inout) :: uie(LBi:UBi,LBj:UBj,2)
       real(r8), intent(inout) :: vie(LBi:UBi,LBj:UBj,2)
-      real(r8), intent(in) :: ai(LBi:UBi,LBj:UBj,2)
-      real(r8), intent(in) :: hi(LBi:UBi,LBj:UBj,2)
       real(r8), intent(out) :: pice(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: zetai(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: eta(LBi:UBi,LBj:UBj)
@@ -137,24 +135,15 @@
 !
       integer :: i, j
 
-      real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: eps11
-      real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: eps22
-      real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: eps12
-
-      real(r8) :: eone
-      real(r8) :: etwos
-      real(r8) :: epx
-      real(r8) :: epy
-      real(r8) :: e2r
-      real(r8) :: delta
-      real(r8) :: zmax
+      real(r8) :: eone, etwos, epx, epy, e2r, eps11, eps22, eps12
+      real(r8) :: delta, zmax
       real(r8), parameter :: epso = 1.E-12_r8
 
 # include "set_bounds.h"
 !
 ! ----------------------------------------------------------------------
-!
-! Update ice velocity
+!   Update ice velocity
+! ----------------------------------------------------------------------
 !
       IF (ievp(ng).eq.1) THEN
         DO j=Jstr,Jend
@@ -249,36 +238,36 @@
 !
       e2r = 1.0_r8/(ellip_sq(ng))
 !
-! *** Compute strain rates
+! ----------------------------------------------------------------------
+!   Compute strain rates
+! ----------------------------------------------------------------------
 !
       DO j=Jstr,Jend
         DO i=Istr,Iend
-          eps11(i,j) = (uie(i+1,j,lieol)-uie(i,j,lieol))*pm(i,j)
-          eps22(i,j) = (vie(i,j+1,lieol)-vie(i,j,lieol))*pn(i,j)
-          epx = 0.25_r8*(vie(i+1,j+1,lieol)+vie(i+1,j,lieol) -          &
-     &                   vie(i-1,j+1,lieol)-vie(i-1,j,lieol))*pm(i,j)
-          epy = 0.25_r8*(uie(i+1,j+1,lieol)+uie(i,j+1,lieol) -          &
-     &                   uie(i+1,j-1,lieol)-uie(i,j-1,lieol))*pn(i,j)
-          eps12(i,j) = 0.5_r8*(epx + epy)
+          eps11 = (uie(i+1,j,lieol)-uie(i,j,lieol))*pm(i,j)
+          eps22 = (vie(i,j+1,lieol)-vie(i,j,lieol))*pn(i,j)
+          epx = 0.25_r8*( vie(i+1,j+1,lieol)+vie(i+1,j,lieol) -         &
+     &                    vie(i-1,j+1,lieol)-vie(i-1,j,lieol) )*pm(i,j)
+          epy = 0.25_r8*( uie(i+1,j+1,lieol)+uie(i,j+1,lieol) -         &
+     &                    uie(i+1,j-1,lieol)-uie(i,j-1,lieol) )*pn(i,j)
+          eps12 = 0.5_r8*(epx + epy)
 !
-          eone=eps11(i,j)+eps22(i,j) 
-          etwos=(eps11(i,j)-eps22(i,j))*(eps11(i,j)-eps22(i,j)) +       &
-     &          4.0_r8*eps12(i,j)*eps12(i,j)
+          eone  = eps11+eps22 
+          etwos = (eps11-eps22)**2 + 4.0_r8*eps12*eps12
 ! 
-          delta=ABS(eone**2+e2r*etwos)
-          delta=MAX(SQRT(delta),epso)
+          delta = ABS(eone**2 + e2r*etwos)
+          delta = MAX(SQRT(delta), epso)
 # ifdef ICE_STRENGTH_QUAD
-          pice(i,j)=pstar_grid(i,j)*hi(i,j,liold)**2 *                  &
-     &              EXP(-astren(ng)*(1.0_r8-ai(i,j,liold)))
+          pice(i,j) = pstar_grid(i,j)*hi(i,j,liold)**2*                 &
 # else
-          pice(i,j)=pstar(ng)*hi(i,j,liold) *                           &
-     &              EXP(-astren(ng)*(1.0_r8-ai(i,j,liold)))
+          pice(i,j) = pstar(ng)*hi(i,j,liold)*                          &
 # endif
-          zetai(i,j)=pice(i,j)/(2.0_r8*delta)
+     &                EXP(-astren(ng)*(1.0_r8-ai(i,j,liold)))
+          zetai(i,j) = pice(i,j)/(2.0_r8*delta)
           zmax = 2.5E+8_r8*pice(i,j)
-          zetai(i,j)= MIN(zetai(i,j),zetamax(ng))
-          zetai(i,j)= MAX(zetai(i,j),zetamin(ng))
-          eta(i,j)=e2r*zetai(i,j)
+          zetai(i,j) = MIN(zetai(i,j),zetamax(ng))
+          zetai(i,j) = MAX(zetai(i,j),zetamin(ng))
+          eta(i,j) = e2r*zetai(i,j)
         ENDDO
       ENDDO
 
@@ -307,9 +296,8 @@
 # endif
         ENDDO
       ENDDO
-
+!
       RETURN
       END SUBROUTINE ice_evp_tile
-
 #endif
       END MODULE ice_evp_mod

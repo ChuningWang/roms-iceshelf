@@ -15,20 +15,20 @@
 !=======================================================================
 !
       implicit none
-!
+
       PRIVATE
-      PUBLIC ice_frazil
-!
+      PUBLIC  :: ice_frazil
+
       CONTAINS
-!
+
       SUBROUTINE ice_frazil (ng, tile)
-!
+
       USE mod_param
       USE mod_grid
       USE mod_ocean
       USE mod_ice
       USE mod_stepping
-!
+
       integer, intent(in) :: ng, tile
 !
 # include "tile.h"
@@ -69,8 +69,8 @@
 # ifdef WET_DRY
      &                            rmask_wet,                            &
 # endif
-     &                            Hz, z_r, rho, t,                      &
-     &                            wfr)
+     &                            Hz, z_r, rho,                         &
+     &                            t, wfr)
 !***********************************************************************
 !
       USE mod_param
@@ -119,22 +119,15 @@
       real(r8), intent(out) :: wfr(LBi:UBi,LBj:UBj)
 # endif
 !
-! Local variable definitions
+!  Local variable definitions
 !
       integer :: i, j, k, itrc
 
       real(r8), parameter :: Lhat = 79.2_r8
       real(r8), parameter :: r = 0.5_r8
-
-      real(r8) :: t_freeze
-      real(r8) :: s1
-      real(r8) :: z1
-      real(r8) :: sice
-      real(r8) :: gamma_k
-      real(r8) :: t_fr
-      real(r8) :: ice_dens
-      real(r8) :: delta_wfr
       real(r8), parameter :: depressT = -0.0543_r8
+
+      real(r8) :: t_freeze, s1, z1, sice, t_fr, gamma_k, delta_wfr
       real(r8) :: cff
 !
 !  Inline functions
@@ -144,7 +137,7 @@
 !    &       - 2.154996d-4*s1*s1 + 0.000753*z1
 !
 !  Freezing temperature (Steele et al. 1989)
-      t_freeze(s1,z1) = -0.0543*s1 + 0.000759*z1
+      t_freeze(s1,z1) = depressT*s1 + 0.000759*z1
 !
 !  Another simple formula - temperature or potential temperature??
 !
@@ -152,14 +145,13 @@
 !
 # include "set_bounds.h"
 !
-      ice_dens = rhoice(ng)
       DO j=Jstr,Jend
         DO i=Istr,Iend
           wfr(i,j) = 0.0_r8
         ENDDO
       ENDDO
 !
-! Old ice model
+!  Old ice model
 !
       DO j=Jstr,Jend
         DO i=Istr,Iend
@@ -173,37 +165,37 @@
               delta_wfr = 0._r8
               IF (t(i,j,k,nnew,itemp) .lt. t_fr) THEN
                 gamma_k = (t_fr - t(i,j,k,nnew,itemp)) /                &
-     &                     (Lhat + t(i,j,k,nnew,itemp)*(1.0_r8 - r) -   &
-     &                      t_fr)
+     &                    (Lhat + t(i,j,k,nnew,itemp)*(1.0_r8 - r) -    &
+     &                     t_fr)
                 delta_wfr = gamma_k * Hz(i,j,k) *                       &
-     &                      (rho0 + rho(i,j,k) ) / ice_dens
+     &                      (rho0 + rho(i,j,k)) / rhoice(ng)
                 wfr(i,j) = wfr(i,j) + delta_wfr
-                t(i,j,k,nnew,itemp) = t(i,j,k,nnew,itemp) + gamma_k *   &
-     &                 (Lhat + t(i,j,k,nnew,itemp)*(1.0_r8 - r))
+                t(i,j,k,nnew,itemp) = t(i,j,k,nnew,itemp) +             &
+     &            gamma_k * (Lhat + t(i,j,k,nnew,itemp)*(1.0_r8 - r))
                 sice = MIN(sice_ref,t(i,j,k,nnew,isalt))
                 t(i,j,k,nnew,isalt) = t(i,j,k,nnew,isalt) *             &
-     &                  (1.0_r8 + gamma_k) - sice*gamma_k
-              ELSE IF (wfr(i,j) > 0._r8 .and.                           &
+     &                                (1.0_r8 + gamma_k) - sice*gamma_k
+              ELSE IF (wfr(i,j)            .gt. 0._r8 .and.             &
      &                 t(i,j,k,nnew,itemp) .gt. t_fr) THEN
 !
-! Use heat at this level to melt some ice from below.
-! gamma_k becomes negative here.
+!  Use heat at this level to melt some ice from below.
+!    gamma_k becomes negative here.
 !
                 gamma_k = (t_fr - t(i,j,k,nnew,itemp)) /                &
-     &                     (Lhat + t(i,j,k,nnew,itemp)*(1.0_r8 - r) -   &
-     &                      t_fr)
+     &                    (Lhat + t(i,j,k,nnew,itemp)*(1.0_r8 - r) -    &
+     &                     t_fr)
                 delta_wfr = gamma_k * Hz(i,j,k) *                       &
-     &                      (rho0 + rho(i,j,k) ) / ice_dens
-                IF ((wfr(i,j) + delta_wfr) > 0._r8) THEN
+     &                      (rho0 + rho(i,j,k) ) / rhoice(ng)
+                IF ((wfr(i,j) + delta_wfr) .gt. 0._r8) THEN
                   wfr(i,j) = wfr(i,j) + delta_wfr
                 ELSE
-                  gamma_k = -wfr(i,j) * ice_dens /                      &
+                  gamma_k = -wfr(i,j) * rhoice(ng) /                    &
      &                      (Hz(i,j,k)*(rho0+rho(i,j,k)))
                   wfr(i,j) = 0.0_r8
                   delta_wfr = -wfr(i,j)
                 ENDIF
                 t(i,j,k,nnew,itemp) = t(i,j,k,nnew,itemp) +             &
-     &            gamma_k*(Lhat + t(i,j,k,nnew,itemp)*(1.0_r8 - r))
+     &            gamma_k * (Lhat + t(i,j,k,nnew,itemp)*(1.0_r8 - r))
                 t(i,j,k,nnew,isalt) = t(i,j,k,nnew,isalt) *             &
      &            (1.0_r8 + gamma_k)
               END IF
@@ -218,7 +210,7 @@
               END IF
 !
 # ifdef T_PASSIVE
-              cff = delta_wfr*ice_dens/(rho0+rho(i,j,k))
+              cff = delta_wfr * rhoice(ng) / (rho0+rho(i,j,k))
               DO itrc=NAT+1,NT(ng)
                 t(i,j,k,nnew,itrc) = t(i,j,k,nnew,itrc)*                &
      &                               (Hz(i,j,k)-cff)/Hz(i,j,k)
@@ -229,7 +221,7 @@
 # endif
           END DO
 !
-          wfr(i,j) = wfr(i,j)/dt(ng)
+          wfr(i,j) = wfr(i,j) / dt(ng)
         END DO
       END DO
 !
@@ -255,8 +247,8 @@
      &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
      &                    wfr)
 # endif
+!
       RETURN
       END SUBROUTINE ice_frazil_tile
-
 #endif
       END MODULE ice_frazil_mod

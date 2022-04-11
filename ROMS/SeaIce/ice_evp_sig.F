@@ -76,8 +76,6 @@
 !
       USE i2dbc_mod, ONLY : i2dbc_sig
 !
-      implicit none
-!
 !  Imported variable declarations.
 !
       integer, intent(in) :: ng, tile
@@ -115,30 +113,17 @@
 !
       integer :: i, j
 
-      real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: eps11
-      real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: eps22
-      real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: eps12
-
-      real(r8) :: e
-      real(r8) :: e0
-      real(r8) :: ep
-      real(r8) :: ee
-      real(r8) :: ees
-      real(r8) :: gamma
-      real(r8) :: f1
-      real(r8) :: f2
-      real(r8) :: f3
-      real(r8) :: alfa
-      real(r8) :: beta
-      real(r8) :: epx
-      real(r8) :: epy
+      real(r8) :: e, e0, ep, ee, ees, gamma
+      real(r8) :: f1, f2, f3
+      real(r8) :: alfa, beta, epx, epy, eps11, eps22, eps12
       real(r8) :: cff
 
 # include "set_bounds.h"
+
 !
 ! ----------------------------------------------------------------------
-!
-!  Initial value for Youngs modulus (between 0 and 1)
+!   Initial value for Youngs modulus (between 0 and 1)
+! ----------------------------------------------------------------------
 !
       e0=0.25_r8
 !
@@ -146,18 +131,13 @@
 !
       DO j=Jstr,Jend
         DO i=Istr,Iend
-          eps11(i,j) = (uie(i+1,j,lieol)-uie(i,j,lieol))*pm(i,j)
-          eps22(i,j) = (vie(i,j+1,lieol)-vie(i,j,lieol))*pn(i,j)
-          epx = 0.25_r8*( vie(i+1,j+1,lieol)+vie(i+1,j,lieol)           &
-     &             - vie(i-1,j+1,lieol)-vie(i-1,j,lieol) )*pm(i,j)
-          epy = 0.25_r8*( uie(i+1,j+1,lieol)+uie(i,j+1,lieol)           &
-     &             - uie(i+1,j-1,lieol)-uie(i,j-1,lieol) )*pn(i,j)
-          eps12(i,j) = 0.5_r8*(epx + epy)
-        END DO
-      END DO
-!
-      DO j=Jstr,Jend
-        DO i=Istr,Iend
+          eps11 = (uie(i+1,j,lieol)-uie(i,j,lieol))*pm(i,j)
+          eps22 = (vie(i,j+1,lieol)-vie(i,j,lieol))*pn(i,j)
+          epx = 0.25_r8*( vie(i+1,j+1,lieol)+vie(i+1,j,lieol) -         &
+     &                    vie(i-1,j+1,lieol)-vie(i-1,j,lieol) )*pm(i,j)
+          epy = 0.25_r8*( uie(i+1,j+1,lieol)+uie(i,j+1,lieol) -         &
+     &                    uie(i+1,j-1,lieol)-uie(i,j-1,lieol) )*pn(i,j)
+          eps12 = 0.5_r8*(epx + epy)
 !
           IF (hi(i,j,liold).gt.0.01_r8) THEN
             e = 2.0_r8*e0*rhoice(ng)*hi(i,j,liold)/(pm(i,j)*dte(ng))**2
@@ -169,34 +149,37 @@
             alfa = 1.0_r8/dte(ng) + ee + ees
             beta = ees
             gamma = 1/dte(ng) + ee
-            f1 = e*eps11(i,j) - ep + sig11(i,j,lieol)/dte(ng)
-            f2 = e*eps22(i,j) - ep + sig22(i,j,lieol)/dte(ng)
-            f3 = e*eps12(i,j) + sig12(i,j,lieol)/dte(ng)
+            f1 = e*eps11 - ep + sig11(i,j,lieol)/dte(ng)
+            f2 = e*eps22 - ep + sig22(i,j,lieol)/dte(ng)
+            f3 = e*eps12 + sig12(i,j,lieol)/dte(ng)
             sig11(i,j,lienw) = (alfa*f1 - beta*f2)/(alfa**2 - beta**2)
-            sig12(i,j,lienw) = f3/gamma
             sig22(i,j,lienw) = (alfa*f2 - beta*f1)/(alfa**2 - beta**2)
+            sig12(i,j,lienw) = f3/gamma
 !
           ELSE
 !
-            sig11(i,j,lienw) = 2.0_r8*eta(i,j)*eps11(i,j)+              &
-     &        (zetai(i,j)-eta(i,j))*                                    &
-     &        (eps11(i,j)+eps22(i,j))  - pice(i,j)/2.0_r8
+            sig11(i,j,lienw) = 2.0_r8*eta(i,j)*eps11+                   &
+     &                         (zetai(i,j)-eta(i,j))*(eps11+eps22) -    &
+     &                         pice(i,j)/2.0_r8
 !
-            sig22(i,j,lienw) = 2.0_r8*eta(i,j)*eps22(i,j)+              &
-     &        (zetai(i,j)-eta(i,j))*                                    &
-     &        (eps11(i,j)+eps22(i,j))  - pice(i,j)/2.0_r8
+            sig22(i,j,lienw) = 2.0_r8*eta(i,j)*eps22+                   &
+     &                         (zetai(i,j)-eta(i,j))*(eps11+eps22) -    &
+     &                         pice(i,j)/2.0_r8
 !
-            sig12(i,j,lienw) = 2.0_r8*eta(i,j)*eps12(i,j)
-!
+            sig12(i,j,lienw) = 2.0_r8*eta(i,j)*eps12
           END IF
+!
           IF (LnudgeSICLM(ng)) THEN
             cff = CLIMA(ng)%SInudgcof(i,j)
-            sig11(i,j,lienw)=sig11(i,j,lienw)+                          &
-     &          dtice(ng)*cff*(CLIMA(ng)%sig11clm(i,j)-sig11(i,j,lienw))
-            sig12(i,j,lienw)=sig12(i,j,lienw)+                          &
-     &          dtice(ng)*cff*(CLIMA(ng)%sig12clm(i,j)-sig12(i,j,lienw))
-            sig22(i,j,lienw)=sig22(i,j,lienw)+                          &
-     &          dtice(ng)*cff*(CLIMA(ng)%sig22clm(i,j)-sig22(i,j,lienw))
+            sig11(i,j,lienw) = sig11(i,j,lienw) +                       &
+     &                         dtice(ng)*cff*(CLIMA(ng)%sig11clm(i,j) - &
+     &                         sig11(i,j,lienw))
+            sig22(i,j,lienw) = sig22(i,j,lienw) +                       &
+     &                         dtice(ng)*cff*(CLIMA(ng)%sig22clm(i,j) - &
+     &                         sig22(i,j,lienw))
+            sig12(i,j,lienw) = sig12(i,j,lienw) +                       &
+     &                         dtice(ng)*cff*(CLIMA(ng)%sig12clm(i,j) - &
+     &                         sig12(i,j,lienw))
           END IF
         END DO
       END DO

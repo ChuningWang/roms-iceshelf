@@ -29,7 +29,7 @@
       USE mod_stepping
 !
       integer, intent(in) :: ng, tile
-
+!
 #include "tile.h"
 !
       CALL  uibc_tile (ng, tile,                                        &
@@ -77,7 +77,7 @@
       real(r8) :: cff, dUde, dUdt, dUdx, phi, tau
 
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: grad
-
+!
 # include "set_bounds.h"
 !
 !-----------------------------------------------------------------------
