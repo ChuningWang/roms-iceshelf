@@ -73,7 +73,7 @@
      &                      FORCES(ng) % snow_n,                        &
      &                      FORCES(ng) % sr_in_i,                       &
      &                      FORCES(ng) % sr_th_i,                       &
-#ifdef BULK_FLUXES
+#ifdef ICE_SNOWFALL
      &                      FORCES(ng) % rain,                          &
 #endif
 #ifdef ICE_DIAGS
@@ -116,7 +116,7 @@
      &                            sustr, svstr,                         &
      &                            qai_n, qao_n, snow_n,                 &
      &                            sr_in_i, sr_th_i,                     &
-#ifdef BULK_FLUXES
+#ifdef ICE_SNOWFALL
      &                            rain,                                 &
 #endif
 #ifdef ICE_DIAGS
@@ -279,7 +279,7 @@
       real(r8), intent(in) :: snow_n(LBi:,LBj:)
       real(r8), intent(in) :: sr_in_i(LBi:,LBj:)
       real(r8), intent(in) :: sr_th_i(LBi:,LBj:)
-# ifdef BULK_FLUXES
+# ifdef ICE_SNOWFALL
       real(r8), intent(in) :: rain(LBi:,LBj:)
 # endif
 # ifdef ICE_DIAGS
@@ -335,7 +335,7 @@
       real(r8), intent(in) :: snow_n(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: sr_in_i(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: sr_th_i(LBi:UBi,LBj:UBj)
-# ifdef BULK_FLUXES
+# ifdef ICE_SNOWFALL
       real(r8), intent(in) :: rain(LBi:UBi,LBj:UBj)
 # endif
 # ifdef ICE_DIAGS
@@ -642,6 +642,9 @@
 #endif
           END IF
           wro(i,j) = MAX(0._r8,wai(i,j)+wsm(i,j))
+#ifdef ICE_SNOWFALL
+          wro(i,j) = wro(i,j) + rain(i,j)
+#endif
         END DO
       END DO
 !
@@ -663,7 +666,7 @@
           chs(i,j) = utau(i,j)/(tpr*log(zdz0)/kappa+terms)
         END DO
       END DO
-
+!
       DO j = Jstr,Jend
         DO i = Istr,Iend
           tfrz = frln*salt_top(i,j)
@@ -718,8 +721,9 @@
               clear = MAX(clear, 0.0_r8)
               fac_sf = MIN(MAX(clear-0.5_r8, 0.0_r8), 1.0_r8)
 #endif
-              stflx(i,j,itemp) = (1.0_r8-ai(i,j,linew))*qao_n(i,j) +    &
-     &          (ai(i,j,linew)*(qio(i,j)-sr_th_i(i,j)) -                &
+              stflx(i,j,itemp) =                                        &
+     &           (1.0_r8-ai(i,j,linew))* qao_n(i,j) +                   &
+     &          (        ai(i,j,linew) *(qio  (i,j) - sr_th_i(i,j)) -   &
      &           xtot*hfus1(i,j))*fac_sf
 !
 #ifdef ICE_DIAGS
@@ -738,8 +742,9 @@
             stflx(i,j,itemp) = stflx(i,j,itemp)*rmask_wet(i,j)
 #endif
             stflx(i,j,isalt) = stflx(i,j,isalt) +                       &
-     & (xtot-ai(i,j,linew)*wro(i,j)*(salt_top(i,j)-sice(i,j)))*fac_sf
-#ifdef BULK_FLUXES
+     &                         (xtot-ai(i,j,linew)*wro(i,j))*           &
+     &                         (salt_top(i,j)-sice(i,j))    *fac_sf
+#ifdef ICE_SNOWFALL
 !
 !  Test for case of rainfall on snow/ice and assume 100% drainage
 !

@@ -260,9 +260,6 @@
 !
       USE mod_param
       USE mod_scalars
-# ifdef ICE_MODEL
-      USE mod_ice
-# endif
 !
       USE exchange_2d_mod
 # ifdef DISTRIBUTE
@@ -612,9 +609,9 @@
 !=======================================================================
 # ifdef ICE_MODEL
       IF (PerfectRST(ng) .and. iic(ng).eq.ntstart(ng)) THEN
-        listp = liold
+        listp=liold
       ELSE
-        listp = linew
+        listp=linew
       END IF
 # endif
 
@@ -715,7 +712,7 @@
               cff1 = ice_thick*5._r8
             ELSE
               cff1 = 0.1_r8*5._r8+(ice_thick-0.1_r8)*1._r8
-            ENDIF
+            END IF
             cff1 = cff1+snow_thick*20._r8
 #  endif
 
@@ -755,7 +752,7 @@
             srflx(i,j) = srflx(i,j)*transw
 #  endif
             rfaci(i,j) = 1.0_r8
-          ENDIF
+          END IF
 !
 !  End modification PWA 25/09/2019
 !
@@ -1108,8 +1105,14 @@
           cff=Qair(i)*Hlv(i,j)/(blk_Rgas*TairK(i)*TairK(i))
           wet_bulb=1.0_r8/(1.0_r8+0.622_r8*(cff*Hlv(i,j)*diffw)/        &
      &                                     (blk_Cpa*diffh))
+# if defined ICE_MODEL && defined ICE_SNOWFALL
+          Hsr=(rain(i,j) + snow(i,j))*wet_bulb*blk_Cpw*                 &
+     &        ((TseaC(i)-TairC(i))+(Qsea(i)-Q(i))*Hlv(i,j)/blk_Cpa) -   &
+     &        snow(i,j)*335000._r8
+# else
           Hsr=rain(i,j)*wet_bulb*blk_Cpw*                               &
      &        ((TseaC(i)-TairC(i))+(Qsea(i)-Q(i))*Hlv(i,j)/blk_Cpa)
+# endif
 # ifndef REGCM_COUPLING
           SHeat(i,j)=(Hs+Hsr)
 # endif
@@ -1141,7 +1144,11 @@
 !
 !  Compute momentum flux (N/m2) due to rainfall (kg/m2/s).
 !
+# if defined ICE_MODEL && defined ICE_SNOWFALL
+          Taur=0.85_r8*(rain(i,j) + snow(i,j))*Wmag(i)
+# else
           Taur=0.85_r8*rain(i,j)*Wmag(i)
+# endif
 !
 !  Compute wind stress components (N/m2), Tau.
 !
@@ -1183,7 +1190,7 @@
             sfc_temp = tis(i,j) + 273.16_r8
           ELSE
             sfc_temp = t(i,j,N(ng),nrhs,itemp) + 273.16_r8
-          ENDIF
+          END IF
           qsh_i         = rhoAir(i)*blk_Cpa*Ch_i*delW(i)*               &
      &                    (TairK(i)+0.0098*blk_ZT(ng)-sfc_temp)
           Coef_Ice(i,j) = Coef_Ice(i,j) +                               &
@@ -1262,7 +1269,7 @@
               cff1 = ice_thick*5._r8
             ELSE
               cff1 = 0.1_r8*5._r8+(ice_thick-0.1_r8)*1._r8
-            ENDIF
+            END IF
             cff1=cff1+snow_thick*20._r8
 !
             sr_th_i(i,j) = sr_in_i(i,j)*          exp(-cff1)
@@ -1386,11 +1393,11 @@
             snow_n(i,j) = 0.0_r8
           ELSE
 #  ifdef ICE_SNOWFALL
-            snow_n(i,j) = (snow(i,j) + rain(i,j))/rhosnow_dry(ng)
+            snow_n(i,j) = snow(i,j)/rhosnow_dry(ng)
 #  else
             snow_n(i,j) = rain(i,j)/rhosnow_dry(ng)
 #  endif
-          ENDIF
+          END IF
 # endif
 
 # ifdef EMINUSP
@@ -1404,7 +1411,11 @@
 #  ifdef WET_DRY
           evap(i,j)=evap(i,j)*rmask_wet(i,j)
 #  endif
+#  if defined ICE_MODEL && ICE_SNOWFALL
+          stflux(i,j,isalt)=cff*(evap(i,j)-(rain(i,j) + snow(i,j)))
+#  else
           stflux(i,j,isalt)=cff*(evap(i,j)-rain(i,j))
+#  endif
 #  ifdef MASKING
           stflux(i,j,isalt)=stflux(i,j,isalt)*rmask(i,j)
 #  endif
@@ -1425,8 +1436,8 @@
         DO i=Istr,IendR
           sustr(i,j)=cff*(Taux(i-1,j)+Taux(i,j))
 # ifdef ICE_MODEL
-          sustr_aw(i,j) = sustr(i,j)
-          tau_aix_n(i,j) = Taux_Ice(i,j)
+          sustr_aw(i,j)=sustr(i,j)
+          tau_aix_n(i,j)=Taux_Ice(i,j)
 # endif
 # ifdef MASKING
           sustr(i,j)=sustr(i,j)*umask(i,j)
@@ -1440,8 +1451,8 @@
         DO i=IstrR,IendR
           svstr(i,j)=cff*(Tauy(i,j-1)+Tauy(i,j))
 # ifdef ICE_MODEL
-          svstr_aw(i,j) = svstr(i,j)
-          tau_aiy_n(i,j) = Tauy_Ice(i,j)
+          svstr_aw(i,j)=svstr(i,j)
+          tau_aiy_n(i,j)=Tauy_Ice(i,j)
 # endif
 # ifdef MASKING
           svstr(i,j)=svstr(i,j)*vmask(i,j)
