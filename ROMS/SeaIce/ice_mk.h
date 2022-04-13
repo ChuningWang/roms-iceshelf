@@ -404,7 +404,6 @@
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: dztop
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: ice_thick
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: snow_thick
-      real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: snow
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: coa
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: cht
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: chs
@@ -583,8 +582,7 @@
 !
       DO j = Jstr,Jend
         DO i = Istr,Iend
-          snow(i,j) = MAX(snow_n(i,j),0._r8)
-          ws(i,j) = snow(i,j)
+          ws(i,j) = MAX(snow_n(i,j),0._r8)
         END DO
       END DO
 !
@@ -760,12 +758,12 @@
 # ifdef ICE_SNOWFALL
             stflx(i,j,isalt) = stflx(i,j,isalt) -                       &
      &                         ai(i,j,linew)*rain(i,j)/rhow
-            IF ((snow(i,j).gt.0._r8 .and. snow_n(i,j).eq.0._r8) THEN
+            IF (snow(i,j).gt.0._r8 .and. snow_n(i,j).eq.0._r8) THEN
               stflx(i,j,isalt) = stflx(i,j,isalt) -                     &
      &                           ai(i,j,linew)*snow(i,j)/rhow
             END IF
 # else
-            IF ((rain(i,j).gt.0._r8 .and. snow_n(i,j).eq.0._r8) THEN
+            IF (rain(i,j).gt.0._r8 .and. snow_n(i,j).eq.0._r8) THEN
               stflx(i,j,isalt) = stflx(i,j,isalt) -                     &
      &                           ai(i,j,linew)*rain(i,j)/rhow
             END IF

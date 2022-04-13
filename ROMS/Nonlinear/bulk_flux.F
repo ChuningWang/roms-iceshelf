@@ -1411,7 +1411,7 @@
 #  ifdef WET_DRY
           evap(i,j)=evap(i,j)*rmask_wet(i,j)
 #  endif
-#  if defined ICE_MODEL && ICE_SNOWFALL
+#  if defined ICE_MODEL && defined ICE_SNOWFALL
           stflux(i,j,isalt)=cff*(evap(i,j)-(rain(i,j) + snow(i,j)))
 #  else
           stflux(i,j,isalt)=cff*(evap(i,j)-rain(i,j))
