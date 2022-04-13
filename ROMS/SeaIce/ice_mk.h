@@ -73,8 +73,11 @@
      &                      FORCES(ng) % snow_n,                        &
      &                      FORCES(ng) % sr_in_i,                       &
      &                      FORCES(ng) % sr_th_i,                       &
-#ifdef ICE_SNOWFALL
+#ifdef BULK_FLUXES
      &                      FORCES(ng) % rain,                          &
+# ifdef ICE_SNOWFALL
+     &                      FORCES(ng) % snow,                          &
+# endif
 #endif
 #ifdef ICE_DIAGS
      &                      FORCES(ng) % snoice,                        &
@@ -116,8 +119,11 @@
      &                            sustr, svstr,                         &
      &                            qai_n, qao_n, snow_n,                 &
      &                            sr_in_i, sr_th_i,                     &
-#ifdef ICE_SNOWFALL
+#ifdef BULK_FLUXES
      &                            rain,                                 &
+# ifdef ICE_SNOWFALL
+     &                            snow,                                 &
+# endif
 #endif
 #ifdef ICE_DIAGS
      &                            snoice, ssflx_i, qio_n, qi2_n,        &
@@ -279,8 +285,11 @@
       real(r8), intent(in) :: snow_n(LBi:,LBj:)
       real(r8), intent(in) :: sr_in_i(LBi:,LBj:)
       real(r8), intent(in) :: sr_th_i(LBi:,LBj:)
-# ifdef ICE_SNOWFALL
+# ifdef BULK_FLUXES
       real(r8), intent(in) :: rain(LBi:,LBj:)
+#  ifdef ICE_SNOWFALL
+      real(r8), intent(in) :: snow(LBi:,LBj:)
+#  endif
 # endif
 # ifdef ICE_DIAGS
       real(r8), intent(inout) :: snoice(LBi:,LBj:)
@@ -335,8 +344,11 @@
       real(r8), intent(in) :: snow_n(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: sr_in_i(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: sr_th_i(LBi:UBi,LBj:UBj)
-# ifdef ICE_SNOWFALL
+# ifdef BULK_FLUXES
       real(r8), intent(in) :: rain(LBi:UBi,LBj:UBj)
+#  ifdef ICE_SNOWFALL
+      real(r8), intent(in) :: snow(LBi:UBi,LBj:UBj)
+#  endif
 # endif
 # ifdef ICE_DIAGS
       real(r8), intent(inout) :: snoice(LBi:UBi,LBj:UBj)
@@ -624,9 +636,9 @@
 !
 !  Snow melting. When does snow get denser???
 !
-                wsm(i,j) = max(0.0_r8,-(qai(i,j)-qi2(i,j))/             &
-     &                    (rhosnow_dry(ng)*hfus)) + ws(i,j)
-!    &                    (rhosnow_wet(ng)*hfus)) + ws(i,j)
+                wsm(i,j) = MAX(0.0_r8,-(qai(i,j)-qi2(i,j)) /            &
+     &                     (rhosnow_dry(ng)*hfus)) + ws(i,j)
+!    &                     (rhosnow_wet(ng)*hfus)) + ws(i,j)
               END IF
             END IF
 !
@@ -642,9 +654,6 @@
 #endif
           END IF
           wro(i,j) = MAX(0._r8,wai(i,j)+wsm(i,j))
-#ifdef ICE_SNOWFALL
-          wro(i,j) = wro(i,j) + rain(i,j)
-#endif
         END DO
       END DO
 !
@@ -744,14 +753,23 @@
             stflx(i,j,isalt) = stflx(i,j,isalt) +                       &
      &                         (xtot-ai(i,j,linew)*wro(i,j))*           &
      &                         (salt_top(i,j)-sice(i,j))    *fac_sf
-#ifdef ICE_SNOWFALL
+#ifdef BULK_FLUXES
 !
 !  Test for case of rainfall on snow/ice and assume 100% drainage
 !
-            IF (rain(i,j).gt.0._r8 .and. snow_n(i,j).eq.0._r8) THEN
+# ifdef ICE_SNOWFALL
+            stflx(i,j,isalt) = stflx(i,j,isalt) -                       &
+     &                         ai(i,j,linew)*rain(i,j)/rhow
+            IF ((snow(i,j).gt.0._r8 .and. snow_n(i,j).eq.0._r8) THEN
               stflx(i,j,isalt) = stflx(i,j,isalt) -                     &
-     &                           ai(i,j,linew)*rain(i,j)*0.001_r8
+     &                           ai(i,j,linew)*snow(i,j)/rhow
             END IF
+# else
+            IF ((rain(i,j).gt.0._r8 .and. snow_n(i,j).eq.0._r8) THEN
+              stflx(i,j,isalt) = stflx(i,j,isalt) -                     &
+     &                           ai(i,j,linew)*rain(i,j)/rhow
+            END IF
+# endif
 #endif
 !
 !  iomflx is ice production rate (+ve for growth)

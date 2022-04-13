@@ -1076,7 +1076,7 @@
 !
 !  Net heat flux from ice to atmosphere
 !
-          Qai(i,j) = -qsh_i - qlh_i - qswi - qlwi
+          Qai(i,j) = - qsh_i - qlh_i - qswi - qlwi
 #  endif
 !
 !--- heat flux ---
@@ -1257,7 +1257,11 @@
 #  ifdef WET_DRY
           evap(i,j)=evap(i,j)*rmask_wet(i,j)
 #  endif
+#  ifdef ICE_SNOWFALL
+          stflux(i,j,isalt)=cff*(evap(i,j)-(rain(i,j) + snow(i,j)))
+#  else
           stflux(i,j,isalt)=cff*(evap(i,j)-rain(i,j))
+#  endif
 #  ifdef MASKING
           stflux(i,j,isalt)=stflux(i,j,isalt)*rmask(i,j)
 #  endif
@@ -1280,7 +1284,7 @@
             snow_n(i,j) = 0.0_r8
           ELSE
 #  ifdef ICE_SNOWFALL
-            snow_n(i,j) = (snow(i,j) + rain(i,j))/rhosnow_dry(ng)
+            snow_n(i,j) = snow(i,j)/rhosnow_dry(ng)
 #  else
             snow_n(i,j) = rain(i,j)/rhosnow_dry(ng)
 #  endif
