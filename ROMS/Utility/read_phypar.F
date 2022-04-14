@@ -4937,6 +4937,14 @@
      &            'Nudging/relaxation time scale (days)',               &
      &            'for tracer ', itrc, TRIM(Vname(1,idTvar(itrc)))
           END DO
+# ifdef TCORRECTION
+          IF (Tnudg(isalt,ng).le.0.0_r8) THEN
+            WRITE (out,265) 'Tnudg(itemp) = ', Tnudg(itemp,ng),         &
+     &            'Must be greater than zero for temp flux correction.'
+            exit_flag=5
+            RETURN
+          END IF
+# endif
 # if defined SCORRECTION && defined SALINITY
           IF (Tnudg(isalt,ng).le.0.0_r8) THEN
             WRITE (out,265) 'Tnudg(isalt) = ', Tnudg(isalt,ng),         &

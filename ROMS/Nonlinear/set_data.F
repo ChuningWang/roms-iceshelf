@@ -431,7 +431,7 @@
 #   endif
 #  endif
 
-#  ifdef QCORRECTION
+#  if defined QCORRECTION || defined TCORRECTION
 !
 !  Set sea surface temperature (SST) and heat flux sensitivity to
 !  SST (dQdSST) which are used for surface heat flux correction.
@@ -446,7 +446,9 @@
      &                     update)
       IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 #   endif
-!
+#  endif
+
+#  ifdef QCORRECTION
 #   ifdef ANA_DQDSST
       CALL ana_dqdsst (ng, tile, iNLM)
 #   else

@@ -55,9 +55,6 @@
      &                   LBi, UBi, LBj, UBj,                            &
      &                   IminS, ImaxS, JminS, JmaxS,                    &
      &                   nrhs(ng),                                      &
-#  ifdef ICE_NO_SCORRECTION
-     &                   liold(ng),                                     &
-#  endif
      &                   GRID(ng) % Hz,                                 &
 #  if defined UV_LOGDRAG
      &                   GRID(ng) % ZoBot,                              &
@@ -77,6 +74,8 @@
 #  endif
 #  ifdef QCORRECTION
      &                   FORCES(ng) % dqdt,                             &
+#  endif
+#  if defined QCORRECTOIN || defined TCORRECTION
      &                   FORCES(ng) % sst,                              &
 #  endif
 #  if defined SCORRECTION || defined SRELAXATION
@@ -87,9 +86,7 @@
      &                   FORCES(ng) % bvstr,                            &
 #  endif
 #  ifdef ICE_MODEL
-#   ifdef ICE_NO_SCORRECTION
      &                   ICE(ng) % ai,                                  &
-#   endif
      &                   FORCES(ng) % qao_n,                            &
 #  endif
      &                   FORCES(ng) % stflux,                           &
@@ -108,9 +105,6 @@
      &                         LBi, UBi, LBj, UBj,                      &
      &                         IminS, ImaxS, JminS, JmaxS,              &
      &                         nrhs,                                    &
-#  ifdef ICE_NO_SCORRECTION
-     &                         liold,                                   &
-#  endif
      &                         Hz,                                      &
 #  if defined UV_LOGDRAG
      &                         ZoBot,                                   &
@@ -127,7 +121,10 @@
      &                         u, v,                                    &
 #  endif
 #  ifdef QCORRECTION
-     &                         dqdt, sst,                               &
+     &                         dqdt,                                    &
+#  endif
+#  if defined QCORRECTOIN || defined TCORRECTION
+     &                         sst,                                     &
 #  endif
 #  if defined SCORRECTION || defined SRELAXATION
      &                         sss,                                     &
@@ -136,9 +133,7 @@
      &                         bustr, bvstr,                            &
 #  endif
 #  ifdef ICE_MODEL
-#   ifdef ICE_NO_SCORRECTION
      &                         ai,                                      &
-#   endif
      &                         qao_n,                                   &
 #  endif
      &                         stflux, btflux,                          &
@@ -159,9 +154,6 @@
       integer, intent(in) :: LBi, UBi, LBj, UBj
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
       integer, intent(in) :: nrhs
-# ifdef ICE_NO_SCORRECTION
-      integer, intent(in) :: liold
-# endif
 !
 #  ifdef ASSUMED_SHAPE
       real(r8), intent(in) :: Hz(LBi:,LBj:,:)
@@ -183,6 +175,8 @@
 #   endif
 #   ifdef QCORRECTION
       real(r8), intent(in) :: dqdt(LBi:,LBj:)
+#   endif
+#   if defined QCORRECTOIN || defined TCORRECTION
       real(r8), intent(in) :: sst(LBi:,LBj:)
 #   endif
 #   if defined SCORRECTION || defined SRELAXATION
@@ -195,9 +189,7 @@
       real(r8), intent(inout) :: bvstr(LBi:,LBj:)
 #   endif
 #   ifdef ICE_MODEL
-#    ifdef ICE_NO_SCORRECTION
       real(r8), intent(in) :: ai(LBi:,LBj:,:)
-#    endif
       real(r8), intent(inout) :: qao_n(LBi:,LBj:)
 #   endif
       real(r8), intent(inout) :: stflx(LBi:,LBj:,:)
@@ -222,6 +214,8 @@
 #   endif
 #   ifdef QCORRECTION
       real(r8), intent(in) :: dqdt(LBi:UBi,LBj:UBj)
+#   endif
+#   if defined QCORRECTION || defined TCORRECTION
       real(r8), intent(in) :: sst(LBi:UBi,LBj:UBj)
 #   endif
 #   if defined SCORRECTION || defined SRELAXATION
@@ -234,9 +228,7 @@
       real(r8), intent(inout) :: bvstr(LBi:UBi,LBj:UBj)
 #   endif
 #   ifdef ICE_MODEL
-#    ifdef ICE_NO_SCORRECTION
       real(r8), intent(in) :: ai(LBi:UBi,LBj:UBj,2)
-#    endif
       real(r8), intent(inout) :: qao_n(LBi:UBi,LBj:UBj)
 #   endif
       real(r8), intent(inout) :: stflx(LBi:UBi,LBj:UBj,NT(ng))
@@ -274,7 +266,13 @@
 !
       DO j=JstrR,JendR
         DO i=IstrR,IendR
+#  if defined TCORRECTION
+          stflx(i,j,itemp)=stflux(i,j,itemp)-                           &
+     &                     Tnudg(itemp,ng)*Hz(i,j,N(ng))*               &
+     &                     (t(i,j,N(ng),nrhs,itemp)-sst(i,j))
+#  else
           stflx(i,j,itemp)=stflux(i,j,itemp)
+#  endif
           btflx(i,j,itemp)=btflux(i,j,itemp)
         END DO
       END DO
@@ -296,7 +294,6 @@
 #   endif
         END DO
       END DO
-#  endif
 
 #  ifdef LIMIT_STFLX_COOLING
 !
@@ -341,19 +338,9 @@
         DO i=IstrR,IendR
           EmP=stflux(i,j,isalt)
 #   if defined SCORRECTION
-#    ifdef ICE_MODEL
-          fac_ice = 1.0_r8
-#     ifdef ICE_NO_SCORRECTION
-          IF(ai(i,j,liold).GE.0.1_r8) fac_ice = 0.0_r8
-#     endif
-          stflx(i,j,isalt)=EmP*t(i,j,N(ng),nrhs,isalt)-                 &
-     &                     fac_ice*Tnudg(isalt,ng)*Hz(i,j,N(ng))*       &
-     &                     (t(i,j,N(ng),nrhs,isalt)-sss(i,j))
-#    else
           stflx(i,j,isalt)=EmP*t(i,j,N(ng),nrhs,isalt)-                 &
      &                     Tnudg(isalt,ng)*Hz(i,j,N(ng))*               &
      &                     (t(i,j,N(ng),nrhs,isalt)-sss(i,j))
-#    endif
 #   elif defined SRELAXATION
           stflx(i,j,isalt)=-Tnudg(isalt,ng)*Hz(i,j,N(ng))*              &
      &                     (t(i,j,N(ng),nrhs,isalt)-sss(i,j))

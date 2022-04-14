@@ -63,6 +63,7 @@
 ** QCORRECTION             if net heat flux correction                       **
 ** SALINITY                if having salinity                                **
 ** SCORRECTION             if freshwater flux correction                     **
+** TCORRECTION             if surface temp flux correction                   **
 ** SOLAR_SOURCE            if solar radiation source term                    **
 ** SPLINES_VDIFF           if splines reconstruction of vertical diffusion   **
 ** SRELAXATION             if salinity relaxation as a freshwater flux       **

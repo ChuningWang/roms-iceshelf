@@ -343,9 +343,14 @@
 
 # ifdef QCORRECTION
           real(r8), pointer :: dqdt(:,:)
-          real(r8), pointer :: sst(:,:)
 #  ifndef ANA_SST
           real(r8), pointer :: dqdtG(:,:,:)
+#  endif
+# endif
+
+# if defined QCORRECTION || defined TCORRECTION
+          real(r8), pointer :: sst(:,:)
+#  ifndef ANA_SST
           real(r8), pointer :: sstG(:,:,:)
 #  endif
 # endif
@@ -803,13 +808,17 @@
       allocate ( FORCES(ng) % dqdt(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
 
+#  ifndef ANA_SST
+      allocate ( FORCES(ng) % dqdtG(LBi:UBi,LBj:UBj,2) )
+      Dmem(ng)=Dmem(ng)+2.0_r8*size2d
+#  endif
+# endif
+
+# if defined QCORRECTION || defined TCORRECTION
       allocate ( FORCES(ng) % sst(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
 
 #  ifndef ANA_SST
-      allocate ( FORCES(ng) % dqdtG(LBi:UBi,LBj:UBj,2) )
-      Dmem(ng)=Dmem(ng)+2.0_r8*size2d
-
       allocate ( FORCES(ng) % sstG(LBi:UBi,LBj:UBj,2) )
       Dmem(ng)=Dmem(ng)+2.0_r8*size2d
 #  endif
@@ -1363,13 +1372,17 @@
       IF (.not.destroy(ng, FORCES(ng)%dqdt, MyFile,                     &
      &                 __LINE__, 'FORCES(ng)%dqdt')) RETURN
 
+#   ifndef ANA_SST
+      IF (.not.destroy(ng, FORCES(ng)%dqdtG, MyFile,                    &
+     &                 __LINE__, 'FORCES(ng)%dqdtG')) RETURN
+#   endif
+#  endif
+
+#  if defined QCORRECTION || defined TCORRECTION
       IF (.not.destroy(ng, FORCES(ng)%sst, MyFile,                      &
      &                 __LINE__, 'FORCES(ng)%sst')) RETURN
 
 #   ifndef ANA_SST
-      IF (.not.destroy(ng, FORCES(ng)%dqdtG, MyFile,                    &
-     &                 __LINE__, 'FORCES(ng)%dqdtG')) RETURN
-
       IF (.not.destroy(ng, FORCES(ng)%sstG, MyFile,                     &
      &                 __LINE__, 'FORCES(ng)%sstG')) RETURN
 #   endif
@@ -1932,10 +1945,14 @@
 # endif
 # ifdef QCORRECTION
             FORCES(ng) % dqdt(i,j) = IniVal
-            FORCES(ng) % sst(i,j) = IniVal
 #  ifndef ANA_SST
             FORCES(ng) % dqdtG(i,j,1) = IniVal
             FORCES(ng) % dqdtG(i,j,2) = IniVal
+#  endif
+# endif
+# if defined QCORRECTION || TCORRECTION
+            FORCES(ng) % sst(i,j) = IniVal
+#  ifndef ANA_SST
             FORCES(ng) % sstG(i,j,1) = IniVal
             FORCES(ng) % sstG(i,j,2) = IniVal
 #  endif

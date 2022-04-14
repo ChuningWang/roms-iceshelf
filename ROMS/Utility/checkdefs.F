@@ -2783,6 +2783,13 @@
       is=LEN_TRIM(Coptions)+1
       Coptions(is:is+9)=' TANGENT,'
 #endif
+#ifdef TCORRECTION
+!
+      IF (Master) WRITE (stdout,20) 'TCORRECTION',                      &
+     &   'Surface temperature flux correction'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+13)=' TCORRECTION,'
+#endif
 #ifdef TIDE_GENERATING_FORCES
 !
       IF (Master) WRITE (stdout,20) 'TIDE_GENERATING_FORCES',           &
