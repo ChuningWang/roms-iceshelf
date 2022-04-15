@@ -1950,7 +1950,7 @@
             FORCES(ng) % dqdtG(i,j,2) = IniVal
 #  endif
 # endif
-# if defined QCORRECTION || TCORRECTION
+# if defined QCORRECTION || defined TCORRECTION
             FORCES(ng) % sst(i,j) = IniVal
 #  ifndef ANA_SST
             FORCES(ng) % sstG(i,j,1) = IniVal

@@ -55,6 +55,9 @@
      &                   LBi, UBi, LBj, UBj,                            &
      &                   IminS, ImaxS, JminS, JmaxS,                    &
      &                   nrhs(ng),                                      &
+#  if defined ICE_MODEL && defined ICE_NO_SCORRECTION
+     &                   liold(ng),                                     &
+#  endif
      &                   GRID(ng) % Hz,                                 &
 #  if defined UV_LOGDRAG
      &                   GRID(ng) % ZoBot,                              &
@@ -105,6 +108,9 @@
      &                         LBi, UBi, LBj, UBj,                      &
      &                         IminS, ImaxS, JminS, JmaxS,              &
      &                         nrhs,                                    &
+#  if defined ICE_MODEL && defined ICE_NO_SCORRECTION
+     &                         liold,                                   &
+#  endif
      &                         Hz,                                      &
 #  if defined UV_LOGDRAG
      &                         ZoBot,                                   &
@@ -154,6 +160,9 @@
       integer, intent(in) :: LBi, UBi, LBj, UBj
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
       integer, intent(in) :: nrhs
+#  if defined ICE_MODEL && defined ICE_NO_SCORRECTION
+      integer, intent(in) :: liold
+#  endif
 !
 #  ifdef ASSUMED_SHAPE
       real(r8), intent(in) :: Hz(LBi:,LBj:,:)
@@ -268,7 +277,7 @@
         DO i=IstrR,IendR
 #  if defined TCORRECTION
           stflx(i,j,itemp)=stflux(i,j,itemp)-                           &
-     &                     Tnudg(itemp,ng)*Hz(i,j,N(ng))*               &
+     &                     obcfac(ng)*Tnudg(itemp,ng)*Hz(i,j,N(ng))*    &
      &                     (t(i,j,N(ng),nrhs,itemp)-sst(i,j))
 #  else
           stflx(i,j,itemp)=stflux(i,j,itemp)
@@ -294,6 +303,7 @@
 #   endif
         END DO
       END DO
+#  endif
 
 #  ifdef LIMIT_STFLX_COOLING
 !
@@ -338,11 +348,22 @@
         DO i=IstrR,IendR
           EmP=stflux(i,j,isalt)
 #   if defined SCORRECTION
-          stflx(i,j,isalt)=EmP*t(i,j,N(ng),nrhs,isalt)-                 &
-     &                     Tnudg(isalt,ng)*Hz(i,j,N(ng))*               &
+#    if defined ICE_MODEL && defined ICE_NO_SCORRECTION
+          IF(ai(i,j,liold).ge.0.1_r8) THEN
+            fac_ice = 0.0_r8
+          ELSE
+            fac_ice = 1.0_r8
+          ENDIF
+          stflx(i,j,isalt)=EmP*t(i,j,N(ng),nrhs,isalt) - fac_ice*       &
+     &                     obcfac(ng)*Tnudg(isalt,ng)*Hz(i,j,N(ng))*    &
      &                     (t(i,j,N(ng),nrhs,isalt)-sss(i,j))
+#    else
+          stflx(i,j,isalt)=EmP*t(i,j,N(ng),nrhs,isalt)-                 &
+     &                     obcfac(ng)*Tnudg(isalt,ng)*Hz(i,j,N(ng))*    &
+     &                     (t(i,j,N(ng),nrhs,isalt)-sss(i,j))
+#    endif
 #   elif defined SRELAXATION
-          stflx(i,j,isalt)=-Tnudg(isalt,ng)*Hz(i,j,N(ng))*              &
+          stflx(i,j,isalt)=-obcfac(ng)*Tnudg(isalt,ng)*Hz(i,j,N(ng))*   &
      &                     (t(i,j,N(ng),nrhs,isalt)-sss(i,j))
 #   else
           stflx(i,j,isalt)=EmP*t(i,j,N(ng),nrhs,isalt)
