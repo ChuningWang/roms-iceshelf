@@ -707,11 +707,11 @@
             s0mk(i,j) =                                                 &
      &        (chs(i,j)*salt_top(i,j) +                                 &
      &         (       ai(i,j,linew) *wro(i,j) - xtot)*sice(i,j)) /     &
-     &        (chs(i,j) +                                               &
+     &        (chs(i,j)               +                                 &
      &                 ai(i,j,linew) *wro(i,j) - xtot -                 &
      &          (1._r8-ai(i,j,linew))*stflx(i,j,isalt))
             IF (s0mk(i,j) < 0.0) s0mk(i,j) = salt_top(i,j)
-            s0mk(i,j) = MIN(MAX(s0mk(i,j), 0._r8), 60._r8)
+            s0mk(i,j) = MIN(MAX(s0mk(i,j), 0._r8), 40._r8)
             t0mk(i,j) = frln*s0mk(i,j)
           END IF
 !

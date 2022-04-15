@@ -137,11 +137,11 @@
 !    &       - 2.154996d-4*s1*s1 + 0.000753*z1
 !
 !  Freezing temperature (Steele et al. 1989)
-      t_freeze(s1,z1) = depressT*s1 + 0.000759*z1
+!     t_freeze(s1,z1) = depressT*s1 + 0.000759*z1
 !
 !  Another simple formula - temperature or potential temperature??
 !
-!     t_freeze(s1,z1) = depressT*s1
+      t_freeze(s1,z1) = depressT*s1
 !
 # include "set_bounds.h"
 !
@@ -185,7 +185,7 @@
      &                    (Lhat + t(i,j,k,nnew,itemp)*(1.0_r8 - r) -    &
      &                     t_fr)
                 delta_wfr = gamma_k * Hz(i,j,k) *                       &
-     &                      (rho0 + rho(i,j,k) ) / rhoice(ng)
+     &                      (rho0 + rho(i,j,k)) / rhoice(ng)
                 IF ((wfr(i,j) + delta_wfr) .gt. 0._r8) THEN
                   wfr(i,j) = wfr(i,j) + delta_wfr
                 ELSE
@@ -204,8 +204,8 @@
 !
               IF (wfr(i,j) .lt. 0.0_r8) THEN
                 WRITE(stdout,*) 'Trouble in ice_frazil', i, j, k,       &
-       &         t(i,j,k,nnew,itemp), t(i,j,k,nnew,isalt),              &
-       &         t_fr, wfr(i,j), gamma_k, Hz(i,j,k)
+       &          t(i,j,k,nnew,itemp), t(i,j,k,nnew,isalt),             &
+       &          t_fr, wfr(i,j), gamma_k, Hz(i,j,k)
                 exit_flag = 10
               END IF
 !
