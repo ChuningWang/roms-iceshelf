@@ -148,8 +148,8 @@
       DO j=Jstr,Jend
         DO i=Istr,Iend
           wfr(i,j) = 0.0_r8
-        ENDDO
-      ENDDO
+        END DO
+      END DO
 !
 !  Old ice model
 !
@@ -193,7 +193,7 @@
      &                      (Hz(i,j,k)*(rho0+rho(i,j,k)))
                   wfr(i,j) = 0.0_r8
                   delta_wfr = -wfr(i,j)
-                ENDIF
+                END IF
                 t(i,j,k,nnew,itemp) = t(i,j,k,nnew,itemp) +             &
      &            gamma_k * (Lhat + t(i,j,k,nnew,itemp)*(1.0_r8 - r))
                 t(i,j,k,nnew,isalt) = t(i,j,k,nnew,isalt) *             &

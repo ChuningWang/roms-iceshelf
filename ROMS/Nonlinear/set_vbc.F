@@ -33,9 +33,9 @@
       USE mod_forces
       USE mod_ocean
       USE mod_stepping
-# ifdef ICE_MODEL
+#  ifdef ICE_MODEL
       USE mod_ice
-# endif
+#  endif
 !
 !  Imported variable declarations.
 !
@@ -78,7 +78,7 @@
 #  ifdef QCORRECTION
      &                   FORCES(ng) % dqdt,                             &
 #  endif
-#  if defined QCORRECTOIN || defined TCORRECTION
+#  if defined QCORRECTION || defined TCORRECTION
      &                   FORCES(ng) % sst,                              &
 #  endif
 #  if defined SCORRECTION || defined SRELAXATION
@@ -129,7 +129,7 @@
 #  ifdef QCORRECTION
      &                         dqdt,                                    &
 #  endif
-#  if defined QCORRECTOIN || defined TCORRECTION
+#  if defined QCORRECTION || defined TCORRECTION
      &                         sst,                                     &
 #  endif
 #  if defined SCORRECTION || defined SRELAXATION
@@ -185,7 +185,7 @@
 #   ifdef QCORRECTION
       real(r8), intent(in) :: dqdt(LBi:,LBj:)
 #   endif
-#   if defined QCORRECTOIN || defined TCORRECTION
+#   if defined QCORRECTION || defined TCORRECTION
       real(r8), intent(in) :: sst(LBi:,LBj:)
 #   endif
 #   if defined SCORRECTION || defined SRELAXATION
@@ -275,7 +275,7 @@
 !
       DO j=JstrR,JendR
         DO i=IstrR,IendR
-#  if defined TCORRECTION
+#  ifdef TCORRECTION
           stflx(i,j,itemp)=stflux(i,j,itemp)-                           &
      &                     obcfac(ng)*Tnudg(itemp,ng)*Hz(i,j,N(ng))*    &
      &                     (t(i,j,N(ng),nrhs,itemp)-sst(i,j))
@@ -353,7 +353,7 @@
             fac_ice = 0.0_r8
           ELSE
             fac_ice = 1.0_r8
-          ENDIF
+          END IF
           stflx(i,j,isalt)=EmP*t(i,j,N(ng),nrhs,isalt) - fac_ice*       &
      &                     obcfac(ng)*Tnudg(isalt,ng)*Hz(i,j,N(ng))*    &
      &                     (t(i,j,N(ng),nrhs,isalt)-sss(i,j))

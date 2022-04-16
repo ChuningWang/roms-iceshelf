@@ -258,7 +258,7 @@
 ! radiation weighted sum of direct albedo
 !
             sads = sads+albdir*ssurf
-          ENDDO
+          END DO
 !
 ! daily mean co-albedo over water
 !
@@ -266,8 +266,8 @@
 #ifdef MASKING
           cawdir(i,j) = cawdir(i,j)*rmask(i,j)
 #endif
-        ENDDO
-      ENDDO
+        END DO
+      END DO
 !
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
         CALL exchange_r2d_tile (ng, tile,                               &

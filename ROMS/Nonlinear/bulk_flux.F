@@ -1237,7 +1237,6 @@
 #   else
           qswi = qswi_n(i,j)
 #   endif
-          sr_in_i(i,j) = qswi
 !
 #   ifdef ICE_I_O
           IF (ai(i,j,listp) .gt. min_a(ng)) THEN
@@ -1247,37 +1246,35 @@
 !
 !  Penetrating SW = frswp*SW (W/m2 ice)
 !
-            sr_th_i(i,j) = qswi_n(i,j) * i0frac(i,j)
-            sr_in_i(i,j) = sr_in_i(i,j) - sr_th_i(i,j)
-!
-!  SW absorbed in surface layer (W/m2 ice)
-!
-            IF (hsn(i,j,listp) < 1.e-3_r8) THEN
-              cff = sr_in_i(i,j) * Io_frac
-              sr_th_i(i,j) = sr_th_i(i,j) + cff
-              sr_in_i(i,j) = sr_in_i(i,j) - cff
-            END IF
+            sr_th_i(i,j) = qswi*i0frac(i,j)
 #    else
 !
 !  Limit shortwave radiation to be used in computing penetrative
-!   radiation by presence of ice and biology.
+!  radiation by presence of ice and biology
 !
             ice_thick  = hi(i,j,listp)  / (ai(i,j,listp)+0.001_r8)
             snow_thick = hsn(i,j,listp) / (ai(i,j,listp)+0.001_r8)
-!
             IF (ice_thick.le.0.1_r8) THEN
               cff1 = ice_thick*5._r8
             ELSE
               cff1 = 0.1_r8*5._r8+(ice_thick-0.1_r8)*1._r8
             END IF
             cff1=cff1+snow_thick*20._r8
+            sr_th_i(i,j) = qswi*exp(-cff1)
 !
-            sr_th_i(i,j) = sr_in_i(i,j)*          exp(-cff1)
-            sr_in_i(i,j) = sr_in_i(i,j)*(1.0_r8 - exp(-cff1))
+!  A even older formula to compute shortwave going through ice. Not
+!  Recommended.
+!
+!           IF (hsn(i,j,listp) .lt. 1.e-3_r8) THEN
+!             sr_th_i(i,j) = qswi * Io_frac
+!           ELSE
+!             sr_th_i(i,j) = 0._r8
+!           END IF
 #    endif
 !
-!  Update qswi
+!  Update sr_in_i and qswi
 !
+            sr_in_i(i,j) = qswi - sr_th_i(i,j)
             qswi = sr_in_i(i,j)
           END IF
 #   endif

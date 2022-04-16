@@ -167,7 +167,7 @@
              vie(0,j,1) = vi(0,j,liuol)
              vie(0,j,2) = vi(0,j,liuol)
           END DO
-        ENDIF
+        END IF
         IF (DOMAIN(ng)%Eastern_Edge(tile)) THEN
           DO j=Jstr,Jend
              uie(Lm(ng)+1,j,1) = ui(Lm(ng)+1,j,liuol)
@@ -177,7 +177,7 @@
              vie(Lm(ng)+1,j,1) = vi(Lm(ng)+1,j,liuol)
              vie(Lm(ng)+1,j,2) = vi(Lm(ng)+1,j,liuol)
           END DO
-        ENDIF
+        END IF
         IF (DOMAIN(ng)%Southern_Edge(tile)) THEN
           DO i=IstrP,Iend
              uie(i,0,1) = ui(i,0,liuol)
@@ -187,7 +187,7 @@
              vie(i,1,1) = vi(i,1,liuol)
              vie(i,1,2) = vi(i,1,liuol)
           END DO
-        ENDIF
+        END IF
         IF (DOMAIN(ng)%Northern_Edge(tile)) THEN
           DO i=IstrP,Iend
              uie(i,Mm(ng)+1,1) = ui(i,Mm(ng)+1,liuol)
@@ -234,7 +234,7 @@
      &                      NSperiodic(ng),                             &
      &                      uie(:,:,2), vie(:,:,2))
 # endif
-      ENDIF
+      END IF
 !
       e2r = 1.0_r8/(ellip_sq(ng))
 !
@@ -268,8 +268,8 @@
           zetai(i,j) = MIN(zetai(i,j),zetamax(ng))
           zetai(i,j) = MAX(zetai(i,j),zetamin(ng))
           eta(i,j) = e2r*zetai(i,j)
-        ENDDO
-      ENDDO
+        END DO
+      END DO
 
       CALL bc_r2d_tile (ng, tile,                                       &
      &                  LBi, UBi, LBj, UBj,                             &
@@ -294,8 +294,8 @@
           zetai(i,j)=zetai(i,j)*mask_outflow(i,j)
           eta(i,j)=eta(i,j)*mask_outflow(i,j)
 # endif
-        ENDDO
-      ENDDO
+        END DO
+      END DO
 !
       RETURN
       END SUBROUTINE ice_evp_tile

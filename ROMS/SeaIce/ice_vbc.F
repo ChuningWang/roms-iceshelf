@@ -313,7 +313,7 @@
           sustr(i,j) = sustr(i,j)*umask_wet(i,j)
 #   endif
 #   ifdef ICESHELF
-          ENDIF
+          END IF
 #   endif
 #  endif
         END DO
@@ -342,7 +342,7 @@
           svstr(i,j) = svstr(i,j)*vmask_wet(i,j)
 #   endif
 #   ifdef ICESHELF
-          ENDIF
+          END IF
 #   endif
 #  endif
         END DO
@@ -402,7 +402,7 @@
           sustr(i,j) = sustr(i,j)*umask_wet(i,j)
 #   endif
 #   ifdef ICESHELF
-          ENDIF
+          END IF
 #   endif
 #  endif
         END DO
@@ -431,7 +431,7 @@
           svstr(i,j) = svstr(i,j)*vmask_wet(i,j)
 #   endif
 #   ifdef ICESHELF
-          ENDIF
+          END IF
 #   endif
 #  endif
         END DO

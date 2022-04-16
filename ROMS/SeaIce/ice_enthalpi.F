@@ -94,8 +94,8 @@
           IF(hi(i,j,liold(ng)).le.min_h(ng)) THEN
             enthalpi(i,j,liold(ng)) = 0.0_r8
           END IF
-        ENDDO
-      ENDDO
+        END DO
+      END DO
 !
 !-----------------------------------------------------------------------
 !  Exchange boundary information.

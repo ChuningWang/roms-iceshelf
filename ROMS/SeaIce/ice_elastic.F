@@ -804,7 +804,7 @@
 # ifdef ICESHELF
           IF ((zice(i,j-1)+zice(i,j)).ne.0.0_r8) THEN
             vie(i,j,lienw) = 0.0_r8
-          ENDIF
+          END IF
 # endif
         END DO
       END DO
@@ -852,7 +852,7 @@
           DO j=JstrP,Jend
             vi(0,j,liunw) = vie(0,j,lienw)
           END DO
-        ENDIF
+        END IF
         IF (DOMAIN(ng)%Eastern_Edge(tile)) THEN
           DO j=Jstr,Jend
             ui(Lm(ng)+1,j,liunw) = uie(Lm(ng)+1,j,lienw)
@@ -860,7 +860,7 @@
           DO j=JstrP,Jend
             vi(Lm(ng)+1,j,liunw) = vie(Lm(ng)+1,j,lienw)
           END DO
-        ENDIF
+        END IF
         IF (DOMAIN(ng)%Southern_Edge(tile)) THEN
           DO i=IstrP,Iend
             ui(i,0,liunw) = uie(i,0,lienw)
@@ -868,7 +868,7 @@
           DO i=Istr,Iend
             vi(i,1,liunw) = vie(i,1,lienw)
           END DO
-        ENDIF
+        END IF
         IF (DOMAIN(ng)%Northern_Edge(tile)) THEN
           DO i=IstrP,Iend
             ui(i,Mm(ng)+1,liunw) = uie(i,Mm(ng)+1,lienw)
@@ -909,7 +909,7 @@
      &                      EWperiodic(ng), NSperiodic(ng),             &
      &                      ui(:,:,liunw), vi(:,:,liunw))
 # endif
-      ENDIF
+      END IF
 !
       RETURN
       END SUBROUTINE ice_elastic_tile

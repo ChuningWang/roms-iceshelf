@@ -908,6 +908,9 @@
           Tauy(i,j) = tau * Vair(i,j) / vmag
 
 # ifdef ICE_MODEL
+#  ifdef ICE_THERMO
+          qswi_n(i,j) = srflx(i,j) * Hscale
+#  endif
 !
 !  Ice model bulk flux formula
 !
@@ -915,14 +918,11 @@
 !
           Taux_Ice(i,j) = rhoAir(i)*cdai(ng)*Uwind(i,j)*vmag
           Tauy_Ice(i,j) = rhoAir(i)*cdai(ng)*Vwind(i,j)*vmag
-
 #  ifdef ICE_THERMO
-          qswi_n(i,j) = srflx(i,j) * Hscale
 !
 !  Correct ocean net short-wave radiation for ice cover and convert to
 !  kinematic units
 !
-
           Coef_Ice(i,j) = 0._r8
           RHS_Ice(i,j)  = 0._r8
 !
@@ -932,7 +932,7 @@
             sfc_temp    = tis(i,j) + 273.16_r8
           ELSE
             sfc_temp    = t(i,j,N(ng),nrhs,itemp) + 273.16_r8
-          ENDIF
+          END IF
           qsh_i         = rhoAir(i)*blk_Cpa*Ch*vmag*                    &
      &                    (TairK(i)+0.0098*blk_ZT(ng)-sfc_temp)
           Coef_Ice(i,j) = Coef_Ice(i,j) +                               &
@@ -957,6 +957,7 @@
           dq_i   = Qair-Qsati
           fqlat1 = rhoAir(i)*Ce*vmag
           qlh_i  = fqlat1*le_i*dq_i
+!
 #   ifdef ICE_DIAGS
           sen_i(i,j) = qsh_i
           lat_i(i,j) = qlh_i
@@ -1002,16 +1003,7 @@
 !
 !  Penetrating SW = frswp*SW (W/m2 ice)
 !
-            sr_th_i(i,j) = qswi_n(i,j) * i0frac(i,j)
-            sr_in_i(i,j) = sr_in_i(i,j) - sr_th_i(i,j)
-!
-!  SW absorbed in surface layer (W/m2 ice)
-!
-            IF (hsn(i,j,listp) < 1.e-3_r8) THEN
-              cff = sr_in_i(i,j) * Io_frac
-              sr_th_i(i,j) = sr_th_i(i,j) + cff
-              sr_in_i(i,j) = sr_in_i(i,j) - cff
-            END IF
+            sr_th_i(i,j) = qswi*i0frac(i,j)
 #    else
 !
 !  Limit shortwave radiation to be used in computing penetrative
@@ -1019,22 +1011,29 @@
 !
             ice_thick  = hi(i,j,listp)  / (ai(i,j,listp)+0.001_r8)
             snow_thick = hsn(i,j,listp) / (ai(i,j,listp)+0.001_r8)
-!
             IF (ice_thick.le.0.1_r8) THEN
               cff1 = ice_thick*5._r8
             ELSE
               cff1 = 0.1_r8*5._r8+(ice_thick-0.1_r8)*1._r8
-            ENDIF
+            END IF
             cff1=cff1+snow_thick*20._r8
+            sr_th_i(i,j) = qswi*exp(-cff1)
 !
-            sr_th_i(i,j) = sr_in_i(i,j)*          exp(-cff1)
-            sr_in_i(i,j) = sr_in_i(i,j)*(1.0_r8 - exp(-cff1))
+!  A even older formula to compute shortwave going through ice. Not
+!  Recommended.
+!
+!           IF (hsn(i,j,listp) .lt. 1.e-3_r8) THEN
+!             sr_th_i(i,j) = qswi * Io_frac
+!           ELSE
+!             sr_th_i(i,j) = 0._r8
+!           END IF
 #    endif
 !
-!  Update qswi
+!  Update sr_in_i and qswi
 !
+            sr_in_i(i,j) = qswi - sr_th_i(i,j)
             qswi = sr_in_i(i,j)
-          ENDIF
+          END IF
 #   endif
 !
 !  Already in W/m**2
@@ -1129,7 +1128,7 @@
               cff1 = ice_thick*5._r8
             ELSE
               cff1 = 0.1_r8*5._r8+(ice_thick-0.1_r8)*1._r8
-            ENDIF
+            END IF
             cff1 = cff1+snow_thick*20._r8
 #  endif
 #  ifdef ICE_ALBEDO
@@ -1169,7 +1168,7 @@
 #   endif
 #  endif
             rfaci(i,j) = 1.0_r8
-          ENDIF
+          END IF
 !
 !  End modification PWA 25/09/2019
 !
@@ -1288,7 +1287,7 @@
 #  else
             snow_n(i,j) = rain(i,j)/rhosnow_dry(ng)
 #  endif
-          ENDIF
+          END IF
 # endif  /* ICE_MODEL */
         END DO
       END DO

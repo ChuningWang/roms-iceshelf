@@ -809,7 +809,8 @@
           END IF
           hi(i,j,linew) = hi(i,j,linew) + dtice(ng)*                    &
      &      (        ai(i,j,linew) *(wio(i,j)-wai(i,j)) +               &
-     &       (1.0_r8-ai(i,j,linew))* wao(i,j)           + wfr(i,j))
+     &       (1.0_r8-ai(i,j,linew))* wao(i,j)           +               &
+     &                               wfr(i,j))
 !
           ai_tmp = ai(i,j,linew)
           ai(i,j,linew) = ai(i,j,linew) +                               &
@@ -883,10 +884,10 @@
 !
           ELSE
             ageice(i,j,linew) = 0.0_r8
-          ENDIF
+          END IF
           hage(i,j,linew) = hi(i,j,linew)*ageice(i,j,linew)
-        ENDDO
-      ENDDO
+        END DO
+      END DO
 !
 !-----------------------------------------------------------------------
 !  Limit variable values.
@@ -902,8 +903,8 @@
           IF (ai(i,j,linew)     .le. 0.0_r8) hi(i,j,linew)     = 0.0_r8
           IF (ageice(i,j,linew) .le. 0.0_r8) ageice(i,j,linew) = 0.0_r8
           IF (hage(i,j,linew)   .le. 0.0_r8) hage(i,j,linew)   = 0.0_r8
-        ENDDO
-      ENDDO
+        END DO
+      END DO
 !
 !-----------------------------------------------------------------------
 !  Exchange boundary information.

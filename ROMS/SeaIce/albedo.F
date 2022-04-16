@@ -347,7 +347,7 @@
 ! Combined ice/snow near IR albedo
 !
               alin = alini
-            ENDIF
+            END IF
 !
 ! Combined ice/snow albedo wrt total incident SW
 ! (absorbed SW = (1-albedo_i)*SW)
@@ -368,7 +368,7 @@
 ! This should be arbitrary
 !
             frswp(i,j) = (1.0_r8-albw)*i0vis*fv
-          ENDIF
+          END IF
 # else
           cff1 = alb_s_wet - alb_s_dry
           cff2 = alb_i_wet - alb_i_dry
@@ -378,17 +378,17 @@
                 alb_i(i,j) = cff1*(tis(i,j)+1.0_r8)+alb_s_dry
               ELSE
                 alb_i(i,j) = alb_s_dry
-              ENDIF
+              END IF
             ELSE
               IF (tis(i,j) .gt. -1.0_r8) THEN
                 alb_i(i,j) = cff2*(tis(i,j)+1.0_r8)+alb_i_dry
               ELSE
                 alb_i(i,j) = alb_i_dry
-              ENDIF
-            ENDIF
+              END IF
+            END IF
           ELSE
             alb_i(i,j)=albw
-          ENDIF
+          END IF
 # endif
 !
 ! Compute ocean albedo
