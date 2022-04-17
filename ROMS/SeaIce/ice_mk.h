@@ -520,6 +520,10 @@
      &        2._r8*alph(i,j)/(rhoice(ng)*ice_thick(i,j)**2*cot)*       &
      &        (t0mk(i,j) + (tis(i,j) - (2._r8+coa(i,j))*ti(i,j,linew))/ &
      &         (1._r8+coa(i,j))))
+#ifdef ICE_I_O
+            ti(i,j,linew) = ti(i,j,linew) +                             &
+     &        sr_th_i(i,j)*dtice(ng)/(rhoice(ng)*ice_thick(i,j)*cot)
+#endif
             ti(i,j,linew) = MAX(ti(i,j,linew),-35._r8)
             ti(i,j,linew) = MIN(ti(i,j,linew),-eps   )
 !           brnfr(i,j) = frln*sice(i,j)/MIN(ti(i,j,linew),-eps)

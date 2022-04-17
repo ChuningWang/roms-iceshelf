@@ -1019,7 +1019,7 @@
             cff1=cff1+snow_thick*20._r8
             sr_th_i(i,j) = qswi*exp(-cff1)
 !
-!  A even older formula to compute shortwave going through ice. Not
+!  An even older formula to compute shortwave going through ice. Not
 !  Recommended.
 !
 !           IF (hsn(i,j,listp) .lt. 1.e-3_r8) THEN
@@ -1034,6 +1034,9 @@
             sr_in_i(i,j) = qswi - sr_th_i(i,j)
             qswi = sr_in_i(i,j)
           END IF
+#   else
+          sr_th_i(i,j) = 0._r8
+          sr_in_i(i,j) = qswi
 #   endif
 !
 !  Already in W/m**2

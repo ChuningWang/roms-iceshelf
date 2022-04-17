@@ -375,13 +375,13 @@
           IF (ai(i,j,listp) .gt. min_a(ng)) THEN
             IF (hsn(i,j,listp).gt.0._r8) THEN
               IF (tis(i,j) .gt. -1.0_r8) THEN
-                alb_i(i,j) = cff1*(tis(i,j)+1.0_r8)+alb_s_dry
+                alb_i(i,j) = cff1*(tis(i,j)+1.0_r8) + alb_s_dry
               ELSE
                 alb_i(i,j) = alb_s_dry
               END IF
             ELSE
               IF (tis(i,j) .gt. -1.0_r8) THEN
-                alb_i(i,j) = cff2*(tis(i,j)+1.0_r8)+alb_i_dry
+                alb_i(i,j) = cff2*(tis(i,j)+1.0_r8) + alb_i_dry
               ELSE
                 alb_i(i,j) = alb_i_dry
               END IF
