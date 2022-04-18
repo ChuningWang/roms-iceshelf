@@ -475,18 +475,16 @@
       integer :: Imin, Imax, Jmin, Jmax
       integer :: i, j
 
+      real(r8) :: Cu_crss, Cu
+      real(r8) :: rateu, ratev, rateyiu, ratexiv, uspeed, vspeed
+      real(r8) :: cff
+
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: ar
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: aflxu
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: aflxv
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: aif
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: FX
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: FE
-
-      real(r8), parameter :: epsil = 1.0E-15_r8
-
-      real(r8) :: Cu_crss, Cu
-      real(r8) :: rateu, ratev, rateyiu, ratexiv, uspeed, vspeed
-      real(r8) :: cff
 !
 #include "set_bounds.h"
 !
@@ -625,12 +623,12 @@
         DO i=Istr,Iend+1
           cff = aif(i,j)+aif(i-1,j)
           rateu=(aif(i,j)-aif(i-1,j)) /                                 &
-     &          (SIGN(1._r8, cff)*MAX(epsil, ABS(cff)))
+     &          (SIGN(1._r8, cff)*MAX(ABS(cff), tol))
 !
           cff = aif(i  ,j) + FE(i  ,j+1) - FE(i  ,j) +                  &
      &          aif(i-1,j) + FE(i-1,j+1) - FE(i-1,j)
           rateyiu=(FE(i,j+1) + FE(i,j) + FE(i-1,j+1) + FE(i-1,j)) /     &
-     &            (SIGN(1._r8, cff)*MAX(epsil, ABS(cff)))
+     &            (SIGN(1._r8, cff)*MAX(ABS(cff), tol))
 !
           Cu=0.5*dtice(ng)*(pm(i,j)+pm(i-1,j))*ui(i,j,liunw)
 !
@@ -651,12 +649,12 @@
         DO i=Istr,Iend
           cff = aif(i,j)+aif(i,j-1)
           ratev=(aif(i,j)-aif(i,j-1)) /                                 &
-     &          (SIGN(1._r8, cff)*MAX(epsil, ABS(cff)))
+     &          (SIGN(1._r8, cff)*MAX(ABS(cff), tol))
 !
           cff = aif(i,j  ) + FX(i+1,j  ) - FX(i,j  ) +                  &
      &          aif(i,j-1) + FX(i+1,j-1) - FX(i,j-1)
           ratexiv=(FX(i+1,j) + FX(i,j) + FX(i+1,j-1) + FX(i,j-1)) /     &
-     &            (SIGN(1._r8, cff)*MAX(epsil, ABS(cff)))
+     &            (SIGN(1._r8, cff)*MAX(ABS(cff), tol))
 !
           Cu=0.5*dtice(ng)*(pn(i,j)+pn(i,j-1))*vi(i,j,liunw)
 !

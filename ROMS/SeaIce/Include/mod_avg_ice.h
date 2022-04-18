@@ -31,8 +31,8 @@
           real(r8), pointer :: avgwdiv(:,:)
 #  ifdef ICE_DIAGS
 #   ifdef ICE_ALBEDO
-          real(r8), pointer :: avgalb(:,:)
-          real(r8), pointer :: avgalb_i(:,:)
+          real(r8), pointer :: avgalbo(:,:)
+          real(r8), pointer :: avgalbi(:,:)
 #    ifdef ICE_ALB_CSIM
           real(r8), pointer :: avgfrswp(:,:)
 #    endif

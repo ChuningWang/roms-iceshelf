@@ -45,13 +45,9 @@
      &                      GRID(ng) % z_r,                             &
      &                      GRID(ng) % z_w,                             &
      &                      OCEAN(ng) % t,                              &
-     &                      ICE(ng) % wfr,                              &
      &                      ICE(ng) % ui,                               &
      &                      ICE(ng) % vi,                               &
-     &                      ICE(ng) % wai,                              &
-     &                      ICE(ng) % wao,                              &
-     &                      ICE(ng) % wio,                              &
-     &                      ICE(ng) % wro,                              &
+     &                      ICE(ng) % wfr,                              &
      &                      ICE(ng) % ai,                               &
      &                      ICE(ng) % hi,                               &
      &                      ICE(ng) % hsn,                              &
@@ -65,6 +61,10 @@
      &                      ICE(ng) % rhs_ice_heat,                     &
      &                      ICE(ng) % s0mk,                             &
      &                      ICE(ng) % t0mk,                             &
+     &                      ICE(ng) % wai,                              &
+     &                      ICE(ng) % wao,                              &
+     &                      ICE(ng) % wio,                              &
+     &                      ICE(ng) % wro,                              &
      &                      ICE(ng) % iomflx,                           &
      &                      FORCES(ng) % sustr,                         &
      &                      FORCES(ng) % svstr,                         &
@@ -109,12 +109,15 @@
      &                            h, Zt_avg1,                           &
 #endif
      &                            z_r, z_w, t,                          &
-     &                            wfr, ui, vi,                          &
-     &                            wai, wao, wio, wro,                   &
+     &                            ui, vi,                               &
+     &                            wfr,                                  &
      &                            ai, hi, hsn, ageice,                  &
-     &                            tis, ti, t2, enthalpi, hage,          &
+     &                            tis, ti, t2,                          &
+     &                            enthalpi, hage,                       &
      &                            coef_ice_heat, rhs_ice_heat,          &
-     &                            s0mk, t0mk, iomflx,                   &
+     &                            s0mk, t0mk,                           &
+     &                            wai, wao, wio, wro,                   &
+     &                            iomflx,                               &
      &                            sustr, svstr,                         &
      &                            wsf, qswo,                            &
      &                            qai, qao, qio, qi2,                   &
@@ -255,13 +258,9 @@
       real(r8), intent(in) :: z_r(LBi:,LBj:,:)
       real(r8), intent(in) :: z_w(LBi:,LBj:,0:)
       real(r8), intent(in) :: t(LBi:,LBj:,:,:,:)
-      real(r8), intent(in) :: wfr(LBi:,LBj:)
       real(r8), intent(in) :: ui(LBi:,LBj:,:)
       real(r8), intent(in) :: vi(LBi:,LBj:,:)
-      real(r8), intent(inout) :: wai(LBi:,LBj:)
-      real(r8), intent(inout) :: wao(LBi:,LBj:)
-      real(r8), intent(inout) :: wio(LBi:,LBj:)
-      real(r8), intent(inout) :: wro(LBi:,LBj:)
+      real(r8), intent(in) :: wfr(LBi:,LBj:)
       real(r8), intent(inout) :: ai(LBi:,LBj:,:)
       real(r8), intent(inout) :: hi(LBi:,LBj:,:)
       real(r8), intent(inout) :: hsn(LBi:,LBj:,:)
@@ -275,8 +274,12 @@
       real(r8), intent(inout) :: rhs_ice_heat(LBi:,LBj:)
       real(r8), intent(inout) :: s0mk(LBi:,LBj:)
       real(r8), intent(inout) :: t0mk(LBi:,LBj:)
+      real(r8), intent(inout) :: wai(LBi:,LBj:)
+      real(r8), intent(inout) :: wao(LBi:,LBj:)
+      real(r8), intent(inout) :: wio(LBi:,LBj:)
+      real(r8), intent(inout) :: wro(LBi:,LBj:)
       real(r8), intent(out) :: iomflx(LBi:,LBj:)
-
+!
       real(r8), intent(in) :: sustr(LBi:,LBj:)
       real(r8), intent(in) :: svstr(LBi:,LBj:)
       real(r8), intent(in) :: wsf(LBi:,LBj:)
@@ -313,13 +316,9 @@
       real(r8), intent(in) :: z_r(LBi:UBi,LBj:UBj,N(ng))
       real(r8), intent(in) :: z_w(LBi:UBi,LBj:UBj,0:N(ng))
       real(r8), intent(in) :: t(LBi:UBi,LBj:UBj,N(ng),3,NT(ng))
-      real(r8), intent(in) :: wfr(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: ui(LBi:UBi,LBj:UBj,2)
       real(r8), intent(in) :: vi(LBi:UBi,LBj:UBj,2)
-      real(r8), intent(inout) :: wai(LBi:UBi,LBj:UBj)
-      real(r8), intent(inout) :: wao(LBi:UBi,LBj:UBj)
-      real(r8), intent(inout) :: wio(LBi:UBi,LBj:UBj)
-      real(r8), intent(inout) :: wro(LBi:UBi,LBj:UBj)
+      real(r8), intent(in) :: wfr(LBi:UBi,LBj:UBj)
       real(r8), intent(inout) :: ai(LBi:UBi,LBj:UBj,2)
       real(r8), intent(inout) :: hi(LBi:UBi,LBj:UBj,2)
       real(r8), intent(inout) :: hsn(LBi:UBi,LBj:UBj,2)
@@ -333,8 +332,12 @@
       real(r8), intent(inout) :: rhs_ice_heat(LBi:UBi,LBj:UBj)
       real(r8), intent(inout) :: s0mk(LBi:UBi,LBj:UBj)
       real(r8), intent(inout) :: t0mk(LBi:UBi,LBj:UBj)
+      real(r8), intent(inout) :: wai(LBi:UBi,LBj:UBj)
+      real(r8), intent(inout) :: wao(LBi:UBi,LBj:UBj)
+      real(r8), intent(inout) :: wio(LBi:UBi,LBj:UBj)
+      real(r8), intent(inout) :: wro(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: iomflx(LBi:UBi,LBj:UBj)
-
+!
       real(r8), intent(in) :: sustr(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: svstr(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: wsf(LBi:UBi,LBj:UBj)
@@ -365,7 +368,6 @@
       real(r8), parameter :: nu = 1.8E-6_r8
       real(r8), parameter :: z0ii = 0.02_r8
       real(r8), parameter :: kappa = 0.4_r8
-      real(r8), parameter :: frln = -0.0543_r8          ! [psu C-1]
       real(r8), parameter :: alphic = 2.034_r8          ! [W m-1 K-1]
       real(r8), parameter :: alphsn = 0.31_r8           ! [W m-1 K-1]
       real(r8), parameter :: hfus = 3.347E+5_r8         ! [J kg-1]
@@ -405,8 +407,7 @@
 !     real(r8), dimension(IminS:ImaxS,JminS:JmaxS,2) :: enthal
 !
 #ifdef ICE_SHALLOW_LIMIT
-      real(r8) :: hh
-      real(r8) :: clear
+      real(r8) :: hh, clear
 #endif
       real(r8) :: fac_sf
 #ifdef ICE_CONVSNOW
@@ -576,14 +577,6 @@
         END DO
       END DO
 !
-!  Set snow fall rate to value derived from precipitation rate
-!
-      DO j = Jstr,Jend
-        DO i = Istr,Iend
-          ws(i,j) = MAX(wsf(i,j),0._r8)
-        END DO
-      END DO
-!
       DO j = Jstr,Jend
         DO i = Istr,Iend
           tfrz = frln*sice(i,j)
@@ -603,17 +596,18 @@
                 t2(i,j) = tfrz
 !
                 hfus1(i,j) = hfus*(1._r8-brnfr(i,j)) + tis(i,j)*cpw -   &
-     &            ((1._r8-brnfr(i,j))*cpi+brnfr(i,j)*cpw)*ti(i,j,linew)
+     &                       ((1._r8-brnfr(i,j))*cpi + brnfr(i,j)*cpw)* &
+     &                       ti(i,j,linew)
                 qi2(i,j) = b2d(i,j)*(ti(i,j,linew)-tis(i,j))
 !
 !  Compute ice production rate (negative here) from atmosphere-ice
 !   exchange means wai is positive for melt
 !
-                wai(i,j) = -(qai(i,j)-qi2(i,j))/(hfus1(i,j)*rho0)
+                wai(i,j) = (qi2(i,j) - qai(i,j))/(hfus1(i,j)*rho0)
 !
 !  Compute production rate for melt water (melting rate)
 !
-                wsm(i,j) = ws(i,j)
+                wsm(i,j) = wsf(i,j)
               END IF
             ELSE
 !
@@ -630,9 +624,9 @@
 !
 !  Snow melting. When does snow get denser???
 !
-                wsm(i,j) = MAX(0.0_r8,-(qai(i,j)-qi2(i,j)) /            &
-     &                     (rhosnow_dry(ng)*hfus)) + ws(i,j)
-!    &                     (rhosnow_wet(ng)*hfus)) + ws(i,j)
+                wsm(i,j) = MAX(0.0_r8,(qi2(i,j) - qai(i,j)) /           &
+     &                                (rhosnow_dry(ng)*hfus)) + wsf(i,j)
+!    &                                (rhosnow_wet(ng)*hfus)) + wsf(i,j)
               END IF
             END IF
 !
@@ -643,11 +637,11 @@
             hsn(i,j,linew) = 0.0_r8
 #else
             hsn(i,j,linew) = hsn(i,j,linew) +                           &
-     &        ai(i,j,linew)*(ws(i,j)-wsm(i,j))*dtice(ng)
+     &                       ai(i,j,linew)*(wsf(i,j)-wsm(i,j))*dtice(ng)
             hsn(i,j,linew) = MAX(0.0_r8,hsn(i,j,linew))
 #endif
           END IF
-          wro(i,j) = MAX(0._r8,wai(i,j)+wsm(i,j))
+          wro(i,j) = MAX(0.0_r8,wai(i,j)+wsm(i,j))
         END DO
       END DO
 !
@@ -656,9 +650,9 @@
           z0 = max(z0ii*ice_thick(i,j),0.01_r8)
           z0 = min(z0,0.1_r8)
 !
-!***  Yaglom and Kader formulation for z0t and z0s
+!***  Yaglom and Kader formulation for z0t and z0s  --WPB
 !
-          zdz0 = dztop(i,j)/z0   !WPB
+          zdz0 = dztop(i,j)/z0
           zdz0 = MAX(zdz0,3._r8)
 !
           rno = utau(i,j)*z0/nu
@@ -683,7 +677,8 @@
 !
 !         IF (temp_top(i,j) .le. tfrz)                                  &
 !    &      wao(i,j) = qao(i,j)/(hfus1(i,j)*rho0)
-          IF (temp_top(i,j) .le. tfrz) temp_top(i,j) = tfrz
+          IF (temp_top(i,j) .le. tfrz)                                  &
+     &      temp_top(i,j) = tfrz
           IF (ai(i,j,linew) .le. min_a(ng) .or.                         &
      &        hi(i,j,linew) .le. min_h(ng)) THEN
             s0mk(i,j) = salt_top(i,j)
@@ -726,11 +721,7 @@
 #endif
               stflx(i,j,itemp) =                                        &
      &           (1.0_r8-ai(i,j,linew))* qao(i,j) +                     &
-#ifdef ICE_I_O
-     &          (        ai(i,j,linew) *(qio  (i,j) - qswo(i,j)) -      &
-#else
-     &          (        ai(i,j,linew) * qio  (i,j) -                   &
-#endif
+     &          (        ai(i,j,linew) * qio(i,j) -                     &
      &           xtot*hfus1(i,j))*fac_sf
 !
             END IF
@@ -752,16 +743,17 @@
 !  Test for case of rainfall on snow/ice and assume 100% drainage
 !
 # ifdef ICE_SNOWFALL
-            stflx(i,j,isalt) = stflx(i,j,isalt) -                       &
-     &                         ai(i,j,linew)*rain(i,j)/rhow
             IF (snow(i,j).gt.0._r8 .and. wsf(i,j).eq.0._r8) THEN
               stflx(i,j,isalt) = stflx(i,j,isalt) -                     &
-     &                           ai(i,j,linew)*snow(i,j)/rhow
+     &          ai(i,j,linew)*(rain(i,j)+snow(i,j))*salt_top(i,j)/rhow
+            ELSE
+              stflx(i,j,isalt) = stflx(i,j,isalt) -                     &
+     &          ai(i,j,linew)* rain(i,j)           *salt_top(i,j)/rhow
             END IF
 # else
             IF (rain(i,j).gt.0._r8 .and. wsf(i,j).eq.0._r8) THEN
               stflx(i,j,isalt) = stflx(i,j,isalt) -                     &
-     &                           ai(i,j,linew)*rain(i,j)/rhow
+     &          ai(i,j,linew)* rain(i,j)           *salt_top(i,j)/rhow
             END IF
 # endif
 #endif
@@ -860,6 +852,9 @@
           IF (zice(i,j).ne.0.0_r8) THEN
             ai(i,j,linew) = 0.0_r8
             hi(i,j,linew) = 0.0_r8
+# ifdef ICE_DIAGS
+            wsni(i,j) = 0.0_r8
+#  endif
           END IF
 #endif
 !
@@ -867,13 +862,13 @@
 !
 !  Case 1 - new ice
 !
-          IF (ageice(i,j,linew).le.0.0_r8 .and.                         &
+          IF (ageice(i,j,linew).le.0.0_r8   .and.                       &
      &            hi(i,j,linew).gt.min_h(ng)) THEN
             ageice(i,j,linew) = dtice(ng)/86400._r8
 !
 !  Case 2 - existing ice gets older
 !
-          ELSEIF(ageice(i,j,linew).gt.0.0_r8 .and.                      &
+          ELSEIF(ageice(i,j,linew).gt.0.0_r8   .and.                    &
      &               hi(i,j,linew).gt.min_h(ng)) THEN
             ageice(i,j,linew) = ageice(i,j,linew)+dtice(ng)/86400._r8
 !

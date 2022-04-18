@@ -135,11 +135,11 @@
             STA(ng)%pioVar(idIwdiv)%gtype=0
 #    ifdef ICE_DIAGS
 #     ifdef ICE_ALBEDO
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIalbe))) THEN
-            got_var(idIalbe)=.TRUE.
-            STA(ng)%pioVar(idIalbe)%vd=var_desc(i)
-            STA(ng)%pioVar(idIalbe)%dkind=PIO_FOUT
-            STA(ng)%pioVar(idIalbe)%gtype=0
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIalbO))) THEN
+            got_var(idIalbO)=.TRUE.
+            STA(ng)%pioVar(idIalbO)%vd=var_desc(i)
+            STA(ng)%pioVar(idIalbO)%dkind=PIO_FOUT
+            STA(ng)%pioVar(idIalbO)%gtype=0
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIalbI))) THEN
             got_var(idIalbI)=.TRUE.
             STA(ng)%pioVar(idIalbI)%vd=var_desc(i)
@@ -441,8 +441,8 @@
         END IF
 #    ifdef ICE_DIAGS
 #     ifdef ICE_ALBEDO
-        IF (.not.got_var(idIalbe).and.Sout(idIalbe,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIalbe)),         &
+        IF (.not.got_var(idIalbO).and.Sout(idIalbO,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIalbO)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN

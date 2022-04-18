@@ -85,9 +85,9 @@
             QCK(ng)%Vid(idIwdiv)=var_id(i)
 #  ifdef ICE_DIAGS
 #   ifdef ICE_ALBEDO
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIalbe))) THEN
-            got_var(idIalbe)=.TRUE.
-            QCK(ng)%Vid(idIalbe)=var_id(i)
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIalbO))) THEN
+            got_var(idIalbO)=.TRUE.
+            QCK(ng)%Vid(idIalbO)=var_id(i)
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIalbI))) THEN
             got_var(idIalbI)=.TRUE.
             QCK(ng)%Vid(idIalbI)=var_id(i)
@@ -337,8 +337,8 @@
         END IF
 #  ifdef ICE_DIAGS
 #   ifdef ICE_ALBEDO
-        IF (.not.got_var(idIalbe).and.Qout(idIalbe,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIalbe)),         &
+        IF (.not.got_var(idIalbO).and.Qout(idIalbO,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIalbO)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN

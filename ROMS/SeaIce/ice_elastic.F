@@ -252,7 +252,6 @@
       real(r8) :: chux, chuy
       real(r8) :: auf, avf
       real(r8) :: pmu, pnu, pmv, pnv
-      real(r8) :: cosstang, sinstang
       real(r8) :: mfu11, mfu21, mfu12, mfu22
       real(r8) :: mfv11, mfv21, mfv12, mfv22
 # ifdef ICE_SHOREFAST
@@ -263,13 +262,6 @@
 # endif
 
 # include "set_bounds.h"
-!
-! ----------------------------------------------------------------------
-!
-      cosstang = COS(deg2rad*stressang(ng))
-      sinstang = SIN(deg2rad*stressang(ng))
-!
-! Initialize fast-step velocities if beginning of cycle
 !
 # ifdef ICE_lIMIT_BSTRESS
 !
@@ -530,7 +522,7 @@
           clear = hu-0.9_r8*masu
           clear = MAX(clear,0.0_r8)
           IF (clear.lt.5.0_r8) uie(i,j,lienw) =                         &
-     &       MAX(clear-1.0_r8,0.0_r8)/4.0_r8*uie(i,j,lienw)
+     &      MAX(clear-1.0_r8,0.0_r8)/4.0_r8*uie(i,j,lienw)
 # endif
 # ifdef ICE_LANDFAST_CLM
           uie(i,j,lienw) = 0.5*(fastice_clm(i,j)+fastice_clm(i-1,j))    &
@@ -792,7 +784,7 @@
           clear = hv-0.9_r8*masv
           clear = MAX(clear,0.0_r8)
           IF (clear.lt.5.0_r8) vie(i,j,lienw) =                         &
-     &       MAX(clear-1.0_r8,0.0_r8)/4.0_r8*vie(i,j,lienw)
+     &      MAX(clear-1.0_r8,0.0_r8)/4.0_r8*vie(i,j,lienw)
 # endif
 # ifdef ICE_LANDFAST_CLM
           vie(i,j,lienw) = 0.5*(fastice_clm(i,j)+fastice_clm(i,j-1))    &

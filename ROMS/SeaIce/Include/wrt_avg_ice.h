@@ -583,20 +583,20 @@
 !
 !  Write out ocean albedo.
 !
-      IF (Aout(idIalbe,ng)) THEN
+      IF (Aout(idIalbO,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, AVG(ng)%ncid,                      &
-     &                     AVG(ng)%Vid(idIalbe),                        &
+     &                     AVG(ng)%Vid(idIalbO),                        &
      &                     AVG(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #    ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #    endif
-     &                     AVERAGE(ng) % avgalb)
+     &                     AVERAGE(ng) % avgalbo)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIalbe)), AVG(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIalbO)), AVG(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -616,7 +616,7 @@
 #    ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #    endif
-     &                     AVERAGE(ng) % avgalb_i)
+     &                     AVERAGE(ng) % avgalbi)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIalbI)), AVG(ng)%Rindex

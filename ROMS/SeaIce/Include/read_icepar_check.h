@@ -201,14 +201,14 @@
               Hout(idIwdiv,1:Ngrids)=Lswitch(1:Ngrids)
 #  ifdef ICE_DIAGS
 #   ifdef ICE_ALBEDO
-            CASE ('Hout(idIalbe)')
-              IF (idIalbe.eq.0) THEN
-                IF (Master) WRITE (out,80) 'idIalbe'
+            CASE ('Hout(idIalbO)')
+              IF (idIalbO.eq.0) THEN
+                IF (Master) WRITE (out,80) 'idIalbO'
                 exit_flag=5
                 RETURN
               END IF
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idIalbe,1:Ngrids)=Lswitch(1:Ngrids)
+              Hout(idIalbO,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Hout(idIalbI)')
               IF (idIalbI.eq.0) THEN
                 IF (Master) WRITE (out,80) 'idIalbI'
@@ -509,9 +509,9 @@
               Aout(idIwdiv,1:Ngrids)=Lswitch(1:Ngrids)
 #  ifdef ICE_DIAGS
 #   ifdef ICE_ALBEDO
-            CASE ('Aout(idIalbe)')
+            CASE ('Aout(idIalbO)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Aout(idIalbe,1:Ngrids)=Lswitch(1:Ngrids)
+              Aout(idIalbO,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Aout(idIalbI)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Aout(idIalbI,1:Ngrids)=Lswitch(1:Ngrids)
@@ -682,9 +682,9 @@
               Qout(idIwdiv,1:Ngrids)=Lswitch(1:Ngrids)
 #  ifdef ICE_DIAGS
 #   ifdef ICE_ALBEDO
-            CASE ('Qout(idIalbe)')
+            CASE ('Qout(idIalbO)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Qout(idIalbe,1:Ngrids)=Lswitch(1:Ngrids)
+              Qout(idIalbO,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Qout(idIalbI)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Qout(idIalbI,1:Ngrids)=Lswitch(1:Ngrids)

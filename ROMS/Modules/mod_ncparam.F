@@ -599,9 +599,9 @@
       integer  :: idIs0mk       ! S of molecular sub-layer under ice
       integer  :: idIt0mk       ! T of molecular sub-layer under ice
       integer  :: idIwfr        ! frazil ice growth rate
-      integer  :: idIwai        ! ice growth/melt rate
-      integer  :: idIwao        ! ice growth/melt rate
-      integer  :: idIwio        ! ice growth/melt rate
+      integer  :: idIwai        ! ice growth/melt rate, ice surface
+      integer  :: idIwao        ! ice growth/melt rate, ocean surface
+      integer  :: idIwio        ! ice growth/melt rate, ice base
       integer  :: idIwro        ! ice pond runoff
       integer  :: idIwdiv       ! ice advective change
       integer  :: idImflx       ! ice-ocean mass flux
@@ -621,25 +621,26 @@
 !
 !  Ice diagnostics.
 !
-      integer  :: idIalbe       ! shortwave albedo
+      integer  :: idIalbO       ! shortwave albedo of ocean
       integer  :: idIalbI       ! shortwave albedo of ice
       integer  :: idIfrsw       ! fraction of sw penetrating into ice
       integer  :: idIrfac       ! reduction fac of near-IR SW under ice
+      integer  :: idIwsni       ! snow-ice conversion
       integer  :: idIqswa       ! upward shortwave from ice
+      integer  :: idIqswi       ! upward shortwave from ice
+      integer  :: idIqswo       ! shortwave through ice
       integer  :: idIqswl       ! downward shortwave
+      integer  :: idIqlwa       ! upward longwave from ice
+      integer  :: idIqlwi       ! longwave into ice
       integer  :: idIqlwl       ! downward longwave
       integer  :: idIqlai       ! latent heat flux over ice
       integer  :: idIqsei       ! sensible heat flux over ice
-      integer  :: idIqlwa       ! upward longwave from ice
-      integer  :: idIqswi       ! upward shortwave from ice
-      integer  :: idIqswo       ! shortwave through ice
-      integer  :: idIsio        ! salt flux from ice
-      integer  :: idIsao        ! salt flux from leads
-      integer  :: idIqao        ! heat flux in leads
       integer  :: idIqai        ! heat flux ice to atmosphere
       integer  :: idIqio        ! heat flux ocean to ice
-      integer  :: idIqi2        ! heat flux ocean to ice
-      integer  :: idIwsni       ! snow-ice conversion
+      integer  :: idIqao        ! heat flux between ocean and air (lead)
+      integer  :: idIqi2        ! heat flux between ice layers
+      integer  :: idIsio        ! salt flux between ocean and ice
+      integer  :: idIsao        ! salt flux between ocean and air (lead)
 !
 !  Ice Boundary conditions identification indicess.
 !

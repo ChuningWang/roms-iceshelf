@@ -304,13 +304,13 @@
 
 #   ifdef ICE_DIAGS
 #    ifdef ICE_ALBEDO
-        IF (Aout(idIalbe,ng)) THEN
+        IF (Aout(idIalbO,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgalb(i,j)=FORCES(ng)%alb(i,j)
+              AVERAGE(ng)%avgalbo(i,j)=FORCES(ng)%albo(i,j)
 #     ifdef WET_DRY
-              AVERAGE(ng)%avgalb(i,j)=AVERAGE(ng)%avgalb(i,j)*          &
-     &                                GRID(ng)%rmask_full(i,j)
+              AVERAGE(ng)%avgalbo(i,j)=AVERAGE(ng)%avgalbo(i,j)*        &
+     &                                 GRID(ng)%rmask_full(i,j)
 #     endif
             END DO
           END DO
@@ -319,10 +319,10 @@
         IF (Aout(idIalbI,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgalb_i(i,j)=FORCES(ng)%alb_i(i,j)
+              AVERAGE(ng)%avgalbi(i,j)=FORCES(ng)%albi(i,j)
 #     ifdef WET_DRY
-              AVERAGE(ng)%avgalb_i(i,j)=AVERAGE(ng)%avgalb_i(i,j)*      &
-     &                                  GRID(ng)%rmask_full(i,j)
+              AVERAGE(ng)%avgalbi(i,j)=AVERAGE(ng)%avgalbi(i,j)*        &
+     &                                 GRID(ng)%rmask_full(i,j)
 #     endif
             END DO
           END DO
@@ -943,14 +943,14 @@
 
 #   ifdef ICE_DIAGS
 #    ifdef ICE_ALBEDO
-        IF (Aout(idIalbe,ng)) THEN
+        IF (Aout(idIalbO,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgalb(i,j)=AVERAGE(ng)%avgalb(i,j)+          &
+              AVERAGE(ng)%avgalbo(i,j)=AVERAGE(ng)%avgalbo(i,j)+        &
 #     ifdef WET_DRY
-     &                                GRID(ng)%rmask_full(i,j)*         &
+     &                                 GRID(ng)%rmask_full(i,j)*        &
 #     endif
-     &                                FORCES(ng)%alb(i,j)
+     &                                 FORCES(ng)%albo(i,j)
             END DO
           END DO
         END IF
@@ -958,11 +958,11 @@
         IF (Aout(idIalbI,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgalb_i(i,j)=AVERAGE(ng)%avgalb_i(i,j)+      &
+              AVERAGE(ng)%avgalbi(i,j)=AVERAGE(ng)%avgalbi(i,j)+        &
 #     ifdef WET_DRY
-     &                                  GRID(ng)%rmask_full(i,j)*       &
+     &                                 GRID(ng)%rmask_full(i,j)*        &
 #     endif
-     &                                  FORCES(ng)%alb_i(i,j)
+     &                                 FORCES(ng)%albi(i,j)
             END DO
           END DO
         END IF
@@ -1806,23 +1806,23 @@
 
 #   ifdef ICE_DIAGS
 #    ifdef ICE_ALBEDO
-        IF (Aout(idIalbe,ng)) THEN
+        IF (Aout(idIalbO,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgalb(i,j)=rfac(i,j)*                        &
-     &                                AVERAGE(ng)%avgalb(i,j)
+              AVERAGE(ng)%avgalbo(i,j)=rfac(i,j)*                       &
+     &                                 AVERAGE(ng)%avgalbo(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
             CALL exchange_r2d_tile (ng, tile,                           &
      &                              LBi, UBi, LBj, UBj,                 &
-     &                              AVERAGE(ng)%avgalb)
+     &                              AVERAGE(ng)%avgalbo)
 #     ifdef DISTRIBUTE
             CALL mp_exchange2d (ng, tile, iNLM, 1,                      &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          NghostPoints,                           &
      &                          EWperiodic(ng), NSperiodic(ng),         &
-     &                          AVERAGE(ng)%avgalb)
+     &                          AVERAGE(ng)%avgalbo)
 #     endif
           END IF
         END IF
@@ -1830,20 +1830,20 @@
         IF (Aout(idIalbI,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgalb_i(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgalb_i(i,j)
+              AVERAGE(ng)%avgalbi(i,j)=rfac(i,j)*                       &
+     &                                 AVERAGE(ng)%avgalbi(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
             CALL exchange_r2d_tile (ng, tile,                           &
      &                              LBi, UBi, LBj, UBj,                 &
-     &                              AVERAGE(ng)%avgalb_i)
+     &                              AVERAGE(ng)%avgalbi)
 #     ifdef DISTRIBUTE
             CALL mp_exchange2d (ng, tile, iNLM, 1,                      &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          NghostPoints,                           &
      &                          EWperiodic(ng), NSperiodic(ng),         &
-     &                          AVERAGE(ng)%avgalb_i)
+     &                          AVERAGE(ng)%avgalbi)
 #     endif
           END IF
         END IF

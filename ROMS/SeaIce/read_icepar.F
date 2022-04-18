@@ -135,21 +135,6 @@
               do ng=1,Ngrids
                  stressang(ng) = stressang(ng)*deg2rad
               enddo
-            CASE ('ICE_EMISS')
-              Npts=load_r(Nval, Rval, 1, Rvalue)
-              ice_emiss=Rvalue(1)
-            CASE ('SPEC_HEAT_AIR')
-              Npts=load_r(Nval, Rval, 1, Rvalue)
-              spec_heat_air=Rvalue(1)
-            CASE ('TRANS_COEFF')
-              Npts=load_r(Nval, Rval, 1, Rvalue)
-              trans_coeff=Rvalue(1)
-            CASE ('SUBLIM_LAT_H')
-              Npts=load_r(Nval, Rval, 1, Rvalue)
-              sublim_lat_h=Rvalue(1)
-            CASE ('T0DEG')
-              Npts=load_r(Nval, Rval, 1, Rvalue)
-              t0deg=Rvalue(1)
 #  ifdef ICE_LANDFAST
             CASE ('LF_K1')
               Npts=load_r(Nval, Rval, 1, Rvalue)
@@ -253,16 +238,6 @@
      &          'Turning angle for ice-water drag (degrees).'
           WRITE (out,60) tol, 'TOL',                                    &
      &          'Numerical tolerance in rheology calculations .'
-          WRITE (out,60) ice_emiss, 'ICE_EMISS',                        &
-     &          'Ice emissivity.'
-          WRITE (out,60) spec_heat_air, 'SPEC_HEAT_AIR',                &
-     &          'Specific heat of air.'
-          WRITE (out,60) trans_coeff, 'TRANS_COEFF',                    &
-     &          'Transfer coefficient.'
-          WRITE (out,60) sublim_lat_h, 'SUBLIM_LAT_H',                  &
-     &          'Latent_heat of sublimation.'
-          WRITE (out,60) t0deg, 'T0DEG',                                &
-     &          'Zero degrees Celsius in degrees Kelvin.'
 #  ifdef ICE_LANDFAST
           WRITE (out,60) lf_k1, 'LF_K1',                                &
      &          'Landfast ice tunable k1.'

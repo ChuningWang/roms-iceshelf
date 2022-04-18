@@ -85,9 +85,9 @@
             AVG(ng)%Vid(idIwdiv)=var_id(i)
 #   ifdef ICE_DIAGS
 #    ifdef ICE_ALBEDO
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIalbe))) THEN
-            got_var(idIalbe)=.TRUE.
-            AVG(ng)%Vid(idIalbe)=var_id(i)
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIalbO))) THEN
+            got_var(idIalbO)=.TRUE.
+            AVG(ng)%Vid(idIalbO)=var_id(i)
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIalbI))) THEN
             got_var(idIalbI)=.TRUE.
             AVG(ng)%Vid(idIalbI)=var_id(i)
@@ -337,8 +337,8 @@
         END IF
 #   ifdef ICE_DIAGS
 #    ifdef ICE_ALBEDO
-        IF (.not.got_var(idIalbe).and.Aout(idIalbe,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIalbe)),         &
+        IF (.not.got_var(idIalbO).and.Aout(idIalbO,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIalbO)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN

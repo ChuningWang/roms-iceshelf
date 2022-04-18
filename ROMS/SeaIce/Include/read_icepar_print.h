@@ -76,8 +76,8 @@
      &       'Write out ice divergence rate.'
 #  ifdef ICE_DIAGS
 #   ifdef ICE_ALBEDO
-          IF (Hout(idIalbe,ng)) WRITE (out,70) Hout(idIalbe,ng),        &
-     &       'Hout(idIalbe)',                                           &
+          IF (Hout(idIalbO,ng)) WRITE (out,70) Hout(idIalbO,ng),        &
+     &       'Hout(idIalbO)',                                           &
      &       'Write out ocean albedo.'
           IF (Hout(idIalbI,ng)) WRITE (out,70) Hout(idIalbI,ng),        &
      &       'Hout(idIalbI)',                                           &
@@ -249,8 +249,8 @@
      &       'Write out averaged ice divergence rate.'
 #  ifdef ICE_DIAGS
 #   ifdef ICE_ALBEDO
-          IF (Aout(idIalbe,ng)) WRITE (out,70) Aout(idIalbe,ng),        &
-     &       'Aout(idIalbe)',                                           &
+          IF (Aout(idIalbO,ng)) WRITE (out,70) Aout(idIalbO,ng),        &
+     &       'Aout(idIalbO)',                                           &
      &       'Write out averaged ocean albedo.'
           IF (Aout(idIalbI,ng)) WRITE (out,70) Aout(idIalbI,ng),        &
      &       'Aout(idIalbI)',                                           &
@@ -422,8 +422,8 @@
      &       'Write out quick ice divergence rate.'
 #  ifdef ICE_DIAGS
 #   ifdef ICE_ALBEDO
-          IF (Qout(idIalbe,ng)) WRITE (out,70) Qout(idIalbe,ng),        &
-     &       'Qout(idIalbe)',                                           &
+          IF (Qout(idIalbO,ng)) WRITE (out,70) Qout(idIalbO,ng),        &
+     &       'Qout(idIalbO)',                                           &
      &       'Write out quick ocean albedo.'
           IF (Qout(idIalbI,ng)) WRITE (out,70) Qout(idIalbI,ng),        &
      &       'Qout(idIalbI)',                                           &

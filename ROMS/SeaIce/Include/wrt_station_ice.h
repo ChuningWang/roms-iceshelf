@@ -431,17 +431,17 @@
 !
 !  Write out ocean albedo.
 !
-      IF (Sout(idIalbe,ng)) THEN
+      IF (Sout(idIalbO,ng)) THEN
         scale=1.0_dp
-        CALL extract_sta2d (ng, iNLM, Cgrid, idIalbe, r2dvar,           &
+        CALL extract_sta2d (ng, iNLM, Cgrid, idIalbO, r2dvar,           &
      &                      LBi, UBi, LBj, UBj,                         &
-     &                      scale, FORCES(ng)%alb,                      &
+     &                      scale, FORCES(ng)%albo,                     &
      &                      Nstation(ng), Xpos, Ypos, psta)
         CALL netcdf_put_fvar (ng, iNLM, STA(ng)%name,                   &
-     &                        TRIM(Vname(1,idIalbe)), psta,             &
+     &                        TRIM(Vname(1,idIalbO)), psta,             &
      &                        (/1,STA(ng)%Rindex/), (/Nstation(ng),1/), &
      &                        ncid = STA(ng)%ncid,                      &
-     &                        varid = STA(ng)%Vid(idIalbe))
+     &                        varid = STA(ng)%Vid(idIalbO))
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
       END IF
 !
@@ -451,7 +451,7 @@
         scale=1.0_dp
         CALL extract_sta2d (ng, iNLM, Cgrid, idIalbI, r2dvar,           &
      &                      LBi, UBi, LBj, UBj,                         &
-     &                      scale, FORCES(ng)%alb_i,                    &
+     &                      scale, FORCES(ng)%albi,                     &
      &                      Nstation(ng), Xpos, Ypos, psta)
         CALL netcdf_put_fvar (ng, iNLM, STA(ng)%name,                   &
      &                        TRIM(Vname(1,idIalbI)), psta,             &

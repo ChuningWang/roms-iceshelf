@@ -181,17 +181,17 @@
       END IF
 #  ifdef ICE_DIAGS
 #   ifdef ICE_ALBEDO
-      IF (Aout(idIalbe,ng)) THEN
+      IF (Aout(idIalbO,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
-            AVERAGE(ng) % avgalb(i,j) = IniVal
+            AVERAGE(ng) % avgalbo(i,j) = IniVal
           END DO
         END DO
       END IF
       IF (Aout(idIalbI,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
-            AVERAGE(ng) % avgalb_i(i,j) = IniVal
+            AVERAGE(ng) % avgalbi(i,j) = IniVal
           END DO
         END DO
       END IF

@@ -71,44 +71,46 @@
               idVIclm=varid
             CASE ('idFastIce')
               idFastIce=varid
-            CASE ('idIalbe')
-              idIalbe=varid
+            CASE ('idIalbO')
+              idIalbO=varid
             CASE ('idIalbI')
               idIalbI=varid
-            CASE ('idIqlwl')
-              idIqlwl=varid
-            CASE ('idIqswl')
-              idIqswl=varid
-            CASE ('idIqlai')
-              idIqlai=varid
-            CASE ('idIqsei')
-              idIqsei=varid
-            CASE ('idIqlwa')
-              idIqlwa=varid
+            CASE ('idIfrsw')
+              idIfrsw=varid
+            CASE ('idIrfac')
+              idIrfac=varid
+            CASE ('idIwsni')
+              idIwsni=varid
             CASE ('idIqswa')
               idIqswa=varid
             CASE ('idIqswi')
               idIqswi=varid
             CASE ('idIqswo')
               idIqswo=varid
-            CASE ('idIsio')
-              idIsio=varid
-            CASE ('idIsao')
-              idIsao=varid
-            CASE ('idIqao')
-              idIqao=varid
+            CASE ('idIqswl')
+              idIqswl=varid
+            CASE ('idIqlwa')
+              idIqlwa=varid
+            CASE ('idIqlwi')
+              idIqlwa=varid
+            CASE ('idIqlwl')
+              idIqlwl=varid
+            CASE ('idIqlai')
+              idIqlai=varid
+            CASE ('idIqsei')
+              idIqsei=varid
             CASE ('idIqai')
               idIqai=varid
             CASE ('idIqio')
               idIqio=varid
+            CASE ('idIqao')
+              idIqao=varid
             CASE ('idIqi2')
               idIqi2=varid
-            CASE ('idIwsni')
-              idIwsni=varid
-            CASE ('idIfrsw')
-              idIfrsw=varid
-            CASE ('idIrfac')
-              idIrfac=varid
+            CASE ('idIsio')
+              idIsio=varid
+            CASE ('idIsao')
+              idIsao=varid
             CASE ('idAibc(iwest)')
               idAibc(iwest)=varid
             CASE ('idAibc(ieast)')

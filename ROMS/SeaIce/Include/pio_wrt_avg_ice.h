@@ -708,25 +708,25 @@
 !
 !  Write out ocean albedo.
 !
-      IF (Aout(idIalbe,ng)) THEN
+      IF (Aout(idIalbO,ng)) THEN
         scale=1.0_dp
-        IF (AVG(ng)%pioVar(idIalbe)%dkind.eq.PIO_double) THEN
+        IF (AVG(ng)%pioVar(idIalbO)%dkind.eq.PIO_double) THEN
           ioDesc => ioDesc_dp_r2dvar(ng)
         ELSE
           ioDesc => ioDesc_sp_r2dvar(ng)
         END IF
         status=nf_fwrite2d(ng, iNLM, AVG(ng)%pioFile,                   &
-     &                     AVG(ng)%pioVar(idIalbe),                     &
+     &                     AVG(ng)%pioVar(idIalbO),                     &
      &                     AVG(ng)%Rindex,                              &
      &                     ioDesc,                                      &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #     ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #     endif
-     &                     AVERAGE(ng) % avgalb)
+     &                     AVERAGE(ng) % avgalbo)
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIalbe)), AVG(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIalbO)), AVG(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -751,7 +751,7 @@
 #     ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #     endif
-     &                     AVERAGE(ng) % avgalb_i)
+     &                     AVERAGE(ng) % avgalbi)
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIalbI)), AVG(ng)%Rindex

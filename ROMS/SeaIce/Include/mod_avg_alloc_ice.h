@@ -106,12 +106,12 @@
       END IF
 #  ifdef ICE_DIAGS
 #   ifdef ICE_ALBEDO
-      IF (Aout(idIalbe,ng)) THEN
-        allocate ( AVERAGE(ng) % avgalb(LBi:UBi,LBj:UBj) )
+      IF (Aout(idIalbO,ng)) THEN
+        allocate ( AVERAGE(ng) % avgalbo(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
       IF (Aout(idIalbI,ng)) THEN
-        allocate ( AVERAGE(ng) % avgalb_i(LBi:UBi,LBj:UBj) )
+        allocate ( AVERAGE(ng) % avgalbi(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
 #    ifdef ICE_ALB_CSIM

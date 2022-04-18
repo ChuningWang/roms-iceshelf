@@ -125,7 +125,6 @@
 
       real(r8), parameter :: Lhat = 79.2_r8
       real(r8), parameter :: r = 0.5_r8
-      real(r8), parameter :: depressT = -0.0543_r8
 
       real(r8) :: t_freeze, s1, z1, sice, t_fr, gamma_k, delta_wfr
       real(r8) :: cff
@@ -137,11 +136,11 @@
 !    &       - 2.154996d-4*s1*s1 + 0.000753*z1
 !
 !  Freezing temperature (Steele et al. 1989)
-!     t_freeze(s1,z1) = depressT*s1 + 0.000759*z1
+!     t_freeze(s1,z1) = frln*s1 + 0.000759*z1
 !
 !  Another simple formula - temperature or potential temperature??
 !
-      t_freeze(s1,z1) = depressT*s1
+      t_freeze(s1,z1) = frln*s1
 !
 # include "set_bounds.h"
 !

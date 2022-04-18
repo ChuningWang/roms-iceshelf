@@ -492,8 +492,8 @@
 # endif
 # ifdef SOLVE3D
 #  if defined SHORTWAVE && defined ICE_ALBEDO
-          real(r8), pointer :: alb(:,:)
-          real(r8), pointer :: alb_i(:,:)
+          real(r8), pointer :: albo(:,:)
+          real(r8), pointer :: albi(:,:)
 #   ifdef ICE_ALB_CSIM
           real(r8), pointer :: frswp(:,:)
 #   endif
@@ -514,12 +514,13 @@
 # ifdef ICE_DIAGS
           real(r8), pointer :: qswa(:,:)
           real(r8), pointer :: qswl(:,:)
+          real(r8), pointer :: qlwa(:,:)
+          real(r8), pointer :: qlwi(:,:)
           real(r8), pointer :: qlwl(:,:)
           real(r8), pointer :: qlai(:,:)
           real(r8), pointer :: qsei(:,:)
-          real(r8), pointer :: qlwa(:,:)
-          real(r8), pointer :: sio(:,:)
           real(r8), pointer :: sao(:,:)
+          real(r8), pointer :: sio(:,:)
           real(r8), pointer :: wsni(:,:)
 # endif
 #endif
@@ -1049,9 +1050,9 @@
 # endif
 # ifdef SOLVE3D
 #  if defined SHORTWAVE && defined ICE_ALBEDO
-      allocate ( FORCES(ng) % alb(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % albo(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % alb_i(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % albi(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
 #   ifdef ICE_ALB_CSIM
       allocate ( FORCES(ng) % frswp(LBi:UBi,LBj:UBj) )
@@ -1080,17 +1081,19 @@
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( FORCES(ng) % qswl(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % qlwa(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % qlwi(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
       allocate ( FORCES(ng) % qlwl(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( FORCES(ng) % qlai(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( FORCES(ng) % qsei(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % qlwa(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % sao(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( FORCES(ng) % sio(LBi:UBi,LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % sao(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( FORCES(ng) % wsni(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
@@ -1637,11 +1640,11 @@
 #  ifdef SOLVE3D
 #   if defined SHORTWAVE && defined ICE_ALBEDO
 
-      IF (.not.destroy(ng, FORCES(ng)%alb, MyFile,                      &
-     &                 __LINE__, 'FORCES(ng)%alb')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%albo, MyFile,                     &
+     &                 __LINE__, 'FORCES(ng)%albo')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%alb_i, MyFile,                    &
-     &                 __LINE__, 'FORCES(ng)%alb_i')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%albi, MyFile,                     &
+     &                 __LINE__, 'FORCES(ng)%albi')) RETURN
 #    ifdef ICE_ALB_CSIM
 
       IF (.not.destroy(ng, FORCES(ng)%frswp, MyFile,                    &
@@ -1677,6 +1680,12 @@
       IF (.not.destroy(ng, FORCES(ng)%qswl, MyFile,                     &
      &                 __LINE__, 'FORCES(ng)%qswl')) RETURN
 
+      IF (.not.destroy(ng, FORCES(ng)%qlwa, MyFile,                     &
+     &                 __LINE__, 'FORCES(ng)%qlwa')) RETURN
+
+      IF (.not.destroy(ng, FORCES(ng)%qlwi, MyFile,                     &
+     &                 __LINE__, 'FORCES(ng)%qlwi')) RETURN
+
       IF (.not.destroy(ng, FORCES(ng)%qlwl, MyFile,                     &
      &                 __LINE__, 'FORCES(ng)%qlwl')) RETURN
 
@@ -1686,14 +1695,11 @@
       IF (.not.destroy(ng, FORCES(ng)%qsei, MyFile,                     &
      &                 __LINE__, 'FORCES(ng)%qsei')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%qlwa, MyFile,                     &
-     &                 __LINE__, 'FORCES(ng)%qlwa')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%sao, MyFile,                      &
+     &                 __LINE__, 'FORCES(ng)%sao')) RETURN
 
       IF (.not.destroy(ng, FORCES(ng)%sio, MyFile,                      &
      &                 __LINE__, 'FORCES(ng)%sio')) RETURN
-
-      IF (.not.destroy(ng, FORCES(ng)%sao, MyFile,                      &
-     &                 __LINE__, 'FORCES(ng)%sao')) RETURN
 
       IF (.not.destroy(ng, FORCES(ng)%wsni, MyFile,                     &
      &                 __LINE__, 'FORCES(ng)%wsni')) RETURN
@@ -2177,8 +2183,8 @@
 # endif
 # ifdef SOLVE3D
 #  if defined SHORTWAVE && defined ICE_ALBEDO
-            FORCES(ng) % alb(i,j) = IniVal
-            FORCES(ng) % alb_i(i,j) = IniVal
+            FORCES(ng) % albo(i,j) = IniVal
+            FORCES(ng) % albi(i,j) = IniVal
 #   ifdef ICE_ALB_CSIM
             FORCES(ng) % frswp(i,j) = IniVal
 #   endif
@@ -2201,12 +2207,13 @@
 # ifdef ICE_DIAGS
             FORCES(ng) % qswa(i,j) = IniVal
             FORCES(ng) % qswl(i,j) = IniVal
+            FORCES(ng) % qlwa(i,j) = IniVal
+            FORCES(ng) % qlwi(i,j) = IniVal
             FORCES(ng) % qlwl(i,j) = IniVal
             FORCES(ng) % qlai(i,j) = IniVal
             FORCES(ng) % qsei(i,j) = IniVal
-            FORCES(ng) % qlwa(i,j) = IniVal
-            FORCES(ng) % sio(i,j) = IniVal
             FORCES(ng) % sao(i,j) = IniVal
+            FORCES(ng) % sio(i,j) = IniVal
             FORCES(ng) % wsni(i,j) = IniVal
 # endif
           END DO

@@ -72,7 +72,6 @@
 !  Local variable declarations.
 !
       integer :: i, Jmax, Jmin, j
-      real(r8), parameter :: eps = 1.0E-20_r8
       real(r8) :: Ce, Cx
       real(r8):: cff, dVde, dVdt, dVdx, tau
 
@@ -118,7 +117,7 @@
               ELSE
                 dVde=grad(Istr,j  )
               END IF
-              cff=MAX(dVdx*dVdx+dVde*dVde,eps)
+              cff=MAX(dVdx*dVdx+dVde*dVde,tol)
               Cx=dVdt*dVdx
 # ifdef RADIATION_2D
               Ce=MIN(cff,MAX(dVdt*dVde,-cff))
@@ -249,7 +248,7 @@
               ELSE
                 dVde=grad(Iend,j  )
               END IF
-              cff=MAX(dVdx*dVdx+dVde*dVde,eps)
+              cff=MAX(dVdx*dVdx+dVde*dVde,tol)
               Cx=dVdt*dVdx
 # ifdef RADIATION_2D
               Ce=MIN(cff,MAX(dVdt*dVde,-cff))
@@ -380,7 +379,7 @@
               ELSE
                 dVdx=grad(i+1,Jstr+1)
               END IF
-              cff=MAX(dVdx*dVdx+dVde*dVde,eps)
+              cff=MAX(dVdx*dVdx+dVde*dVde,tol)
 # ifdef RADIATION_2D
               Cx=MIN(cff,MAX(dVdt*dVdx,-cff))
 # else
@@ -502,7 +501,7 @@
               ELSE
                 dVdx=grad(i+1,Jend)
               END IF
-              cff=MAX(dVdx*dVdx+dVde*dVde,eps)
+              cff=MAX(dVdx*dVdx+dVde*dVde,tol)
 # ifdef RADIATION_2D
               Cx=MIN(cff,MAX(dVdt*dVdx,-cff))
 # else

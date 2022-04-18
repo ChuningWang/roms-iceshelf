@@ -2083,7 +2083,7 @@
   1.0d0
 
 'hsnow'
-  'thickness of snow cover'
+  'average snow cover thickness in cell'
   'meter'
   'hsnow, scalar, series'
   'ocean_time'
@@ -2092,7 +2092,7 @@
   1.0d0
 
 'ageice'
-  'age of the ice'
+  'age of ice'
   'sec'
   'ageice, scalar, series'
   'ocean_time'
@@ -2164,7 +2164,7 @@
   1.0d0
 
 'iomflx'
-  'ice-ocean mass flux'
+  'ice-ocean total mass flux'
   'meter second-1'
   'iomflx, scalar, series'
   'ocean_time'
@@ -2218,7 +2218,7 @@
   1.0d0
 
 'wai'
-  'rate of ice melt/growth on ice-air boundary'
+  'rate of ice melt/growth at ice-air boundary'
   'm^3 s-1'
   'wai, scalar, series'
   'ocean_time'
@@ -2227,7 +2227,7 @@
   1.0d0
 
 'wao'
-  'rate of direct ice growth on ocean-air boundary'
+  'rate of ice growth at ocean-air boundary'
   'm^3 s-1'
   'wao, scalar, series'
   'ocean_time'
@@ -2236,7 +2236,7 @@
   1.0d0
 
 'wio'
-  'rate of ice melt/growth under ice'
+  'rate of ice melt/growth at ice base'
   'm^3 s-1'
   'wio, scalar, series'
   'ocean_time'
@@ -2262,111 +2262,129 @@
   'r2dvar'
   1.0d0
 
-'alb'                                              ! Input/Output
+'alb_ocean'                                        ! Input/Output
   'ocean albedo'
   'fraction'                                       ! Input: [fraction]
-  'alb, scalar, series'                            ! [Celsius m/s]
+  'alb_ocean, scalar, series'                      ! [Celsius m/s]
   'ocean_time'                                     ! Output: [fraction]
-  'idIalbe'
+  'idIalbO'
   'r2dvar'
   1.0d0
 
-'alb_i'                                            ! Input/Output
+'alb_ice'                                          ! Input/Output
   'ice albedo'
   'fraction'                                       ! Input: [fraction]
-  'alb_i, scalar, series'                          ! [Celsius m/s]
+  'alb_ice, scalar, series'                        ! [Celsius m/s]
   'ocean_time'                                     ! Output: [fraction]
   'idIalbI'
   'r2dvar'
   1.0d0
 
-'sr_down'
-  'downward shortwave radiation'
-  'W m-2'
-  'sr_down, scalar, series'
+'swrad_io_frac'
+  'shortwave penetration into ice'
+  'm s-1'
+  'swrad_io_frac, scalar, series'
   'ocean_time'
-  'idIqswl'
+  'idIfrsw'
   'r2dvar'
   1.0d0
 
-'lr_down'
-  'downward longwave radiation'
-  'W m-2'
-  'lr_down, scalar, series'
+'rfac_ice'
+  'reduction factor for near-IR fraction of SW under ice'
+  'm s-1'
+  'rfac_ice, scalar, series'
   'ocean_time'
-  'idIqlwl'
+  'idIrfac'
   'r2dvar'
   1.0d0
 
-'lat_ice'
-  'latent heat flux over ice'
-  'W m-2'
-  'lat_ice, scalar, series'
+'snow_ice'
+  'snow-ice conversion'
+  'm s-1'
+  'snow_ice, scalar, series'
   'ocean_time'
-  'idIqlai'
+  'idIwsni'
   'r2dvar'
   1.0d0
 
-'sen_ice'
-  'sensible heat flux over ice'
+'swrad_air'
+  'shortwave radiation from ice to air'
   'W m-2'
-  'sens_ice, scalar, series'
-  'ocean_time'
-  'idIqsei'
-  'r2dvar'
-  1.0d0
-
-'lr_up_ice'
-  'upward longwave radiation over ice'
-  'W m-2'
-  'lr_up_ice, scalar, series'
-  'ocean_time'
-  'idIqlwa'
-  'r2dvar'
-  1.0d0
-
-'sr_up_ice'
-  'upward shortwave radiation over ice'
-  'W m-2'
-  'sr_up_ice, scalar, series'
+  'swrad_air, scalar, series'
   'ocean_time'
   'idIqswa'
   'r2dvar'
   1.0d0
 
-'sr_in_ice'
+'swrad_ice'
   'shortwave radiation into ice'
   'W m-2'
-  'sr_in_ice, scalar, series'
+  'swrad_ice, scalar, series'
   'ocean_time'
   'idIqswi'
   'r2dvar'
   1.0d0
 
-'sr_th_ice'
-  'shortwave radiation through ice'
+'swrad_ocn'
+  'shortwave radiation at ice base'
   'W m-2'
-  'sr_th_ice, scalar, series'
+  'swrad_ocn, scalar, series'
   'ocean_time'
   'idIqswo'
   'r2dvar'
   1.0d0
 
-'ssflx_i'
-  'salt flux under ice'
-  'meter second-1'                                 ! [PSU m/s]
-  'ssflx_i, scalar, series'
+'swrad_lead'
+  'shortwave radiation into leads'
+  'W m-2'
+  'swrad_lead, scalar, series'
   'ocean_time'
-  'idIsio'
+  'idIqswl'
   'r2dvar'
   1.0d0
 
-'ssflx_l'
-  'salt flux of air-ocean'
-  'meter second-1'                                 ! [PSU m/s]
-  'ssflx_l, scalar, series'
+'lwrad_air'
+  'longwave radiation from ice to air'
+  'W m-2'
+  'lwrad_air, scalar, series'
   'ocean_time'
-  'idIsao'
+  'idIqlwa'
+  'r2dvar'
+  1.0d0
+
+'lwrad_ice'
+  'longwave radiation into ice'
+  'W m-2'
+  'lwrad_ice, scalar, series'
+  'ocean_time'
+  'idIqlwi'
+  'r2dvar'
+  1.0d0
+
+'lwrad_lead'
+  'longwave radiation into lead'
+  'W m-2'
+  'lwrad_lead, scalar, series'
+  'ocean_time'
+  'idIqlwl'
+  'r2dvar'
+  1.0d0
+
+'latent_ice'
+  'latent heat flux into ice'
+  'W m-2'
+  'latent_ice, scalar, series'
+  'ocean_time'
+  'idIqlai'
+  'r2dvar'
+  1.0d0
+
+'sensible_ice'
+  'sensible heat flux into ice'
+  'W m-2'
+  'sensible_ice, scalar, series'
+  'ocean_time'
+  'idIqsei'
   'r2dvar'
   1.0d0
 
@@ -2406,32 +2424,38 @@
   'r2dvar'
   1.0d0
 
-'snow_ice'
-  'snow-ice conversion'
-  'm s-1'
-  'snow_ice, scalar, series'
+'sio'
+  'salt flux at ice base'
+  'meter second-1'                                 ! [PSU m/s]
+  'sio, scalar, series'
   'ocean_time'
-  'idIwsni'
+  'idIsio'
   'r2dvar'
   1.0d0
 
-'frac_sr_ice'
-  'shortwave penetration into ice'
-  'm s-1'
-  'frac_sr_ice, scalar, series'
+'sao'
+  'salt flux at leads'
+  'meter second-1'                                 ! [PSU m/s]
+  'sao, scalar, series'
   'ocean_time'
-  'idIfrsw'
+  'idIsao'
   'r2dvar'
   1.0d0
 
-'rfac_ice'
-  'reduction factor for near-IR fraction of SW under ice'
-  'm s-1'
-  'rfac_ice, scalar, series'
+'fastice_clm'
+  'landfast ice climatology'
+  'nondimensional'
+  'fastice_clm, scalar, series'
   'ocean_time'
-  'idIrfac'
+  'idIFastIce'
   'r2dvar'
   1.0d0
+
+!
+!------------------------------------------------------------------------------
+! ice model boundary variables (Chuning Wang)
+!------------------------------------------------------------------------------
+!
 
 'aice_west'
   'ice concentration western boundary condition'

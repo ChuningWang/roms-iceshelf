@@ -57,8 +57,8 @@
 # ifdef ICE_ALB_CSIM
      &                  FORCES(ng) % frswp,                             &
 # endif
-     &                  FORCES(ng) % alb_i,                             &
-     &                  FORCES(ng) % alb)
+     &                  FORCES(ng) % albi,                              &
+     &                  FORCES(ng) % albo)
 # ifdef PROFILE
       CALL wclock_off (ng, iNLM, 17, __LINE__, __FILE__)
 # endif
@@ -80,7 +80,7 @@
 # ifdef ICE_ALB_CSIM
      &                        frswp,                                    &
 # endif
-     &                        alb_i, alb)
+     &                        albi, albo)
 !***********************************************************************
 !
       USE mod_param
@@ -112,8 +112,8 @@
 #  ifdef ICE_ALB_CSIM
       real(r8), intent(out) :: frswp(LBi:,LBj:)
 #  endif
-      real(r8), intent(out) :: alb_i(LBi:,LBj:)
-      real(r8), intent(out) :: alb(LBi:,LBj:)
+      real(r8), intent(out) :: albi(LBi:,LBj:)
+      real(r8), intent(out) :: albo(LBi:,LBj:)
 
 # else
 #  ifdef ICE_ALB_CURVE
@@ -128,8 +128,8 @@
 #  ifdef ICE_ALB_CSIM
       real(r8), intent(out) :: frswp(LBi:UBi,LBj:UBj)
 #  endif
-      real(r8), intent(out) :: alb_i(LBi:UBi,LBj:UBj)
-      real(r8), intent(out) :: alb(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: albi(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: albo(LBi:UBi,LBj:UBj)
 # endif
 !
 !  Local variable declarations.
@@ -137,7 +137,7 @@
       integer :: i, j, listp
 !
 # ifdef ICE_ALB_EC92
-      real(r8) :: albs = 0.83_r8
+      real(r8) :: alb_s = 0.83_r8
 # elif defined ICE_ALB_CSIM
 !
 ! DuVivier et al., 2018
@@ -210,7 +210,7 @@
 !
       real(r8), parameter :: i0vis=0.70_r8
 
-      real(r8) :: fh, albo, alvni, alini, dTs, fT
+      real(r8) :: fh, alb, alvni, alini, dTs, fT
       real(r8) :: alvns, alins, asnow, alvn, alin
 # else
       real(r8), parameter :: alb_i_dry=0.65_r8
@@ -239,7 +239,7 @@
 !
 !  Default water albedo
 !
-      real(r8), parameter :: albw=0.06_r8
+      real(r8), parameter :: alb_o=0.06_r8
 !
       real(r8) :: i_thick, s_thick
       real(r8) :: cff1, cff2
@@ -273,22 +273,22 @@
 ! Ice and snow albedo is calculated from Ebert and Curry,1992b
 !
           IF (hsn(i,j,listp).gt.0._r8) THEN
-            alb_i(i,j) = albs
+            albi(i,j) = alb_s
           ELSE
 !
-! Approximated values for albs (depends on COSZ, but small variation)
+! Approximated values for ice alb (depends on COSZ, but small variation)
 !
             IF (ai(i,j,listp) .ge. min_a(ng)) THEN
-              i_thick = MAX(i_thick, 0.00001_r8)
+              i_thick = MAX(i_thick, 1.0E-6_r8)
               IF (i_thick.ge.2._r8) THEN
-                alb_i(i,j) = 0.561632_r8
+                albi(i,j) = 0.561632_r8
               ELSE IF (i_thick.ge.1._r8) THEN
-                alb_i(i,j) = 0.07616_r8*i_thick+0.414492_r8
+                albi(i,j) = 0.07616_r8*i_thick+0.414492_r8
               ELSE
-                alb_i(i,j) = 0.082409_r8*LOG(i_thick) + 0.485472_r8
+                albi(i,j) = 0.082409_r8*LOG(i_thick) + 0.485472_r8
               END IF
             ELSE
-              alb_i(i,j) = albw
+              albi(i,j) = alb_o
             END IF
           END IF
 # elif defined ICE_ALB_CSIM
@@ -300,9 +300,9 @@
 ! bare ice, thickness dependence
 !
             fh = MIN(ATAN(i_thick*4.0_r8)/ATAN(ahmax*4.0_r8), 1.0_r8)
-            albo = albw*(1.0_r8-fh)
-            alvni = albicev*fh + albo
-            alini = albicei*fh + albo
+            alb = alb_o*(1.0_r8-fh)
+            alvni = albicev*fh + alb
+            alini = albicei*fh + alb
 !
 ! bare ice, temperature dependence
 !
@@ -311,18 +311,18 @@
 ! fT=0 for dTs>=dT_melt, =-1 for dTs=0
 !
             fT = MIN(dTs/dT_melt-1.0_r8, 0.0_r8)
-            alvni = MAX(albw, alvni - dalb_mlt*fT)
+            alvni = MAX(alb_o, alvni - dalb_mlt*fT)
 !
 ! Ice albedo decreases with warming, capped by ocean albedo
 !
-            alini = MAX(albw, alini - dalb_mlt*fT)
+            alini = MAX(alb_o, alini - dalb_mlt*fT)
 
             IF (s_thick > puny) THEN
 !
 ! Snow on ice, temperature dependence
 !
-              alvns = MAX(albw, albsnowv - dalb_mltv*fT)
-              alins = MAX(albw, albsnowi - dalb_mlti*fT)
+              alvns = MAX(alb_o, albsnowv - dalb_mltv*fT)
+              alins = MAX(alb_o, albsnowi - dalb_mlti*fT)
 !
 ! Note: the CESM2/CICE5.1 code (ice_shortwave.F90/compute_albedos) does
 !       not impose lower cap here, but it seems safer to do so for the
@@ -352,7 +352,7 @@
 ! Combined ice/snow albedo wrt total incident SW
 ! (absorbed SW = (1-albedo_i)*SW)
 !
-            alb_i(i,j) = fv*alvn + (1.0_r8-fv)*alin
+            albi(i,j) = fv*alvn + (1.0_r8-fv)*alin
 !
 ! Penetrating fraction of total incident SW
 ! (penetrating SW SW_in_ice = frswp*SW)
@@ -363,11 +363,11 @@
 !       ice can penetrate through the surface layer (if not reflected)
 !
           ELSE
-            alb_i(i,j) = albw
+            albi(i,j) = alb_o
 !
 ! This should be arbitrary
 !
-            frswp(i,j) = (1.0_r8-albw)*i0vis*fv
+            frswp(i,j) = (1.0_r8-alb_o)*i0vis*fv
           END IF
 # else
           cff1 = alb_s_wet - alb_s_dry
@@ -375,28 +375,28 @@
           IF (ai(i,j,listp) .gt. min_a(ng)) THEN
             IF (hsn(i,j,listp).gt.0._r8) THEN
               IF (tis(i,j) .gt. -1.0_r8) THEN
-                alb_i(i,j) = cff1*(tis(i,j)+1.0_r8) + alb_s_dry
+                albi(i,j) = cff1*(tis(i,j)+1.0_r8) + alb_s_dry
               ELSE
-                alb_i(i,j) = alb_s_dry
+                albi(i,j) = alb_s_dry
               END IF
             ELSE
               IF (tis(i,j) .gt. -1.0_r8) THEN
-                alb_i(i,j) = cff2*(tis(i,j)+1.0_r8) + alb_i_dry
+                albi(i,j) = cff2*(tis(i,j)+1.0_r8) + alb_i_dry
               ELSE
-                alb_i(i,j) = alb_i_dry
+                albi(i,j) = alb_i_dry
               END IF
             END IF
           ELSE
-            alb_i(i,j)=albw
+            albi(i,j) = alb_o
           END IF
 # endif
 !
 ! Compute ocean albedo
 !
 # ifdef ICE_ALB_CURVE
-          alb(i,j) = (0.069_r8 - 0.011_r8*COS(2*deg2rad*latr(i,j)))
+          albo(i,j) = (0.069_r8 - 0.011_r8*COS(2*deg2rad*latr(i,j)))
 # else
-          alb(i,j) = albw
+          albo(i,j) = alb_o
 # endif
         END DO
       END DO
@@ -408,10 +408,10 @@
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
-     &                          alb)
+     &                          albo)
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
-     &                          alb_i)
+     &                          albi)
 # ifdef ICE_ALB_CSIM
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
@@ -423,7 +423,7 @@
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints,                                 &
      &                    EWperiodic(ng), NSperiodic(ng),               &
-     &                    alb, alb_i)
+     &                    albo, albi)
 #  ifdef ICE_ALB_CSIM
       CALL mp_exchange2d (ng, tile, iNLM, 1,                            &
      &                    LBi, UBi, LBj, UBj,                           &

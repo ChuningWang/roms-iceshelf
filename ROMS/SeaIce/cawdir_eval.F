@@ -106,7 +106,7 @@
       integer :: ifrac, npart, iday, month, year
       integer :: i, j, k
 !
-      real(r8) :: pi2, deg, eepsil, fraci
+      real(r8) :: pi2, deg, fraci
       real(r8) :: absh2o, s0caw, day, dangle
       real(r8) :: decli, sundv, cc, intpol
       real(r8) :: sin2, cos2, stot, sads, bioday
@@ -129,10 +129,6 @@
 !        convert from radians to degrees
 !
       deg = 360._r8/pi2
-!
-!        small number
-!
-      eepsil = 1.0E-9_r8
 !
 !        split each 12 hrs day into ifrac parts
 !
@@ -233,7 +229,7 @@
 !
 ! direct radiation component
 !
-            sdir = srad*0.7_r8**MIN(100._r8,1._r8/(cosz+eepsil))
+            sdir = srad*0.7_r8**MIN(100._r8,1._r8/(cosz+tol))
 !
 ! diffusive radiation component
 !
@@ -247,7 +243,7 @@
 !
             cfac = (1._r8-0.62_r8*cc+0.0019_r8*altdeg)
 !
-            ssurf = (sdir+sdif)*cfac+eepsil
+            ssurf = (sdir+sdif)*cfac+tol
 !
             stot = stot+ssurf
 !

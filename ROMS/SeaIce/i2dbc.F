@@ -508,7 +508,6 @@
 !  Local variable declarations.
 !
       integer :: i, j
-      real(r8), parameter :: eps = 1.0E-20_r8
       real(r8) :: Ce, Cx, cff, dTde, dTdt, dTdx, tau
 
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: grad
@@ -553,7 +552,7 @@
               ELSE
                 dTde=grad(Istr,j+1)
               END IF
-              cff=MAX(dTdx*dTdx+dTde*dTde,eps)
+              cff=MAX(dTdx*dTdx+dTde*dTde,tol)
               Cx=dTdt*dTdx
 # ifdef RADIATION_2D
               Ce=MIN(cff,MAX(dTdt*dTde,-cff))
@@ -659,7 +658,7 @@
               ELSE
                 dTde=grad(Iend,j+1)
               END IF
-              cff=MAX(dTdx*dTdx+dTde*dTde,eps)
+              cff=MAX(dTdx*dTdx+dTde*dTde,tol)
               Cx=dTdt*dTdx
 # ifdef RADIATION_2D
               Ce=MIN(cff,MAX(dTdt*dTde,-cff))
@@ -765,7 +764,7 @@
               ELSE
                 dTdx=grad(i+1,Jstr)
               END IF
-              cff=MAX(dTdx*dTdx+dTde*dTde,eps)
+              cff=MAX(dTdx*dTdx+dTde*dTde,tol)
 # ifdef RADIATION_2D
               Cx=MIN(cff,MAX(dTdt*dTdx,-cff))
 # else
@@ -871,7 +870,7 @@
               ELSE
                 dTdx=grad(i+1,Jend)
               END IF
-              cff=MAX(dTdx*dTdx+dTde*dTde,eps)
+              cff=MAX(dTdx*dTdx+dTde*dTde,tol)
 # ifdef RADIATION_2D
               Cx=MIN(cff,MAX(dTdt*dTdx,-cff))
 # else

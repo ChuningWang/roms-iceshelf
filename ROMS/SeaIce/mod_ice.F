@@ -12,17 +12,19 @@
 !  ui, vi     - [m/s] Ice velocities.                                  !
 !  uie, vie   - [m/s] Ice velocities in elastic steps.                 !
 !  ai         - [non] Sea ice concentration.                           !
-!  hi         - [m]   Sea ice thickness, mean over whole surface.      !
-!  hsn        - [m]   Snow thickness, mean over whole surface.         !
+!  hi         - [m]   effective sea ice thickness,                     !
+!                    mean over whole surface.                          !
+!  hsn        - [m]   effective snow thickness,                        !
+!                     mean over whole surface.                         !
 !  ageice     - [yr]  Sea ice age.                                     !
 !                                                                      !
 !  Mass fluxes.                                                        !
 !                                                                      !
-!  iomflx - [m/s] ice/ocean mass flux.                                 !
+!  iomflx - [m/s] ice/ocean mass flux rate.                            !
 !  wfr    - [m/s] ice frazil growth rate.                              !
-!  wai    - [m/s] air/ice mass flux.                                   !
-!  wao    - [m/s] air/ocean mass flux.                                 !
-!  wio    - [m/s] ice/ocean mass flux.                                 !
+!  wai    - [m/s] air/ice mass flux rate.                              !
+!  wao    - [m/s] air/ocean mass flux rate.                            !
+!  wio    - [m/s] ice/ocean mass flux rate at ice base.                !
 !  wro    - [m/s] ice surface runoff rate.                             !
 !                                                                      !
 !  Ice thermodynamic states.                                           !

@@ -401,7 +401,9 @@
      &                       FORCES(ng)%rain,                           &
      &                       update)
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-#    ifdef ICE_SNOWFALL
+#    if defined ICE_MODEL && defined ICE_SNOWFALL
+!
+!  Set snow fall rate (kg/m2/s).
 !
         CALL set_2dfld_tile (ng, tile, iNLM, idsnow,                    &
      &                       LBi, UBi, LBj, UBj,                        &
@@ -1396,7 +1398,35 @@
 !
 !  Set ice model parameters.
 !
-      IF (.not.(RefinedGrid(ng).and.RefineScale(ng).gt.0)) THEN
+#  if defined ICE_ALB_FILE && defined SHORTWAVE
+!
+!  Set albedo of ocean and ice (fraction).
+!
+      IF (Lprocess) THEN
+        CALL set_2dfld_tile (ng, tile, iNLM, idAlbO,                    &
+     &                       LBi, UBi, LBj, UBj,                        &
+     &                       FORCES(ng)%albG,                           &
+     &                       FORCES(ng)%albo,                           &
+     &                       update)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        FORCES(ng)%albi = FORCES(ng)%albo
+      END IF
+#  endif
+#  if defined ICE_LANDFAST_CLM && !defined ANA_LFICE
+!
+!  Set landfast ice.
+!
+      IF (Lprocess) THEN
+        CALL set_2dfld_tile (ng, tile, iNLM, idFastIce,                 &
+     &                       LBi, UBi, LBj, UBj,                        &
+     &                       FORCES(ng)%fastice_clmG,                   &
+     &                       FORCES(ng)%fastice_clm,                    &
+     &                       update)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+      END IF
+#  endif
+!
+      IF (LprocessOBC(ng)) THEN
 #  ifdef ANA_MIOBC
         CALL ana_miobc (ng, tile, iNLM)
 #  else
@@ -1467,7 +1497,9 @@
           END IF
         END IF
 #  endif
+      END IF
 !
+      IF (LprocessOBC(ng)) THEN
 #  ifdef ANA_AIOBC
         CALL ana_aiobc (ng, tile, iNLM)
 #  else
@@ -1506,7 +1538,9 @@
           END IF
         END IF
 #  endif
+      END IF
 !
+      IF (LprocessOBC(ng)) THEN
 #  ifdef ANA_HIOBC
         CALL ana_hiobc (ng, tile, iNLM)
         CALL ana_hsnobc (ng, tile, iNLM)
@@ -1570,7 +1604,9 @@
           END IF
         END IF
 #  endif
+      END IF
 !
+      IF (LprocessOBC(ng)) THEN
 #  ifdef ANA_TIOBC
         CALL ana_tiobc (ng, tile, iNLM)
 #  else
@@ -1609,7 +1645,9 @@
           END IF
         END IF
 #  endif
+      END IF
 !
+      IF (LprocessOBC(ng)) THEN
 #  ifdef ANA_SIGIOBC
         CALL ana_sigiobc (ng, tile, iNLM)
 #  else
@@ -1697,29 +1735,6 @@
         END IF
 #  endif
       END IF
-#  if defined ICE_ALB_FILE && defined SHORTWAVE
-!
-!  Set albedo of ocean and ice (fraction).
-!
-      CALL set_2dfld_tile (ng, tile, iNLM, idAlbe,                      &
-     &                     LBi, UBi, LBj, UBj,                          &
-     &                     FORCES(ng)%albG,                             &
-     &                     FORCES(ng)%alb,                              &
-     &                     update)
-      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-      FORCES(ng)%alb_i = FORCES(ng)%alb
-#  endif
-#  if defined ICE_LANDFAST_CLM && !defined ANA_LFICE
-!
-!  Set landfast ice.
-!
-      CALL set_2dfld_tile (ng, tile, iNLM, idFastIce,                   &
-     &                     LBi, UBi, LBj, UBj,                          &
-     &                     FORCES(ng)%fastice_clmG,                     &
-     &                     FORCES(ng)%fastice_clm,                      &
-     &                     update)
-      IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-#  endif
 !
       IF (LaiCLM(ng)) THEN
 #  ifdef ANA_AICLIMA

@@ -238,13 +238,12 @@
 
       real(r8) :: rhoO
       real(r8) :: dztop
-      real(r8) :: thic
+      real(r8) :: thick
       real(r8) :: zdz0
       real(r8) :: z0
 
       real(r8), parameter :: kappa = 0.4_r8
       real(r8), parameter :: z0ii = 0.02_r8
-      real(r8), parameter :: eps = 1.e-20
 !
 # include "set_bounds.h"
 !
@@ -269,9 +268,8 @@
           utauiw(i,j) = spd
           chuiw(i,j) = cdiw(ng)*spd
 #  else
-          thic = hi(i,j,liold)/MAX(ai(i,j,liold),MAX(min_a(ng),eps))
-          z0 = MAX(z0ii*thic,0.01_r8)
-          z0 = MIN(z0,0.1_r8)
+          thick = hi(i,j,liold)/MAX(ai(i,j,liold),MAX(min_a(ng),tol))
+          z0 = MIN(MAX(z0ii*thick,0.01_r8),0.1_r8)
           dztop = z_w(i,j,N(ng))-z_r(i,j,N(ng))
           zdz0 = dztop/z0
           if (zdz0 .lt. 3._r8) zdz0 = 3._r8

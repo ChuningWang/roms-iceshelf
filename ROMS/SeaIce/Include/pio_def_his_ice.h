@@ -683,22 +683,22 @@
 !
 !  Define ocean albedo.
 !
-        IF (Hout(idIalbe,ng)) THEN
-          Vinfo( 1)=Vname(1,idIalbe)
-          Vinfo( 2)=Vname(2,idIalbe)
-          Vinfo( 3)=Vname(3,idIalbe)
-          Vinfo(14)=Vname(4,idIalbe)
+        IF (Hout(idIalbO,ng)) THEN
+          Vinfo( 1)=Vname(1,idIalbO)
+          Vinfo( 2)=Vname(2,idIalbO)
+          Vinfo( 3)=Vname(3,idIalbO)
+          Vinfo(14)=Vname(4,idIalbO)
           Vinfo(16)=Vname(1,idtime)
 #    if defined WRITE_WATER && defined MASKING
           Vinfo(20)='mask_rho'
 #    endif
           Vinfo(22)='coordinates'
-          Aval(5)=REAL(Iinfo(1,idIalbe,ng),r8)
-          HIS(ng)%pioVar(idIalbe)%dkind=PIO_FOUT
-          HIS(ng)%pioVar(idIalbe)%gtype=r2dvar
+          Aval(5)=REAL(Iinfo(1,idIalbO,ng),r8)
+          HIS(ng)%pioVar(idIalbO)%dkind=PIO_FOUT
+          HIS(ng)%pioVar(idIalbO)%gtype=r2dvar
 !
           status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
-     &                   HIS(ng)%pioVar(idIalbe)%vd,                    &
+     &                   HIS(ng)%pioVar(idIalbO)%vd,                    &
 #    ifdef WET_DRY
      &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
      &                   SetFillVal = .FALSE.)

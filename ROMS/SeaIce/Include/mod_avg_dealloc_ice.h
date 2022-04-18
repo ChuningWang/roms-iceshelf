@@ -106,13 +106,13 @@
       END IF
 #  ifdef ICE_DIAGS
 #   ifdef ICE_ALBEDO
-      IF (Aout(idIalbe,ng)) THEN
-        IF (.not.destroy(ng, AVERAGE(ng)%avgalb, MyFile,                &
-     &                   __LINE__, 'AVERAGE(ng)%avgalb')) RETURN
+      IF (Aout(idIalbO,ng)) THEN
+        IF (.not.destroy(ng, AVERAGE(ng)%avgalbo, MyFile,               &
+     &                   __LINE__, 'AVERAGE(ng)%avgalbo')) RETURN
       END IF
       IF (Aout(idIalbI,ng)) THEN
-        IF (.not.destroy(ng, AVERAGE(ng)%avgalb_i, MyFile,              &
-     &                   __LINE__, 'AVERAGE(ng)%avgalb_i')) RETURN
+        IF (.not.destroy(ng, AVERAGE(ng)%avgalbi, MyFile,               &
+     &                   __LINE__, 'AVERAGE(ng)%avgalbi')) RETURN
       END IF
 #    ifdef ICE_ALB_CSIM
       IF (Aout(idIfrsw,ng)) THEN

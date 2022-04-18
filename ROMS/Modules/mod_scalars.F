@@ -1831,19 +1831,30 @@
 !-----------------------------------------------------------------------
 !  Other sea ice related model parameters.
 !-----------------------------------------------------------------------
+!                                                                      !
+!  Ice model constants.                                                !
+!                                                                      !
+!  sice_ref   - [PSU]        Ice reference salinity.                   !
+!  frln       - [PSU degC-1] Freezing point dependence on salinity.    !
+!                                                                      !
+!  tol - Tolerance against zero-devide.                                !
+!                                                                      !
+!-----------------------------------------------------------------------
 !
         integer, allocatable :: nstrs(:)
         integer, allocatable :: nevp(:)
         integer, allocatable :: ievp(:)
 !
-        real(r8) :: tol = 1.0E-16
-        real(r8) :: ice_emiss = 0.97_r8
+!       real(r8), parameter :: sice_ref = 3.2_r8
+        real(r8), parameter :: sice_ref = 7.0_r8
+        real(r8), parameter :: frln     = -0.0543_r8
+!
+        real(r8) :: tol           = 1.0E-20_r8
+        real(r8) :: emmiss_ice    = 0.97_r8
         real(r8) :: spec_heat_air = 1004._r8
-        real(r8) :: trans_coeff = 1.75E-3
-        real(r8) :: sublim_lat_h = 2.834E+6
-        real(r8) :: t0deg = 273.15_r8                     ! [Kelvin]
-!       real(r8), parameter :: sice_ref = 3.2_r8          ! [psu]
-        real(r8), parameter :: sice_ref = 7.0_r8          ! [psu]
+        real(r8) :: Ch_i          = 1.75E-3_r8
+        real(r8) :: Ce_i          = 1.75E-3_r8
+        real(r8) :: sublim_lat_h  = 2.834E+6_r8
 !
         real(r8), allocatable :: dtice(:)
         real(r8), allocatable :: dte(:)

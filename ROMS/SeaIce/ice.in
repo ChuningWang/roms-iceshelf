@@ -159,26 +159,6 @@
 
          STRESSANG = 0.d0
 
-! Ice emissivity (nondimensional)
-
-         ICE_EMISS = 0.97d0
-
-! Specific heat of air
-
-     SPEC_HEAT_AIR = 1004.d0
-
-! Transfer coefficient (nondimensional)
-
-       TRANS_COEFF = 1.75d-3
-
-! Latent heat of sublimation
-
-SUBLIM_LATENT_HEAT = 2.834d6
-
-! Zero degree Celsius in Kelvin
-
-             T0DEG = 273.15d0
-
 ! tunable parameters for Lemieux landfast ice
 
              LF_K1 = 8.0d0
@@ -222,7 +202,7 @@ Hout(idIwao)    == T
 Hout(idIwio)    == T
 Hout(idIwro)    == T
 Hout(idIwdiv)   == T
-Hout(idIalbe)   == T
+Hout(idIalbO)   == T
 Hout(idIalbI)   == T
 Hout(idIfrsw)   == T
 Hout(idIrfac)   == T
@@ -278,7 +258,7 @@ Aout(idIwao)    == T
 Aout(idIwio)    == T
 Aout(idIwro)    == T
 Aout(idIwdiv)   == T
-Aout(idIalbe)   == T
+Aout(idIalbO)   == T
 Aout(idIalbI)   == T
 Aout(idIfrsw)   == T
 Aout(idIrfac)   == T
@@ -334,7 +314,7 @@ Qout(idIwao)    == T
 Qout(idIwio)    == T
 Qout(idIwro)    == T
 Qout(idIwdiv)   == T
-Qout(idIalbe)   == T
+Qout(idIalbO)   == T
 Qout(idIalbI)   == T
 Qout(idIfrsw)   == T
 Qout(idIrfac)   == T
@@ -390,7 +370,7 @@ Sout(idIwao)    == T
 Sout(idIwio)    == T
 Sout(idIwro)    == T
 Sout(idIwdiv)   == T
-Sout(idIalbe)   == T
+Sout(idIalbO)   == T
 Sout(idIalbI)   == T
 Sout(idIfrsw)   == T
 Sout(idIrfac)   == T

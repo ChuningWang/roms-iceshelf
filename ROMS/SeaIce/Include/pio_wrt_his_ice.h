@@ -725,25 +725,25 @@
 !
 !  Write out ocean albedo.
 !
-      IF (Hout(idIalbe,ng)) THEN
+      IF (Hout(idIalbO,ng)) THEN
         scale=1.0_dp
-        IF (HIS(ng)%pioVar(idIalbe)%dkind.eq.PIO_double) THEN
+        IF (HIS(ng)%pioVar(idIalbO)%dkind.eq.PIO_double) THEN
           ioDesc => ioDesc_dp_r2dvar(ng)
         ELSE
           ioDesc => ioDesc_sp_r2dvar(ng)
         END IF
         status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
-     &                     HIS(ng)%pioVar(idIalbe),                     &
+     &                     HIS(ng)%pioVar(idIalbO),                     &
      &                     HIS(ng)%Rindex,                              &
      &                     ioDesc,                                      &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #    ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #    endif
-     &                     FORCES(ng)%alb)
+     &                     FORCES(ng)%albo)
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIalbe)), HIS(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIalbO)), HIS(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -768,7 +768,7 @@
 #    ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #    endif
-     &                     FORCES(ng)%alb_i)
+     &                     FORCES(ng)%albi)
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIalbI)), HIS(ng)%Rindex

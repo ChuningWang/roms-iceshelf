@@ -583,17 +583,17 @@
 !
 !  Define ocean albedo.
 !
-        IF (Sout(idIalbe,ng)) THEN
-          Vinfo( 1)=Vname(1,idIalbe)
-          Vinfo( 2)=Vname(2,idIalbe)
-          Vinfo( 3)=Vname(3,idIalbe)
-          Vinfo(14)=Vname(4,idIalbe)
+        IF (Sout(idIalbO,ng)) THEN
+          Vinfo( 1)=Vname(1,idIalbO)
+          Vinfo( 2)=Vname(2,idIalbO)
+          Vinfo( 3)=Vname(3,idIalbO)
+          Vinfo(14)=Vname(4,idIalbO)
           Vinfo(16)=Vname(1,idtime)
-          STA(ng)%pioVar(idIalbe)%dkind=PIO_FOUT
-          STA(ng)%pioVar(idIalbe)%gtype=0
+          STA(ng)%pioVar(idIalbO)%dkind=PIO_FOUT
+          STA(ng)%pioVar(idIalbO)%gtype=0
 !
           status=def_var(ng, iNLM, STA(ng)%pioFile,                     &
-     &                   STA(ng)%pioVar(idIalbe)%vd,                    &
+     &                   STA(ng)%pioVar(idIalbO)%vd,                    &
      &                   PIO_FOUT, 2, pgrd, Aval, Vinfo, ncname,        &
 #     ifdef WET_DRY
      &                   SetFillVal = .FALSE.,                          &
