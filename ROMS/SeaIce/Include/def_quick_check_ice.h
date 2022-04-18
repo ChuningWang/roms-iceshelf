@@ -100,36 +100,36 @@
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIrfac))) THEN
             got_var(idIrfac)=.TRUE.
             QCK(ng)%Vid(idIrfac)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIlrdn))) THEN
-            got_var(idIlrdn)=.TRUE.
-            QCK(ng)%Vid(idIlrdn)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsrdn))) THEN
-            got_var(idIsrdn)=.TRUE.
-            QCK(ng)%Vid(idIsrdn)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIlatI))) THEN
-            got_var(idIlatI)=.TRUE.
-            QCK(ng)%Vid(idIlatI)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsenI))) THEN
-            got_var(idIsenI)=.TRUE.
-            QCK(ng)%Vid(idIsenI)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIlrup))) THEN
-            got_var(idIlrup)=.TRUE.
-            QCK(ng)%Vid(idIlrup)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsrup))) THEN
-            got_var(idIsrup)=.TRUE.
-            QCK(ng)%Vid(idIsrup)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsrin))) THEN
-            got_var(idIsrin)=.TRUE.
-            QCK(ng)%Vid(idIsrin)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsrth))) THEN
-            got_var(idIsrth)=.TRUE.
-            QCK(ng)%Vid(idIsrth)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsfI))) THEN
-            got_var(idIsfI)=.TRUE.
-            QCK(ng)%Vid(idIsfI)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsfL))) THEN
-            got_var(idIsfL)=.TRUE.
-            QCK(ng)%Vid(idIsfL)=var_id(i)
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqswl))) THEN
+            got_var(idIqswl)=.TRUE.
+            QCK(ng)%Vid(idIqswl)=var_id(i)
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqlwl))) THEN
+            got_var(idIqlwl)=.TRUE.
+            QCK(ng)%Vid(idIqlwl)=var_id(i)
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqlai))) THEN
+            got_var(idIqlai)=.TRUE.
+            QCK(ng)%Vid(idIqlai)=var_id(i)
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqsei))) THEN
+            got_var(idIqsei)=.TRUE.
+            QCK(ng)%Vid(idIqsei)=var_id(i)
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqlwa))) THEN
+            got_var(idIqlwa)=.TRUE.
+            QCK(ng)%Vid(idIqlwa)=var_id(i)
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqswa))) THEN
+            got_var(idIqswa)=.TRUE.
+            QCK(ng)%Vid(idIqswa)=var_id(i)
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqswi))) THEN
+            got_var(idIqswi)=.TRUE.
+            QCK(ng)%Vid(idIqswi)=var_id(i)
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqswo))) THEN
+            got_var(idIqswo)=.TRUE.
+            QCK(ng)%Vid(idIqswo)=var_id(i)
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsio))) THEN
+            got_var(idIsio)=.TRUE.
+            QCK(ng)%Vid(idIsio)=var_id(i)
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsao))) THEN
+            got_var(idIsao)=.TRUE.
+            QCK(ng)%Vid(idIsao)=var_id(i)
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqao))) THEN
             got_var(idIqao)=.TRUE.
             QCK(ng)%Vid(idIqao)=var_id(i)
@@ -142,9 +142,9 @@
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqi2))) THEN
             got_var(idIqi2)=.TRUE.
             QCK(ng)%Vid(idIqi2)=var_id(i)
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsnoi))) THEN
-            got_var(idIsnoi)=.TRUE.
-            QCK(ng)%Vid(idIsnoi)=var_id(i)
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIwsni))) THEN
+            got_var(idIwsni)=.TRUE.
+            QCK(ng)%Vid(idIwsni)=var_id(i)
 #  endif
 # endif
 # ifdef ICESHELF
@@ -364,62 +364,62 @@
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIlrdn).and.Qout(idIlrdn,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIlrdn)),         &
+        IF (.not.got_var(idIqswl).and.Qout(idIqswl,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIqswl)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIsrdn).and.Qout(idIsrdn,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsrdn)),         &
+        IF (.not.got_var(idIqlwl).and.Qout(idIqlwl,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIqlwl)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIlatI).and.Qout(idIlatI,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIlatI)),         &
+        IF (.not.got_var(idIqlai).and.Qout(idIqlai,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIqlai)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIsenI).and.Qout(idIsenI,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsenI)),         &
+        IF (.not.got_var(idIqsei).and.Qout(idIqsei,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIqsei)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIlrup).and.Qout(idIlrup,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIlrup)),         &
+        IF (.not.got_var(idIqlwa).and.Qout(idIqlwa,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIqlwa)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIsrup).and.Qout(idIsrup,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsrup)),         &
+        IF (.not.got_var(idIqswa).and.Qout(idIqswa,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIqswa)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIsrin).and.Qout(idIsrin,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsrin)),         &
+        IF (.not.got_var(idIqswi).and.Qout(idIqswi,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIqswi)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIsrth).and.Qout(idIsrth,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsrth)),         &
+        IF (.not.got_var(idIqswo).and.Qout(idIqswo,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIqswo)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIsfI).and.Qout(idIsfI,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsfI)),          &
+        IF (.not.got_var(idIsio).and.Qout(idIsio,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsio)),          &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIsfL).and.Qout(idIsfL,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsfL)),          &
+        IF (.not.got_var(idIsao).and.Qout(idIsao,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsao)),          &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
@@ -448,8 +448,8 @@
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIsnoi).and.Qout(idIsnoi,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsnoi)),         &
+        IF (.not.got_var(idIwsni).and.Qout(idIwsni,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIwsni)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN

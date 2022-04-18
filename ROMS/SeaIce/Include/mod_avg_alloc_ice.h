@@ -125,64 +125,64 @@
         allocate ( AVERAGE(ng) % avgrfaci(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
-      IF (Aout(idIlrdn,ng)) THEN
-        allocate ( AVERAGE(ng) % avglr_dn(LBi:UBi,LBj:UBj) )
+      IF (Aout(idIqswl,ng)) THEN
+        allocate ( AVERAGE(ng) % avgqswl(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
-      IF (Aout(idIsrdn,ng)) THEN
-        allocate ( AVERAGE(ng) % avgsr_dn(LBi:UBi,LBj:UBj) )
+      IF (Aout(idIqlwl,ng)) THEN
+        allocate ( AVERAGE(ng) % avgqlwl(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
-      IF (Aout(idIlatI,ng)) THEN
-        allocate ( AVERAGE(ng) % avglat_i(LBi:UBi,LBj:UBj) )
+      IF (Aout(idIqlai,ng)) THEN
+        allocate ( AVERAGE(ng) % avgqlai(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
-      IF (Aout(idIsenI,ng)) THEN
-        allocate ( AVERAGE(ng) % avgsen_i(LBi:UBi,LBj:UBj) )
+      IF (Aout(idIqsei,ng)) THEN
+        allocate ( AVERAGE(ng) % avgqsei(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
-      IF (Aout(idIlrup,ng)) THEN
-        allocate ( AVERAGE(ng) % avglr_up_i(LBi:UBi,LBj:UBj) )
+      IF (Aout(idIqlwa,ng)) THEN
+        allocate ( AVERAGE(ng) % avgqlwa(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
-      IF (Aout(idIsrup,ng)) THEN
-        allocate ( AVERAGE(ng) % avgsr_up_i(LBi:UBi,LBj:UBj) )
+      IF (Aout(idIqswa,ng)) THEN
+        allocate ( AVERAGE(ng) % avgqswa(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
-      IF (Aout(idIsrin,ng)) THEN
-        allocate ( AVERAGE(ng) % avgsr_in_i(LBi:UBi,LBj:UBj) )
+      IF (Aout(idIqswi,ng)) THEN
+        allocate ( AVERAGE(ng) % avgqswi(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
-      IF (Aout(idIsrth,ng)) THEN
-        allocate ( AVERAGE(ng) % avgsr_th_i(LBi:UBi,LBj:UBj) )
+      IF (Aout(idIqswo,ng)) THEN
+        allocate ( AVERAGE(ng) % avgqswo(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
-      IF (Aout(idIsfI,ng)) THEN
-        allocate ( AVERAGE(ng) % avgssflx_i(LBi:UBi,LBj:UBj) )
+      IF (Aout(idIsio,ng)) THEN
+        allocate ( AVERAGE(ng) % avgsio(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
-      IF (Aout(idIsfL,ng)) THEN
-        allocate ( AVERAGE(ng) % avgssflx_l(LBi:UBi,LBj:UBj) )
+      IF (Aout(idIsao,ng)) THEN
+        allocate ( AVERAGE(ng) % avgsao(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
       IF (Aout(idIqao,ng)) THEN
-        allocate ( AVERAGE(ng) % avgqao_n(LBi:UBi,LBj:UBj) )
+        allocate ( AVERAGE(ng) % avgqao(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
       IF (Aout(idIqai,ng)) THEN
-        allocate ( AVERAGE(ng) % avgqai_n(LBi:UBi,LBj:UBj) )
+        allocate ( AVERAGE(ng) % avgqai(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
       IF (Aout(idIqio,ng)) THEN
-        allocate ( AVERAGE(ng) % avgqio_n(LBi:UBi,LBj:UBj) )
+        allocate ( AVERAGE(ng) % avgqio(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
       IF (Aout(idIqi2,ng)) THEN
-        allocate ( AVERAGE(ng) % avgqi2_n(LBi:UBi,LBj:UBj) )
+        allocate ( AVERAGE(ng) % avgqi2(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
-      IF (Aout(idIsnoi,ng)) THEN
-        allocate ( AVERAGE(ng) % avgsnoice(LBi:UBi,LBj:UBj) )
+      IF (Aout(idIwsni,ng)) THEN
+        allocate ( AVERAGE(ng) % avgwsni(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
 #  endif

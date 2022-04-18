@@ -91,35 +91,35 @@
           IF (Hout(idIrfac,ng)) WRITE (out,70) Hout(idIrfac,ng),        &
      &       'Hout(idIrfac)',                                           &
      &       'Write out reduction fac of near-IR SW under ice.'
-          IF (Hout(idIlrdn,ng)) WRITE (out,70) Hout(idIlrdn,ng),        &
-     &       'Hout(idIlrdn)',                                           &
-     &       'Write out downward longwave radiation.'
-          IF (Hout(idIsrdn,ng)) WRITE (out,70) Hout(idIsrdn,ng),        &
-     &       'Hout(idIsrdn)',                                           &
+          IF (Hout(idIqswl,ng)) WRITE (out,70) Hout(idIqswl,ng),        &
+     &       'Hout(idIqswl)',                                           &
      &       'Write out downward shortwave radiation.'
-          IF (Hout(idIlatI,ng)) WRITE (out,70) Hout(idIlatI,ng),        &
-     &       'Hout(idIlatI)',                                           &
+          IF (Hout(idIqlwl,ng)) WRITE (out,70) Hout(idIqlwl,ng),        &
+     &       'Hout(idIqlwl)',                                           &
+     &       'Write out downward longwave radiation.'
+          IF (Hout(idIqlai,ng)) WRITE (out,70) Hout(idIqlai,ng),        &
+     &       'Hout(idIqlai)',                                           &
      &       'Write out latent heat over ice.'
-          IF (Hout(idIsenI,ng)) WRITE (out,70) Hout(idIsenI,ng),        &
-     &       'Hout(idIsenI)',                                           &
+          IF (Hout(idIqsei,ng)) WRITE (out,70) Hout(idIqsei,ng),        &
+     &       'Hout(idIqsei)',                                           &
      &       'Write out sensible heat over ice.'
-          IF (Hout(idIlrup,ng)) WRITE (out,70) Hout(idIlrup,ng),        &
-     &       'Hout(idIlrup)',                                           &
+          IF (Hout(idIqlwa,ng)) WRITE (out,70) Hout(idIqlwa,ng),        &
+     &       'Hout(idIqlwa)',                                           &
      &       'Write out upward longwave over ice.'
-          IF (Hout(idIsrup,ng)) WRITE (out,70) Hout(idIsrup,ng),        &
-     &       'Hout(idIsrup)',                                           &
+          IF (Hout(idIqswa,ng)) WRITE (out,70) Hout(idIqswa,ng),        &
+     &       'Hout(idIqswa)',                                           &
      &       'Write out upward shortwave over ice.'
-          IF (Hout(idIsrin,ng)) WRITE (out,70) Hout(idIsrin,ng),        &
-     &       'Hout(idIsrin)',                                           &
+          IF (Hout(idIqswi,ng)) WRITE (out,70) Hout(idIqswi,ng),        &
+     &       'Hout(idIqswi)',                                           &
      &       'Write out shortwave into ice.'
-          IF (Hout(idIsrth,ng)) WRITE (out,70) Hout(idIsrth,ng),        &
-     &       'Hout(idIsrth)',                                           &
+          IF (Hout(idIqswo,ng)) WRITE (out,70) Hout(idIqswo,ng),        &
+     &       'Hout(idIqswo)',                                           &
      &       'Write out shortwave through ice.'
-          IF (Hout(idIsfI,ng)) WRITE (out,70) Hout(idIsfI,ng),          &
-     &       'Hout(idIsfI)',                                            &
+          IF (Hout(idIsio,ng)) WRITE (out,70) Hout(idIsio,ng),          &
+     &       'Hout(idIsio)',                                            &
      &       'Write out salt flux under ice.'
-          IF (Hout(idIsfL,ng)) WRITE (out,70) Hout(idIsfL,ng),          &
-     &       'Hout(idIsfL)',                                            &
+          IF (Hout(idIsao,ng)) WRITE (out,70) Hout(idIsao,ng),          &
+     &       'Hout(idIsao)',                                            &
      &       'Write out salt flux through leads.'
           IF (Hout(idIqao,ng)) WRITE (out,70) Hout(idIqao,ng),          &
      &       'Hout(idIqao)',                                            &
@@ -133,8 +133,8 @@
           IF (Hout(idIqi2,ng)) WRITE (out,70) Hout(idIqi2,ng),          &
      &       'Hout(idIqi2)',                                            &
      &       'Write out ice heat flux.'
-          IF (Hout(idIsnoi,ng)) WRITE (out,70) Hout(idIsnoi,ng),        &
-     &       'Hout(idIsnoi)',                                           &
+          IF (Hout(idIwsni,ng)) WRITE (out,70) Hout(idIwsni,ng),        &
+     &       'Hout(idIwsni)',                                           &
      &       'Write out snow-ice conversion.'
 #  endif
 # endif
@@ -264,35 +264,35 @@
           IF (Aout(idIrfac,ng)) WRITE (out,70) Aout(idIrfac,ng),        &
      &       'Aout(idIrfac)',                                           &
      &       'Write out averaged reduction fac of near-IR SW under ice.'
-          IF (Aout(idIlrdn,ng)) WRITE (out,70) Aout(idIlrdn,ng),        &
-     &       'Aout(idIlrdn)',                                           &
-     &       'Write out averaged downward longwave radiation.'
-          IF (Aout(idIsrdn,ng)) WRITE (out,70) Aout(idIsrdn,ng),        &
-     &       'Aout(idIsrdn)',                                           &
+          IF (Aout(idIqswl,ng)) WRITE (out,70) Aout(idIqswl,ng),        &
+     &       'Aout(idIqswl)',                                           &
      &       'Write out averaged downward shortwave radiation.'
-          IF (Aout(idIlatI,ng)) WRITE (out,70) Aout(idIlatI,ng),        &
-     &       'Aout(idIlatI)',                                           &
+          IF (Aout(idIqlwl,ng)) WRITE (out,70) Aout(idIqlwl,ng),        &
+     &       'Aout(idIqlwl)',                                           &
+     &       'Write out averaged downward longwave radiation.'
+          IF (Aout(idIqlai,ng)) WRITE (out,70) Aout(idIqlai,ng),        &
+     &       'Aout(idIqlai)',                                           &
      &       'Write out averaged latent heat over ice.'
-          IF (Aout(idIsenI,ng)) WRITE (out,70) Aout(idIsenI,ng),        &
-     &       'Aout(idIsenI)',                                           &
+          IF (Aout(idIqsei,ng)) WRITE (out,70) Aout(idIqsei,ng),        &
+     &       'Aout(idIqsei)',                                           &
      &       'Write out averaged sensible heat over ice.'
-          IF (Aout(idIlrup,ng)) WRITE (out,70) Aout(idIlrup,ng),        &
-     &       'Aout(idIlrup)',                                           &
+          IF (Aout(idIqlwa,ng)) WRITE (out,70) Aout(idIqlwa,ng),        &
+     &       'Aout(idIqlwa)',                                           &
      &       'Write out averaged upward longwave over ice.'
-          IF (Aout(idIsrup,ng)) WRITE (out,70) Aout(idIsrup,ng),        &
-     &       'Aout(idIsrup)',                                           &
+          IF (Aout(idIqswa,ng)) WRITE (out,70) Aout(idIqswa,ng),        &
+     &       'Aout(idIqswa)',                                           &
      &       'Write out averaged upward shortwave over ice.'
-          IF (Aout(idIsrin,ng)) WRITE (out,70) Aout(idIsrin,ng),        &
-     &       'Aout(idIsrin)',                                           &
+          IF (Aout(idIqswi,ng)) WRITE (out,70) Aout(idIqswi,ng),        &
+     &       'Aout(idIqswi)',                                           &
      &       'Write out averaged shortwave into ice.'
-          IF (Aout(idIsrth,ng)) WRITE (out,70) Aout(idIsrth,ng),        &
-     &       'Aout(idIsrth)',                                           &
+          IF (Aout(idIqswo,ng)) WRITE (out,70) Aout(idIqswo,ng),        &
+     &       'Aout(idIqswo)',                                           &
      &       'Write out averaged shortwave through ice.'
-          IF (Aout(idIsfI,ng)) WRITE (out,70) Aout(idIsfI,ng),          &
-     &       'Aout(idIsfI)',                                            &
+          IF (Aout(idIsio,ng)) WRITE (out,70) Aout(idIsio,ng),          &
+     &       'Aout(idIsio)',                                            &
      &       'Write out averaged salt flux under ice.'
-          IF (Aout(idIsfL,ng)) WRITE (out,70) Aout(idIsfL,ng),          &
-     &       'Aout(idIsfL)',                                            &
+          IF (Aout(idIsao,ng)) WRITE (out,70) Aout(idIsao,ng),          &
+     &       'Aout(idIsao)',                                            &
      &       'Write out averaged salt flux through leads.'
           IF (Aout(idIqao,ng)) WRITE (out,70) Aout(idIqao,ng),          &
      &       'Aout(idIqao)',                                            &
@@ -306,8 +306,8 @@
           IF (Aout(idIqi2,ng)) WRITE (out,70) Aout(idIqi2,ng),          &
      &       'Aout(idIqi2)',                                            &
      &       'Write out averaged ice heat flux.'
-          IF (Aout(idIsnoi,ng)) WRITE (out,70) Aout(idIsnoi,ng),        &
-     &       'Aout(idIsnoi)',                                           &
+          IF (Aout(idIwsni,ng)) WRITE (out,70) Aout(idIwsni,ng),        &
+     &       'Aout(idIwsni)',                                           &
      &       'Write out averaged snow-ice conversion.'
 #  endif
 # endif
@@ -437,35 +437,35 @@
           IF (Qout(idIrfac,ng)) WRITE (out,70) Qout(idIrfac,ng),        &
      &       'Qout(idIrfac)',                                           &
      &       'Write out quick reduction fac of near-IR SW under ice.'
-          IF (Qout(idIlrdn,ng)) WRITE (out,70) Qout(idIlrdn,ng),        &
-     &       'Qout(idIlrdn)',                                           &
-     &       'Write out quick downward longwave radiation.'
-          IF (Qout(idIsrdn,ng)) WRITE (out,70) Qout(idIsrdn,ng),        &
-     &       'Qout(idIsrdn)',                                           &
+          IF (Qout(idIqswl,ng)) WRITE (out,70) Qout(idIqswl,ng),        &
+     &       'Qout(idIqswl)',                                           &
      &       'Write out quick downward shortwave radiation.'
-          IF (Qout(idIlatI,ng)) WRITE (out,70) Qout(idIlatI,ng),        &
-     &       'Qout(idIlatI)',                                           &
+          IF (Qout(idIqlwl,ng)) WRITE (out,70) Qout(idIqlwl,ng),        &
+     &       'Qout(idIqlwl)',                                           &
+     &       'Write out quick downward longwave radiation.'
+          IF (Qout(idIqlai,ng)) WRITE (out,70) Qout(idIqlai,ng),        &
+     &       'Qout(idIqlai)',                                           &
      &       'Write out quick latent heat over ice.'
-          IF (Qout(idIsenI,ng)) WRITE (out,70) Qout(idIsenI,ng),        &
-     &       'Qout(idIsenI)',                                           &
+          IF (Qout(idIqsei,ng)) WRITE (out,70) Qout(idIqsei,ng),        &
+     &       'Qout(idIqsei)',                                           &
      &       'Write out quick sensible heat over ice.'
-          IF (Qout(idIlrup,ng)) WRITE (out,70) Qout(idIlrup,ng),        &
-     &       'Qout(idIlrup)',                                           &
+          IF (Qout(idIqlwa,ng)) WRITE (out,70) Qout(idIqlwa,ng),        &
+     &       'Qout(idIqlwa)',                                           &
      &       'Write out quick upward longwave over ice.'
-          IF (Qout(idIsrup,ng)) WRITE (out,70) Qout(idIsrup,ng),        &
-     &       'Qout(idIsrup)',                                           &
+          IF (Qout(idIqswa,ng)) WRITE (out,70) Qout(idIqswa,ng),        &
+     &       'Qout(idIqswa)',                                           &
      &       'Write out quick upward shortwave over ice.'
-          IF (Qout(idIsrin,ng)) WRITE (out,70) Qout(idIsrin,ng),        &
-     &       'Qout(idIsrin)',                                           &
+          IF (Qout(idIqswi,ng)) WRITE (out,70) Qout(idIqswi,ng),        &
+     &       'Qout(idIqswi)',                                           &
      &       'Write out quick shortwave into ice.'
-          IF (Qout(idIsrth,ng)) WRITE (out,70) Qout(idIsrth,ng),        &
-     &       'Qout(idIsrth)',                                           &
+          IF (Qout(idIqswo,ng)) WRITE (out,70) Qout(idIqswo,ng),        &
+     &       'Qout(idIqswo)',                                           &
      &       'Write out quick shortwave through ice.'
-          IF (Qout(idIsfI,ng)) WRITE (out,70) Qout(idIsfI,ng),          &
-     &       'Qout(idIsfI)',                                            &
+          IF (Qout(idIsio,ng)) WRITE (out,70) Qout(idIsio,ng),          &
+     &       'Qout(idIsio)',                                            &
      &       'Write out quick salt flux under ice.'
-          IF (Qout(idIsfL,ng)) WRITE (out,70) Qout(idIsfL,ng),          &
-     &       'Qout(idIsfL)',                                            &
+          IF (Qout(idIsao,ng)) WRITE (out,70) Qout(idIsao,ng),          &
+     &       'Qout(idIsao)',                                            &
      &       'Write out quick salt flux through leads.'
           IF (Qout(idIqao,ng)) WRITE (out,70) Qout(idIqao,ng),          &
      &       'Qout(idIqao)',                                            &
@@ -479,8 +479,8 @@
           IF (Qout(idIqi2,ng)) WRITE (out,70) Qout(idIqi2,ng),          &
      &       'Qout(idIqi2)',                                            &
      &       'Write out quick ice heat flux.'
-          IF (Qout(idIsnoi,ng)) WRITE (out,70) Qout(idIsnoi,ng),        &
-     &       'Qout(idIsnoi)',                                           &
+          IF (Qout(idIwsni,ng)) WRITE (out,70) Qout(idIwsni,ng),        &
+     &       'Qout(idIwsni)',                                           &
      &       'Write out quick snow-ice conversion.'
 #  endif
 # endif

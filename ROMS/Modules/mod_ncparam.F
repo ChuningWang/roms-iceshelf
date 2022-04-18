@@ -625,21 +625,21 @@
       integer  :: idIalbI       ! shortwave albedo of ice
       integer  :: idIfrsw       ! fraction of sw penetrating into ice
       integer  :: idIrfac       ! reduction fac of near-IR SW under ice
-      integer  :: idIlrdn       ! downward longwave
-      integer  :: idIsrdn       ! downward shortwave
-      integer  :: idIlatI       ! latent heat flux over ice
-      integer  :: idIsenI       ! sensible heat flux over ice
-      integer  :: idIlrup       ! upward longwave from ice
-      integer  :: idIsrup       ! upward shortwave from ice
-      integer  :: idIsrin       ! upward shortwave from ice
-      integer  :: idIsrth       ! shortwave through ice
-      integer  :: idIsfI        ! salt flux from ice
-      integer  :: idIsfL        ! salt flux from leads
+      integer  :: idIqswa       ! upward shortwave from ice
+      integer  :: idIqswl       ! downward shortwave
+      integer  :: idIqlwl       ! downward longwave
+      integer  :: idIqlai       ! latent heat flux over ice
+      integer  :: idIqsei       ! sensible heat flux over ice
+      integer  :: idIqlwa       ! upward longwave from ice
+      integer  :: idIqswi       ! upward shortwave from ice
+      integer  :: idIqswo       ! shortwave through ice
+      integer  :: idIsio        ! salt flux from ice
+      integer  :: idIsao        ! salt flux from leads
       integer  :: idIqao        ! heat flux in leads
       integer  :: idIqai        ! heat flux ice to atmosphere
       integer  :: idIqio        ! heat flux ocean to ice
       integer  :: idIqi2        ! heat flux ocean to ice
-      integer  :: idIsnoi       ! snow-ice conversion
+      integer  :: idIwsni       ! snow-ice conversion
 !
 !  Ice Boundary conditions identification indicess.
 !

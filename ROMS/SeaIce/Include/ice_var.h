@@ -75,26 +75,26 @@
               idIalbe=varid
             CASE ('idIalbI')
               idIalbI=varid
-            CASE ('idIlrdn')
-              idIlrdn=varid
-            CASE ('idIsrdn')
-              idIsrdn=varid
-            CASE ('idIlatI')
-              idIlatI=varid
-            CASE ('idIsenI')
-              idIsenI=varid
-            CASE ('idIlrup')
-              idIlrup=varid
-            CASE ('idIsrup')
-              idIsrup=varid
-            CASE ('idIsrin')
-              idIsrin=varid
-            CASE ('idIsrth')
-              idIsrth=varid
-            CASE ('idIsfI')
-              idIsfI=varid
-            CASE ('idIsfL')
-              idIsfL=varid
+            CASE ('idIqlwl')
+              idIqlwl=varid
+            CASE ('idIqswl')
+              idIqswl=varid
+            CASE ('idIqlai')
+              idIqlai=varid
+            CASE ('idIqsei')
+              idIqsei=varid
+            CASE ('idIqlwa')
+              idIqlwa=varid
+            CASE ('idIqswa')
+              idIqswa=varid
+            CASE ('idIqswi')
+              idIqswi=varid
+            CASE ('idIqswo')
+              idIqswo=varid
+            CASE ('idIsio')
+              idIsio=varid
+            CASE ('idIsao')
+              idIsao=varid
             CASE ('idIqao')
               idIqao=varid
             CASE ('idIqai')
@@ -103,8 +103,8 @@
               idIqio=varid
             CASE ('idIqi2')
               idIqi2=varid
-            CASE ('idIsnoi')
-              idIsnoi=varid
+            CASE ('idIwsni')
+              idIwsni=varid
             CASE ('idIfrsw')
               idIfrsw=varid
             CASE ('idIrfac')

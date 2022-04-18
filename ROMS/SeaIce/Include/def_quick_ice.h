@@ -676,20 +676,20 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 !
-!  Define downward longwave radiation.
+!  Define downward shortwave radiation.
 !
-        IF (Qout(idIlrdn,ng)) THEN
-          Vinfo( 1)=Vname(1,idIlrdn)
-          Vinfo( 2)=Vname(2,idIlrdn)
-          Vinfo( 3)=Vname(3,idIlrdn)
-          Vinfo(14)=Vname(4,idIlrdn)
+        IF (Qout(idIqswl,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqswl)
+          Vinfo( 2)=Vname(2,idIqswl)
+          Vinfo( 3)=Vname(3,idIqswl)
+          Vinfo(14)=Vname(4,idIqswl)
           Vinfo(16)=Vname(1,idtime)
 #  if defined WRITE_WATER && defined MASKING
           Vinfo(20)='mask_rho'
 #  endif
           Vinfo(22)='coordinates'
-          Aval(5)=REAL(Iinfo(1,idIlrdn,ng),r8)
-          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIlrdn),  &
+          Aval(5)=REAL(Iinfo(1,idIqswl,ng),r8)
+          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIqswl),  &
 #  ifdef WET_DRY
      &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
      &                   SetFillVal = .FALSE.)
@@ -699,20 +699,20 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 !
-!  Define downward shortwave radiation.
+!  Define downward longwave radiation.
 !
-        IF (Qout(idIsrdn,ng)) THEN
-          Vinfo( 1)=Vname(1,idIsrdn)
-          Vinfo( 2)=Vname(2,idIsrdn)
-          Vinfo( 3)=Vname(3,idIsrdn)
-          Vinfo(14)=Vname(4,idIsrdn)
+        IF (Qout(idIqlwl,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqlwl)
+          Vinfo( 2)=Vname(2,idIqlwl)
+          Vinfo( 3)=Vname(3,idIqlwl)
+          Vinfo(14)=Vname(4,idIqlwl)
           Vinfo(16)=Vname(1,idtime)
 #  if defined WRITE_WATER && defined MASKING
           Vinfo(20)='mask_rho'
 #  endif
           Vinfo(22)='coordinates'
-          Aval(5)=REAL(Iinfo(1,idIsrdn,ng),r8)
-          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIsrdn),  &
+          Aval(5)=REAL(Iinfo(1,idIqlwl,ng),r8)
+          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIqlwl),  &
 #  ifdef WET_DRY
      &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
      &                   SetFillVal = .FALSE.)
@@ -724,18 +724,18 @@
 !
 !  Define latent heat over ice.
 !
-        IF (Qout(idIlatI,ng)) THEN
-          Vinfo( 1)=Vname(1,idIlatI)
-          Vinfo( 2)=Vname(2,idIlatI)
-          Vinfo( 3)=Vname(3,idIlatI)
-          Vinfo(14)=Vname(4,idIlatI)
+        IF (Qout(idIqlai,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqlai)
+          Vinfo( 2)=Vname(2,idIqlai)
+          Vinfo( 3)=Vname(3,idIqlai)
+          Vinfo(14)=Vname(4,idIqlai)
           Vinfo(16)=Vname(1,idtime)
 #  if defined WRITE_WATER && defined MASKING
           Vinfo(20)='mask_rho'
 #  endif
           Vinfo(22)='coordinates'
-          Aval(5)=REAL(Iinfo(1,idIlatI,ng),r8)
-          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIlatI),  &
+          Aval(5)=REAL(Iinfo(1,idIqlai,ng),r8)
+          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIqlai),  &
 #  ifdef WET_DRY
      &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
      &                   SetFillVal = .FALSE.)
@@ -747,18 +747,18 @@
 !
 !  Define sensible heat over ice.
 !
-        IF (Qout(idIsenI,ng)) THEN
-          Vinfo( 1)=Vname(1,idIsenI)
-          Vinfo( 2)=Vname(2,idIsenI)
-          Vinfo( 3)=Vname(3,idIsenI)
-          Vinfo(14)=Vname(4,idIsenI)
+        IF (Qout(idIqsei,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqsei)
+          Vinfo( 2)=Vname(2,idIqsei)
+          Vinfo( 3)=Vname(3,idIqsei)
+          Vinfo(14)=Vname(4,idIqsei)
           Vinfo(16)=Vname(1,idtime)
 #  if defined WRITE_WATER && defined MASKING
           Vinfo(20)='mask_rho'
 #  endif
           Vinfo(22)='coordinates'
-          Aval(5)=REAL(Iinfo(1,idIsenI,ng),r8)
-          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIsenI),  &
+          Aval(5)=REAL(Iinfo(1,idIqsei,ng),r8)
+          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIqsei),  &
 #  ifdef WET_DRY
      &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
      &                   SetFillVal = .FALSE.)
@@ -770,18 +770,18 @@
 !
 !  Define upward longwave over ice.
 !
-        IF (Qout(idIlrup,ng)) THEN
-          Vinfo( 1)=Vname(1,idIlrup)
-          Vinfo( 2)=Vname(2,idIlrup)
-          Vinfo( 3)=Vname(3,idIlrup)
-          Vinfo(14)=Vname(4,idIlrup)
+        IF (Qout(idIqlwa,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqlwa)
+          Vinfo( 2)=Vname(2,idIqlwa)
+          Vinfo( 3)=Vname(3,idIqlwa)
+          Vinfo(14)=Vname(4,idIqlwa)
           Vinfo(16)=Vname(1,idtime)
 #  if defined WRITE_WATER && defined MASKING
           Vinfo(20)='mask_rho'
 #  endif
           Vinfo(22)='coordinates'
-          Aval(5)=REAL(Iinfo(1,idIlrup,ng),r8)
-          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIlrup),  &
+          Aval(5)=REAL(Iinfo(1,idIqlwa,ng),r8)
+          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIqlwa),  &
 #  ifdef WET_DRY
      &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
      &                   SetFillVal = .FALSE.)
@@ -793,18 +793,18 @@
 !
 !  Define upward shortwave over ice.
 !
-        IF (Qout(idIsrup,ng)) THEN
-          Vinfo( 1)=Vname(1,idIsrup)
-          Vinfo( 2)=Vname(2,idIsrup)
-          Vinfo( 3)=Vname(3,idIsrup)
-          Vinfo(14)=Vname(4,idIsrup)
+        IF (Qout(idIqswa,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqswa)
+          Vinfo( 2)=Vname(2,idIqswa)
+          Vinfo( 3)=Vname(3,idIqswa)
+          Vinfo(14)=Vname(4,idIqswa)
           Vinfo(16)=Vname(1,idtime)
 #  if defined WRITE_WATER && defined MASKING
           Vinfo(20)='mask_rho'
 #  endif
           Vinfo(22)='coordinates'
-          Aval(5)=REAL(Iinfo(1,idIsrup,ng),r8)
-          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIsrup),  &
+          Aval(5)=REAL(Iinfo(1,idIqswa,ng),r8)
+          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIqswa),  &
 #  ifdef WET_DRY
      &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
      &                   SetFillVal = .FALSE.)
@@ -816,18 +816,18 @@
 !
 !  Define shortwave into ice.
 !
-        IF (Qout(idIsrin,ng)) THEN
-          Vinfo( 1)=Vname(1,idIsrin)
-          Vinfo( 2)=Vname(2,idIsrin)
-          Vinfo( 3)=Vname(3,idIsrin)
-          Vinfo(14)=Vname(4,idIsrin)
+        IF (Qout(idIqswi,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqswi)
+          Vinfo( 2)=Vname(2,idIqswi)
+          Vinfo( 3)=Vname(3,idIqswi)
+          Vinfo(14)=Vname(4,idIqswi)
           Vinfo(16)=Vname(1,idtime)
 #  if defined WRITE_WATER && defined MASKING
           Vinfo(20)='mask_rho'
 #  endif
           Vinfo(22)='coordinates'
-          Aval(5)=REAL(Iinfo(1,idIsrin,ng),r8)
-          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIsrin),  &
+          Aval(5)=REAL(Iinfo(1,idIqswi,ng),r8)
+          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIqswi),  &
 #  ifdef WET_DRY
      &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
      &                   SetFillVal = .FALSE.)
@@ -839,18 +839,18 @@
 !
 !  Define shortwave through ice.
 !
-        IF (Qout(idIsrth,ng)) THEN
-          Vinfo( 1)=Vname(1,idIsrth)
-          Vinfo( 2)=Vname(2,idIsrth)
-          Vinfo( 3)=Vname(3,idIsrth)
-          Vinfo(14)=Vname(4,idIsrth)
+        IF (Qout(idIqswo,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqswo)
+          Vinfo( 2)=Vname(2,idIqswo)
+          Vinfo( 3)=Vname(3,idIqswo)
+          Vinfo(14)=Vname(4,idIqswo)
           Vinfo(16)=Vname(1,idtime)
 #  if defined WRITE_WATER && defined MASKING
           Vinfo(20)='mask_rho'
 #  endif
           Vinfo(22)='coordinates'
-          Aval(5)=REAL(Iinfo(1,idIsrth,ng),r8)
-          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIsrth),  &
+          Aval(5)=REAL(Iinfo(1,idIqswo,ng),r8)
+          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIqswo),  &
 #  ifdef WET_DRY
      &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
      &                   SetFillVal = .FALSE.)
@@ -862,18 +862,18 @@
 !
 !  Define salt flux under ice.
 !
-        IF (Qout(idIsfI,ng)) THEN
-          Vinfo( 1)=Vname(1,idIsfI)
-          Vinfo( 2)=Vname(2,idIsfI)
-          Vinfo( 3)=Vname(3,idIsfI)
-          Vinfo(14)=Vname(4,idIsfI)
+        IF (Qout(idIsio,ng)) THEN
+          Vinfo( 1)=Vname(1,idIsio)
+          Vinfo( 2)=Vname(2,idIsio)
+          Vinfo( 3)=Vname(3,idIsio)
+          Vinfo(14)=Vname(4,idIsio)
           Vinfo(16)=Vname(1,idtime)
 #  if defined WRITE_WATER && defined MASKING
           Vinfo(20)='mask_rho'
 #  endif
           Vinfo(22)='coordinates'
-          Aval(5)=REAL(Iinfo(1,idIsfI,ng),r8)
-          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIsfI),   &
+          Aval(5)=REAL(Iinfo(1,idIsio,ng),r8)
+          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIsio),   &
 #  ifdef WET_DRY
      &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
      &                   SetFillVal = .FALSE.)
@@ -885,18 +885,18 @@
 !
 !  Define salt flux through leads.
 !
-        IF (Qout(idIsfL,ng)) THEN
-          Vinfo( 1)=Vname(1,idIsfL)
-          Vinfo( 2)=Vname(2,idIsfL)
-          Vinfo( 3)=Vname(3,idIsfL)
-          Vinfo(14)=Vname(4,idIsfL)
+        IF (Qout(idIsao,ng)) THEN
+          Vinfo( 1)=Vname(1,idIsao)
+          Vinfo( 2)=Vname(2,idIsao)
+          Vinfo( 3)=Vname(3,idIsao)
+          Vinfo(14)=Vname(4,idIsao)
           Vinfo(16)=Vname(1,idtime)
 #  if defined WRITE_WATER && defined MASKING
           Vinfo(20)='mask_rho'
 #  endif
           Vinfo(22)='coordinates'
-          Aval(5)=REAL(Iinfo(1,idIsfL,ng),r8)
-          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIsfL),   &
+          Aval(5)=REAL(Iinfo(1,idIsao,ng),r8)
+          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIsao),   &
 #  ifdef WET_DRY
      &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
      &                   SetFillVal = .FALSE.)
@@ -1000,18 +1000,18 @@
 !
 !  Define snow-ice conversion.
 !
-        IF (Qout(idIsnoi,ng)) THEN
-          Vinfo( 1)=Vname(1,idIsnoi)
-          Vinfo( 2)=Vname(2,idIsnoi)
-          Vinfo( 3)=Vname(3,idIsnoi)
-          Vinfo(14)=Vname(4,idIsnoi)
+        IF (Qout(idIwsni,ng)) THEN
+          Vinfo( 1)=Vname(1,idIwsni)
+          Vinfo( 2)=Vname(2,idIwsni)
+          Vinfo( 3)=Vname(3,idIwsni)
+          Vinfo(14)=Vname(4,idIwsni)
           Vinfo(16)=Vname(1,idtime)
 #  if defined WRITE_WATER && defined MASKING
           Vinfo(20)='mask_rho'
 #  endif
           Vinfo(22)='coordinates'
-          Aval(5)=REAL(Iinfo(1,idIsnoi,ng),r8)
-          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIsnoi),  &
+          Aval(5)=REAL(Iinfo(1,idIwsni,ng),r8)
+          status=def_var(ng, iNLM, QCK(ng)%ncid, QCK(ng)%Vid(idIwsni),  &
 #  ifdef WET_DRY
      &                   NF_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,    &
      &                   SetFillVal = .FALSE.)

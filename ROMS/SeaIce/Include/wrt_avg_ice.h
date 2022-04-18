@@ -676,22 +676,22 @@
         END IF
       END IF
 !
-!  Write out downward longwave radiation.
+!  Write out downward shortwave radiation.
 !
-      IF (Aout(idIlrdn,ng)) THEN
+      IF (Aout(idIqswl,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, AVG(ng)%ncid,                      &
-     &                     AVG(ng)%Vid(idIlrdn),                        &
+     &                     AVG(ng)%Vid(idIqswl),                        &
      &                     AVG(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     AVERAGE(ng) % avglr_dn)
+     &                     AVERAGE(ng) % avgqswl)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIlrdn)), AVG(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqswl)), AVG(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -699,22 +699,22 @@
         END IF
       END IF
 !
-!  Write out downward shortwave radiation.
+!  Write out downward longwave radiation.
 !
-      IF (Aout(idIsrdn,ng)) THEN
+      IF (Aout(idIqlwl,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, AVG(ng)%ncid,                      &
-     &                     AVG(ng)%Vid(idIsrdn),                        &
+     &                     AVG(ng)%Vid(idIqlwl),                        &
      &                     AVG(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     AVERAGE(ng) % avgsr_dn)
+     &                     AVERAGE(ng) % avgqlwl)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsrdn)), AVG(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqlwl)), AVG(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -724,20 +724,20 @@
 !
 !  Write out latent heat over ice.
 !
-      IF (Aout(idIlatI,ng)) THEN
+      IF (Aout(idIqlai,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, AVG(ng)%ncid,                      &
-     &                     AVG(ng)%Vid(idIlatI),                        &
+     &                     AVG(ng)%Vid(idIqlai),                        &
      &                     AVG(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     AVERAGE(ng) % avglat_i)
+     &                     AVERAGE(ng) % avgqlai)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIlatI)), AVG(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqlai)), AVG(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -747,20 +747,20 @@
 !
 !  Write out sensible heat over ice.
 !
-      IF (Aout(idIsenI,ng)) THEN
+      IF (Aout(idIqsei,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, AVG(ng)%ncid,                      &
-     &                     AVG(ng)%Vid(idIsenI),                        &
+     &                     AVG(ng)%Vid(idIqsei),                        &
      &                     AVG(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     AVERAGE(ng) % avgsen_i)
+     &                     AVERAGE(ng) % avgqsei)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsenI)), AVG(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqsei)), AVG(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -770,20 +770,20 @@
 !
 !  Write out upward longwave over ice.
 !
-      IF (Aout(idIlrup,ng)) THEN
+      IF (Aout(idIqlwa,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, AVG(ng)%ncid,                      &
-     &                     AVG(ng)%Vid(idIlrup),                        &
+     &                     AVG(ng)%Vid(idIqlwa),                        &
      &                     AVG(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     AVERAGE(ng) % avglr_up_i)
+     &                     AVERAGE(ng) % avgqlwa)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIlrup)), AVG(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqlwa)), AVG(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -793,20 +793,20 @@
 !
 !  Write out upward shortwave over ice.
 !
-      IF (Aout(idIsrup,ng)) THEN
+      IF (Aout(idIqswa,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, AVG(ng)%ncid,                      &
-     &                     AVG(ng)%Vid(idIsrup),                        &
+     &                     AVG(ng)%Vid(idIqswa),                        &
      &                     AVG(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     AVERAGE(ng) % avgsr_up_i)
+     &                     AVERAGE(ng) % avgqswa)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsrup)), AVG(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqswa)), AVG(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -816,20 +816,20 @@
 !
 !  Write out shortwave into ice.
 !
-      IF (Aout(idIsrin,ng)) THEN
+      IF (Aout(idIqswi,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, AVG(ng)%ncid,                      &
-     &                     AVG(ng)%Vid(idIsrin),                        &
+     &                     AVG(ng)%Vid(idIqswi),                        &
      &                     AVG(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     AVERAGE(ng) % avgsr_in_i)
+     &                     AVERAGE(ng) % avgqswi)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsrin)), AVG(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqswi)), AVG(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -839,20 +839,20 @@
 !
 !  Write out shortwave through ice.
 !
-      IF (Aout(idIsrth,ng)) THEN
+      IF (Aout(idIqswo,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, AVG(ng)%ncid,                      &
-     &                     AVG(ng)%Vid(idIsrth),                        &
+     &                     AVG(ng)%Vid(idIqswo),                        &
      &                     AVG(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     AVERAGE(ng) % avgsr_th_i)
+     &                     AVERAGE(ng) % avgqswo)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsrth)), AVG(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqswo)), AVG(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -862,20 +862,20 @@
 !
 !  Write out salt flux under ice.
 !
-      IF (Aout(idIsfI,ng)) THEN
+      IF (Aout(idIsio,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, AVG(ng)%ncid,                      &
-     &                     AVG(ng)%Vid(idIsfI),                         &
+     &                     AVG(ng)%Vid(idIsio),                         &
      &                     AVG(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     AVERAGE(ng) % avgssflx_i)
+     &                     AVERAGE(ng) % avgsio)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsfI)), AVG(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIsio)), AVG(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -885,20 +885,20 @@
 !
 !  Write out salt flux through leads.
 !
-      IF (Aout(idIsfL,ng)) THEN
+      IF (Aout(idIsao,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, AVG(ng)%ncid,                      &
-     &                     AVG(ng)%Vid(idIsfL),                         &
+     &                     AVG(ng)%Vid(idIsao),                         &
      &                     AVG(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     AVERAGE(ng) % avgssflx_l)
+     &                     AVERAGE(ng) % avgsao)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsfL)), AVG(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIsao)), AVG(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -918,7 +918,7 @@
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     AVERAGE(ng) % avgqao_n)
+     &                     AVERAGE(ng) % avgqao)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqao)), AVG(ng)%Rindex
@@ -941,7 +941,7 @@
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     AVERAGE(ng) % avgqai_n)
+     &                     AVERAGE(ng) % avgqai)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqai)), AVG(ng)%Rindex
@@ -964,7 +964,7 @@
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     AVERAGE(ng) % avgqio_n)
+     &                     AVERAGE(ng) % avgqio)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqio)), AVG(ng)%Rindex
@@ -987,7 +987,7 @@
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     AVERAGE(ng) % avgqi2_n)
+     &                     AVERAGE(ng) % avgqi2)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqi2)), AVG(ng)%Rindex
@@ -1000,20 +1000,20 @@
 !
 !  Write out snow-ice conversion.
 !
-      IF (Aout(idIsnoi,ng)) THEN
+      IF (Aout(idIwsni,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, AVG(ng)%ncid,                      &
-     &                     AVG(ng)%Vid(idIsnoi),                        &
+     &                     AVG(ng)%Vid(idIwsni),                        &
      &                     AVG(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     AVERAGE(ng) % avgsnoice)
+     &                     AVERAGE(ng) % avgwsni)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsnoi)), AVG(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIwsni)), AVG(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status

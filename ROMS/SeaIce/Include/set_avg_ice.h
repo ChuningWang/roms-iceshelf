@@ -355,121 +355,121 @@
           END DO
         END IF
 
-        IF (Aout(idIlrdn,ng)) THEN
+        IF (Aout(idIqswl,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avglr_dn(i,j)=FORCES(ng)%lr_dn(i,j)
+              AVERAGE(ng)%avgqswl(i,j)=FORCES(ng)%qswl(i,j)
 #    ifdef WET_DRY
-              AVERAGE(ng)%avglr_dn(i,j)=AVERAGE(ng)%avglr_dn(i,j)*      &
-     &                                  GRID(ng)%rmask_full(i,j)
+              AVERAGE(ng)%avgqswl(i,j)=AVERAGE(ng)%avgqswl(i,j)*        &
+     &                                 GRID(ng)%rmask_full(i,j)
 #    endif
             END DO
           END DO
         END IF
 
-        IF (Aout(idIsrdn,ng)) THEN
+        IF (Aout(idIqlwl,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsr_dn(i,j)=FORCES(ng)%sr_dn(i,j)
+              AVERAGE(ng)%avgqlwl(i,j)=FORCES(ng)%qlwl(i,j)
 #    ifdef WET_DRY
-              AVERAGE(ng)%avgsr_dn(i,j)=AVERAGE(ng)%avgsr_dn(i,j)*      &
-     &                                  GRID(ng)%rmask_full(i,j)
+              AVERAGE(ng)%avgqlwl(i,j)=AVERAGE(ng)%avgqlwl(i,j)*        &
+     &                                 GRID(ng)%rmask_full(i,j)
 #    endif
             END DO
           END DO
         END IF
 
-        IF (Aout(idIlatI,ng)) THEN
+        IF (Aout(idIqlai,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avglat_i(i,j)=FORCES(ng)%lat_i(i,j)
+              AVERAGE(ng)%avgqlai(i,j)=FORCES(ng)%qlai(i,j)
 #    ifdef WET_DRY
-              AVERAGE(ng)%avglat_i(i,j)=AVERAGE(ng)%avglat_i(i,j)*      &
-     &                                  GRID(ng)%rmask_full(i,j)
+              AVERAGE(ng)%avgqlai(i,j)=AVERAGE(ng)%avgqlai(i,j)*        &
+     &                                 GRID(ng)%rmask_full(i,j)
 #    endif
             END DO
           END DO
         END IF
 
-        IF (Aout(idIsenI,ng)) THEN
+        IF (Aout(idIqsei,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsen_i(i,j)=FORCES(ng)%sen_i(i,j)
+              AVERAGE(ng)%avgqsei(i,j)=FORCES(ng)%qsei(i,j)
 #    ifdef WET_DRY
-              AVERAGE(ng)%avgsen_i(i,j)=AVERAGE(ng)%avgsen_i(i,j)*      &
-     &                                  GRID(ng)%rmask_full(i,j)
+              AVERAGE(ng)%avgqsei(i,j)=AVERAGE(ng)%avgqsei(i,j)*        &
+     &                                 GRID(ng)%rmask_full(i,j)
 #    endif
             END DO
           END DO
         END IF
 
-        IF (Aout(idIlrup,ng)) THEN
+        IF (Aout(idIqlwa,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avglr_up_i(i,j)=FORCES(ng)%lr_up_i(i,j)
+              AVERAGE(ng)%avgqlwa(i,j)=FORCES(ng)%qlwa(i,j)
 #    ifdef WET_DRY
-              AVERAGE(ng)%avglr_up_i(i,j)=AVERAGE(ng)%avglr_up_i(i,j)*  &
-     &                                    GRID(ng)%rmask_full(i,j)
+              AVERAGE(ng)%avgqlwa(i,j)=AVERAGE(ng)%avgqlwa(i,j)*        &
+     &                                 GRID(ng)%rmask_full(i,j)
 #    endif
             END DO
           END DO
         END IF
 
-        IF (Aout(idIsrup,ng)) THEN
+        IF (Aout(idIqswa,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsr_up_i(i,j)=FORCES(ng)%sr_up_i(i,j)
+              AVERAGE(ng)%avgqswa(i,j)=FORCES(ng)%qswa(i,j)
 #    ifdef WET_DRY
-              AVERAGE(ng)%avgsr_up_i(i,j)=AVERAGE(ng)%avgsr_up_i(i,j)*  &
-     &                                    GRID(ng)%rmask_full(i,j)
+              AVERAGE(ng)%avgqswa(i,j)=AVERAGE(ng)%avgqswa(i,j)*        &
+     &                                 GRID(ng)%rmask_full(i,j)
 #    endif
             END DO
           END DO
         END IF
 
-        IF (Aout(idIsrin,ng)) THEN
+        IF (Aout(idIqswi,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsr_in_i(i,j)=FORCES(ng)%sr_in_i(i,j)
+              AVERAGE(ng)%avgqswi(i,j)=FORCES(ng)%qswi(i,j)
 #    ifdef WET_DRY
-              AVERAGE(ng)%avgsr_in_i(i,j)=AVERAGE(ng)%avgsr_in_i(i,j)*  &
-     &                                    GRID(ng)%rmask_full(i,j)
+              AVERAGE(ng)%avgqswi(i,j)=AVERAGE(ng)%avgqswi(i,j)*        &
+     &                                 GRID(ng)%rmask_full(i,j)
 #    endif
             END DO
           END DO
         END IF
 
-        IF (Aout(idIsrth,ng)) THEN
+        IF (Aout(idIqswo,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsr_th_i(i,j)=FORCES(ng)%sr_th_i(i,j)
+              AVERAGE(ng)%avgqswo(i,j)=FORCES(ng)%qswo(i,j)
 #    ifdef WET_DRY
-              AVERAGE(ng)%avgsr_th_i(i,j)=AVERAGE(ng)%avgsr_th_i(i,j)*  &
-     &                                    GRID(ng)%rmask_full(i,j)
+              AVERAGE(ng)%avgqswo(i,j)=AVERAGE(ng)%avgqswo(i,j)*        &
+     &                                 GRID(ng)%rmask_full(i,j)
 #    endif
             END DO
           END DO
         END IF
 
-        IF (Aout(idIsfI,ng)) THEN
+        IF (Aout(idIsio,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgssflx_i(i,j)=FORCES(ng)%ssflx_i(i,j)
+              AVERAGE(ng)%avgsio(i,j)=FORCES(ng)%sio(i,j)
 #    ifdef WET_DRY
-              AVERAGE(ng)%avgssflx_i(i,j)=AVERAGE(ng)%avgssflx_i(i,j)*  &
-     &                                    GRID(ng)%rmask_full(i,j)
+              AVERAGE(ng)%avgsio(i,j)=AVERAGE(ng)%avgsio(i,j)*          &
+     &                                GRID(ng)%rmask_full(i,j)
 #    endif
             END DO
           END DO
         END IF
 
-        IF (Aout(idIsfL,ng)) THEN
+        IF (Aout(idIsao,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgssflx_l(i,j)=FORCES(ng)%ssflx_l(i,j)
+              AVERAGE(ng)%avgsao(i,j)=FORCES(ng)%sao(i,j)
 #    ifdef WET_DRY
-              AVERAGE(ng)%avgssflx_l(i,j)=AVERAGE(ng)%avgssflx_l(i,j)*  &
-     &                                    GRID(ng)%rmask_full(i,j)
+              AVERAGE(ng)%avgsao(i,j)=AVERAGE(ng)%avgsao(i,j)*          &
+     &                                GRID(ng)%rmask_full(i,j)
 #    endif
             END DO
           END DO
@@ -478,10 +478,10 @@
         IF (Aout(idIqao,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgqao_n(i,j)=FORCES(ng)%qao_n(i,j)
+              AVERAGE(ng)%avgqao(i,j)=FORCES(ng)%qao(i,j)
 #    ifdef WET_DRY
-              AVERAGE(ng)%avgqao_n(i,j)=AVERAGE(ng)%avgqao_n(i,j)*      &
-     &                                  GRID(ng)%rmask_full(i,j)
+              AVERAGE(ng)%avgqao(i,j)=AVERAGE(ng)%avgqao(i,j)*          &
+     &                                GRID(ng)%rmask_full(i,j)
 #    endif
             END DO
           END DO
@@ -490,10 +490,10 @@
         IF (Aout(idIqai,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgqai_n(i,j)=FORCES(ng)%qai_n(i,j)
+              AVERAGE(ng)%avgqai(i,j)=FORCES(ng)%qai(i,j)
 #    ifdef WET_DRY
-              AVERAGE(ng)%avgqai_n(i,j)=AVERAGE(ng)%avgqai_n(i,j)*      &
-     &                                  GRID(ng)%rmask_full(i,j)
+              AVERAGE(ng)%avgqai(i,j)=AVERAGE(ng)%avgqai(i,j)*          &
+     &                                GRID(ng)%rmask_full(i,j)
 #    endif
             END DO
           END DO
@@ -502,10 +502,10 @@
         IF (Aout(idIqio,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgqio_n(i,j)=FORCES(ng)%qio_n(i,j)
+              AVERAGE(ng)%avgqio(i,j)=FORCES(ng)%qio(i,j)
 #    ifdef WET_DRY
-              AVERAGE(ng)%avgqio_n(i,j)=AVERAGE(ng)%avgqio_n(i,j)*      &
-     &                                  GRID(ng)%rmask_full(i,j)
+              AVERAGE(ng)%avgqio(i,j)=AVERAGE(ng)%avgqio(i,j)*          &
+     &                                GRID(ng)%rmask_full(i,j)
 #    endif
             END DO
           END DO
@@ -514,22 +514,22 @@
         IF (Aout(idIqi2,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgqi2_n(i,j)=FORCES(ng)%qi2_n(i,j)
+              AVERAGE(ng)%avgqi2(i,j)=FORCES(ng)%qi2(i,j)
 #    ifdef WET_DRY
-              AVERAGE(ng)%avgqi2_n(i,j)=AVERAGE(ng)%avgqi2_n(i,j)*      &
-     &                                  GRID(ng)%rmask_full(i,j)
+              AVERAGE(ng)%avgqi2(i,j)=AVERAGE(ng)%avgqi2(i,j)*          &
+     &                                GRID(ng)%rmask_full(i,j)
 #    endif
             END DO
           END DO
         END IF
 
-        IF (Aout(idIsnoi,ng)) THEN
+        IF (Aout(idIwsni,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsnoice(i,j)=FORCES(ng)%snoice(i,j)
+              AVERAGE(ng)%avgwsni(i,j)=FORCES(ng)%wsni(i,j)
 #    ifdef WET_DRY
-              AVERAGE(ng)%avgsnoice(i,j)=AVERAGE(ng)%avgsnoice(i,j)*    &
-     &                                   GRID(ng)%rmask_full(i,j)
+              AVERAGE(ng)%avgwsni(i,j)=AVERAGE(ng)%avgwsni(i,j)*        &
+     &                                 GRID(ng)%rmask_full(i,j)
 #    endif
             END DO
           END DO
@@ -994,122 +994,122 @@
           END DO
         END IF
 
-        IF (Aout(idIlrdn,ng)) THEN
+        IF (Aout(idIqswl,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avglr_dn(i,j)=AVERAGE(ng)%avglr_dn(i,j)+      &
+              AVERAGE(ng)%avgqswl(i,j)=AVERAGE(ng)%avgqswl(i,j)+        &
 #    ifdef WET_DRY
-     &                                  GRID(ng)%rmask_full(i,j)*       &
+     &                                 GRID(ng)%rmask_full(i,j)*        &
 #    endif
-     &                                  FORCES(ng)%lr_dn(i,j)
+     &                                 FORCES(ng)%qswl(i,j)
             END DO
           END DO
         END IF
 
-        IF (Aout(idIsrdn,ng)) THEN
+        IF (Aout(idIqlwl,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsr_dn(i,j)=AVERAGE(ng)%avgsr_dn(i,j)+      &
+              AVERAGE(ng)%avgqlwl(i,j)=AVERAGE(ng)%avgqlwl(i,j)+        &
 #    ifdef WET_DRY
-     &                                  GRID(ng)%rmask_full(i,j)*       &
+     &                                 GRID(ng)%rmask_full(i,j)*        &
 #    endif
-     &                                  FORCES(ng)%sr_dn(i,j)
+     &                                 FORCES(ng)%qlwl(i,j)
             END DO
           END DO
         END IF
 
-        IF (Aout(idIlatI,ng)) THEN
+        IF (Aout(idIqlai,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avglat_i(i,j)=AVERAGE(ng)%avglat_i(i,j)+      &
+              AVERAGE(ng)%avgqlai(i,j)=AVERAGE(ng)%avgqlai(i,j)+        &
 #    ifdef WET_DRY
-     &                                  GRID(ng)%rmask_full(i,j)*       &
+     &                                 GRID(ng)%rmask_full(i,j)*        &
 #    endif
-     &                                  FORCES(ng)%lat_i(i,j)
+     &                                 FORCES(ng)%qlai(i,j)
             END DO
           END DO
         END IF
 
-        IF (Aout(idIsenI,ng)) THEN
+        IF (Aout(idIqsei,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsen_i(i,j)=AVERAGE(ng)%avgsen_i(i,j)+      &
+              AVERAGE(ng)%avgqsei(i,j)=AVERAGE(ng)%avgqsei(i,j)+        &
 #    ifdef WET_DRY
-     &                                  GRID(ng)%rmask_full(i,j)*       &
+     &                                 GRID(ng)%rmask_full(i,j)*        &
 #    endif
-     &                                  FORCES(ng)%sen_i(i,j)
+     &                                 FORCES(ng)%qsei(i,j)
             END DO
           END DO
         END IF
 
-        IF (Aout(idIlrup,ng)) THEN
+        IF (Aout(idIqlwa,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avglr_up_i(i,j)=AVERAGE(ng)%avglr_up_i(i,j)+  &
+              AVERAGE(ng)%avgqlwa(i,j)=AVERAGE(ng)%avgqlwa(i,j)+        &
 #    ifdef WET_DRY
-     &                                    GRID(ng)%rmask_full(i,j)*     &
+     &                                 GRID(ng)%rmask_full(i,j)*        &
 #    endif
-     &                                    FORCES(ng)%lr_up_i(i,j)
+     &                                 FORCES(ng)%qlwa(i,j)
             END DO
           END DO
         END IF
 
-        IF (Aout(idIsrup,ng)) THEN
+        IF (Aout(idIqswa,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsr_up_i(i,j)=AVERAGE(ng)%avgsr_up_i(i,j)+  &
+              AVERAGE(ng)%avgqswa(i,j)=AVERAGE(ng)%avgqswa(i,j)+        &
 #    ifdef WET_DRY
-     &                                    GRID(ng)%rmask_full(i,j)*     &
+     &                                 GRID(ng)%rmask_full(i,j)*        &
 #    endif
-     &                                    FORCES(ng)%sr_up_i(i,j)
+     &                                 FORCES(ng)%qswa(i,j)
             END DO
           END DO
         END IF
 
-        IF (Aout(idIsrin,ng)) THEN
+        IF (Aout(idIqswi,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsr_in_i(i,j)=AVERAGE(ng)%avgsr_in_i(i,j)+  &
+              AVERAGE(ng)%avgqswi(i,j)=AVERAGE(ng)%avgqswi(i,j)+        &
 #    ifdef WET_DRY
-     &                                    GRID(ng)%rmask_full(i,j)*     &
+     &                                 GRID(ng)%rmask_full(i,j)*        &
 #    endif
-     &                                    FORCES(ng)%sr_in_i(i,j)
+     &                                 FORCES(ng)%qswi(i,j)
             END DO
           END DO
         END IF
 
-        IF (Aout(idIsrth,ng)) THEN
+        IF (Aout(idIqswo,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsr_th_i(i,j)=AVERAGE(ng)%avgsr_th_i(i,j)+  &
+              AVERAGE(ng)%avgqswo(i,j)=AVERAGE(ng)%avgqswo(i,j)+        &
 #    ifdef WET_DRY
-     &                                    GRID(ng)%rmask_full(i,j)*     &
+     &                                 GRID(ng)%rmask_full(i,j)*        &
 #    endif
-     &                                    FORCES(ng)%sr_th_i(i,j)
+     &                                 FORCES(ng)%qswo(i,j)
             END DO
           END DO
         END IF
 
-        IF (Aout(idIsfI,ng)) THEN
+        IF (Aout(idIsio,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgssflx_i(i,j)=AVERAGE(ng)%avgssflx_i(i,j)+  &
+              AVERAGE(ng)%avgsio(i,j)=AVERAGE(ng)%avgsio(i,j)+          &
 #    ifdef WET_DRY
-     &                                    GRID(ng)%rmask_full(i,j)*     &
+     &                                GRID(ng)%rmask_full(i,j)*         &
 #    endif
-     &                                    FORCES(ng)%ssflx_i(i,j)
+     &                                FORCES(ng)%sio(i,j)
             END DO
           END DO
         END IF
 
-        IF (Aout(idIsfL,ng)) THEN
+        IF (Aout(idIsao,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgssflx_l(i,j)=AVERAGE(ng)%avgssflx_l(i,j)+  &
+              AVERAGE(ng)%avgsao(i,j)=AVERAGE(ng)%avgsao(i,j)+          &
 #    ifdef WET_DRY
-     &                                    GRID(ng)%rmask_full(i,j)*     &
+     &                                GRID(ng)%rmask_full(i,j)*         &
 #    endif
-     &                                    FORCES(ng)%ssflx_l(i,j)
+     &                                FORCES(ng)%sao(i,j)
             END DO
           END DO
         END IF
@@ -1117,11 +1117,11 @@
         IF (Aout(idIqao,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgqao_n(i,j)=AVERAGE(ng)%avgqao_n(i,j)+      &
+              AVERAGE(ng)%avgqao(i,j)=AVERAGE(ng)%avgqao(i,j)+          &
 #    ifdef WET_DRY
-     &                                  GRID(ng)%rmask_full(i,j)*       &
+     &                                GRID(ng)%rmask_full(i,j)*         &
 #    endif
-     &                                  FORCES(ng)%qao_n(i,j)
+     &                                FORCES(ng)%qao(i,j)
             END DO
           END DO
         END IF
@@ -1129,11 +1129,11 @@
         IF (Aout(idIqai,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgqai_n(i,j)=AVERAGE(ng)%avgqai_n(i,j)+      &
+              AVERAGE(ng)%avgqai(i,j)=AVERAGE(ng)%avgqai(i,j)+          &
 #    ifdef WET_DRY
-     &                                  GRID(ng)%rmask_full(i,j)*       &
+     &                                GRID(ng)%rmask_full(i,j)*         &
 #    endif
-     &                                  FORCES(ng)%qai_n(i,j)
+     &                                FORCES(ng)%qai(i,j)
             END DO
           END DO
         END IF
@@ -1141,11 +1141,11 @@
         IF (Aout(idIqio,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgqio_n(i,j)=AVERAGE(ng)%avgqio_n(i,j)+      &
+              AVERAGE(ng)%avgqio(i,j)=AVERAGE(ng)%avgqio(i,j)+          &
 #    ifdef WET_DRY
-     &                                  GRID(ng)%rmask_full(i,j)*       &
+     &                                GRID(ng)%rmask_full(i,j)*         &
 #    endif
-     &                                  FORCES(ng)%qio_n(i,j)
+     &                                FORCES(ng)%qio(i,j)
             END DO
           END DO
         END IF
@@ -1153,23 +1153,23 @@
         IF (Aout(idIqi2,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgqi2_n(i,j)=AVERAGE(ng)%avgqi2_n(i,j)+      &
+              AVERAGE(ng)%avgqi2(i,j)=AVERAGE(ng)%avgqi2(i,j)+          &
 #    ifdef WET_DRY
-     &                                  GRID(ng)%rmask_full(i,j)*       &
+     &                                GRID(ng)%rmask_full(i,j)*         &
 #    endif
-     &                                  FORCES(ng)%qi2_n(i,j)
+     &                                FORCES(ng)%qi2(i,j)
             END DO
           END DO
         END IF
 
-        IF (Aout(idIsnoi,ng)) THEN
+        IF (Aout(idIwsni,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsnoice(i,j)=AVERAGE(ng)%avgsnoice(i,j)+    &
+              AVERAGE(ng)%avgwsni(i,j)=AVERAGE(ng)%avgwsni(i,j)+        &
 #    ifdef WET_DRY
-     &                                   GRID(ng)%rmask_full(i,j)*      &
+     &                                 GRID(ng)%rmask_full(i,j)*        &
 #    endif
-     &                                   FORCES(ng)%snoice(i,j)
+     &                                 FORCES(ng)%wsni(i,j)
             END DO
           END DO
         END IF
@@ -1893,212 +1893,212 @@
           END IF
         END IF
 
-        IF (Aout(idIlrdn,ng)) THEN
+        IF (Aout(idIqswl,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avglr_dn(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avglr_dn(i,j)
+              AVERAGE(ng)%avgqswl(i,j)=rfac(i,j)*                       &
+     &                                 AVERAGE(ng)%avgqswl(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
             CALL exchange_r2d_tile (ng, tile,                           &
      &                              LBi, UBi, LBj, UBj,                 &
-     &                              AVERAGE(ng)%avglr_dn)
+     &                              AVERAGE(ng)%avgqswl)
 #    ifdef DISTRIBUTE
             CALL mp_exchange2d (ng, tile, iNLM, 1,                      &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          NghostPoints,                           &
      &                          EWperiodic(ng), NSperiodic(ng),         &
-     &                          AVERAGE(ng)%avglr_dn)
+     &                          AVERAGE(ng)%avgqswl)
 #    endif
           END IF
         END IF
 
-        IF (Aout(idIsrdn,ng)) THEN
+        IF (Aout(idIqlwl,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsr_dn(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgsr_dn(i,j)
+              AVERAGE(ng)%avgqlwl(i,j)=rfac(i,j)*                       &
+     &                                 AVERAGE(ng)%avgqlwl(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
             CALL exchange_r2d_tile (ng, tile,                           &
      &                              LBi, UBi, LBj, UBj,                 &
-     &                              AVERAGE(ng)%avgsr_dn)
+     &                              AVERAGE(ng)%avgqlwl)
 #    ifdef DISTRIBUTE
             CALL mp_exchange2d (ng, tile, iNLM, 1,                      &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          NghostPoints,                           &
      &                          EWperiodic(ng), NSperiodic(ng),         &
-     &                          AVERAGE(ng)%avgsr_dn)
+     &                          AVERAGE(ng)%avgqlwl)
 #    endif
           END IF
         END IF
 
-        IF (Aout(idIlatI,ng)) THEN
+        IF (Aout(idIqlai,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avglat_i(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avglat_i(i,j)
+              AVERAGE(ng)%avgqlai(i,j)=rfac(i,j)*                       &
+     &                                 AVERAGE(ng)%avgqlai(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
             CALL exchange_r2d_tile (ng, tile,                           &
      &                              LBi, UBi, LBj, UBj,                 &
-     &                              AVERAGE(ng)%avglat_i)
+     &                              AVERAGE(ng)%avgqlai)
 #    ifdef DISTRIBUTE
             CALL mp_exchange2d (ng, tile, iNLM, 1,                      &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          NghostPoints,                           &
      &                          EWperiodic(ng), NSperiodic(ng),         &
-     &                          AVERAGE(ng)%avglat_i)
+     &                          AVERAGE(ng)%avgqlai)
 #    endif
           END IF
         END IF
 
-        IF (Aout(idIsenI,ng)) THEN
+        IF (Aout(idIqsei,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsen_i(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgsen_i(i,j)
+              AVERAGE(ng)%avgqsei(i,j)=rfac(i,j)*                       &
+     &                                 AVERAGE(ng)%avgqsei(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
             CALL exchange_r2d_tile (ng, tile,                           &
      &                              LBi, UBi, LBj, UBj,                 &
-     &                              AVERAGE(ng)%avgsen_i)
+     &                              AVERAGE(ng)%avgqsei)
 #    ifdef DISTRIBUTE
             CALL mp_exchange2d (ng, tile, iNLM, 1,                      &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          NghostPoints,                           &
      &                          EWperiodic(ng), NSperiodic(ng),         &
-     &                          AVERAGE(ng)%avgsen_i)
+     &                          AVERAGE(ng)%avgqsei)
 #    endif
           END IF
         END IF
 
-        IF (Aout(idIlrup,ng)) THEN
+        IF (Aout(idIqlwa,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avglr_up_i(i,j)=rfac(i,j)*                    &
-     &                                    AVERAGE(ng)%avglr_up_i(i,j)
+              AVERAGE(ng)%avgqlwa(i,j)=rfac(i,j)*                       &
+     &                                 AVERAGE(ng)%avgqlwa(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
             CALL exchange_r2d_tile (ng, tile,                           &
      &                              LBi, UBi, LBj, UBj,                 &
-     &                              AVERAGE(ng)%avglr_up_i)
+     &                              AVERAGE(ng)%avgqlwa)
 #    ifdef DISTRIBUTE
             CALL mp_exchange2d (ng, tile, iNLM, 1,                      &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          NghostPoints,                           &
      &                          EWperiodic(ng), NSperiodic(ng),         &
-     &                          AVERAGE(ng)%avglr_up_i)
+     &                          AVERAGE(ng)%avgqlwa)
 #    endif
           END IF
         END IF
 
-        IF (Aout(idIsrup,ng)) THEN
+        IF (Aout(idIqswa,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsr_up_i(i,j)=rfac(i,j)*                    &
-     &                                    AVERAGE(ng)%avgsr_up_i(i,j)
+              AVERAGE(ng)%avgqswa(i,j)=rfac(i,j)*                       &
+     &                                 AVERAGE(ng)%avgqswa(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
             CALL exchange_r2d_tile (ng, tile,                           &
      &                              LBi, UBi, LBj, UBj,                 &
-     &                              AVERAGE(ng)%avgsr_up_i)
+     &                              AVERAGE(ng)%avgqswa)
 #    ifdef DISTRIBUTE
             CALL mp_exchange2d (ng, tile, iNLM, 1,                      &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          NghostPoints,                           &
      &                          EWperiodic(ng), NSperiodic(ng),         &
-     &                          AVERAGE(ng)%avgsr_up_i)
+     &                          AVERAGE(ng)%avgqswa)
 #    endif
           END IF
         END IF
 
-        IF (Aout(idIsrin,ng)) THEN
+        IF (Aout(idIqswi,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsr_in_i(i,j)=rfac(i,j)*                    &
-     &                                    AVERAGE(ng)%avgsr_in_i(i,j)
+              AVERAGE(ng)%avgqswi(i,j)=rfac(i,j)*                       &
+     &                                 AVERAGE(ng)%avgqswi(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
             CALL exchange_r2d_tile (ng, tile,                           &
      &                              LBi, UBi, LBj, UBj,                 &
-     &                              AVERAGE(ng)%avgsr_in_i)
+     &                              AVERAGE(ng)%avgqswi)
 #    ifdef DISTRIBUTE
             CALL mp_exchange2d (ng, tile, iNLM, 1,                      &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          NghostPoints,                           &
      &                          EWperiodic(ng), NSperiodic(ng),         &
-     &                          AVERAGE(ng)%avgsr_in_i)
+     &                          AVERAGE(ng)%avgqswi)
 #    endif
           END IF
         END IF
 
-        IF (Aout(idIsrth,ng)) THEN
+        IF (Aout(idIqswo,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsr_th_i(i,j)=rfac(i,j)*                    &
-     &                                    AVERAGE(ng)%avgsr_th_i(i,j)
+              AVERAGE(ng)%avgqswo(i,j)=rfac(i,j)*                       &
+     &                                 AVERAGE(ng)%avgqswo(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
             CALL exchange_r2d_tile (ng, tile,                           &
      &                              LBi, UBi, LBj, UBj,                 &
-     &                              AVERAGE(ng)%avgsr_th_i)
+     &                              AVERAGE(ng)%avgqswo)
 #    ifdef DISTRIBUTE
             CALL mp_exchange2d (ng, tile, iNLM, 1,                      &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          NghostPoints,                           &
      &                          EWperiodic(ng), NSperiodic(ng),         &
-     &                          AVERAGE(ng)%avgsr_th_i)
+     &                          AVERAGE(ng)%avgqswo)
 #    endif
           END IF
         END IF
 
-        IF (Aout(idIsfI,ng)) THEN
+        IF (Aout(idIsio,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgssflx_i(i,j)=rfac(i,j)*                    &
-     &                                    AVERAGE(ng)%avgssflx_i(i,j)
+              AVERAGE(ng)%avgsio(i,j)=rfac(i,j)*                        &
+     &                                AVERAGE(ng)%avgsio(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
             CALL exchange_r2d_tile (ng, tile,                           &
      &                              LBi, UBi, LBj, UBj,                 &
-     &                              AVERAGE(ng)%avgssflx_i)
+     &                              AVERAGE(ng)%avgsio)
 #    ifdef DISTRIBUTE
             CALL mp_exchange2d (ng, tile, iNLM, 1,                      &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          NghostPoints,                           &
      &                          EWperiodic(ng), NSperiodic(ng),         &
-     &                          AVERAGE(ng)%avgssflx_i)
+     &                          AVERAGE(ng)%avgsio)
 #    endif
           END IF
         END IF
 
-        IF (Aout(idIsfL,ng)) THEN
+        IF (Aout(idIsao,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgssflx_l(i,j)=rfac(i,j)*                    &
-     &                                    AVERAGE(ng)%avgssflx_l(i,j)
+              AVERAGE(ng)%avgsao(i,j)=rfac(i,j)*                        &
+     &                                AVERAGE(ng)%avgsao(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
             CALL exchange_r2d_tile (ng, tile,                           &
      &                              LBi, UBi, LBj, UBj,                 &
-     &                              AVERAGE(ng)%avgssflx_l)
+     &                              AVERAGE(ng)%avgsao)
 #    ifdef DISTRIBUTE
             CALL mp_exchange2d (ng, tile, iNLM, 1,                      &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          NghostPoints,                           &
      &                          EWperiodic(ng), NSperiodic(ng),         &
-     &                          AVERAGE(ng)%avgssflx_l)
+     &                          AVERAGE(ng)%avgsao)
 #    endif
           END IF
         END IF
@@ -2106,20 +2106,20 @@
         IF (Aout(idIqao,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgqao_n(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgqao_n(i,j)
+              AVERAGE(ng)%avgqao(i,j)=rfac(i,j)*                        &
+     &                                AVERAGE(ng)%avgqao(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
             CALL exchange_r2d_tile (ng, tile,                           &
      &                              LBi, UBi, LBj, UBj,                 &
-     &                              AVERAGE(ng)%avgqao_n)
+     &                              AVERAGE(ng)%avgqao)
 #    ifdef DISTRIBUTE
             CALL mp_exchange2d (ng, tile, iNLM, 1,                      &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          NghostPoints,                           &
      &                          EWperiodic(ng), NSperiodic(ng),         &
-     &                          AVERAGE(ng)%avgqao_n)
+     &                          AVERAGE(ng)%avgqao)
 #    endif
           END IF
         END IF
@@ -2127,20 +2127,20 @@
         IF (Aout(idIqai,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgqai_n(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgqai_n(i,j)
+              AVERAGE(ng)%avgqai(i,j)=rfac(i,j)*                        &
+     &                                AVERAGE(ng)%avgqai(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
             CALL exchange_r2d_tile (ng, tile,                           &
      &                              LBi, UBi, LBj, UBj,                 &
-     &                              AVERAGE(ng)%avgqai_n)
+     &                              AVERAGE(ng)%avgqai)
 #    ifdef DISTRIBUTE
             CALL mp_exchange2d (ng, tile, iNLM, 1,                      &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          NghostPoints,                           &
      &                          EWperiodic(ng), NSperiodic(ng),         &
-     &                          AVERAGE(ng)%avgqai_n)
+     &                          AVERAGE(ng)%avgqai)
 #    endif
           END IF
         END IF
@@ -2148,20 +2148,20 @@
         IF (Aout(idIqio,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgqio_n(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgqio_n(i,j)
+              AVERAGE(ng)%avgqio(i,j)=rfac(i,j)*                        &
+     &                                AVERAGE(ng)%avgqio(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
             CALL exchange_r2d_tile (ng, tile,                           &
      &                              LBi, UBi, LBj, UBj,                 &
-     &                              AVERAGE(ng)%avgqio_n)
+     &                              AVERAGE(ng)%avgqio)
 #    ifdef DISTRIBUTE
             CALL mp_exchange2d (ng, tile, iNLM, 1,                      &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          NghostPoints,                           &
      &                          EWperiodic(ng), NSperiodic(ng),         &
-     &                          AVERAGE(ng)%avgqio_n)
+     &                          AVERAGE(ng)%avgqio)
 #    endif
           END IF
         END IF
@@ -2169,41 +2169,41 @@
         IF (Aout(idIqi2,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgqi2_n(i,j)=rfac(i,j)*                      &
-     &                                  AVERAGE(ng)%avgqi2_n(i,j)
+              AVERAGE(ng)%avgqi2(i,j)=rfac(i,j)*                        &
+     &                                AVERAGE(ng)%avgqi2(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
             CALL exchange_r2d_tile (ng, tile,                           &
      &                              LBi, UBi, LBj, UBj,                 &
-     &                              AVERAGE(ng)%avgqi2_n)
+     &                              AVERAGE(ng)%avgqi2)
 #    ifdef DISTRIBUTE
             CALL mp_exchange2d (ng, tile, iNLM, 1,                      &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          NghostPoints,                           &
      &                          EWperiodic(ng), NSperiodic(ng),         &
-     &                          AVERAGE(ng)%avgqi2_n)
+     &                          AVERAGE(ng)%avgqi2)
 #    endif
           END IF
         END IF
 
-        IF (Aout(idIsnoi,ng)) THEN
+        IF (Aout(idIwsni,ng)) THEN
           DO j=JstrR,JendR
             DO i=IstrR,IendR
-              AVERAGE(ng)%avgsnoice(i,j)=rfac(i,j)*                     &
-     &                                   AVERAGE(ng)%avgsnoice(i,j)
+              AVERAGE(ng)%avgwsni(i,j)=rfac(i,j)*                       &
+     &                                 AVERAGE(ng)%avgwsni(i,j)
             END DO
           END DO
           IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
             CALL exchange_r2d_tile (ng, tile,                           &
      &                              LBi, UBi, LBj, UBj,                 &
-     &                              AVERAGE(ng)%avgsnoice)
+     &                              AVERAGE(ng)%avgwsni)
 #    ifdef DISTRIBUTE
             CALL mp_exchange2d (ng, tile, iNLM, 1,                      &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          NghostPoints,                           &
      &                          EWperiodic(ng), NSperiodic(ng),         &
-     &                          AVERAGE(ng)%avgsnoice)
+     &                          AVERAGE(ng)%avgwsni)
 #    endif
           END IF
         END IF

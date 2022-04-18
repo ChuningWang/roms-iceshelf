@@ -466,19 +466,18 @@
 #endif
 
 #ifdef ICE_MODEL
-          real(r8), pointer :: qai_n(:,:)
-          real(r8), pointer :: sr_in_i(:,:)
-          real(r8), pointer :: qao_n(:,:)
-          real(r8), pointer :: qio_n(:,:)
-          real(r8), pointer :: qi2_n(:,:)
-          real(r8), pointer :: snow_n(:,:)
-          real(r8), pointer :: sr_th_i(:,:)
+          real(r8), pointer :: wsf(:,:)
+          real(r8), pointer :: qai(:,:)
+          real(r8), pointer :: qao(:,:)
+          real(r8), pointer :: qio(:,:)
+          real(r8), pointer :: qi2(:,:)
+          real(r8), pointer :: qswo(:,:)
 # ifdef ICE_BULK_FLUXES
           real(r8), pointer :: sustr_aw(:,:)
           real(r8), pointer :: svstr_aw(:,:)
-          real(r8), pointer :: tau_aix_n(:,:)
-          real(r8), pointer :: tau_aiy_n(:,:)
-          real(r8), pointer :: qswi_n(:,:)
+          real(r8), pointer :: taux_ai(:,:)
+          real(r8), pointer :: tauy_ai(:,:)
+          real(r8), pointer :: qswi(:,:)
 # endif
 # ifdef PERFECT_RESTART
           real(r8), pointer :: stflx_save(:,:,:)
@@ -513,15 +512,15 @@
 #  endif
 # endif
 # ifdef ICE_DIAGS
-          real(r8), pointer :: lr_dn(:,:)
-          real(r8), pointer :: sr_dn(:,:)
-          real(r8), pointer :: lat_i(:,:)
-          real(r8), pointer :: sen_i(:,:)
-          real(r8), pointer :: lr_up_i(:,:)
-          real(r8), pointer :: sr_up_i(:,:)
-          real(r8), pointer :: ssflx_i(:,:)
-          real(r8), pointer :: ssflx_l(:,:)
-          real(r8), pointer :: snoice(:,:)
+          real(r8), pointer :: qswa(:,:)
+          real(r8), pointer :: qswl(:,:)
+          real(r8), pointer :: qlwl(:,:)
+          real(r8), pointer :: qlai(:,:)
+          real(r8), pointer :: qsei(:,:)
+          real(r8), pointer :: qlwa(:,:)
+          real(r8), pointer :: sio(:,:)
+          real(r8), pointer :: sao(:,:)
+          real(r8), pointer :: wsni(:,:)
 # endif
 #endif
 
@@ -1008,30 +1007,28 @@
 #endif
 
 #ifdef ICE_MODEL
-      allocate ( FORCES(ng) % qai_n(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % wsf(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % sr_in_i(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % qai(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % qao_n(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % qao(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % qio_n(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % qio(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % qi2_n(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % qi2(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % snow_n(LBi:UBi,LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % sr_th_i(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % qswo(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
 # ifdef ICE_BULK_FLUXES
       allocate ( FORCES(ng) % sustr_aw(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( FORCES(ng) % svstr_aw(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % tau_aix_n(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % taux_ai(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % tau_aiy_n(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % tauy_ai(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % qswi_n(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % qswi(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
 # endif
 # ifdef PERFECT_RESTART
@@ -1079,23 +1076,23 @@
 #  endif
 # endif
 # ifdef ICE_DIAGS
-      allocate ( FORCES(ng) % lr_dn(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % qswa(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % sr_dn(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % qswl(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % lat_i(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % qlwl(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % sen_i(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % qlai(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % lr_up_i(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % qsei(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % sr_up_i(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % qlwa(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % ssflx_i(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % sio(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % ssflx_l(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % sao(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % snoice(LBi:UBi,LBj:UBj) )
+      allocate ( FORCES(ng) % wsni(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
 # endif
 #endif
@@ -1585,23 +1582,20 @@
 # endif
 
 # ifdef ICE_MODEL
-      IF (.not.destroy(ng, FORCES(ng)%sr_in_i, MyFile,                  &
-     &                 __LINE__, 'FORCES(ng)%sr_in_i')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%wsf, MyFile,                      &
+     &                 __LINE__, 'FORCES(ng)%wsf')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%qao_n, MyFile,                    &
-     &                 __LINE__, 'FORCES(ng)%qao_n')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%qao, MyFile,                      &
+     &                 __LINE__, 'FORCES(ng)%qao')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%qio_n, MyFile,                    &
-     &                 __LINE__, 'FORCES(ng)%qio_n')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%qio, MyFile,                      &
+     &                 __LINE__, 'FORCES(ng)%qio')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%qi2_n, MyFile,                    &
-     &                 __LINE__, 'FORCES(ng)%qi2_n')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%qi2, MyFile,                      &
+     &                 __LINE__, 'FORCES(ng)%qi2')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%snow_n, MyFile,                   &
-     &                 __LINE__, 'FORCES(ng)%snow_n')) RETURN
-
-      IF (.not.destroy(ng, FORCES(ng)%sr_th_i, MyFile,                  &
-     &                 __LINE__, 'FORCES(ng)%sr_th_i')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%qswo, MyFile,                     &
+     &                 __LINE__, 'FORCES(ng)%qswo')) RETURN
 #  ifdef ICE_BULK_FLUXES
 
       IF (.not.destroy(ng, FORCES(ng)%sustr_aw, MyFile,                 &
@@ -1610,14 +1604,14 @@
       IF (.not.destroy(ng, FORCES(ng)%svstr_aw, MyFile,                 &
      &                 __LINE__, 'FORCES(ng)%svstr_aw')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%tau_aix_n, MyFile,                &
-     &                 __LINE__, 'FORCES(ng)%tau_aix_n')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%taux_ai, MyFile,                  &
+     &                 __LINE__, 'FORCES(ng)%taux_ai')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%tau_aiy_n, MyFile,                &
-     &                 __LINE__, 'FORCES(ng)%tau_aiy_n')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%tauy_ai, MyFile,                  &
+     &                 __LINE__, 'FORCES(ng)%tauy_ai')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%qswi_n, MyFile,                   &
-     &                 __LINE__, 'FORCES(ng)%qswi_n')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%qswi, MyFile,                     &
+     &                 __LINE__, 'FORCES(ng)%qswi')) RETURN
 #  endif
 #  ifdef PERFECT_RESTART
 
@@ -1677,32 +1671,32 @@
 #  endif
 #  ifdef ICE_DIAGS
 
-      IF (.not.destroy(ng, FORCES(ng)%lr_dn, MyFile,                    &
-     &                 __LINE__, 'FORCES(ng)%lr_dn')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%qswa, MyFile,                     &
+     &                 __LINE__, 'FORCES(ng)%qswa')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%sw_dn, MyFile,                    &
-     &                 __LINE__, 'FORCES(ng)%sw_dn')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%qswl, MyFile,                     &
+     &                 __LINE__, 'FORCES(ng)%qswl')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%lat_i, MyFile,                    &
-     &                 __LINE__, 'FORCES(ng)%lat_i')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%qlwl, MyFile,                     &
+     &                 __LINE__, 'FORCES(ng)%qlwl')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%sen_i, MyFile,                    &
-     &                 __LINE__, 'FORCES(ng)%sen_i')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%qlai, MyFile,                     &
+     &                 __LINE__, 'FORCES(ng)%qlai')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%lr_up_i, MyFile,                  &
-     &                 __LINE__, 'FORCES(ng)%lr_up_i')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%qsei, MyFile,                     &
+     &                 __LINE__, 'FORCES(ng)%qsei')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%sr_up_i, MyFile,                  &
-     &                 __LINE__, 'FORCES(ng)%sr_up_i')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%qlwa, MyFile,                     &
+     &                 __LINE__, 'FORCES(ng)%qlwa')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%ssflx_i, MyFile,                  &
-     &                 __LINE__, 'FORCES(ng)%ssflx_i')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%sio, MyFile,                      &
+     &                 __LINE__, 'FORCES(ng)%sio')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%ssflx_l, MyFile,                  &
-     &                 __LINE__, 'FORCES(ng)%ssflx_l')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%sao, MyFile,                      &
+     &                 __LINE__, 'FORCES(ng)%sao')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%snoice, MyFile,                   &
-     &                 __LINE__, 'FORCES(ng)%snoice')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%wsni, MyFile,                     &
+     &                 __LINE__, 'FORCES(ng)%wsni')) RETURN
 #  endif
 # endif
 #endif
@@ -2155,19 +2149,18 @@
       IF ((model.eq.0).or.(model.eq.iNLM)) THEN
         DO j=Jmin,Jmax
           DO i=Imin,Imax
-            FORCES(ng) % qai_n(i,j) = IniVal
-            FORCES(ng) % sr_in_i(i,j) = IniVal
-            FORCES(ng) % qao_n(i,j) = IniVal
-            FORCES(ng) % qio_n(i,j) = IniVal
-            FORCES(ng) % qi2_n(i,j) = IniVal
-            FORCES(ng) % snow_n(i,j) = IniVal
-            FORCES(ng) % sr_th_i(i,j) = IniVal
+            FORCES(ng) % wsf(i,j) = IniVal
+            FORCES(ng) % qai(i,j) = IniVal
+            FORCES(ng) % qao(i,j) = IniVal
+            FORCES(ng) % qio(i,j) = IniVal
+            FORCES(ng) % qi2(i,j) = IniVal
+            FORCES(ng) % qswo(i,j) = IniVal
 # ifdef ICE_BULK_FLUXES
             FORCES(ng) % sustr_aw(i,j) = IniVal
             FORCES(ng) % svstr_aw(i,j) = IniVal
-            FORCES(ng) % tau_aix_n(i,j) = IniVal
-            FORCES(ng) % tau_aiy_n(i,j) = IniVal
-            FORCES(ng) % qswi_n(i,j) = IniVal
+            FORCES(ng) % taux_ai(i,j) = IniVal
+            FORCES(ng) % tauy_ai(i,j) = IniVal
+            FORCES(ng) % qswi(i,j) = IniVal
 # endif
 # ifdef PERFECT_RESTART
             FORCES(ng) % stflx_save(i,j,1) = IniVal
@@ -2206,15 +2199,15 @@
 #  endif
 # endif
 # ifdef ICE_DIAGS
-            FORCES(ng) % lr_dn(i,j) = IniVal
-            FORCES(ng) % sr_dn(i,j) = IniVal
-            FORCES(ng) % lat_i(i,j) = IniVal
-            FORCES(ng) % sen_i(i,j) = IniVal
-            FORCES(ng) % lr_up_i(i,j) = IniVal
-            FORCES(ng) % sr_up_i(i,j) = IniVal
-            FORCES(ng) % ssflx_i(i,j) = IniVal
-            FORCES(ng) % ssflx_l(i,j) = IniVal
-            FORCES(ng) % snoice(i,j) = IniVal
+            FORCES(ng) % qswa(i,j) = IniVal
+            FORCES(ng) % qswl(i,j) = IniVal
+            FORCES(ng) % qlwl(i,j) = IniVal
+            FORCES(ng) % qlai(i,j) = IniVal
+            FORCES(ng) % qsei(i,j) = IniVal
+            FORCES(ng) % qlwa(i,j) = IniVal
+            FORCES(ng) % sio(i,j) = IniVal
+            FORCES(ng) % sao(i,j) = IniVal
+            FORCES(ng) % wsni(i,j) = IniVal
 # endif
           END DO
         END DO

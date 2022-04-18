@@ -41,12 +41,14 @@
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsg22))) THEN
             got_var(idIsg22)=.TRUE.
             RST(ng)%Vid(idIsg22)=var_id(i)
+#  ifndef ICE_MOM_BULK
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIutau))) THEN
             got_var(idIutau)=.TRUE.
             RST(ng)%Vid(idIutau)=var_id(i)
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idImchu))) THEN
             got_var(idImchu)=.TRUE.
             RST(ng)%Vid(idImchu)=var_id(i)
+#  endif
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIt0mk))) THEN
             got_var(idIt0mk)=.TRUE.
             RST(ng)%Vid(idIt0mk)=var_id(i)
@@ -162,6 +164,7 @@
           exit_flag=3
           RETURN
         END IF
+#  ifndef ICE_MOM_BULK
         IF (.not.got_var(idIutau)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIutau)),         &
      &                                  TRIM(ncname)
@@ -174,6 +177,7 @@
           exit_flag=3
           RETURN
         END IF
+#  endif
         IF (.not.got_var(idIt0mk)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIt0mk)),         &
      &                                  TRIM(ncname)
@@ -189,7 +193,7 @@
 #  ifdef PERFECT_RESTART
         DO itrc=1,NAT
           IF (.not.got_var(idTsur(itrc))) THEN
-            IF (Master) WRITE (stdout,60) TRIM(Vname(1,idTsur(itrc))),  &
+            IF (Master) WRITE (stdout,60) TRIM(Vname(1,idTsur(itrc))),    &
      &                                    TRIM(ncname)
             exit_flag=3
             RETURN
@@ -227,7 +231,7 @@
         END IF
         DO itrc=NAT+1, NT(ng)
           IF (.not.got_var(idIsTrc(itrc))) THEN
-            IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsTrc(itrc))), &
+            IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsTrc(itrc))),   &
      &                                    TRIM(ncname)
             exit_flag=3
             RETURN

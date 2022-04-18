@@ -2280,21 +2280,21 @@
   'r2dvar'
   1.0d0
 
-'lr_down'
-  'downward longwave radiation'
-  'W m-2'
-  'lr_down, scalar, series'
-  'ocean_time'
-  'idIlrdn'
-  'r2dvar'
-  1.0d0
-
 'sr_down'
   'downward shortwave radiation'
   'W m-2'
   'sr_down, scalar, series'
   'ocean_time'
-  'idIsrdn'
+  'idIqswl'
+  'r2dvar'
+  1.0d0
+
+'lr_down'
+  'downward longwave radiation'
+  'W m-2'
+  'lr_down, scalar, series'
+  'ocean_time'
+  'idIqlwl'
   'r2dvar'
   1.0d0
 
@@ -2303,7 +2303,7 @@
   'W m-2'
   'lat_ice, scalar, series'
   'ocean_time'
-  'idIlatI'
+  'idIqlai'
   'r2dvar'
   1.0d0
 
@@ -2312,7 +2312,7 @@
   'W m-2'
   'sens_ice, scalar, series'
   'ocean_time'
-  'idIsenI'
+  'idIqsei'
   'r2dvar'
   1.0d0
 
@@ -2321,7 +2321,7 @@
   'W m-2'
   'lr_up_ice, scalar, series'
   'ocean_time'
-  'idIlrup'
+  'idIqlwa'
   'r2dvar'
   1.0d0
 
@@ -2330,7 +2330,7 @@
   'W m-2'
   'sr_up_ice, scalar, series'
   'ocean_time'
-  'idIsrup'
+  'idIqswa'
   'r2dvar'
   1.0d0
 
@@ -2339,7 +2339,7 @@
   'W m-2'
   'sr_in_ice, scalar, series'
   'ocean_time'
-  'idIsrin'
+  'idIqswi'
   'r2dvar'
   1.0d0
 
@@ -2348,7 +2348,7 @@
   'W m-2'
   'sr_th_ice, scalar, series'
   'ocean_time'
-  'idIsrth'
+  'idIqswo'
   'r2dvar'
   1.0d0
 
@@ -2357,7 +2357,7 @@
   'meter second-1'                                 ! [PSU m/s]
   'ssflx_i, scalar, series'
   'ocean_time'
-  'idIsfI'
+  'idIsio'
   'r2dvar'
   1.0d0
 
@@ -2366,7 +2366,7 @@
   'meter second-1'                                 ! [PSU m/s]
   'ssflx_l, scalar, series'
   'ocean_time'
-  'idIsfL'
+  'idIsao'
   'r2dvar'
   1.0d0
 
@@ -2411,7 +2411,7 @@
   'm s-1'
   'snow_ice, scalar, series'
   'ocean_time'
-  'idIsnoi'
+  'idIwsni'
   'r2dvar'
   1.0d0
 

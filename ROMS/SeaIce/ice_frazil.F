@@ -204,8 +204,8 @@
 !
               IF (wfr(i,j) .lt. 0.0_r8) THEN
                 WRITE(stdout,*) 'Trouble in ice_frazil', i, j, k,       &
-       &          t(i,j,k,nnew,itemp), t(i,j,k,nnew,isalt),             &
-       &          t_fr, wfr(i,j), gamma_k, Hz(i,j,k)
+     &            t(i,j,k,nnew,itemp), t(i,j,k,nnew,isalt),             &
+     &            t_fr, wfr(i,j), gamma_k, Hz(i,j,k)
                 exit_flag = 10
               END IF
 !

@@ -692,22 +692,22 @@
         END IF
       END IF
 !
-!  Write out downward longwave radiation.
+!  Write out downward shortwave radiation.
 !
-      IF (Hout(idIlrdn,ng)) THEN
+      IF (Hout(idIqswl,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid,                      &
-     &                     HIS(ng)%Vid(idIlrdn),                        &
+     &                     HIS(ng)%Vid(idIqswl),                        &
      &                     HIS(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%lr_dn)
+     &                     FORCES(ng)%qswl)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIlrdn)), HIS(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqswl)), HIS(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -715,22 +715,22 @@
         END IF
       END IF
 !
-!  Write out downward shortwave radiation.
+!  Write out downward longwave radiation.
 !
-      IF (Hout(idIsrdn,ng)) THEN
+      IF (Hout(idIqlwl,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid,                      &
-     &                     HIS(ng)%Vid(idIsrdn),                        &
+     &                     HIS(ng)%Vid(idIqlwl),                        &
      &                     HIS(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%sr_dn)
+     &                     FORCES(ng)%qlwl)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsrdn)), HIS(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqlwl)), HIS(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -740,20 +740,20 @@
 !
 !  Write out latent heat over ice.
 !
-      IF (Hout(idIlatI,ng)) THEN
+      IF (Hout(idIqlai,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid,                      &
-     &                     HIS(ng)%Vid(idIlatI),                        &
+     &                     HIS(ng)%Vid(idIqlai),                        &
      &                     HIS(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%lat_i)
+     &                     FORCES(ng)%qlai)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIlatI)), HIS(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqlai)), HIS(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -763,20 +763,20 @@
 !
 !  Write out sensible heat over ice.
 !
-      IF (Hout(idIsenI,ng)) THEN
+      IF (Hout(idIqsei,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid,                      &
-     &                     HIS(ng)%Vid(idIsenI),                        &
+     &                     HIS(ng)%Vid(idIqsei),                        &
      &                     HIS(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%sen_i)
+     &                     FORCES(ng)%qsei)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsenI)), HIS(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqsei)), HIS(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -786,20 +786,20 @@
 !
 !  Write out upward longwave over ice.
 !
-      IF (Hout(idIlrup,ng)) THEN
+      IF (Hout(idIqlwa,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid,                      &
-     &                     HIS(ng)%Vid(idIlrup),                        &
+     &                     HIS(ng)%Vid(idIqlwa),                        &
      &                     HIS(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%lr_up_i)
+     &                     FORCES(ng)%qlwa)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIlrup)), HIS(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqlwa)), HIS(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -809,20 +809,20 @@
 !
 !  Write out upward shortwave over ice.
 !
-      IF (Hout(idIsrup,ng)) THEN
+      IF (Hout(idIqswa,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid,                      &
-     &                     HIS(ng)%Vid(idIsrup),                        &
+     &                     HIS(ng)%Vid(idIqswa),                        &
      &                     HIS(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%sr_up_i)
+     &                     FORCES(ng)%qswa)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsrup)), HIS(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqswa)), HIS(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -832,20 +832,20 @@
 !
 !  Write out shortwave into ice.
 !
-      IF (Hout(idIsrin,ng)) THEN
+      IF (Hout(idIqswi,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid,                      &
-     &                     HIS(ng)%Vid(idIsrin),                        &
+     &                     HIS(ng)%Vid(idIqswi),                        &
      &                     HIS(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%sr_in_i)
+     &                     FORCES(ng)%qswi)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsrin)), HIS(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqswi)), HIS(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -855,20 +855,20 @@
 !
 !  Write out shortwave through ice.
 !
-      IF (Hout(idIsrth,ng)) THEN
+      IF (Hout(idIqswo,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid,                      &
-     &                     HIS(ng)%Vid(idIsrth),                        &
+     &                     HIS(ng)%Vid(idIqswo),                        &
      &                     HIS(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%sr_th_i)
+     &                     FORCES(ng)%qswo)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsrth)), HIS(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqswo)), HIS(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -878,20 +878,20 @@
 !
 !  Write out salt flux under ice.
 !
-      IF (Hout(idIsfI,ng)) THEN
+      IF (Hout(idIsio,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid,                      &
-     &                     HIS(ng)%Vid(idIsfI),                         &
+     &                     HIS(ng)%Vid(idIsio),                         &
      &                     HIS(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%ssflx_i)
+     &                     FORCES(ng)%sio)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsfI)), HIS(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIsio)), HIS(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -901,20 +901,20 @@
 !
 !  Write out salt flux through leads.
 !
-      IF (Hout(idIsfL,ng)) THEN
+      IF (Hout(idIsao,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid,                      &
-     &                     HIS(ng)%Vid(idIsfL),                         &
+     &                     HIS(ng)%Vid(idIsao),                         &
      &                     HIS(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%ssflx_l)
+     &                     FORCES(ng)%sao)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsfL)), HIS(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIsao)), HIS(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -934,7 +934,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%qao_n)
+     &                     FORCES(ng)%qao)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqao)), HIS(ng)%Rindex
@@ -957,7 +957,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%qai_n)
+     &                     FORCES(ng)%qai)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqai)), HIS(ng)%Rindex
@@ -980,7 +980,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%qio_n)
+     &                     FORCES(ng)%qio)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqio)), HIS(ng)%Rindex
@@ -1003,7 +1003,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%qi2_n)
+     &                     FORCES(ng)%qi2)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqi2)), HIS(ng)%Rindex
@@ -1016,20 +1016,20 @@
 !
 !  Write out snow-ice conversion.
 !
-      IF (Hout(idIsnoi,ng)) THEN
+      IF (Hout(idIwsni,ng)) THEN
         scale=1.0_dp
         gtype=gfactor*r2dvar
         status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid,                      &
-     &                     HIS(ng)%Vid(idIsnoi),                        &
+     &                     HIS(ng)%Vid(idIwsni),                        &
      &                     HIS(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%snoice)
+     &                     FORCES(ng)%wsni)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsnoi)), HIS(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIwsni)), HIS(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status

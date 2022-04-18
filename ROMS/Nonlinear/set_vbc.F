@@ -90,7 +90,7 @@
 #  endif
 #  ifdef ICE_MODEL
      &                   ICE(ng) % ai,                                  &
-     &                   FORCES(ng) % qao_n,                            &
+     &                   FORCES(ng) % qao,                              &
 #  endif
      &                   FORCES(ng) % stflux,                           &
      &                   FORCES(ng) % btflux,                           &
@@ -140,7 +140,7 @@
 #  endif
 #  ifdef ICE_MODEL
      &                         ai,                                      &
-     &                         qao_n,                                   &
+     &                         qao,                                     &
 #  endif
      &                         stflux, btflux,                          &
      &                         stflx, btflx)
@@ -199,7 +199,7 @@
 #   endif
 #   ifdef ICE_MODEL
       real(r8), intent(in) :: ai(LBi:,LBj:,:)
-      real(r8), intent(inout) :: qao_n(LBi:,LBj:)
+      real(r8), intent(inout) :: qao(LBi:,LBj:)
 #   endif
       real(r8), intent(inout) :: stflx(LBi:,LBj:,:)
       real(r8), intent(inout) :: btflx(LBi:,LBj:,:)
@@ -238,7 +238,7 @@
 #   endif
 #   ifdef ICE_MODEL
       real(r8), intent(in) :: ai(LBi:UBi,LBj:UBj,2)
-      real(r8), intent(inout) :: qao_n(LBi:UBi,LBj:UBj)
+      real(r8), intent(inout) :: qao(LBi:UBi,LBj:UBj)
 #   endif
       real(r8), intent(inout) :: stflx(LBi:UBi,LBj:UBj,NT(ng))
       real(r8), intent(inout) :: btflx(LBi:UBi,LBj:UBj,NT(ng))
@@ -299,7 +299,7 @@
           stflx(i,j,itemp)=stflx(i,j,itemp)+                            &
      &                     dqdt(i,j)*(t(i,j,N(ng),nrhs,itemp)-sst(i,j))
 #   ifdef ICE_MODEL
-          qao_n(i,j) = -stflx(i,j,itemp) * rho0 * Cp
+          qao(i,j) = -stflx(i,j,itemp) * rho0 * Cp
 #   endif
         END DO
       END DO

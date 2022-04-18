@@ -838,27 +838,27 @@
         END IF
       END IF
 !
-!  Write out downward longwave radiation.
+!  Write out downward shortwave radiation.
 !
-      IF (Qout(idIlrdn,ng)) THEN
+      IF (Qout(idIqswl,ng)) THEN
         scale=1.0_dp
-        IF (QCK(ng)%pioVar(idIlrdn)%dkind.eq.PIO_double) THEN
+        IF (QCK(ng)%pioVar(idIqswl)%dkind.eq.PIO_double) THEN
           ioDesc => ioDesc_dp_r2dvar(ng)
         ELSE
           ioDesc => ioDesc_sp_r2dvar(ng)
         END IF
         status=nf_fwrite2d(ng, iNLM, QCK(ng)%pioFile,                   &
-     &                     QCK(ng)%pioVar(idIlrdn),                     &
+     &                     QCK(ng)%pioVar(idIqswl),                     &
      &                     QCK(ng)%Rindex,                              &
      &                     ioDesc,                                      &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     FORCES(ng)%lr_dn)
+     &                     FORCES(ng)%qswl)
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIlrdn)), QCK(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqswl)), QCK(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -866,27 +866,27 @@
         END IF
       END IF
 !
-!  Write out downward shortwave radiation.
+!  Write out downward longwave radiation.
 !
-      IF (Qout(idIsrdn,ng)) THEN
+      IF (Qout(idIqlwl,ng)) THEN
         scale=1.0_dp
-        IF (QCK(ng)%pioVar(idIsrdn)%dkind.eq.PIO_double) THEN
+        IF (QCK(ng)%pioVar(idIqlwl)%dkind.eq.PIO_double) THEN
           ioDesc => ioDesc_dp_r2dvar(ng)
         ELSE
           ioDesc => ioDesc_sp_r2dvar(ng)
         END IF
         status=nf_fwrite2d(ng, iNLM, QCK(ng)%pioFile,                   &
-     &                     QCK(ng)%pioVar(idIsrdn),                     &
+     &                     QCK(ng)%pioVar(idIqlwl),                     &
      &                     QCK(ng)%Rindex,                              &
      &                     ioDesc,                                      &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     FORCES(ng)%sr_dn)
+     &                     FORCES(ng)%qlwl)
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsrdn)), QCK(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqlwl)), QCK(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -896,25 +896,25 @@
 !
 !  Write out latent heat over ice.
 !
-      IF (Qout(idIlatI,ng)) THEN
+      IF (Qout(idIqlai,ng)) THEN
         scale=1.0_dp
-        IF (QCK(ng)%pioVar(idIlatI)%dkind.eq.PIO_double) THEN
+        IF (QCK(ng)%pioVar(idIqlai)%dkind.eq.PIO_double) THEN
           ioDesc => ioDesc_dp_r2dvar(ng)
         ELSE
           ioDesc => ioDesc_sp_r2dvar(ng)
         END IF
         status=nf_fwrite2d(ng, iNLM, QCK(ng)%pioFile,                   &
-     &                     QCK(ng)%pioVar(idIlatI),                     &
+     &                     QCK(ng)%pioVar(idIqlai),                     &
      &                     QCK(ng)%Rindex,                              &
      &                     ioDesc,                                      &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     FORCES(ng)%lat_i)
+     &                     FORCES(ng)%qlai)
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIlatI)), QCK(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqlai)), QCK(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -924,25 +924,25 @@
 !
 !  Write out sensible heat over ice.
 !
-      IF (Qout(idIsenI,ng)) THEN
+      IF (Qout(idIqsei,ng)) THEN
         scale=1.0_dp
-        IF (QCK(ng)%pioVar(idIsenI)%dkind.eq.PIO_double) THEN
+        IF (QCK(ng)%pioVar(idIqsei)%dkind.eq.PIO_double) THEN
           ioDesc => ioDesc_dp_r2dvar(ng)
         ELSE
           ioDesc => ioDesc_sp_r2dvar(ng)
         END IF
         status=nf_fwrite2d(ng, iNLM, QCK(ng)%pioFile,                   &
-     &                     QCK(ng)%pioVar(idIsenI),                     &
+     &                     QCK(ng)%pioVar(idIqsei),                     &
      &                     QCK(ng)%Rindex,                              &
      &                     ioDesc,                                      &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     FORCES(ng)%sen_i)
+     &                     FORCES(ng)%qsei)
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsenI)), QCK(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqsei)), QCK(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -952,25 +952,25 @@
 !
 !  Write out upward longwave over ice.
 !
-      IF (Qout(idIlrup,ng)) THEN
+      IF (Qout(idIqlwa,ng)) THEN
         scale=1.0_dp
-        IF (QCK(ng)%pioVar(idIlrup)%dkind.eq.PIO_double) THEN
+        IF (QCK(ng)%pioVar(idIqlwa)%dkind.eq.PIO_double) THEN
           ioDesc => ioDesc_dp_r2dvar(ng)
         ELSE
           ioDesc => ioDesc_sp_r2dvar(ng)
         END IF
         status=nf_fwrite2d(ng, iNLM, QCK(ng)%pioFile,                   &
-     &                     QCK(ng)%pioVar(idIlrup),                     &
+     &                     QCK(ng)%pioVar(idIqlwa),                     &
      &                     QCK(ng)%Rindex,                              &
      &                     ioDesc,                                      &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     FORCES(ng)%lr_up_i)
+     &                     FORCES(ng)%qlwa)
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIlrup)), QCK(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqlwa)), QCK(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -980,25 +980,25 @@
 !
 !  Write out upward shortwave over ice.
 !
-      IF (Qout(idIsrup,ng)) THEN
+      IF (Qout(idIqswa,ng)) THEN
         scale=1.0_dp
-        IF (QCK(ng)%pioVar(idIsrup)%dkind.eq.PIO_double) THEN
+        IF (QCK(ng)%pioVar(idIqswa)%dkind.eq.PIO_double) THEN
           ioDesc => ioDesc_dp_r2dvar(ng)
         ELSE
           ioDesc => ioDesc_sp_r2dvar(ng)
         END IF
         status=nf_fwrite2d(ng, iNLM, QCK(ng)%pioFile,                   &
-     &                     QCK(ng)%pioVar(idIsrup),                     &
+     &                     QCK(ng)%pioVar(idIqswa),                     &
      &                     QCK(ng)%Rindex,                              &
      &                     ioDesc,                                      &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     FORCES(ng)%sr_up_i)
+     &                     FORCES(ng)%qswa)
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsrup)), QCK(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqswa)), QCK(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -1008,25 +1008,25 @@
 !
 !  Write out shortwave into ice.
 !
-      IF (Qout(idIsrin,ng)) THEN
+      IF (Qout(idIqswi,ng)) THEN
         scale=1.0_dp
-        IF (QCK(ng)%pioVar(idIsrin)%dkind.eq.PIO_double) THEN
+        IF (QCK(ng)%pioVar(idIqswi)%dkind.eq.PIO_double) THEN
           ioDesc => ioDesc_dp_r2dvar(ng)
         ELSE
           ioDesc => ioDesc_sp_r2dvar(ng)
         END IF
         status=nf_fwrite2d(ng, iNLM, QCK(ng)%pioFile,                   &
-     &                     QCK(ng)%pioVar(idIsrin),                     &
+     &                     QCK(ng)%pioVar(idIqswi),                     &
      &                     QCK(ng)%Rindex,                              &
      &                     ioDesc,                                      &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     FORCES(ng)%sr_in_i)
+     &                     FORCES(ng)%qswi)
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsrin)), QCK(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqswi)), QCK(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -1036,25 +1036,25 @@
 !
 !  Write out shortwave through ice.
 !
-      IF (Qout(idIsrth,ng)) THEN
+      IF (Qout(idIqswo,ng)) THEN
         scale=1.0_dp
-        IF (QCK(ng)%pioVar(idIsrth)%dkind.eq.PIO_double) THEN
+        IF (QCK(ng)%pioVar(idIqswo)%dkind.eq.PIO_double) THEN
           ioDesc => ioDesc_dp_r2dvar(ng)
         ELSE
           ioDesc => ioDesc_sp_r2dvar(ng)
         END IF
         status=nf_fwrite2d(ng, iNLM, QCK(ng)%pioFile,                   &
-     &                     QCK(ng)%pioVar(idIsrth),                     &
+     &                     QCK(ng)%pioVar(idIqswo),                     &
      &                     QCK(ng)%Rindex,                              &
      &                     ioDesc,                                      &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     FORCES(ng)%sr_th_i)
+     &                     FORCES(ng)%qswo)
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsrth)), QCK(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIqswo)), QCK(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -1064,25 +1064,25 @@
 !
 !  Write out salt flux under ice.
 !
-      IF (Qout(idIsfI,ng)) THEN
+      IF (Qout(idIsio,ng)) THEN
         scale=1.0_dp
-        IF (QCK(ng)%pioVar(idIsfI)%dkind.eq.PIO_double) THEN
+        IF (QCK(ng)%pioVar(idIsio)%dkind.eq.PIO_double) THEN
           ioDesc => ioDesc_dp_r2dvar(ng)
         ELSE
           ioDesc => ioDesc_sp_r2dvar(ng)
         END IF
         status=nf_fwrite2d(ng, iNLM, QCK(ng)%pioFile,                   &
-     &                     QCK(ng)%pioVar(idIsfI),                      &
+     &                     QCK(ng)%pioVar(idIsio),                      &
      &                     QCK(ng)%Rindex,                              &
      &                     ioDesc,                                      &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     FORCES(ng)%ssflx_i)
+     &                     FORCES(ng)%sio)
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsfI)), QCK(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIsio)), QCK(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -1092,25 +1092,25 @@
 !
 !  Write out salt flux through leads.
 !
-      IF (Qout(idIsfL,ng)) THEN
+      IF (Qout(idIsao,ng)) THEN
         scale=1.0_dp
-        IF (QCK(ng)%pioVar(idIsfL)%dkind.eq.PIO_double) THEN
+        IF (QCK(ng)%pioVar(idIsao)%dkind.eq.PIO_double) THEN
           ioDesc => ioDesc_dp_r2dvar(ng)
         ELSE
           ioDesc => ioDesc_sp_r2dvar(ng)
         END IF
         status=nf_fwrite2d(ng, iNLM, QCK(ng)%pioFile,                   &
-     &                     QCK(ng)%pioVar(idIsfL),                      &
+     &                     QCK(ng)%pioVar(idIsao),                      &
      &                     QCK(ng)%Rindex,                              &
      &                     ioDesc,                                      &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     FORCES(ng)%ssflx_l)
+     &                     FORCES(ng)%sao)
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsfL)), QCK(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIsao)), QCK(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status
@@ -1135,7 +1135,7 @@
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     FORCES(ng)%qao_n)
+     &                     FORCES(ng)%qao)
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqao)), QCK(ng)%Rindex
@@ -1163,7 +1163,7 @@
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     FORCES(ng)%qai_n)
+     &                     FORCES(ng)%qai)
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqai)), QCK(ng)%Rindex
@@ -1191,7 +1191,7 @@
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     FORCES(ng)%qio_n)
+     &                     FORCES(ng)%qio)
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqio)), QCK(ng)%Rindex
@@ -1219,7 +1219,7 @@
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     FORCES(ng)%qi2_n)
+     &                     FORCES(ng)%qi2)
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqi2)), QCK(ng)%Rindex
@@ -1232,25 +1232,25 @@
 !
 !  Write out snow-ice conversion.
 !
-      IF (Qout(idIsnoi,ng)) THEN
+      IF (Qout(idIwsni,ng)) THEN
         scale=1.0_dp
-        IF (QCK(ng)%pioVar(idIsnoi)%dkind.eq.PIO_double) THEN
+        IF (QCK(ng)%pioVar(idIwsni)%dkind.eq.PIO_double) THEN
           ioDesc => ioDesc_dp_r2dvar(ng)
         ELSE
           ioDesc => ioDesc_sp_r2dvar(ng)
         END IF
         status=nf_fwrite2d(ng, iNLM, QCK(ng)%pioFile,                   &
-     &                     QCK(ng)%pioVar(idIsnoi),                     &
+     &                     QCK(ng)%pioVar(idIwsni),                     &
      &                     QCK(ng)%Rindex,                              &
      &                     ioDesc,                                      &
      &                     LBi, UBi, LBj, UBj, scale,                   &
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     FORCES(ng)%snoice)
+     &                     FORCES(ng)%wsni)
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsnoi)), QCK(ng)%Rindex
+            WRITE (stdout,10) TRIM(Vname(1,idIwsni)), QCK(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status

@@ -212,108 +212,108 @@
           END DO
         END DO
       END IF
-      IF (Aout(idIlrdn,ng)) THEN
+      IF (Aout(idIqswl,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
-            AVERAGE(ng) % avglr_dn(i,j) = IniVal
+            AVERAGE(ng) % avgqswl(i,j) = IniVal
           END DO
         END DO
       END IF
-      IF (Aout(idIsrdn,ng)) THEN
+      IF (Aout(idIqlwl,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
-            AVERAGE(ng) % avgsr_dn(i,j) = IniVal
+            AVERAGE(ng) % avgqlwl(i,j) = IniVal
           END DO
         END DO
       END IF
-      IF (Aout(idIlatI,ng)) THEN
+      IF (Aout(idIqlai,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
-            AVERAGE(ng) % avglat_i(i,j) = IniVal
+            AVERAGE(ng) % avgqlai(i,j) = IniVal
           END DO
         END DO
       END IF
-      IF (Aout(idIsenI,ng)) THEN
+      IF (Aout(idIqsei,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
-            AVERAGE(ng) % avgsen_i(i,j) = IniVal
+            AVERAGE(ng) % avgqsei(i,j) = IniVal
           END DO
         END DO
       END IF
-      IF (Aout(idIlrup,ng)) THEN
+      IF (Aout(idIqlwa,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
-            AVERAGE(ng) % avglr_up_i(i,j) = IniVal
+            AVERAGE(ng) % avgqlwa(i,j) = IniVal
           END DO
         END DO
       END IF
-      IF (Aout(idIsrup,ng)) THEN
+      IF (Aout(idIqswa,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
-            AVERAGE(ng) % avgsr_up_i(i,j) = IniVal
+            AVERAGE(ng) % avgqswa(i,j) = IniVal
           END DO
         END DO
       END IF
-      IF (Aout(idIsrin,ng)) THEN
+      IF (Aout(idIqswi,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
-            AVERAGE(ng) % avgsr_in_i(i,j) = IniVal
+            AVERAGE(ng) % avgqswi(i,j) = IniVal
           END DO
         END DO
       END IF
-      IF (Aout(idIsrth,ng)) THEN
+      IF (Aout(idIqswo,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
-            AVERAGE(ng) % avgsr_th_i(i,j) = IniVal
+            AVERAGE(ng) % avgqswo(i,j) = IniVal
           END DO
         END DO
       END IF
-      IF (Aout(idIsfI,ng)) THEN
+      IF (Aout(idIsio,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
-            AVERAGE(ng) % avgssflx_i(i,j) = IniVal
+            AVERAGE(ng) % avgsio(i,j) = IniVal
           END DO
         END DO
       END IF
-      IF (Aout(idIsfL,ng)) THEN
+      IF (Aout(idIsao,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
-            AVERAGE(ng) % avgssflx_l(i,j) = IniVal
+            AVERAGE(ng) % avgsao(i,j) = IniVal
           END DO
         END DO
       END IF
       IF (Aout(idIqao,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
-            AVERAGE(ng) % avgqao_n(i,j) = IniVal
+            AVERAGE(ng) % avgqao(i,j) = IniVal
           END DO
         END DO
       END IF
       IF (Aout(idIqai,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
-            AVERAGE(ng) % avgqai_n(i,j) = IniVal
+            AVERAGE(ng) % avgqai(i,j) = IniVal
           END DO
         END DO
       END IF
       IF (Aout(idIqio,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
-            AVERAGE(ng) % avgqio_n(i,j) = IniVal
+            AVERAGE(ng) % avgqio(i,j) = IniVal
           END DO
         END DO
       END IF
       IF (Aout(idIqi2,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
-            AVERAGE(ng) % avgqi2_n(i,j) = IniVal
+            AVERAGE(ng) % avgqi2(i,j) = IniVal
           END DO
         END DO
       END IF
-      IF (Aout(idIsnoi,ng)) THEN
+      IF (Aout(idIwsni,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
-            AVERAGE(ng) % avgsnoice(i,j) = IniVal
+            AVERAGE(ng) % avgwsni(i,j) = IniVal
           END DO
         END DO
       END IF

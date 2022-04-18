@@ -158,56 +158,56 @@
             QCK(ng)%pioVar(idIrfac)%vd=var_desc(i)
             QCK(ng)%pioVar(idIrfac)%dkind=PIO_FOUT
             QCK(ng)%pioVar(idIrfac)%gtype=r2dvar
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIlrdn))) THEN
-            got_var(idIlrdn)=.TRUE.
-            QCK(ng)%pioVar(idIlrdn)%vd=var_desc(i)
-            QCK(ng)%pioVar(idIlrdn)%dkind=PIO_FOUT
-            QCK(ng)%pioVar(idIlrdn)%gtype=r2dvar
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsrdn))) THEN
-            got_var(idIsrdn)=.TRUE.
-            QCK(ng)%pioVar(idIsrdn)%vd=var_desc(i)
-            QCK(ng)%pioVar(idIsrdn)%dkind=PIO_FOUT
-            QCK(ng)%pioVar(idIsrdn)%gtype=r2dvar
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIlatI))) THEN
-            got_var(idIlatI)=.TRUE.
-            QCK(ng)%pioVar(idIlatI)%vd=var_desc(i)
-            QCK(ng)%pioVar(idIlatI)%dkind=PIO_FOUT
-            QCK(ng)%pioVar(idIlatI)%gtype=r2dvar
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsenI))) THEN
-            got_var(idIsenI)=.TRUE.
-            QCK(ng)%pioVar(idIsenI)%vd=var_desc(i)
-            QCK(ng)%pioVar(idIsenI)%dkind=PIO_FOUT
-            QCK(ng)%pioVar(idIsenI)%gtype=r2dvar
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIlrup))) THEN
-            got_var(idIlrup)=.TRUE.
-            QCK(ng)%pioVar(idIlrup)%vd=var_desc(i)
-            QCK(ng)%pioVar(idIlrup)%dkind=PIO_FOUT
-            QCK(ng)%pioVar(idIlrup)%gtype=r2dvar
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsrup))) THEN
-            got_var(idIsrup)=.TRUE.
-            QCK(ng)%pioVar(idIsrup)%vd=var_desc(i)
-            QCK(ng)%pioVar(idIsrup)%dkind=PIO_FOUT
-            QCK(ng)%pioVar(idIsrup)%gtype=r2dvar
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsrin))) THEN
-            got_var(idIsrin)=.TRUE.
-            QCK(ng)%pioVar(idIsrin)%vd=var_desc(i)
-            QCK(ng)%pioVar(idIsrin)%dkind=PIO_FOUT
-            QCK(ng)%pioVar(idIsrin)%gtype=r2dvar
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsrth))) THEN
-            got_var(idIsrth)=.TRUE.
-            QCK(ng)%pioVar(idIsrth)%vd=var_desc(i)
-            QCK(ng)%pioVar(idIsrth)%dkind=PIO_FOUT
-            QCK(ng)%pioVar(idIsrth)%gtype=r2dvar
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsfI))) THEN
-            got_var(idIsfI)=.TRUE.
-            QCK(ng)%pioVar(idIsfI)%vd=var_desc(i)
-            QCK(ng)%pioVar(idIsfI)%dkind=PIO_FOUT
-            QCK(ng)%pioVar(idIsfI)%gtype=r2dvar
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsfL))) THEN
-            got_var(idIsfL)=.TRUE.
-            QCK(ng)%pioVar(idIsfL)%vd=var_desc(i)
-            QCK(ng)%pioVar(idIsfL)%dkind=PIO_FOUT
-            QCK(ng)%pioVar(idIsfL)%gtype=r2dvar
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqswl))) THEN
+            got_var(idIqswl)=.TRUE.
+            QCK(ng)%pioVar(idIqswl)%vd=var_desc(i)
+            QCK(ng)%pioVar(idIqswl)%dkind=PIO_FOUT
+            QCK(ng)%pioVar(idIqswl)%gtype=r2dvar
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqlwl))) THEN
+            got_var(idIqlwl)=.TRUE.
+            QCK(ng)%pioVar(idIqlwl)%vd=var_desc(i)
+            QCK(ng)%pioVar(idIqlwl)%dkind=PIO_FOUT
+            QCK(ng)%pioVar(idIqlwl)%gtype=r2dvar
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqlai))) THEN
+            got_var(idIqlai)=.TRUE.
+            QCK(ng)%pioVar(idIqlai)%vd=var_desc(i)
+            QCK(ng)%pioVar(idIqlai)%dkind=PIO_FOUT
+            QCK(ng)%pioVar(idIqlai)%gtype=r2dvar
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqsei))) THEN
+            got_var(idIqsei)=.TRUE.
+            QCK(ng)%pioVar(idIqsei)%vd=var_desc(i)
+            QCK(ng)%pioVar(idIqsei)%dkind=PIO_FOUT
+            QCK(ng)%pioVar(idIqsei)%gtype=r2dvar
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqlwa))) THEN
+            got_var(idIqlwa)=.TRUE.
+            QCK(ng)%pioVar(idIqlwa)%vd=var_desc(i)
+            QCK(ng)%pioVar(idIqlwa)%dkind=PIO_FOUT
+            QCK(ng)%pioVar(idIqlwa)%gtype=r2dvar
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqswa))) THEN
+            got_var(idIqswa)=.TRUE.
+            QCK(ng)%pioVar(idIqswa)%vd=var_desc(i)
+            QCK(ng)%pioVar(idIqswa)%dkind=PIO_FOUT
+            QCK(ng)%pioVar(idIqswa)%gtype=r2dvar
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqswi))) THEN
+            got_var(idIqswi)=.TRUE.
+            QCK(ng)%pioVar(idIqswi)%vd=var_desc(i)
+            QCK(ng)%pioVar(idIqswi)%dkind=PIO_FOUT
+            QCK(ng)%pioVar(idIqswi)%gtype=r2dvar
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqswo))) THEN
+            got_var(idIqswo)=.TRUE.
+            QCK(ng)%pioVar(idIqswo)%vd=var_desc(i)
+            QCK(ng)%pioVar(idIqswo)%dkind=PIO_FOUT
+            QCK(ng)%pioVar(idIqswo)%gtype=r2dvar
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsio))) THEN
+            got_var(idIsio)=.TRUE.
+            QCK(ng)%pioVar(idIsio)%vd=var_desc(i)
+            QCK(ng)%pioVar(idIsio)%dkind=PIO_FOUT
+            QCK(ng)%pioVar(idIsio)%gtype=r2dvar
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsao))) THEN
+            got_var(idIsao)=.TRUE.
+            QCK(ng)%pioVar(idIsao)%vd=var_desc(i)
+            QCK(ng)%pioVar(idIsao)%dkind=PIO_FOUT
+            QCK(ng)%pioVar(idIsao)%gtype=r2dvar
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqao))) THEN
             got_var(idIqao)=.TRUE.
             QCK(ng)%pioVar(idIqao)%vd=var_desc(i)
@@ -228,11 +228,11 @@
             QCK(ng)%pioVar(idIqi2)%vd=var_desc(i)
             QCK(ng)%pioVar(idIqi2)%dkind=PIO_FOUT
             QCK(ng)%pioVar(idIqi2)%gtype=r2dvar
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsnoi))) THEN
-            got_var(idIsnoi)=.TRUE.
-            QCK(ng)%pioVar(idIsnoi)%vd=var_desc(i)
-            QCK(ng)%pioVar(idIsnoi)%dkind=PIO_FOUT
-            QCK(ng)%pioVar(idIsnoi)%gtype=r2dvar
+          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIwsni))) THEN
+            got_var(idIwsni)=.TRUE.
+            QCK(ng)%pioVar(idIwsni)%vd=var_desc(i)
+            QCK(ng)%pioVar(idIwsni)%dkind=PIO_FOUT
+            QCK(ng)%pioVar(idIwsni)%gtype=r2dvar
 #   endif
 #  endif
 #  ifdef ICESHELF
@@ -468,62 +468,62 @@
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIlrdn).and.Qout(idIlrdn,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIlrdn)),         &
+        IF (.not.got_var(idIqswl).and.Qout(idIqswl,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIqswl)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIsrdn).and.Qout(idIsrdn,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsrdn)),         &
+        IF (.not.got_var(idIqlwl).and.Qout(idIqlwl,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIqlwl)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIlatI).and.Qout(idIlatI,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIlatI)),         &
+        IF (.not.got_var(idIqlai).and.Qout(idIqlai,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIqlai)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIsenI).and.Qout(idIsenI,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsenI)),         &
+        IF (.not.got_var(idIqsei).and.Qout(idIqsei,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIqsei)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIlrup).and.Qout(idIlrup,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIlrup)),         &
+        IF (.not.got_var(idIqlwa).and.Qout(idIqlwa,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIqlwa)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIsrup).and.Qout(idIsrup,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsrup)),         &
+        IF (.not.got_var(idIqswa).and.Qout(idIqswa,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIqswa)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIsrin).and.Qout(idIsrin,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsrin)),         &
+        IF (.not.got_var(idIqswi).and.Qout(idIqswi,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIqswi)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIsrth).and.Qout(idIsrth,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsrth)),         &
+        IF (.not.got_var(idIqswo).and.Qout(idIqswo,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIqswo)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIsfI).and.Qout(idIsfI,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsfI)),          &
+        IF (.not.got_var(idIsio).and.Qout(idIsio,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsio)),          &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIsfL).and.Qout(idIsfL,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsfL)),          &
+        IF (.not.got_var(idIsao).and.Qout(idIsao,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsao)),          &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
@@ -552,8 +552,8 @@
           exit_flag=3
           RETURN
         END IF
-        IF (.not.got_var(idIsnoi).and.Qout(idIsnoi,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsnoi)),         &
+        IF (.not.got_var(idIwsni).and.Qout(idIwsni,ng)) THEN
+          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIwsni)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN

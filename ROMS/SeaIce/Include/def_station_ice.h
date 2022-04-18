@@ -560,15 +560,15 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 !
-!  Define downward longwave radiation.
+!  Define downward shortwave radiation.
 !
-        IF (Sout(idIlrdn,ng)) THEN
-          Vinfo( 1)=Vname(1,idIlrdn)
-          Vinfo( 2)=Vname(2,idIlrdn)
-          Vinfo( 3)=Vname(3,idIlrdn)
-          Vinfo(14)=Vname(4,idIlrdn)
+        IF (Sout(idIqswl,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqswl)
+          Vinfo( 2)=Vname(2,idIqswl)
+          Vinfo( 3)=Vname(3,idIqswl)
+          Vinfo(14)=Vname(4,idIqswl)
           Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIlrdn),  &
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqswl),  &
      &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
 #   ifdef WET_DRY
      &                   SetFillVal = .FALSE.,                          &
@@ -579,15 +579,15 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 !
-!  Define downward shortwave radiation.
+!  Define downward longwave radiation.
 !
-        IF (Sout(idIsrdn,ng)) THEN
-          Vinfo( 1)=Vname(1,idIsrdn)
-          Vinfo( 2)=Vname(2,idIsrdn)
-          Vinfo( 3)=Vname(3,idIsrdn)
-          Vinfo(14)=Vname(4,idIsrdn)
+        IF (Sout(idIqlwl,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqlwl)
+          Vinfo( 2)=Vname(2,idIqlwl)
+          Vinfo( 3)=Vname(3,idIqlwl)
+          Vinfo(14)=Vname(4,idIqlwl)
           Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIsrdn),  &
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqlwl),  &
      &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
 #   ifdef WET_DRY
      &                   SetFillVal = .FALSE.,                          &
@@ -600,13 +600,13 @@
 !
 !  Define latent heat over ice.
 !
-        IF (Sout(idIlatI,ng)) THEN
-          Vinfo( 1)=Vname(1,idIlatI)
-          Vinfo( 2)=Vname(2,idIlatI)
-          Vinfo( 3)=Vname(3,idIlatI)
-          Vinfo(14)=Vname(4,idIlatI)
+        IF (Sout(idIqlai,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqlai)
+          Vinfo( 2)=Vname(2,idIqlai)
+          Vinfo( 3)=Vname(3,idIqlai)
+          Vinfo(14)=Vname(4,idIqlai)
           Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIlatI),  &
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqlai),  &
      &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
 #   ifdef WET_DRY
      &                   SetFillVal = .FALSE.,                          &
@@ -619,13 +619,13 @@
 !
 !  Define sensible heat over ice.
 !
-        IF (Sout(idIsenI,ng)) THEN
-          Vinfo( 1)=Vname(1,idIsenI)
-          Vinfo( 2)=Vname(2,idIsenI)
-          Vinfo( 3)=Vname(3,idIsenI)
-          Vinfo(14)=Vname(4,idIsenI)
+        IF (Sout(idIqsei,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqsei)
+          Vinfo( 2)=Vname(2,idIqsei)
+          Vinfo( 3)=Vname(3,idIqsei)
+          Vinfo(14)=Vname(4,idIqsei)
           Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIsenI),  &
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqsei),  &
      &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
 #   ifdef WET_DRY
      &                   SetFillVal = .FALSE.,                          &
@@ -638,13 +638,13 @@
 !
 !  Define upward longwave over ice.
 !
-        IF (Sout(idIlrup,ng)) THEN
-          Vinfo( 1)=Vname(1,idIlrup)
-          Vinfo( 2)=Vname(2,idIlrup)
-          Vinfo( 3)=Vname(3,idIlrup)
-          Vinfo(14)=Vname(4,idIlrup)
+        IF (Sout(idIqlwa,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqlwa)
+          Vinfo( 2)=Vname(2,idIqlwa)
+          Vinfo( 3)=Vname(3,idIqlwa)
+          Vinfo(14)=Vname(4,idIqlwa)
           Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIlrup),  &
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqlwa),  &
      &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
 #   ifdef WET_DRY
      &                   SetFillVal = .FALSE.,                          &
@@ -657,13 +657,13 @@
 !
 !  Define upward shortwave over ice.
 !
-        IF (Sout(idIsrup,ng)) THEN
-          Vinfo( 1)=Vname(1,idIsrup)
-          Vinfo( 2)=Vname(2,idIsrup)
-          Vinfo( 3)=Vname(3,idIsrup)
-          Vinfo(14)=Vname(4,idIsrup)
+        IF (Sout(idIqswa,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqswa)
+          Vinfo( 2)=Vname(2,idIqswa)
+          Vinfo( 3)=Vname(3,idIqswa)
+          Vinfo(14)=Vname(4,idIqswa)
           Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIsrup),  &
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqswa),  &
      &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
 #   ifdef WET_DRY
      &                   SetFillVal = .FALSE.,                          &
@@ -676,13 +676,13 @@
 !
 !  Define shortwave into ice.
 !
-        IF (Sout(idIsrin,ng)) THEN
-          Vinfo( 1)=Vname(1,idIsrin)
-          Vinfo( 2)=Vname(2,idIsrin)
-          Vinfo( 3)=Vname(3,idIsrin)
-          Vinfo(14)=Vname(4,idIsrin)
+        IF (Sout(idIqswi,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqswi)
+          Vinfo( 2)=Vname(2,idIqswi)
+          Vinfo( 3)=Vname(3,idIqswi)
+          Vinfo(14)=Vname(4,idIqswi)
           Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIsrin),  &
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqswi),  &
      &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
 #   ifdef WET_DRY
      &                   SetFillVal = .FALSE.,                          &
@@ -695,13 +695,13 @@
 !
 !  Define shortwave through ice.
 !
-        IF (Sout(idIsrth,ng)) THEN
-          Vinfo( 1)=Vname(1,idIsrth)
-          Vinfo( 2)=Vname(2,idIsrth)
-          Vinfo( 3)=Vname(3,idIsrth)
-          Vinfo(14)=Vname(4,idIsrth)
+        IF (Sout(idIqswo,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqswo)
+          Vinfo( 2)=Vname(2,idIqswo)
+          Vinfo( 3)=Vname(3,idIqswo)
+          Vinfo(14)=Vname(4,idIqswo)
           Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIsrth),  &
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqswo),  &
      &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
 #   ifdef WET_DRY
      &                   SetFillVal = .FALSE.,                          &
@@ -714,13 +714,13 @@
 !
 !  Define salt flux under ice.
 !
-        IF (Sout(idIsfI,ng)) THEN
-          Vinfo( 1)=Vname(1,idIsfI)
-          Vinfo( 2)=Vname(2,idIsfI)
-          Vinfo( 3)=Vname(3,idIsfI)
-          Vinfo(14)=Vname(4,idIsfI)
+        IF (Sout(idIsio,ng)) THEN
+          Vinfo( 1)=Vname(1,idIsio)
+          Vinfo( 2)=Vname(2,idIsio)
+          Vinfo( 3)=Vname(3,idIsio)
+          Vinfo(14)=Vname(4,idIsio)
           Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIsfI),   &
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIsio),   &
      &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
 #   ifdef WET_DRY
      &                   SetFillVal = .FALSE.,                          &
@@ -733,13 +733,13 @@
 !
 !  Define salt flux through leads.
 !
-        IF (Sout(idIsfL,ng)) THEN
-          Vinfo( 1)=Vname(1,idIsfL)
-          Vinfo( 2)=Vname(2,idIsfL)
-          Vinfo( 3)=Vname(3,idIsfL)
-          Vinfo(14)=Vname(4,idIsfL)
+        IF (Sout(idIsao,ng)) THEN
+          Vinfo( 1)=Vname(1,idIsao)
+          Vinfo( 2)=Vname(2,idIsao)
+          Vinfo( 3)=Vname(3,idIsao)
+          Vinfo(14)=Vname(4,idIsao)
           Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIsfL),   &
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIsao),   &
      &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
 #   ifdef WET_DRY
      &                   SetFillVal = .FALSE.,                          &
@@ -828,13 +828,13 @@
 !
 !  Define snow-ice conversion.
 !
-        IF (Sout(idIsnoi,ng)) THEN
-          Vinfo( 1)=Vname(1,idIsnoi)
-          Vinfo( 2)=Vname(2,idIsnoi)
-          Vinfo( 3)=Vname(3,idIsnoi)
-          Vinfo(14)=Vname(4,idIsnoi)
+        IF (Sout(idIwsni,ng)) THEN
+          Vinfo( 1)=Vname(1,idIwsni)
+          Vinfo( 2)=Vname(2,idIwsni)
+          Vinfo( 3)=Vname(3,idIwsni)
+          Vinfo(14)=Vname(4,idIwsni)
           Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIsnoi),  &
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIwsni),  &
      &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
 #   ifdef WET_DRY
      &                   SetFillVal = .FALSE.,                          &

@@ -465,6 +465,7 @@
 #  endif
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 
+#  ifndef ICE_MOM_BULK
 !
 !  Define ice-water friction velocity.
 !
@@ -473,14 +474,14 @@
         Vinfo( 3)=Vname(3,idIutau)
         Vinfo(14)=Vname(4,idIutau)
         Vinfo(16)=Vname(1,idtime)
-#  if defined WRITE_WATER && defined MASKING
-#   if !defined WET_DRY && defined PERFECT_RESTART
+#   if defined WRITE_WATER && defined MASKING
+#    if !defined WET_DRY && defined PERFECT_RESTART
         Vinfo(24)='_FillValue'
         Aval(6)=spval
-#   else
+#    else
         Vinfo(20)='mask_rho'
+#    endif
 #   endif
-#  endif
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idIutau,ng),r8)
         RST(ng)%pioVar(idIutau)%dkind=PIO_FRST
@@ -488,13 +489,13 @@
 !
         status=def_var(ng, iNLM, RST(ng)%pioFile,                       &
      &                 RST(ng)%pioVar(idIutau)%vd,                      &
-#  ifdef WET_DRY
+#   ifdef WET_DRY
      &                 PIO_FRST, nvd3, sr2dgrd, Aval, Vinfo, ncname,    &
      &                 SetFillVal = .FALSE.)
-#  else
+#   else
      &                 PIO_FRST, nvd3, sr2dgrd, Aval, Vinfo, ncname)
 
-#  endif
+#   endif
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 
 !
@@ -505,14 +506,14 @@
         Vinfo( 3)=Vname(3,idImchu)
         Vinfo(14)=Vname(4,idImchu)
         Vinfo(16)=Vname(1,idtime)
-#  if defined WRITE_WATER && defined MASKING
-#   if !defined WET_DRY && defined PERFECT_RESTART
+#   if defined WRITE_WATER && defined MASKING
+#    if !defined WET_DRY && defined PERFECT_RESTART
         Vinfo(24)='_FillValue'
         Aval(6)=spval
-#   else
+#    else
         Vinfo(20)='mask_rho'
+#    endif
 #   endif
-#  endif
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idImchu,ng),r8)
         RST(ng)%pioVar(idImchu)%dkind=PIO_FRST
@@ -520,15 +521,16 @@
 !
         status=def_var(ng, iNLM, RST(ng)%pioFile,                       &
      &                 RST(ng)%pioVar(idImchu)%vd,                      &
-#  ifdef WET_DRY
+#   ifdef WET_DRY
      &                 PIO_FRST, nvd3, sr2dgrd, Aval, Vinfo, ncname,    &
      &                 SetFillVal = .FALSE.)
-#  else
+#   else
      &                 PIO_FRST, nvd3, sr2dgrd, Aval, Vinfo, ncname)
 
-#  endif
+#   endif
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
 
+#  endif
 !
 !  Define temperature of molecular sublayer under ice.
 !

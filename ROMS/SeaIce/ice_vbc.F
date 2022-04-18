@@ -62,8 +62,8 @@
 # ifdef ICE_BULK_FLUXES
      &                   FORCES(ng) % sustr_aw,                         &
      &                   FORCES(ng) % svstr_aw,                         &
-     &                   FORCES(ng) % tau_aix_n,                        &
-     &                   FORCES(ng) % tau_aiy_n,                        &
+     &                   FORCES(ng) % taux_ai,                          &
+     &                   FORCES(ng) % tauy_ai,                          &
 # endif
 # ifdef ICE_SHOREFAST
      &                   GRID(ng) % h,                                  &
@@ -101,8 +101,7 @@
      &                         Zt_avg1,                                 &
      &                         ai, hi, ui, vi, uwater, vwater, spd_iw,  &
 # ifdef ICE_BULK_FLUXES
-     &                         sustr_aw, svstr_aw,                      &
-     &                         tau_aix_n, tau_aiy_n,                    &
+     &                         sustr_aw, svstr_aw, taux_ai, tauy_ai,    &
 # endif
 # ifdef ICE_SHOREFAST
      &                         h,                                       &
@@ -150,8 +149,8 @@
 #  ifdef ICE_BULK_FLUXES
       real(r8), intent(in) :: sustr_aw(LBi:,LBj:)
       real(r8), intent(in) :: svstr_aw(LBi:,LBj:)
-      real(r8), intent(in) :: tau_aix_n(LBi:,LBj:)
-      real(r8), intent(in) :: tau_aiy_n(LBi:,LBj:)
+      real(r8), intent(in) :: taux_ai(LBi:,LBj:)
+      real(r8), intent(in) :: tauy_ai(LBi:,LBj:)
 #  endif
 #  ifdef ICE_SHOREFAST
       real(r8), intent(in) :: h(LBi:,LBj:)
@@ -189,8 +188,8 @@
 #  ifdef ICE_BULK_FLUXES
       real(r8), intent(in) :: sustr_aw(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: svstr_aw(LBi:UBi,LBj:UBj)
-      real(r8), intent(in) :: tau_aix_n(LBi:UBi,LBj:UBj)
-      real(r8), intent(in) :: tau_aiy_n(LBi:UBi,LBj:UBj)
+      real(r8), intent(in) :: taux_ai(LBi:UBi,LBj:UBj)
+      real(r8), intent(in) :: tauy_ai(LBi:UBi,LBj:UBj)
 #  endif
 #  ifdef ICE_SHOREFAST
       real(r8), intent(in) :: h(LBi:UBi,LBj:UBj)
@@ -223,9 +222,9 @@
 # ifndef ICE_MK
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: Uwind
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: Vwind
-      real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: wind_speed
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: windu
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: windv
+      real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: wind_speed
 # endif
       real(r8) :: tauiwu
       real(r8) :: tauiwv
@@ -296,7 +295,7 @@
           aix = 0.5_r8*(ai(i,j,liold)+ai(i-1,j,liold))
           chux = 0.5_r8*(chuiw(i,j)+chuiw(i-1,j))
 #  ifdef ICE_BULK_FLUXES
-          tauaiu(i,j) = 0.5_r8*aix*(tau_aix_n(i,j)+tau_aix_n(i-1,j))
+          tauaiu(i,j) = 0.5_r8*aix*(taux_ai(i,j)+taux_ai(i-1,j))
 #  else
           tauaiu(i,j) = 0.5_r8*aix*rhoice(ng)*(sustr(i,j)+sustr(i-1,j))
 #  endif
@@ -325,7 +324,7 @@
           aiy = 0.5_r8*(ai(i,j,liold)+ai(i,j-1,liold))
           chuy = 0.5_r8*(chuiw(i,j)+chuiw(i,j-1))
 #  ifdef ICE_BULK_FLUXES
-          tauaiv(i,j) = 0.5_r8*aiy*(tau_aiy_n(i,j)+tau_aiy_n(i,j-1))
+          tauaiv(i,j) = 0.5_r8*aiy*(tauy_ai(i,j)+tauy_ai(i,j-1))
 #  else
           tauaiv(i,j) = 0.5_r8*aiy*rhoice(ng)*(svstr(i,j)+svstr(i,j-1))
 #  endif

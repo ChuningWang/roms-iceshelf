@@ -564,6 +564,7 @@
         ioerror=status
         RETURN
       END IF
+#  ifndef ICE_MOM_BULK
 !
 !  Write out ice-water friction velocity.
 !
@@ -578,15 +579,15 @@
      &                   RST(ng)%Rindex,                                &
      &                   ioDesc,                                        &
      &                   LBi, UBi, LBj, UBj, scale,                     &
-#  ifdef MASKING
+#   ifdef MASKING
      &                   GRID(ng) % rmask,                              &
-#  endif
-#  ifdef WET_DRY
+#   endif
+#   ifdef WET_DRY
      &                   ICE(ng)%utau_iw,                               &
      &                   SetFillVal = .FALSE.)
-#  else
+#   else
      &                   ICE(ng)%utau_iw)
-#  endif
+#   endif
       IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idIutau)), RST(ng)%Rindex
@@ -609,15 +610,15 @@
      &                   RST(ng)%Rindex,                                &
      &                   ioDesc,                                        &
      &                   LBi, UBi, LBj, UBj, scale,                     &
-#  ifdef MASKING
+#   ifdef MASKING
      &                   GRID(ng) % rmask,                              &
-#  endif
-#  ifdef WET_DRY
+#   endif
+#   ifdef WET_DRY
      &                   ICE(ng)%chu_iw,                                &
      &                   SetFillVal = .FALSE.)
-#  else
+#   else
      &                   ICE(ng)%chu_iw)
-#  endif
+#   endif
       IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
         IF (Master) THEN
           WRITE (stdout,10) TRIM(Vname(1,idImchu)), RST(ng)%Rindex
@@ -626,6 +627,7 @@
         ioerror=status
         RETURN
       END IF
+#  endif
 !
 !  Write out temperature of molecular sublayer under ice.
 !
@@ -708,7 +710,7 @@
      &                     GRID(ng) % rmask,                            &
 #   endif
 #   ifdef WET_DRY
-     &                     FORCES(ng)%stflx_save(:,:,itrc),             &
+     &                     FORCES(ng)%stflx_save(:,:,itrc),                &
      &                     SetFillVal = .FALSE.)
 #   else
      &                     FORCES(ng)%stflx_save(:,:,itrc))
@@ -872,10 +874,10 @@
      &                     GRID(ng) % rmask,                            &
 #   endif
 #   ifdef WET_DRY
-     &                     ICESHELFVAR(ng)%istrc,                       &
+     &                     ICESHELFVAR(ng)%istrc(:,:,itrc),             &
      &                     SetFillVal = .FALSE.)
 #   else
-     &                     ICESHELFVAR(ng)%istrc)
+     &                     ICESHELFVAR(ng)%istrc(:,:,itrc))
 #   endif
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
