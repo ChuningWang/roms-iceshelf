@@ -500,10 +500,6 @@
 # ifdef ICE_MODEL
       integer :: listp
 !
-! Ratio of molecular weight of water to dry air
-!
-      real(r8), parameter :: epsilon = 0.622_r8
-!
 ! Visual fraction of total shortwave (Aumont et al., 2015)
 !
       real(r8), parameter :: fv=0.43_r8
@@ -512,11 +508,9 @@
       real(r8) :: transw, transi, rtransi
 !
 #  ifdef ICE_THERMO
-      real(r8), parameter :: Io_frac = 0.17_r8   ! from MU
-!
+!     real(r8), parameter :: io_frac = 0.17_r8   ! from MU
       real(r8) :: qlwi_i, qlai_i, qsei_i
-      real(r8) :: dq_i, fqlat1, sfc_temp, slp, Qsati
-      real(r8) :: vap_p_i
+      real(r8) :: dq_i, fqlat1, sfc_temp, slp, Qsati, vap_p_i
 #  endif
 #  ifdef ICE_CCSM_SHORTWAVE
 !
@@ -527,7 +521,6 @@
 #  endif
 #  ifdef ICE_ALB_DIRDIFF
       real(r8), parameter :: alb_w_d = 0.065_r8
-!
       real(r8) :: cawdif
 #  endif
 !
@@ -1252,7 +1245,7 @@
 !  Recommended.
 !
 !           IF (hsn(i,j,listp) .lt. 1.e-3_r8) THEN
-!             qswo(i,j) = qswi(i,j) * Io_frac
+!             qswo(i,j) = qswi(i,j) * io_frac
 !           ELSE
 !             qswo(i,j) = 0._r8
 !           END IF

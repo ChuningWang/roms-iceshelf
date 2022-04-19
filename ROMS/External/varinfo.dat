@@ -1452,6 +1452,15 @@
   'r2dvar'
   1.0d0                                            ! 1/rhow (0.001 m3/kg) if m/s
 
+'snow'                                             ! Input
+  'snow fall rate'
+  'kilogram meter-2 second-1'                      ! [kg m2/s]
+  'snow, scalar, series'
+  'snow_time'
+  'idsnow'
+  'r2dvar'
+  1.0d0                                            ! 1/rhow (0.001 m3/kg) if m/s
+
 'evaporation'                                      ! Input
   'evaporation rate'
   'kilogram meter-2 second-1'                      ! [kg m2/s]

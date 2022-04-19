@@ -459,7 +459,7 @@
 !
 !  Local variable declarations.
 !
-      integer :: i, j, listp
+      integer :: i, j
 
       real(r8), parameter :: eps = 1.0E-20_r8
       real(r8), parameter :: r3 = 1.0_r8/3.0_r8
@@ -469,8 +469,7 @@
       real(r8), parameter :: epsilon = 0.622_r8
 
       real(r8) :: Hscale, Hscale_inv
-      real(r8) :: RH, cff1, cff2
-      real(r8) :: cff
+      real(r8) :: RH, cff, cff1, cff2, cff3
 # ifdef EVAP_SHALLOW
       real(r8), parameter :: coef_shallow = 5.28_r8
 !     real(r8), parameter :: coef_shallow = 4.69_r8
@@ -584,19 +583,18 @@
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: u10n_tmp
 !
 # ifdef ICE_MODEL
+      integer :: listp
 !
 ! Visual fraction of total shortwave (Aumont et al., 2015)
 !
       real(r8), parameter :: fv=0.43_r8
 !
-      real(r8) :: transw, transi, rtransi
       real(r8) :: ice_thick, snow_thick
+      real(r8) :: transw, transi, rtransi
 #  ifdef ICE_THERMO
-      real(r8), parameter :: Io_frac = 0.17_r8   ! from MU
-!
+!     real(r8), parameter :: io_frac = 0.17_r8   ! from MU
       real(r8) :: qlwi_i, qlai_i, qsei_i
-      real(r8) :: dq_i, fqlat1, sfc_temp, slp, Qsati
-      real(r8) :: vap_p_i
+      real(r8) :: dq_i, fqlat1, sfc_temp, slp, Qsati, vap_p_i
 #  endif
 #  ifdef ICE_CCSM_SHORTWAVE
 !
@@ -607,7 +605,6 @@
 #  endif
 #  ifdef ICE_ALB_DIRDIFF
       real(r8), parameter :: alb_w_d = 0.065_r8
-!
       real(r8) :: cawdif
 #  endif
 !
@@ -897,24 +894,25 @@
           u10n_tmp(i,j) = u10n
 !
 !------------------------------------------------------------
-! compute the fluxes
+!  Compute the fluxes
 !------------------------------------------------------------
 !
           tau = rhoAir(i) * ustar * ustar
 !
-!--- momentum flux ---
+!------------------------------------------------------------
+!  Momentum flux
+!------------------------------------------------------------
 !
           Taux(i,j) = tau * Uair(i,j) / vmag
           Tauy(i,j) = tau * Vair(i,j) / vmag
 
 # ifdef ICE_MODEL
-#  ifdef ICE_THERMO
-          qswi(i,j) = srflx(i,j) * Hscale
-#  endif
 !
-!  Ice model bulk flux formula
+!  Ice model bulk flux formula.
 !
-!  Sea ice momentum flux.
+!------------------------------------------------------------
+!  Sea ice momentum flux
+!------------------------------------------------------------
 !
           Taux_Ice(i,j) = rhoAir(i)*cdai(ng)*Uwind(i,j)*vmag
           Tauy_Ice(i,j) = rhoAir(i)*cdai(ng)*Vwind(i,j)*vmag
@@ -926,7 +924,9 @@
           Coef_Ice(i,j) = 0._r8
           RHS_Ice(i,j)  = 0._r8
 !
+!------------------------------------------------------------
 !  Sensible heat flux over ice
+!------------------------------------------------------------
 !
           IF (ai(i,j,listp).gt.min_a(ng)) THEN
             sfc_temp    = tis(i,j) + 273.16_r8
@@ -941,6 +941,9 @@
      &                    rhoAir(i)*blk_Cpa*Ch_i*vmag*                  &
      &                    (TairK(i)+0.0098*blk_ZT(ng))
 !
+!------------------------------------------------------------
+!  Latent heat flux over ice
+!------------------------------------------------------------
 !  Qsati is saturation specific humidity over the ice from
 !  Parkinson and Washington (1979)
 !
@@ -954,15 +957,21 @@
           fqlat1 = rhoAir(i)*Ce_i*vmag
           qlai_i = fqlat1*sublim_lat_h*dq_i
 !
+          RHS_Ice(i,j) = RHS_Ice(i,j) + qlai_i
+!
 #   ifdef ICE_DIAGS
           qlai(i,j) = qlai_i
           qsei(i,j) = qsei_i
 #   endif
-          RHS_Ice(i,j) = RHS_Ice(i,j) + qlai_i
 !
-!  Short-wave radiation to ice
+!  Save original SRad
 !
+          qswi(i,j) = srflx(i,j) * Hscale
 #   ifdef ICE_ALBEDO
+!
+!------------------------------------------------------------
+!  Shortwave radiation over ice
+!------------------------------------------------------------
 !
 !  Total absorbed shortwave (W/m2 ice)
 !
@@ -1017,7 +1026,7 @@
 !  Recommended.
 !
 !           IF (hsn(i,j,listp) .lt. 1.e-3_r8) THEN
-!             qswo(i,j) = qswi(i,j) * Io_frac
+!             qswo(i,j) = qswi(i,j) * io_frac
 !           ELSE
 !             qswo(i,j) = 0._r8
 !           END IF
@@ -1167,17 +1176,17 @@
 
 # if defined LONGWAVE
           tsk = t(i,j,N(ng),nrhs,itemp) + 273.16_r8
-          tak = Tair(i,j) + 273.16_r8
+          tak = Tair(i,j)               + 273.16_r8
 
-          cff=(0.7859_r8+0.03477_r8*Tair(i,j))/                         &
-     &        (1.0_r8+0.00412_r8*Tair(i,j))
-          cff=10.0_r8**cff   ! saturation vapor pressure (hPa or mbar)
-          cff=cff*Hair(i,j)  ! water vapor pressure (hPa or mbar)
+          cff3 = (0.7859_r8+0.03477_r8*Tair(i,j)) /                     &
+     &           (1.0_r8   +0.00412_r8*Tair(i,j))
+          cff3 = 10.0_r8**cff3   ! saturation vapor pre (hPa or mbar)
+          cff3 = cff3*Hair(i,j)  ! water vapor pressure (hPa or mbar)
 
-          cff2=tak*tak*tak
-          cff1=cff2*tak
+          cff2 = tak*tak*tak
+          cff1 = cff2*tak
           lrflx(i,j) = -shr_const_stebol*                               &
-     &                 (cff1*(0.39_r8-0.05_r8*SQRT(cff))  *             &
+     &                 (cff1*(0.39_r8-0.05_r8*SQRT(cff3))  *            &
      &                       (1.0_r8-0.6823_r8*cloud(i,j)*cloud(i,j))+  &
      &                  cff2*4.0_r8*(tsk-tak))
           lrflx(i,j) = lrflx(i,j)*Hscale_inv
