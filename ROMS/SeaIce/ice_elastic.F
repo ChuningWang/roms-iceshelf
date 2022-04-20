@@ -6,7 +6,7 @@
 !  Copyright (c) 2002-2020 The ROMS/TOMS Group                         !
 !================================================== Hernan G. Arango ===
 !                                                                      !
-!  This routine timesteps the ice momentum equations.
+!  This routine timesteps the ice momentum equations.                  !
 !                                                                      !
 !=======================================================================
 !

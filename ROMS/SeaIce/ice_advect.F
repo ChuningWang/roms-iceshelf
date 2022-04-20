@@ -7,8 +7,7 @@
 !================================================== Hernan G. Arango ===
 !                                                                      !
 !  This subroutine performs advection of ice using one of 2 options:   !
-!  (1) Smolarkiewicz second-order upwind scheme.                       !
-!      Reference:                                                      !
+!  (1) Smolarkiewicz second-order upwind scheme. Reference:            !
 !      Smolarkiewicz and Grabowski (1990)                              !
 !  (2) MPDATA advection scheme.                                        !
 !                                                                      !

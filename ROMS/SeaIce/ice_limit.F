@@ -6,8 +6,8 @@
 !  Copyright (c) 2002-2021 ROMS/TOMS Group                             !
 !============================================== Hernan G. Arango =======
 !                                                                      !
-!  Limit ice tracer variables, for instance to not allow negative      !
-!  ice concentration or thickness.                                     !
+!  Limit ice tracer variables, for instance to not allow negative ice  !
+!  concentration or thickness.                                         !
 !                                                                      !
 !=======================================================================
 !

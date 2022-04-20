@@ -168,6 +168,36 @@
 !                 5 nm bandwidth.                                      !
 !  avcos        Cosine of average zenith angle of downwelling          !
 !                 spectral photons.                                    !
+#ifdef ICE_MODEL
+!                                                                      !
+!  snow         Snowfall rate (kg m-2 s-1).                            !
+!  wsf          Effective snowfall rate (kg m-2 s-1).                  !
+!                                                                      !
+!  qai          Heat flux from ice to air (watt m-2).                  !
+!  qao          Heat flux from ocean to air (watt m-2).                !
+!  qao          Heat flux from ocean to ice (watt m-2).                !
+!  qi2          Heat flux from ice to snow layer (watt m-2).           !
+!  qswo         Shortwave flux at ice base (watt m-2).                 !
+!  qswa         Shortwave flux relected back to air (watt m-2).        !
+!  qswl         Shortwave flux through lead (watt m-2).                !
+!  qswi         Shortwave flux absorbed by ice (watt m-2).             !
+!  qlwa         Longwave flux from ice to air (watt m-2).              !
+!  qlwl         Longwave flux from air to ocean (watt m-2).            !
+!  qlai         Latent heat flux from air to ice (watt m-2).           !
+!  qsei         Sensible heat flux from air to ice (watt m-2).         !
+!                                                                      !
+!  sio          Salt flux from ice to ocean.                           !
+!  sao          Salt flux from air to ocean.                           !
+!  wsni         Snow-ice conversion rate.                              !
+!                                                                      !
+!  sustr_aw     Air/ocean momentum stress in XI direction [m2 s-2].    !
+!  svstr_aw     Air/ocean momentum stress in ETA direction [m2 s-2].   !
+!  taux_ai      Air/ice momentum stress in XI direction [kg m-1 s-2].  !
+!  tayy_ai      Air/ice momentum stress in ETA direction [kg m-1 s-2]. !
+!                                                                      !
+!  albo, albi   Ocean, ice albedo [fraction].                          !
+!  frswp        Shortwave penetration rate in ice [fraction].          !
+#endif
 !                                                                      !
 !=======================================================================
 !
@@ -494,14 +524,11 @@
 #  if defined SHORTWAVE && defined ICE_ALBEDO
           real(r8), pointer :: albo(:,:)
           real(r8), pointer :: albi(:,:)
-#   ifdef ICE_ALB_CSIM
           real(r8), pointer :: frswp(:,:)
-#   endif
-#   ifdef ICE_ALB_DIRDIFF
-          real(r8), pointer :: cawdir(:,:)
-#   endif
 #   ifdef ICE_ALB_FILE
-          real(r8), pointer :: albG(:,:,:)
+          real(r8), pointer :: alboG(:,:,:)
+          real(r8), pointer :: albiG(:,:,:)
+          real(r8), pointer :: frswpG(:,:,:)
 #   endif
 #  endif
 #  ifdef ICE_SNOWFALL
@@ -519,8 +546,8 @@
           real(r8), pointer :: qlwl(:,:)
           real(r8), pointer :: qlai(:,:)
           real(r8), pointer :: qsei(:,:)
-          real(r8), pointer :: sao(:,:)
           real(r8), pointer :: sio(:,:)
+          real(r8), pointer :: sao(:,:)
           real(r8), pointer :: wsni(:,:)
 # endif
 #endif
@@ -1054,16 +1081,14 @@
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( FORCES(ng) % albi(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-#   ifdef ICE_ALB_CSIM
       allocate ( FORCES(ng) % frswp(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-#   endif
-#   ifdef ICE_ALB_DIRDIFF
-      allocate ( FORCES(ng) % cawdir(LBi:UBi,LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+size2d
-#   endif
 #   ifdef ICE_ALB_FILE
-      allocate ( FORCES(ng) % albG(LBi:UBi,LBj:UBj,2) )
+      allocate ( FORCES(ng) % alboG(LBi:UBi,LBj:UBj,2) )
+      Dmem(ng)=Dmem(ng)+2.0_r8*size2d
+      allocate ( FORCES(ng) % albiG(LBi:UBi,LBj:UBj,2) )
+      Dmem(ng)=Dmem(ng)+2.0_r8*size2d
+      allocate ( FORCES(ng) % frswpG(LBi:UBi,LBj:UBj,2) )
       Dmem(ng)=Dmem(ng)+2.0_r8*size2d
 #   endif
 #  endif
@@ -1091,9 +1116,9 @@
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( FORCES(ng) % qsei(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % sao(LBi:UBi,LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+size2d
       allocate ( FORCES(ng) % sio(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % sao(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( FORCES(ng) % wsni(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
@@ -1645,20 +1670,17 @@
 
       IF (.not.destroy(ng, FORCES(ng)%albi, MyFile,                     &
      &                 __LINE__, 'FORCES(ng)%albi')) RETURN
-#    ifdef ICE_ALB_CSIM
 
       IF (.not.destroy(ng, FORCES(ng)%frswp, MyFile,                    &
      &                 __LINE__, 'FORCES(ng)%frswp')) RETURN
-#    endif
-#    ifdef ICE_ALB_DIRDIFF
-
-      IF (.not.destroy(ng, FORCES(ng)%cawdir, MyFile,                   &
-     &                 __LINE__, 'FORCES(ng)%cawdir')) RETURN
-#    endif
 #    ifdef ICE_ALB_FILE
 
-      IF (.not.destroy(ng, FORCES(ng)%albG, MyFile,                     &
-     &                 __LINE__, 'FORCES(ng)%albG')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%alboG, MyFile,                    &
+     &                 __LINE__, 'FORCES(ng)%alboG')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%albiG, MyFile,                    &
+     &                 __LINE__, 'FORCES(ng)%albiG')) RETURN
+      IF (.not.destroy(ng, FORCES(ng)%frswpG, MyFile,                   &
+     &                 __LINE__, 'FORCES(ng)%frswpG')) RETURN
 #    endif
 #   endif
 #   ifdef ICE_SNOWFALL
@@ -1695,14 +1717,14 @@
       IF (.not.destroy(ng, FORCES(ng)%qsei, MyFile,                     &
      &                 __LINE__, 'FORCES(ng)%qsei')) RETURN
 
-      IF (.not.destroy(ng, FORCES(ng)%sao, MyFile,                      &
-     &                 __LINE__, 'FORCES(ng)%sao')) RETURN
-
       IF (.not.destroy(ng, FORCES(ng)%sio, MyFile,                      &
      &                 __LINE__, 'FORCES(ng)%sio')) RETURN
 
       IF (.not.destroy(ng, FORCES(ng)%wsni, MyFile,                     &
      &                 __LINE__, 'FORCES(ng)%wsni')) RETURN
+
+      IF (.not.destroy(ng, FORCES(ng)%sao, MyFile,                      &
+     &                 __LINE__, 'FORCES(ng)%sao')) RETURN
 #  endif
 # endif
 #endif
@@ -2185,15 +2207,14 @@
 #  if defined SHORTWAVE && defined ICE_ALBEDO
             FORCES(ng) % albo(i,j) = IniVal
             FORCES(ng) % albi(i,j) = IniVal
-#   ifdef ICE_ALB_CSIM
             FORCES(ng) % frswp(i,j) = IniVal
-#   endif
-#   ifdef ICE_ALB_DIRDIFF
-            FORCES(ng) % cawdir(i,j) = IniVal
-#   endif
 #   ifdef ICE_ALB_FILE
-            FORCES(ng) % albG(i,j,1) = IniVal
-            FORCES(ng) % albG(i,j,2) = IniVal
+            FORCES(ng) % alboG(i,j,1) = IniVal
+            FORCES(ng) % alboG(i,j,2) = IniVal
+            FORCES(ng) % albiG(i,j,1) = IniVal
+            FORCES(ng) % albiG(i,j,2) = IniVal
+            FORCES(ng) % frswpG(i,j,1) = IniVal
+            FORCES(ng) % frswpG(i,j,2) = IniVal
 #   endif
 #  endif
 #  ifdef ICE_SNOWFALL
@@ -2212,8 +2233,8 @@
             FORCES(ng) % qlwl(i,j) = IniVal
             FORCES(ng) % qlai(i,j) = IniVal
             FORCES(ng) % qsei(i,j) = IniVal
-            FORCES(ng) % sao(i,j) = IniVal
             FORCES(ng) % sio(i,j) = IniVal
+            FORCES(ng) % sao(i,j) = IniVal
             FORCES(ng) % wsni(i,j) = IniVal
 # endif
           END DO

@@ -16,7 +16,7 @@
       implicit none
 
       PRIVATE
-      PUBLIC vibc_tile
+      PUBLIC  :: vibc_tile
 
       CONTAINS
 !
@@ -73,7 +73,7 @@
 !
       integer :: i, Jmax, Jmin, j
       real(r8) :: Ce, Cx
-      real(r8):: cff, dVde, dVdt, dVdx, tau
+      real(r8) :: cff, dVde, dVdt, dVdx, tau
 
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: grad
 !
@@ -620,8 +620,8 @@
           END IF
         END IF
       END IF
+
       RETURN
       END SUBROUTINE vibc_tile
 #endif
-
       END MODULE vibc_mod

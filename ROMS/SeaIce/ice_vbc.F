@@ -7,14 +7,14 @@
 !================================================== Hernan G. Arango ===
 !                                                                      !
 !  This module sets the ice-water and ice-air stresses for the ice     !
-!   momentum equation.                                                 !
+!    momentum equation.                                                !
 !                                                                      !
 !=======================================================================
 !
       implicit none
 
       PRIVATE
-      PUBLIC ice_vbc
+      PUBLIC  :: ice_vbc
 
       CONTAINS
 !

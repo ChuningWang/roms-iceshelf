@@ -10,54 +10,51 @@
 !  Ice basic states.                                                   !
 !                                                                      !
 !  ui, vi     - [m/s] Ice velocities.                                  !
-!  uie, vie   - [m/s] Ice velocities in elastic steps.                 !
+!  uie, vie   - [m/s] Ice velocities in EVP steps.                     !
 !  ai         - [non] Sea ice concentration.                           !
-!  hi         - [m]   effective sea ice thickness,                     !
-!                    mean over whole surface.                          !
-!  hsn        - [m]   effective snow thickness,                        !
-!                     mean over whole surface.                         !
-!  ageice     - [yr]  Sea ice age.                                     !
+!  hi         - [m]   sea ice thickness, averaged over whole grid cell.!
+!  hsn        - [m]   snow thickness, averaged over whole grid cell.   !
+!  ageice     - [day] Sea ice age.                                     !
 !                                                                      !
 !  Mass fluxes.                                                        !
 !                                                                      !
-!  iomflx - [m/s] ice/ocean mass flux rate.                            !
-!  wfr    - [m/s] ice frazil growth rate.                              !
-!  wai    - [m/s] air/ice mass flux rate.                              !
-!  wao    - [m/s] air/ocean mass flux rate.                            !
-!  wio    - [m/s] ice/ocean mass flux rate at ice base.                !
+!  iomflx - [m/s] net ice mass flux rate at ocean/ice boundary.        !
+!  wfr    - [m/s] frazil ice growth rate.                              !
+!  wai    - [m/s] ice surface melt rate.                               !
+!  wao    - [m/s] ice growth rate at sea surface.                      !
+!  wio    - [m/s] ice growth/melt rate at ice base.                    !
 !  wro    - [m/s] ice surface runoff rate.                             !
 !                                                                      !
 !  Ice thermodynamic states.                                           !
 !                                                                      !
-!  tis      - [degC]   Snow top/atmospheric temperature.               !
-!  ti       - [degC]   Ice interior temperature.                       !
+!  tis      - [degC]   Snow top temperature (t3 im Mellor & Kantha)    !
+!  ti       - [degC]   Ice interior temperature (t1 im Mellor & Kantha)!
 !  t2       - [degC]   Ice/snow interface temperature.                 !
 !  enthalpi - [degC m] Scaled perturbation ice heat content.           !
 !  hage     - [yr m]   Ice age times thickness.                        !
 !                                                                      !
 !  Stress calculation.                                                 !
 !                                                                      !
-!  utau_iw       - [m2/s2] Ice/water momentum flux (stress).           !
-!  chu_iw        - [m/s]   Ice/water friction velocity.                !
-!  spd_iw        - [m's]   Ice/water relative velocity.                !
-!  pice          - [Pa]    Pressure in ice.                            !
-!  zetai         - [m2/s]  Ice bulk viscosity.                         !
-!  eta           - [m2/s]  Ice shear viscosity.                        !
-!  tauaiu        - [m2/s2] Ice/water stress in XI-direction.           !
-!  tauaiv        - [m2/s2] Ice/water stress in ETA-direction.          !
+!  utau_iw - [m2/s2]   Ice/water friction velocity.                    !
+!  chu_iw  - [m/s]     Ice/water stress velocity.                      !
+!  spd_iw  - [m's]     Ice/water relative velocity.                    !
+!  pice    - [Pa]      Ice pressure.                                   !
+!  zetai   - [m2/s]    Ice bulk viscosity.                             !
+!  eta     - [m2/s]    Ice shear viscosity.                            !
+!  tauaiu  - [kg/m/s2] Ice/water stress in XI-direction.               !
+!  tauaiv  - [kg/m/s2] Ice/water stress in ETA-direction.              !
 !                                                                      !
 !  Heat budgets.                                                       !
 !                                                                      !
 !  coef_ice_heat - Gradient coefficient for heat conductivity.         !
 !  rhs_ice_heat  - RHS of ice heat budget equations.                   !
-!  rfaci         - Correction factor for IR over ice.                  !
 !                                                                      !
 !  Other variables.                                                    !
 !                                                                      !
 !  Uwater, Vwater      - [m/s]       Ocean surface velocity.           !
 !  sealev              - [m]         Sea surface height.               !
-!  s0mk, t0mk          - [PSU, degC] Frictional salinity/temperature.  !
-!  sig11, sig12, sig13 - Stress terms.                                 !
+!  s0mk, t0mk          - [PSU, degC] Ice/ocean boundary S/T.           !
+!  sig11, sig12, sig13 -             Ice stress terms.                 !
 #ifdef ICE_STRENGTH_QUAD
 !  pstar_grid          - Grid dependent pStar values.                  !
 #endif

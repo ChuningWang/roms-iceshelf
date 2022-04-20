@@ -1400,17 +1400,40 @@
 !
 #  if defined ICE_ALB_FILE && defined SHORTWAVE
 !
-!  Set albedo of ocean and ice (fraction).
+!  Set albedo of ocean (fraction).
 !
       IF (Lprocess) THEN
-        CALL set_2dfld_tile (ng, tile, iNLM, idAlbO,                    &
+        CALL set_2dfld_tile (ng, tile, iNLM, idIalbO,                   &
      &                       LBi, UBi, LBj, UBj,                        &
-     &                       FORCES(ng)%albG,                           &
+     &                       FORCES(ng)%alboG,                          &
      &                       FORCES(ng)%albo,                           &
      &                       update)
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-        FORCES(ng)%albi = FORCES(ng)%albo
       END IF
+!
+!  Set albedo of ice (fraction).
+!
+      IF (Lprocess) THEN
+        CALL set_2dfld_tile (ng, tile, iNLM, idIalbI,                   &
+     &                       LBi, UBi, LBj, UBj,                        &
+     &                       FORCES(ng)%albiG,                          &
+     &                       FORCES(ng)%albi,                           &
+     &                       update)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+      END IF
+#   ifdef ICE_I_O
+!
+!  Set Fraction of shortwave penetrating ice base.
+!
+      IF (Lprocess) THEN
+        CALL set_2dfld_tile (ng, tile, iNLM, idIfrsw,                   &
+     &                       LBi, UBi, LBj, UBj,                        &
+     &                       FORCES(ng)%frswpG,                         &
+     &                       FORCES(ng)%frswp,                          &
+     &                       update)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+      END IF
+#   endif
 #  endif
 #  if defined ICE_LANDFAST_CLM && !defined ANA_LFICE
 !

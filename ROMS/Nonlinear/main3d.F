@@ -129,11 +129,11 @@
       USE wvelocity_mod,        ONLY : wvelocity
 # ifdef ICE_MODEL
       USE ice_flux_mod
+#  ifdef ICE_BULK_FLUXES
+      USE ice_bulk_flux_mod,    ONLY : ice_bulk_flux
+#  endif
 #  ifdef ICE_ALBEDO
-      USE albedo_mod,           ONLY : albedo_eval
-#   ifdef ICE_ALB_DIRDIFF
-      USE cawdir_eval_mod,      ONLY : cawdir_eval
-#   endif
+      USE albedo_mod,           ONLY : albedo
 #  endif
 # endif
 # ifdef ICESHELF
@@ -400,10 +400,7 @@
               DO tile=first_tile(ng),last_tile(ng),+1
 # ifdef BULK_FLUXES
 #  ifdef ICE_ALBEDO
-#   ifdef ICE_ALB_DIRDIFF
-                CALL cawdir_eval (ng, tile)
-#   endif
-                CALL albedo_eval (ng, tile)
+                CALL albedo (ng, tile)
 #  endif
 #  if defined FOUR_DVAR && defined PRIOR_BULK_FLUXES
                 IF (Nrun.eq.1) CALL bulk_flux (ng, tile)
@@ -411,6 +408,9 @@
                 CALL ccsm_flux (ng, tile)
 #  else
                 CALL bulk_flux (ng, tile)
+#  endif
+#  ifdef ICE_BULK_FLUXES
+                CALL ice_bulk_flux (ng, tile)
 #  endif
 # endif
 # ifdef BBL_MODEL

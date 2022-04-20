@@ -1095,20 +1095,20 @@
 #endif
 
 /*
-** Ice albedo formula
-*/
-
-#if defined ICE_ALB_CSIM || defined ICE_ALB_EC92
-# define ICE_ALBEDO
-#endif
-
-/*
 ** Activate CCSM albedo is using CCSM treatment of shortwave
 ** interactions with ice/snow
 */
 
 #ifdef ICE_CCSM_SHORTWAVE
 # define ICE_ALB_CSIM
+#endif
+
+/*
+** Ice albedo formula
+*/
+
+#if defined ICE_ALB_CSIM || defined ICE_ALB_EC92
+# define ICE_ALBEDO
 #endif
 
 /*
@@ -1162,7 +1162,7 @@
      defined ALBEDO)      || \
     (defined BULK_FLUXES  && \
      defined LONGWAVE)    || \
-    defined ICE_ALB_DIRDIFF || \
+    defined ICE_ALBEDO    || \
     defined ECOSIM
 # define CLOUDS
 #endif

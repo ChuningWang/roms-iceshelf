@@ -7,19 +7,21 @@
 !================================================== Hernan G. Arango ===
 !                                                                      !
 !  This subroutine evaluates the ice thermodynamic growth and decay    !
-!  term based on  Mellor and Kantha (1989) and Parkinson and           !
-!  Washington (1979)                                                   !
+!  term based on :                                                     !
+!    Mellor and Kantha (1989) and Parkinson and Washington (1979)      !
 !                                                                      !
 !=======================================================================
 !
       implicit none
 
       PRIVATE
+      PUBLIC  :: ice_thermo
+
+      CONTAINS
 
 # ifdef ICE_MK
-      PUBLIC ice_thermo
-      CONTAINS
 #  include "ice_mk.h"
 # endif
+
 #endif
       END MODULE ice_thermo_mod

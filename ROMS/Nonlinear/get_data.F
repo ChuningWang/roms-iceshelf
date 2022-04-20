@@ -1540,7 +1540,7 @@
 !
 # if defined ICE_ALB_FILE && defined SHORTWAVE
 !
-! Albedo of ocean and ice (fraction).
+! Albedo of ocean (fraction).
 !
       IF (Lprocess) THEN
         CALL get_2dfld (ng, iNLM, idIalbO, FRCncid(idIalbO,ng),         &
@@ -1549,12 +1549,46 @@
 #  endif
      &                  nFfiles(ng), FRC(1,ng), update(1),              &
      &                  LBi, UBi, LBj, UBj, 2, 1,                       &
+#  ifdef MASKING
+     &                  GRID(ng) % rmask,                               &
+#  endif
+     &                  FORCES(ng) % alboG)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+      END IF
+!
+! Albedo of ice (fraction).
+!
+      IF (Lprocess) THEN
+        CALL get_2dfld (ng, iNLM, idIalbI, FRCncid(idIalbI,ng),         &
+#  if defined PIO_LIB && defined DISTRIBUTE
+     &                  FRCpioFile(idIalbI,ng),                         &
+#  endif
+     &                  nFfiles(ng), FRC(1,ng), update(1),              &
+     &                  LBi, UBi, LBj, UBj, 2, 1,                       &
+#  ifdef MASKING
+     &                  GRID(ng) % rmask,                               &
+#  endif
+     &                  FORCES(ng) % albiG)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+      END IF
+#  ifdef ICE_I_O
+!
+! Fraction of shortwave penetrating ice base.
+!
+      IF (Lprocess) THEN
+        CALL get_2dfld (ng, iNLM, idIfrsw, FRCncid(idIfrsw,ng),         &
+#   if defined PIO_LIB && defined DISTRIBUTE
+     &                  FRCpioFile(idIfrsw,ng),                         &
+#   endif
+     &                  nFfiles(ng), FRC(1,ng), update(1),              &
+     &                  LBi, UBi, LBj, UBj, 2, 1,                       &
 #   ifdef MASKING
      &                  GRID(ng) % rmask,                               &
 #   endif
-     &                  FORCES(ng) % albG)
+     &                  FORCES(ng) % frswpG)
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
       END IF
+#  endif
 # endif
 # if defined ICE_LANDFAST_CLM && !defined ANA_LFICE
 !

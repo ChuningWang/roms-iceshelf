@@ -138,7 +138,8 @@
 !  Freezing temperature (Steele et al. 1989)
 !     t_freeze(s1,z1) = frln*s1 + 0.000759*z1
 !
-!  Another simple formula - temperature or potential temperature??
+!  Another simple formula - perhaps works better for potential
+!  temperature
 !
       t_freeze(s1,z1) = frln*s1
 !

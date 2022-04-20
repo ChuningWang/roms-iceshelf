@@ -16,7 +16,7 @@
       implicit none
 
       PRIVATE
-      PUBLIC uibc_tile
+      PUBLIC  :: uibc_tile
 
       CONTAINS
 !
@@ -620,6 +620,7 @@
           END IF
         END IF
       END IF
+
       RETURN
       END SUBROUTINE uibc_tile
 #endif
