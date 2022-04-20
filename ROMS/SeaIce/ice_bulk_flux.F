@@ -60,8 +60,8 @@
      &                         GRID(ng) % vmask_wet,                    &
 # endif
 # ifdef WIND_MINUS_CURRENT
-     &                         ICE(ng) % uice,                          &
-     &                         ICE(ng) % vice,                          &
+     &                         ICE(ng) % ui,                            &
+     &                         ICE(ng) % vi,                            &
 # endif
      &                         FORCES(ng) % Hair,                       &
      &                         FORCES(ng) % Pair,                       &
@@ -111,7 +111,7 @@
      &                               rmask_wet, umask_wet, vmask_wet,   &
 # endif
 # ifdef WIND_MINUS_CURRENT
-     &                               uice, vice,                        &
+     &                               ui, vi,                            &
 # endif
      &                               Hair, Pair, Tair, Uwind, Vwind,    &
 # ifdef CLOUDS
@@ -156,8 +156,8 @@
       real(r8), intent(in) :: vmask_wet(LBi:,LBj:)
 #  endif
 #  ifdef WIND_MINUS_CURRENT
-      real(r8), intent(in) :: uice(LBi:,LBj:,:)
-      real(r8), intent(in) :: vice(LBi:,LBj:,:)
+      real(r8), intent(in) :: ui(LBi:,LBj:,:)
+      real(r8), intent(in) :: vi(LBi:,LBj:,:)
 #  endif
       real(r8), intent(in) :: Hair(LBi:,LBj:)
       real(r8), intent(in) :: Pair(LBi:,LBj:)
@@ -200,8 +200,8 @@
       real(r8), intent(in) :: vmask_wet(LBi:UBi,LBj:UBj)
 #  endif
 #  ifdef WIND_MINUS_CURRENT
-      real(r8), intent(in) :: uice(LBi:UBi,LBj:UBj,3)
-      real(r8), intent(in) :: vice(LBi:UBi,LBj:UBj,3)
+      real(r8), intent(in) :: ui(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(in) :: vi(LBi:UBi,LBj:UBj,2)
 #  endif
       real(r8), intent(in) :: Hair(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: Pair(LBi:UBi,LBj:UBj)
