@@ -37,7 +37,6 @@
           real(r8), pointer :: avgfrswp(:,:)
 #    endif
 #   endif
-          real(r8), pointer :: avgrfaci(:,:)
           real(r8), pointer :: avgqswl(:,:)
           real(r8), pointer :: avgqlwl(:,:)
           real(r8), pointer :: avgqlai(:,:)

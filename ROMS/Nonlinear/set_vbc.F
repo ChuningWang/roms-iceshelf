@@ -88,9 +88,8 @@
      &                   FORCES(ng) % bustr,                            &
      &                   FORCES(ng) % bvstr,                            &
 #  endif
-#  ifdef ICE_MODEL
+#  if defined ICE_MODEL && defined ICE_NO_SCORRECTION
      &                   ICE(ng) % ai,                                  &
-     &                   FORCES(ng) % qao,                              &
 #  endif
      &                   FORCES(ng) % stflux,                           &
      &                   FORCES(ng) % btflux,                           &
@@ -138,9 +137,8 @@
 #  ifndef BBL_MODEL
      &                         bustr, bvstr,                            &
 #  endif
-#  ifdef ICE_MODEL
+#  if defined ICE_MODEL && defined ICE_NO_SCORRECTION
      &                         ai,                                      &
-     &                         qao,                                     &
 #  endif
      &                         stflux, btflux,                          &
      &                         stflx, btflx)
@@ -197,9 +195,8 @@
       real(r8), intent(inout) :: bustr(LBi:,LBj:)
       real(r8), intent(inout) :: bvstr(LBi:,LBj:)
 #   endif
-#   ifdef ICE_MODEL
+#   if defined ICE_MODEL && defined ICE_NO_SCORRECTION
       real(r8), intent(in) :: ai(LBi:,LBj:,:)
-      real(r8), intent(inout) :: qao(LBi:,LBj:)
 #   endif
       real(r8), intent(inout) :: stflx(LBi:,LBj:,:)
       real(r8), intent(inout) :: btflx(LBi:,LBj:,:)
@@ -236,9 +233,8 @@
       real(r8), intent(inout) :: bustr(LBi:UBi,LBj:UBj)
       real(r8), intent(inout) :: bvstr(LBi:UBi,LBj:UBj)
 #   endif
-#   ifdef ICE_MODEL
+#   if defined ICE_MODEL && defined ICE_NO_SCORRECTION
       real(r8), intent(in) :: ai(LBi:UBi,LBj:UBj,2)
-      real(r8), intent(inout) :: qao(LBi:UBi,LBj:UBj)
 #   endif
       real(r8), intent(inout) :: stflx(LBi:UBi,LBj:UBj,NT(ng))
       real(r8), intent(inout) :: btflx(LBi:UBi,LBj:UBj,NT(ng))
@@ -251,6 +247,9 @@
       real(r8) :: EmP
 #  if !defined BBL_MODEL || defined LIMIT_STFLX_COOLING
       real(r8) :: cff, cff1, cff2, cff3
+#  endif
+#  if defined ICE_MODEL && defined ICE_NO_SCORRECTION
+      real(r8) :: fac_ice
 #  endif
 
 #  if (!defined BBL_MODEL) && defined UV_LOGDRAG
@@ -298,9 +297,6 @@
         DO i=IstrR,IendR
           stflx(i,j,itemp)=stflx(i,j,itemp)+                            &
      &                     dqdt(i,j)*(t(i,j,N(ng),nrhs,itemp)-sst(i,j))
-#   ifdef ICE_MODEL
-          qao(i,j) = -stflx(i,j,itemp) * rho0 * Cp
-#   endif
         END DO
       END DO
 #  endif

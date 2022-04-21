@@ -205,13 +205,6 @@
       END IF
 #    endif
 #   endif
-      IF (Aout(idIrfac,ng)) THEN
-        DO j=JstrR,JendR
-          DO i=IstrR,IendR
-            AVERAGE(ng) % avgrfaci(i,j) = IniVal
-          END DO
-        END DO
-      END IF
       IF (Aout(idIqswl,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR

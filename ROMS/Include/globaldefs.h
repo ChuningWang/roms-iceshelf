@@ -1101,6 +1101,9 @@
 
 #ifdef ICE_CCSM_SHORTWAVE
 # define ICE_ALB_CSIM
+# ifdef ICE_ALB_EC92
+#  undef ICE_ALB_EC92
+# endif
 #endif
 
 /*

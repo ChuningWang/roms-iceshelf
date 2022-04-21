@@ -653,29 +653,6 @@
 #    endif
 #   endif
 !
-!  Write out reduction factor for near-IR fraction of SW under ice.
-!
-      IF (Aout(idIrfac,ng)) THEN
-        scale=1.0_dp
-        gtype=gfactor*r2dvar
-        status=nf_fwrite2d(ng, iNLM, AVG(ng)%ncid,                      &
-     &                     AVG(ng)%Vid(idIrfac),                        &
-     &                     AVG(ng)%Rindex, gtype,                       &
-     &                     LBi, UBi, LBj, UBj, scale,                   &
-#   ifdef MASKING
-     &                     GRID(ng) % rmask,                            &
-#   endif
-     &                     AVERAGE(ng) % avgrfaci)
-        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-          IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIrfac)), AVG(ng)%Rindex
-          END IF
-          exit_flag=3
-          ioerror=status
-          RETURN
-        END IF
-      END IF
-!
 !  Write out downward shortwave radiation.
 !
       IF (Aout(idIqswl,ng)) THEN

@@ -793,34 +793,6 @@
 #     endif
 #    endif
 !
-!  Write out reduction factor for near-IR fraction of SW under ice.
-!
-      IF (Aout(idIrfac,ng)) THEN
-        scale=1.0_dp
-        IF (AVG(ng)%pioVar(idIrfac)%dkind.eq.PIO_double) THEN
-          ioDesc => ioDesc_dp_r2dvar(ng)
-        ELSE
-          ioDesc => ioDesc_sp_r2dvar(ng)
-        END IF
-        status=nf_fwrite2d(ng, iNLM, AVG(ng)%pioFile,                   &
-     &                     AVG(ng)%pioVar(idIrfac),                     &
-     &                     AVG(ng)%Rindex,                              &
-     &                     ioDesc,                                      &
-     &                     LBi, UBi, LBj, UBj, scale,                   &
-#    ifdef MASKING
-     &                     GRID(ng) % rmask,                            &
-#    endif
-     &                     AVERAGE(ng) % avgrfaci)
-        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
-          IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIrfac)), AVG(ng)%Rindex
-          END IF
-          exit_flag=3
-          ioerror=status
-          RETURN
-        END IF
-      END IF
-!
 !  Write out downward shortwave radiation.
 !
       IF (Aout(idIqswl,ng)) THEN

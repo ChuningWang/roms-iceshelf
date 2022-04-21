@@ -121,10 +121,6 @@
       END IF
 #    endif
 #   endif
-      IF (Aout(idIrfac,ng)) THEN
-        allocate ( AVERAGE(ng) % avgrfaci(LBi:UBi,LBj:UBj) )
-        Dmem(ng)=Dmem(ng)+size2d
-      END IF
       IF (Aout(idIqswl,ng)) THEN
         allocate ( AVERAGE(ng) % avgqswl(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d

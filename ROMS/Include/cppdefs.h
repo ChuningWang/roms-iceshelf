@@ -620,7 +620,6 @@
 ** ICE_NO_SCORRECTION  use for no scorrection under the ice                  **
 ** ICE_NO_SNOW         use to remove snow layer in ice model                 **
 ** ICE_OUTFLOW_MASK    use for Hibler style outflow cells                    **
-** ICE_SHALLOW_LIMIT   use for grounded sea ice                              **
 ** ICE_SHOREFAST       use for a simple shorefast-ice algorithm (Budgell)    **
 ** ICE_LMD_SHORTWAVE   use for ice impact on shortwave spectral quality      **
 ** ICE_SMOLAR          use for MPDATA advection scheme                       **

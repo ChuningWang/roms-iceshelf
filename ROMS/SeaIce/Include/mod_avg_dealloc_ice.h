@@ -121,10 +121,6 @@
       END IF
 #    endif
 #   endif
-      IF (Aout(idIrfac,ng)) THEN
-        IF (.not.destroy(ng, AVERAGE(ng)%avgrfaci, MyFile,              &
-     &                   __LINE__, 'AVERAGE(ng)%avgrfaci')) RETURN
-      END IF
       IF (Aout(idIqswl,ng)) THEN
         IF (.not.destroy(ng, AVERAGE(ng)%avgqswl, MyFile,               &
      &                   __LINE__, 'AVERAGE(ng)%avgqswl')) RETURN

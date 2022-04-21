@@ -228,14 +228,6 @@
               Hout(idIfrsw,1:Ngrids)=Lswitch(1:Ngrids)
 #    endif
 #   endif
-            CASE ('Hout(idIrfac)')
-              IF (idIrfac.eq.0) THEN
-                IF (Master) WRITE (out,80) 'idIrfac'
-                exit_flag=5
-                RETURN
-              END IF
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idIrfac,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Hout(idIqswl)')
               IF (idIqswl.eq.0) THEN
                 IF (Master) WRITE (out,80) 'idIqswl'
@@ -521,9 +513,6 @@
               Aout(idIfrsw,1:Ngrids)=Lswitch(1:Ngrids)
 #    endif
 #   endif
-            CASE ('Aout(idIrfac)')
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Aout(idIrfac,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Aout(idIqswl)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Aout(idIqswl,1:Ngrids)=Lswitch(1:Ngrids)
@@ -694,9 +683,6 @@
               Qout(idIfrsw,1:Ngrids)=Lswitch(1:Ngrids)
 #    endif
 #   endif
-            CASE ('Qout(idIrfac)')
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Qout(idIrfac,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Qout(idIqswl)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Qout(idIqswl,1:Ngrids)=Lswitch(1:Ngrids)

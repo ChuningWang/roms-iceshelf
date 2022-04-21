@@ -765,33 +765,6 @@
 #    endif
 #   endif
 !
-!  Define reduction factor for near-IR fraction of SW under ice.
-!
-        IF (Hout(idIrfac,ng)) THEN
-          Vinfo( 1)=Vname(1,idIrfac)
-          Vinfo( 2)=Vname(2,idIrfac)
-          Vinfo( 3)=Vname(3,idIrfac)
-          Vinfo(14)=Vname(4,idIrfac)
-          Vinfo(16)=Vname(1,idtime)
-#   if defined WRITE_WATER && defined MASKING
-          Vinfo(20)='mask_rho'
-#   endif
-          Vinfo(22)='coordinates'
-          Aval(5)=REAL(Iinfo(1,idIrfac,ng),r8)
-          HIS(ng)%pioVar(idIrfac)%dkind=PIO_FOUT
-          HIS(ng)%pioVar(idIrfac)%gtype=r2dvar
-!
-          status=def_var(ng, iNLM, HIS(ng)%pioFile,                     &
-     &                   HIS(ng)%pioVar(idIrfac)%vd,                    &
-#   ifdef WET_DRY
-     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname,   &
-     &                   SetFillVal = .FALSE.)
-#   else
-     &                   PIO_FOUT, nvd3, t2dgrd, Aval, Vinfo, ncname)
-#   endif
-          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-        END IF
-!
 !  Define downward shortwave radiation.
 !
         IF (Hout(idIqswl,ng)) THEN

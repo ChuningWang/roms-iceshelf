@@ -480,22 +480,6 @@
 #    endif
 #   endif
 !
-!  Write out reduction factor for near-IR fraction of SW under ice.
-!
-      IF (Sout(idIrfac,ng)) THEN
-        scale=1.0_dp
-        CALL extract_sta2d (ng, iNLM, Cgrid, idIrfac, r2dvar,           &
-     &                      LBi, UBi, LBj, UBj,                         &
-     &                      scale, ICE(ng)%rfaci,                       &
-     &                      Nstation(ng), Xpos, Ypos, psta)
-        CALL netcdf_put_fvar (ng, iNLM, STA(ng)%name,                   &
-     &                        TRIM(Vname(1,idIrfac)), psta,             &
-     &                        (/1,STA(ng)%Rindex/), (/Nstation(ng),1/), &
-     &                        ncid = STA(ng)%ncid,                      &
-     &                        varid = STA(ng)%Vid(idIrfac))
-        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-      END IF
-!
 !  Write out downward shortwave radiation.
 !
       IF (Sout(idIqswl,ng)) THEN

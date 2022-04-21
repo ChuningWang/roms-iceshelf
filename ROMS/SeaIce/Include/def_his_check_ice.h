@@ -97,9 +97,6 @@
             HIS(ng)%Vid(idIfrsw)=var_id(i)
 #    endif
 #   endif
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIrfac))) THEN
-            got_var(idIrfac)=.TRUE.
-            HIS(ng)%Vid(idIrfac)=var_id(i)
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqswl))) THEN
             got_var(idIqswl)=.TRUE.
             HIS(ng)%Vid(idIqswl)=var_id(i)
@@ -358,12 +355,6 @@
         END IF
 #    endif
 #   endif
-        IF (.not.got_var(idIrfac).and.Hout(idIrfac,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIrfac)),         &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
         IF (.not.got_var(idIqswl).and.Hout(idIqswl,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIqswl)),         &
      &                                  TRIM(ncname)

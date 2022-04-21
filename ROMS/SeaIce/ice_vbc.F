@@ -64,6 +64,8 @@
      &                   FORCES(ng) % svstr_aw,                         &
      &                   FORCES(ng) % taux_ai,                          &
      &                   FORCES(ng) % tauy_ai,                          &
+     &                   FORCES(ng) % sustr_iw,                         &
+     &                   FORCES(ng) % svstr_iw,                         &
 # endif
 # ifdef ICE_SHOREFAST
      &                   GRID(ng) % h,                                  &
@@ -102,6 +104,7 @@
      &                         ai, hi, ui, vi, uwater, vwater, spd_iw,  &
 # ifdef ICE_BULK_FLUXES
      &                         sustr_aw, svstr_aw, taux_ai, tauy_ai,    &
+     &                         sustr_iw, svstr_iw,                      &
 # endif
 # ifdef ICE_SHOREFAST
      &                         h,                                       &
@@ -151,6 +154,8 @@
       real(r8), intent(in) :: svstr_aw(LBi:,LBj:)
       real(r8), intent(in) :: taux_ai(LBi:,LBj:)
       real(r8), intent(in) :: tauy_ai(LBi:,LBj:)
+      real(r8), intent(out) :: sustr_iw(LBi:,LBj:)
+      real(r8), intent(out) :: svstr_iw(LBi:,LBj:)
 #  endif
 #  ifdef ICE_SHOREFAST
       real(r8), intent(in) :: h(LBi:,LBj:)
@@ -190,6 +195,8 @@
       real(r8), intent(in) :: svstr_aw(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: taux_ai(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: tauy_ai(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: sustr_aw(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: svstr_aw(LBi:UBi,LBj:UBj)
 #  endif
 #  ifdef ICE_SHOREFAST
       real(r8), intent(in) :: h(LBi:UBi,LBj:UBj)
@@ -249,26 +256,25 @@
 !
 !  Input from ocean model / atmosphere data
 !
-# ifdef ICE_MK
       DO j=Jstr-1,Jend
         DO i=Istr-1,Iend
           rhoO = rho0+rho(i,j,N(ng))
           spd = spd_iw(i,j)
-#  ifdef ICE_SHOREFAST
+# ifdef ICE_SHOREFAST
           spd = MAX(spd,0.10_r8)
           clear = h(i,j)+MIN(Zt_avg1(i,j),0.0_r8)-0.9*hi(i,j,liold)
           clear = MAX(clear,0.001_r8)
           IF (clear .lt. 5.0_r8) THEN
             spd = (clear/5.0_r8)*spd
           END IF
-#  else
+# else
           spd = MAX(spd,0.15_r8)
-#  endif
-#  ifdef ICE_MOM_BULK
+# endif
+# ifdef ICE_MOM_BULK
           utauiw(i,j) = spd
           chuiw(i,j) = cdiw(ng)*spd
-#  else
-          thick = hi(i,j,liold)/MAX(ai(i,j,liold),MAX(min_a(ng),tol))
+# else
+          thick = hi(i,j,liold)/MAX(tol,ai(i,j,liold))
           z0 = MIN(MAX(z0ii*thick,0.01_r8),0.1_r8)
           dztop = z_w(i,j,N(ng))-z_r(i,j,N(ng))
           zdz0 = dztop/z0
@@ -276,14 +282,14 @@
           utauiw(i,j) = SQRT(chu_iw(i,j)*spd)
           utauiw(i,j) = MAX(utauiw(i,j),1.E-04_r8)
           chuiw(i,j) = kappa*utauiw(i,j)/LOG(zdz0)
-#  endif
-#  ifdef ICE_SHOREFAST
+# endif
+# ifdef ICE_SHOREFAST
           hh = h(i,j)+MIN(Zt_avg1(i,j),0.0_r8)
           clear = hh-0.9_r8*hi(i,j,liold)
           clear = MAX(clear,0.0_r8)
           IF (clear.lt.5.0_r8) chuiw(i,j) =                             &
      &       (MAX(clear-1.0_r8,0.0_r8)/4.0_r8)*chuiw(i,j)
-#  endif
+# endif
         END DO
       END DO
 !
@@ -292,27 +298,27 @@
           rhoO = 1000._r8 + 0.5_r8*(rho(i,j,N(ng))+rho(i-1,j,N(ng)))
           aix = 0.5_r8*(ai(i,j,liold)+ai(i-1,j,liold))
           chux = 0.5_r8*(chuiw(i,j)+chuiw(i-1,j))
-#  ifdef ICE_BULK_FLUXES
+# ifdef ICE_BULK_FLUXES
           tauaiu(i,j) = 0.5_r8*aix*(taux_ai(i,j)+taux_ai(i-1,j))
-#  else
+# else
           tauaiu(i,j) = 0.5_r8*aix*rhoice(ng)*(sustr(i,j)+sustr(i-1,j))
-#  endif
-#  ifdef WET_DRY
+# endif
+# ifdef WET_DRY
           tauaiu(i,j) = tauaiu(i,j)*umask_wet(i,j)
-#  endif
-#  ifdef ICE_BULK_FLUXES
-#   ifdef ICESHELF
+# endif
+# ifdef ICE_BULK_FLUXES
+#  ifdef ICESHELF
           IF (zice(i,j).eq.0.0_r8) THEN
-#   endif
-          sustr(i,j) =         aix *chux*(ui(i,j,liuol)-uwater(i,j)) +  &
-     &                 (1.0_r8-aix)*sustr_aw(i,j)
-#   ifdef WET_DRY
-          sustr(i,j) = sustr(i,j)*umask_wet(i,j)
-#   endif
-#   ifdef ICESHELF
-          END IF
-#   endif
 #  endif
+          sustr_iw(i,j) = chux*(ui(i,j,liuol)-uwater(i,j))
+          sustr(i,j) = aix*sustr_iw(i,j) + (1.0_r8-aix)*sustr_aw(i,j)
+#  ifdef WET_DRY
+          sustr(i,j) = sustr(i,j)*umask_wet(i,j)
+#  endif
+#  ifdef ICESHELF
+          END IF
+#  endif
+# endif
         END DO
       END DO
 !
@@ -321,119 +327,29 @@
           rhoO = 1000._r8 + 0.5_r8*(rho(i,j,N(ng))+rho(i,j-1,N(ng)))
           aiy = 0.5_r8*(ai(i,j,liold)+ai(i,j-1,liold))
           chuy = 0.5_r8*(chuiw(i,j)+chuiw(i,j-1))
-#  ifdef ICE_BULK_FLUXES
+# ifdef ICE_BULK_FLUXES
           tauaiv(i,j) = 0.5_r8*aiy*(tauy_ai(i,j)+tauy_ai(i,j-1))
-#  else
-          tauaiv(i,j) = 0.5_r8*aiy*rhoice(ng)*(svstr(i,j)+svstr(i,j-1))
-#  endif
-#  ifdef WET_DRY
-          tauaiv(i,j) = tauaiv(i,j)*vmask_wet(i,j)
-#  endif
-#  ifdef ICE_BULK_FLUXES
-#   ifdef ICESHELF
-          IF (zice(i,j).EQ.0.0_r8) THEN
-#   endif
-          svstr(i,j) =         aiy *chuy*(vi(i,j,liuol)-vwater(i,j)) +  &
-     &                 (1.0_r8-aiy)*svstr_aw(i,j)
-#   ifdef WET_DRY
-          svstr(i,j) = svstr(i,j)*vmask_wet(i,j)
-#   endif
-#   ifdef ICESHELF
-          END IF
-#   endif
-#  endif
-        END DO
-      END DO
 # else
-      DO j=Jstr,Jend
-        DO i=IstrP,Iend
-           windu(i,j) = 0.5_r8*(Uwind(i-1,j)+Uwind(i,j))
-        END DO
-      END DO
-      DO j=JstrP,Jend
-        DO i=Istr,Iend
-           windv(i,j) = 0.5_r8*(Vwind(i,j-1)+Vwind(i,j))
-        END DO
-      END DO
-!
-      DO j=Jstr,Jend
-        DO i=Istr,Iend
-          spd = spd_iw(i,j)
-          spdiw(i,j) = (ai(i,j,liold)+0.02)*rho0*cdiw(ng)*spd/rhoice(ng)
-          spdiw(i,j) =                                                  &
-     &      MAX(spdiw(i,j),                                             &
-     &          (ai(i,j,liold)+0.02_r8)*cdiw(ng)*0.1_r8*rho/rhoice(ng))
-           wind_speed(i,j) = 0.5*SQRT((windu(i,j) + windu(i+1,j))**2 +  &
-     &                                (windv(i,j) + windv(i,j+1))**2)
-#  ifdef ICE_SHOREFAST
-          clear = h(i,j)+MIN(Zt_avg1(i,j),0.0_r8)-0.9*hi(i,j,liold)
-          clear = MAX(clear,0.001_r8)
-          IF (clear .lt. 5.0_r8) THEN
-            spdiw(i,j) = (clear/5.0_r8)*spdiw(i,j)
-            wind(i,j) = (clear/5.0_r8)*wind(i,j)
-          END IF
-#  endif
-        END DO
-      END DO
-!
-      DO j=Jstr,Jend
-        DO i=IstrP,Iend
-          rhoO = 1000._r8 + 0.5_r8*(rho(i,j,N(ng))+rho(i-1,j,N(ng)))
-          aix = 0.5_r8*(ai(i,j,liold)+ai(i-1,j,liold))
-          hix = 0.5_r8*(hi(i,j,liold)+hi(i-1,j,liold))
-          spd = 0.5_r8*(wind_speed(i,j)+wind_speed(i-1,j))
-          tauaiu(i,j) = aix*rho_air(ng)*                                &
-     &      (0.5_r8*cdai(ng)*                                           &
-     &       (1.0_r8-                                                   &
-     &        COS(2.0_r8*pi*MIN((hix/(aix+0.02_r8)+0.1_r8),0.5_r8))))*  &
-     &      spd*windu(i,j)/rhoice(ng)
-          tauiwu = 0.5_r8*(spdiw(i,j)+spdiw(i-1,j)) *                   &
-     &             (ui(i,j,liuol)-uwater(i,j))*rhoice(ng)/rhoO
-#  ifdef ICE_BULK_FLUXES
-#   ifdef ICESHELF
-          IF (zice(i,j).eq.0.0_r8) THEN
-#   endif
-          sustr(i,j) = tauiwu + (1.0_r8-aix)*0.5_r8*                    &
-     &                          (sustr_aw(i,j)+sustr_aw(i-1,j))
-#   ifdef WET_DRY
-          sustr(i,j) = sustr(i,j)*umask_wet(i,j)
-#   endif
-#   ifdef ICESHELF
-          END IF
-#   endif
-#  endif
-        END DO
-      END DO
-!
-      DO j=JstrP,Jend
-        DO i=Istr,Iend
-          rhoO = 1000._r8 + 0.5_r8*(rho(i,j,N(ng))+rho(i,j-1,N(ng)))
-          aiy = 0.5_r8*(ai(i,j,liold)+ai(i,j-1,liold))
-          hiy = 0.5_r8*(hi(i,j,liold)+hi(i,j-1,liold))
-          spd = 0.5_r8*(wind_speed(i,j)+wind_speed(i,j-1))
-          tauaiv(i,j) = aiy*rho_air(ng)*                                &
-     &      (0.5_r8*cdai(ng)*&
-     &       (1.0_r8-&
-     &        COS(2.0_r8*pi*MIN((hiy/(aiy+0.02_r8)+0.1_r8),0.5_r8))))*  &
-     &      spd*windv(i,j)/rhoice(ng)
-          tauiwv = 0.5_r8*(spdiw(i,j)+spdiw(i,j-1)) *                   &
-     &             (vi(i,j,liuol)-vwater(i,j))*rhoice(ng)/rhoO
-#  ifdef ICE_BULK_FLUXES
-#   ifdef ICESHELF
-          IF (zice(i,j).EQ.0.0_r8) THEN
-#   endif
-          svstr(i,j) = tauiwv + (1.0_r8-aiy)*0.5_r8*                    &
-     &                          (svstr_aw(i,j)+svstr_aw(i,j-1))
-#   ifdef WET_DRY
-          svstr(i,j) = svstr(i,j)*vmask_wet(i,j)
-#   endif
-#   ifdef ICESHELF
-          END IF
-#   endif
-#  endif
-        END DO
-      END DO
+          tauaiv(i,j) = 0.5_r8*aiy*rhoice(ng)*(svstr(i,j)+svstr(i,j-1))
 # endif
+# ifdef WET_DRY
+          tauaiv(i,j) = tauaiv(i,j)*vmask_wet(i,j)
+# endif
+# ifdef ICE_BULK_FLUXES
+#  ifdef ICESHELF
+          IF (zice(i,j).EQ.0.0_r8) THEN
+#  endif
+          svstr_iw(i,j) = chuy*(vi(i,j,liuol)-vwater(i,j))
+          svstr(i,j) = aiy*svstr_iw(i,j) + (1.0_r8-aiy)*svstr_aw(i,j)
+#  ifdef WET_DRY
+          svstr(i,j) = svstr(i,j)*vmask_wet(i,j)
+#  endif
+#  ifdef ICESHELF
+          END IF
+#  endif
+# endif
+        END DO
+      END DO
 !
       DO j=Jstr,Jend
         DO i=Istr,Iend

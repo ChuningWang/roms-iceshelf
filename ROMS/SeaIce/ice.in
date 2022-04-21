@@ -205,7 +205,6 @@ Hout(idIwdiv)   == T
 Hout(idIalbO)   == T
 Hout(idIalbI)   == T
 Hout(idIfrsw)   == T
-Hout(idIrfac)   == T
 Hout(idIqswl)   == T
 Hout(idIqlwl)   == T
 Hout(idIqlai)   == T
@@ -261,7 +260,6 @@ Aout(idIwdiv)   == T
 Aout(idIalbO)   == T
 Aout(idIalbI)   == T
 Aout(idIfrsw)   == T
-Aout(idIrfac)   == T
 Aout(idIqswl)   == T
 Aout(idIqlwl)   == T
 Aout(idIqlai)   == T
@@ -317,7 +315,6 @@ Qout(idIwdiv)   == T
 Qout(idIalbO)   == T
 Qout(idIalbI)   == T
 Qout(idIfrsw)   == T
-Qout(idIrfac)   == T
 Qout(idIqswl)   == T
 Qout(idIqlwl)   == T
 Qout(idIqlai)   == T
@@ -373,7 +370,6 @@ Sout(idIwdiv)   == T
 Sout(idIalbO)   == T
 Sout(idIalbI)   == T
 Sout(idIfrsw)   == T
-Sout(idIrfac)   == T
 Sout(idIqswl)   == T
 Sout(idIqlwl)   == T
 Sout(idIqlai)   == T

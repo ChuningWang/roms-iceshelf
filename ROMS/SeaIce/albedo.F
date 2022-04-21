@@ -59,6 +59,9 @@
      &                  GRID(ng) % lonr,                                &
      &                  FORCES(ng) % cloud,                             &
 # endif
+# ifdef ICE_LMD_SHORTWAVE
+     &                  ICE(ng) % rfaci,                                &
+# endif
      &                  FORCES(ng) % albi,                              &
      &                  FORCES(ng) % albo,                              &
      &                  FORCES(ng) % frswp)
@@ -76,6 +79,9 @@
      &                        ai, hi, hsn, tis,                         &
 # ifdef CLOUDS
      &                        latr, lonr, cloud,                        &
+# endif
+# ifdef ICE_LMD_SHORTWAVE
+     &                        rfaci,                                    &
 # endif
      &                        albi, albo, frswp)
 !***********************************************************************
@@ -107,6 +113,9 @@
       real(r8), intent(in) :: lonr(LBi:,LBj:)
       real(r8), intent(in) :: cloud(LBi:,LBj:)
 #  endif
+#  ifdef ICE_LMD_SHORTWAVE
+      real(r8), intent(out) :: rfaci(LBi:,LBj:)
+#  endif
       real(r8), intent(out) :: albi(LBi:,LBj:)
       real(r8), intent(out) :: albo(LBi:,LBj:)
       real(r8), intent(out) :: frswp(LBi:,LBj:)
@@ -120,6 +129,9 @@
       real(r8), intent(in) :: latr(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: lonr(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: cloud(LBi:UBi,LBj:UBj)
+#  endif
+#  ifdef ICE_LMD_SHORTWAVE
+      real(r8), intent(out) :: rfaci(LBi:UBi,LBj:UBj)
 #  endif
       real(r8), intent(out) :: albi(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: albo(LBi:UBi,LBj:UBj)
@@ -506,6 +518,15 @@
           ELSE
             frswp(i,j) = 1.0_r8
           END IF
+# ifdef ICE_LMD_SHORTWAVE
+!
+!  Calculate correction factor for lmd_r1
+!
+          cff1 =  1.0_r8 - albo(i,j)
+          cff2 = (1.0_r8 - albi(i,j))*frswp(i,j)
+          rfaci(i,j) = (1.0_r8-ai(i,j,listp))*cff1 /                    &
+     &      MAX(tol,((1.0_r8-ai(i,j,listp))*cff1 + ai(i,j,listp)*cff2))
+# endif
         END DO
       END DO
 !
@@ -514,31 +535,34 @@
 !-----------------------------------------------------------------------
 !
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+# ifdef ICE_LMD_SHORTWAVE
+        CALL exchange_r2d_tile (ng, tile,                               &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          rfaci)
+# endif
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          albo)
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          albi)
-# ifdef ICE_ALB_CSIM
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          frswp)
-# endif
       END IF
 # ifdef DISTRIBUTE
-      CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
-     &                    LBi, UBi, LBj, UBj,                           &
-     &                    NghostPoints,                                 &
-     &                    EWperiodic(ng), NSperiodic(ng),               &
-     &                    albo, albi)
-#  ifdef ICE_ALB_CSIM
+#  ifdef ICE_LMD_SHORTWAVE
       CALL mp_exchange2d (ng, tile, iNLM, 1,                            &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints,                                 &
      &                    EWperiodic(ng), NSperiodic(ng),               &
-     &                    frswp)
+     &                    rfaci)
 #  endif
+      CALL mp_exchange2d (ng, tile, iNLM, 3,                            &
+     &                    LBi, UBi, LBj, UBj,                           &
+     &                    NghostPoints,                                 &
+     &                    EWperiodic(ng), NSperiodic(ng),               &
+     &                    albo, albi, frswp)
 # endif
       RETURN
 !

@@ -541,25 +541,6 @@
 #    endif
 #   endif
 !
-!  Define reduction factor for near-IR fraction of SW under ice.
-!
-        IF (Sout(idIrfac,ng)) THEN
-          Vinfo( 1)=Vname(1,idIrfac)
-          Vinfo( 2)=Vname(2,idIrfac)
-          Vinfo( 3)=Vname(3,idIrfac)
-          Vinfo(14)=Vname(4,idIrfac)
-          Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIrfac),  &
-     &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
-#   ifdef WET_DRY
-     &                   SetFillVal = .FALSE.,                          &
-#   else
-     &                   SetFillVal = .TRUE.,                           &
-#   endif
-     &                   SetParAccess = .TRUE.)
-          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-        END IF
-!
 !  Define downward shortwave radiation.
 !
         IF (Sout(idIqswl,ng)) THEN

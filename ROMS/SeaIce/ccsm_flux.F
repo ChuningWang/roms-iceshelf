@@ -107,7 +107,6 @@
      &                     FORCES(ng) % sustr_aw,                       &
      &                     FORCES(ng) % svstr_aw,                       &
      &                     FORCES(ng) % qswi,                           &
-     &                     FORCES(ng) % qao,                            &
 #  ifdef ICE_DIAGS
      &                     FORCES(ng) % qswl,                           &
      &                     FORCES(ng) % qlwl,                           &
@@ -168,7 +167,7 @@
 #  endif
      &                           wsf,                                   &
      &                           sustr_aw, svstr_aw,                    &
-     &                           qswi, qao,                             &
+     &                           qswi,                                  &
 #  ifdef ICE_DIAGS
      &                           qswl, qlwl,                            &
 #  endif
@@ -262,7 +261,6 @@
       real(r8), intent(out) :: sustr_aw(LBi:,LBj:)
       real(r8), intent(out) :: svstr_aw(LBi:,LBj:)
       real(r8), intent(out) :: qswi(LBi:,LBj:)
-      real(r8), intent(out) :: qao(LBi:,LBj:)
 #   ifdef ICE_DIAGS
       real(r8), intent(out) :: qswl(LBi:,LBj:)
       real(r8), intent(out) :: qlwl(LBi:,LBj:)
@@ -337,7 +335,6 @@
       real(r8), intent(out) :: sustr_aw(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: svstr_aw(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: qswi(LBi:UBi,LBj:UBj)
-      real(r8), intent(out) :: qao(LBi:UBi,LBj:UBj)
 #   ifdef ICE_DIAGS
       real(r8), intent(out) :: qswl(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: qlwl(LBi:UBi,LBj:UBj)
@@ -882,7 +879,6 @@
 !    Note that in Mellor and Kantha qai is positive **upwards**,
 !    while in ocean model heat flux is positive **downwards**.
 !
-          qao(i,j)=-stflux(i,j,itemp)*Hscale
 #  ifdef ICE_DIAGS
           qswl(i,j) = srflx(i,j)*Hscale
           qlwl(i,j) = lrflx(i,j)*Hscale
@@ -982,9 +978,6 @@
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          qswi)
-        CALL exchange_r2d_tile (ng, tile,                               &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          qao)
 #  ifdef ICE_DIAGS
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
@@ -1022,11 +1015,11 @@
      &                    NghostPoints,                                 &
      &                    EWperiodic(ng), NSperiodic(ng),               &
      &                    wsf, sustr_aw, svstr_aw)
-      CALL mp_exchange2d (ng, tile, iNLM, 3,                            &
+      CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints,                                 &
      &                    EWperiodic(ng), NSperiodic(ng),               &
-     &                    srflx, qswi, qao)
+     &                    srflx, qswi)
 #   ifdef ICE_DIAGS
       CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
      &                    LBi, UBi, LBj, UBj,                           &

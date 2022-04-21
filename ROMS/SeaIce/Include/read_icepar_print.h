@@ -88,9 +88,6 @@
      &       'Write out fraction of SW penetrating into ice.'
 #    endif
 #   endif
-          IF (Hout(idIrfac,ng)) WRITE (out,70) Hout(idIrfac,ng),        &
-     &       'Hout(idIrfac)',                                           &
-     &       'Write out reduction fac of near-IR SW under ice.'
           IF (Hout(idIqswl,ng)) WRITE (out,70) Hout(idIqswl,ng),        &
      &       'Hout(idIqswl)',                                           &
      &       'Write out downward shortwave radiation.'
@@ -261,9 +258,6 @@
      &       'Write out averaged fraction of SW penetrating into ice.'
 #    endif
 #   endif
-          IF (Aout(idIrfac,ng)) WRITE (out,70) Aout(idIrfac,ng),        &
-     &       'Aout(idIrfac)',                                           &
-     &       'Write out averaged reduction fac of near-IR SW under ice.'
           IF (Aout(idIqswl,ng)) WRITE (out,70) Aout(idIqswl,ng),        &
      &       'Aout(idIqswl)',                                           &
      &       'Write out averaged downward shortwave radiation.'
@@ -434,9 +428,6 @@
      &       'Write out quick fraction of SW penetrating into ice.'
 #    endif
 #   endif
-          IF (Qout(idIrfac,ng)) WRITE (out,70) Qout(idIrfac,ng),        &
-     &       'Qout(idIrfac)',                                           &
-     &       'Write out quick reduction fac of near-IR SW under ice.'
           IF (Qout(idIqswl,ng)) WRITE (out,70) Qout(idIqswl,ng),        &
      &       'Qout(idIqswl)',                                           &
      &       'Write out quick downward shortwave radiation.'

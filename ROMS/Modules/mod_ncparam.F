@@ -624,7 +624,6 @@
       integer  :: idIalbO       ! shortwave albedo of ocean
       integer  :: idIalbI       ! shortwave albedo of ice
       integer  :: idIfrsw       ! fraction of sw penetrating into ice
-      integer  :: idIrfac       ! reduction fac of near-IR SW under ice
       integer  :: idIwsni       ! snow-ice conversion
       integer  :: idIqswa       ! upward shortwave from ice
       integer  :: idIqswi       ! upward shortwave from ice

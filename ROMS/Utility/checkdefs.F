@@ -1385,13 +1385,6 @@
       is=LEN_TRIM(Coptions)+1
       Coptions(is:is+13)=' ICE_NO_SNOW,'
 #   endif
-#   ifdef ICE_SHALLOW_LIMIT
-!
-      IF (Master) WRITE (stdout,20) 'ICE_SHALLOW_LIMIT',                &
-     &   "Grounded ice doesn't grow thermodynamically."
-      is=LEN_TRIM(Coptions)+1
-      Coptions(is:is+19)=' ICE_SHALLOW_LIMIT,'
-#   endif
 #  endif
 # endif
 #endif

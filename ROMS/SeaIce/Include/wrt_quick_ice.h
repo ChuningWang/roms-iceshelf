@@ -16,7 +16,7 @@
 # ifdef MASKING
      &                     GRID(ng) % umask,                            &
 # endif
-     &                     ICE(ng)%ui(:,:,IOUT))
+     &                     ICE(ng) % ui(:,:,IOUT))
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIuice)), QCK(ng)%Rindex
@@ -39,7 +39,7 @@
 # ifdef MASKING
      &                     GRID(ng) % vmask,                            &
 # endif
-     &                     ICE(ng)%vi(:,:,IOUT))
+     &                     ICE(ng) % vi(:,:,IOUT))
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIvice)), QCK(ng)%Rindex
@@ -124,7 +124,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%ai(:,:,IOUT))
+     &                     ICE(ng) % ai(:,:,IOUT))
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIaice)), QCK(ng)%Rindex
@@ -147,7 +147,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%hi(:,:,IOUT))
+     &                     ICE(ng) % hi(:,:,IOUT))
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIhice)), QCK(ng)%Rindex
@@ -170,7 +170,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%hsn(:,:,IOUT))
+     &                     ICE(ng) % hsn(:,:,IOUT))
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIhsno)), QCK(ng)%Rindex
@@ -193,7 +193,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%ageice(:,:,IOUT))
+     &                     ICE(ng) % ageice(:,:,IOUT))
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIagei)), QCK(ng)%Rindex
@@ -216,7 +216,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%tis)
+     &                     ICE(ng) % tis)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idItice)), QCK(ng)%Rindex
@@ -239,7 +239,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%ti(:,:,IOUT))
+     &                     ICE(ng) % ti(:,:,IOUT))
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idItmid)), QCK(ng)%Rindex
@@ -262,7 +262,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%t2)
+     &                     ICE(ng) % t2)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIt2ic)), QCK(ng)%Rindex
@@ -285,7 +285,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%sig11(:,:,IOUT))
+     &                     ICE(ng) % sig11(:,:,IOUT))
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIsg11)), QCK(ng)%Rindex
@@ -308,7 +308,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%sig12(:,:,IOUT))
+     &                     ICE(ng) % sig12(:,:,IOUT))
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIsg12)), QCK(ng)%Rindex
@@ -331,7 +331,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%sig22(:,:,IOUT))
+     &                     ICE(ng) % sig22(:,:,IOUT))
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIsg22)), QCK(ng)%Rindex
@@ -354,7 +354,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%utau_iw)
+     &                     ICE(ng) % utau_iw)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIutau)), QCK(ng)%Rindex
@@ -377,7 +377,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%chu_iw)
+     &                     ICE(ng) % chu_iw)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idImchu)), QCK(ng)%Rindex
@@ -400,7 +400,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%t0mk)
+     &                     ICE(ng) % t0mk)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIt0mk)), QCK(ng)%Rindex
@@ -423,7 +423,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%s0mk)
+     &                     ICE(ng) % s0mk)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIs0mk)), QCK(ng)%Rindex
@@ -446,7 +446,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%iomflx)
+     &                     ICE(ng) % iomflx)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idImflx)), QCK(ng)%Rindex
@@ -469,7 +469,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%wfr)
+     &                     ICE(ng) % wfr)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIwfr)), QCK(ng)%Rindex
@@ -492,7 +492,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%wai)
+     &                     ICE(ng) % wai)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIwai)), QCK(ng)%Rindex
@@ -515,7 +515,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%wao)
+     &                     ICE(ng) % wao)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIwao)), QCK(ng)%Rindex
@@ -538,7 +538,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%wio)
+     &                     ICE(ng) % wio)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIwio)), QCK(ng)%Rindex
@@ -561,7 +561,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%wro)
+     &                     ICE(ng) % wro)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIwro)), QCK(ng)%Rindex
@@ -584,7 +584,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICE(ng)%wdiv)
+     &                     ICE(ng) % wdiv)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIwdiv)), QCK(ng)%Rindex
@@ -609,7 +609,7 @@
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     FORCES(ng)%albo)
+     &                     FORCES(ng) % albo)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIalbO)), QCK(ng)%Rindex
@@ -632,7 +632,7 @@
 #   ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #   endif
-     &                     FORCES(ng)%albi)
+     &                     FORCES(ng) % albi)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIalbI)), QCK(ng)%Rindex
@@ -656,7 +656,7 @@
 #    ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #    endif
-     &                     FORCES(ng)%frswp)
+     &                     FORCES(ng) % frswp)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIfrsw)), QCK(ng)%Rindex
@@ -668,29 +668,6 @@
       END IF
 #   endif
 #  endif
-!
-!  Write out reduction factor for near-IR fraction of SW under ice.
-!
-      IF (Qout(idIrfac,ng)) THEN
-        scale=1.0_dp
-        gtype=gfactor*r2dvar
-        status=nf_fwrite2d(ng, iNLM, QCK(ng)%ncid,                      &
-     &                     QCK(ng)%Vid(idIrfac),                        &
-     &                     QCK(ng)%Rindex, gtype,                       &
-     &                     LBi, UBi, LBj, UBj, scale,                   &
-#  ifdef MASKING
-     &                     GRID(ng) % rmask,                            &
-#  endif
-     &                     ICE(ng)%rfaci)
-        IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
-          IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIrfac)), QCK(ng)%Rindex
-          END IF
-          exit_flag=3
-          ioerror=status
-          RETURN
-        END IF
-      END IF
 !
 !  Write out downward shortwave radiation.
 !
@@ -704,7 +681,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%qswl)
+     &                     FORCES(ng) % qswl)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqswl)), QCK(ng)%Rindex
@@ -727,7 +704,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%qlwl)
+     &                     FORCES(ng) % qlwl)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqlwl)), QCK(ng)%Rindex
@@ -750,7 +727,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%qlai)
+     &                     FORCES(ng) % qlai)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqlai)), QCK(ng)%Rindex
@@ -773,7 +750,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%qsei)
+     &                     FORCES(ng) % qsei)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqsei)), QCK(ng)%Rindex
@@ -796,7 +773,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%qlwa)
+     &                     FORCES(ng) % qlwa)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqlwa)), QCK(ng)%Rindex
@@ -819,7 +796,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%qswa)
+     &                     FORCES(ng) % qswa)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqswa)), QCK(ng)%Rindex
@@ -842,7 +819,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%qswi)
+     &                     FORCES(ng) % qswi)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqswi)), QCK(ng)%Rindex
@@ -865,7 +842,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%qswo)
+     &                     FORCES(ng) % qswo)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqswo)), QCK(ng)%Rindex
@@ -888,7 +865,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%sio)
+     &                     FORCES(ng) % sio)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIsio)), QCK(ng)%Rindex
@@ -911,7 +888,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%sao)
+     &                     FORCES(ng) % sao)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIsao)), QCK(ng)%Rindex
@@ -934,7 +911,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%qao)
+     &                     FORCES(ng) % qao)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqao)), QCK(ng)%Rindex
@@ -957,7 +934,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%qai)
+     &                     FORCES(ng) % qai)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqai)), QCK(ng)%Rindex
@@ -980,7 +957,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%qio)
+     &                     FORCES(ng) % qio)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqio)), QCK(ng)%Rindex
@@ -1003,7 +980,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%qi2)
+     &                     FORCES(ng) % qi2)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqi2)), QCK(ng)%Rindex
@@ -1026,7 +1003,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     FORCES(ng)%wsni)
+     &                     FORCES(ng) % wsni)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIwsni)), QCK(ng)%Rindex
@@ -1052,7 +1029,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ICESHELFVAR(ng)%m)
+     &                     ICESHELFVAR(ng) % m)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIsMr)), QCK(ng)%Rindex
@@ -1076,7 +1053,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     ICESHELFVAR(ng)%Tstar)
+     &                     ICESHELFVAR(ng) % Tstar)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIsTs)), QCK(ng)%Rindex
@@ -1099,7 +1076,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     ICESHELFVAR(ng)%Ustar)
+     &                     ICESHELFVAR(ng) % Ustar)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIsUs)), QCK(ng)%Rindex
@@ -1122,7 +1099,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     ICESHELFVAR(ng)%Tb)
+     &                     ICESHELFVAR(ng) % Tb)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIsTb)), QCK(ng)%Rindex
@@ -1145,7 +1122,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     ICESHELFVAR(ng)%Sb)
+     &                     ICESHELFVAR(ng) % Sb)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIsSb)), QCK(ng)%Rindex
@@ -1170,7 +1147,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     GRID(ng)%zice)
+     &                     GRID(ng) % zice)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIsDrft)), QCK(ng)%Rindex
@@ -1195,7 +1172,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     ICESHELFVAR(ng)%SOFs)
+     &                     ICESHELFVAR(ng) % SOFs)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIsSOFs)), QCK(ng)%Rindex
@@ -1218,7 +1195,7 @@
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif
-     &                     ICESHELFVAR(ng)%SOFh)
+     &                     ICESHELFVAR(ng) % SOFh)
         IF (FoundError(status, nf90_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIsSOFh)), QCK(ng)%Rindex

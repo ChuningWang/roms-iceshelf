@@ -77,8 +77,6 @@
               idIalbI=varid
             CASE ('idIfrsw')
               idIfrsw=varid
-            CASE ('idIrfac')
-              idIrfac=varid
             CASE ('idIwsni')
               idIwsni=varid
             CASE ('idIqswa')

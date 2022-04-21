@@ -153,11 +153,6 @@
             AVG(ng)%pioVar(idIfrsw)%gtype=r2dvar
 #      endif
 #     endif
-          ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIrfac))) THEN
-            got_var(idIrfac)=.TRUE.
-            AVG(ng)%pioVar(idIrfac)%vd=var_desc(i)
-            AVG(ng)%pioVar(idIrfac)%dkind=PIO_FOUT
-            AVG(ng)%pioVar(idIrfac)%gtype=r2dvar
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqswl))) THEN
             got_var(idIqswl)=.TRUE.
             AVG(ng)%pioVar(idIqswl)%vd=var_desc(i)
@@ -462,12 +457,6 @@
         END IF
 #      endif
 #     endif
-        IF (.not.got_var(idIrfac).and.Aout(idIrfac,ng)) THEN
-          IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIrfac)),         &
-     &                                  TRIM(ncname)
-          exit_flag=3
-          RETURN
-        END IF
         IF (.not.got_var(idIqswl).and.Aout(idIqswl,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIqswl)),         &
      &                                  TRIM(ncname)
