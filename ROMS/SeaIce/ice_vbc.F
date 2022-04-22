@@ -195,8 +195,8 @@
       real(r8), intent(in) :: svstr_aw(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: taux_ai(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: tauy_ai(LBi:UBi,LBj:UBj)
-      real(r8), intent(out) :: sustr_aw(LBi:UBi,LBj:UBj)
-      real(r8), intent(out) :: svstr_aw(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: sustr_iw(LBi:UBi,LBj:UBj)
+      real(r8), intent(out) :: svstr_iw(LBi:UBi,LBj:UBj)
 #  endif
 #  ifdef ICE_SHOREFAST
       real(r8), intent(in) :: h(LBi:UBi,LBj:UBj)
@@ -406,6 +406,7 @@
       CALL bc_r2d_tile (ng, tile,                                       &
      &                  LBi, UBi, LBj, UBj,                             &
      &                  chu_iw)
+# ifdef ICE_BULK_FLUXES
       CALL bc_u2d_tile (ng, tile,                                       &
      &                  LBi, UBi, LBj, UBj,                             &
      &                  sustr)
@@ -418,6 +419,13 @@
       CALL bc_v2d_tile (ng, tile,                                       &
      &                  LBi, UBi, LBj, UBj,                             &
      &                  tauaiv)
+      CALL bc_u2d_tile (ng, tile,                                       &
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  sustr_iw)
+      CALL bc_v2d_tile (ng, tile,                                       &
+     &                  LBi, UBi, LBj, UBj,                             &
+     &                  svstr_iw)
+# endif
 # ifdef ICE_LANDFAST
       CALL bc_u2d_tile (ng, tile,                                       &
      &                  LBi, UBi, LBj, UBj,                             &
@@ -427,14 +435,20 @@
      &                  h_loadv)
 # endif
 # ifdef DISTRIBUTE
-      CALL mp_exchange2d (ng, tile, iNLM, 4,                            &
-     &                    LBi, UBi, LBj, UBj,                           &
-     &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
-     &                    sealev, utau_iw, chu_iw, sustr)
       CALL mp_exchange2d (ng, tile, iNLM, 3,                            &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
-     &                    svstr, tauaiu, tauaiv)
+     &                    sealev, utau_iw, chu_iw)
+#  ifdef ICE_BULK_FLUXES
+      CALL mp_exchange2d (ng, tile, iNLM, 4,                            &
+     &                    LBi, UBi, LBj, UBj,                           &
+     &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
+     &                    sustr, svstr, tauaiu, tauaiv)
+      CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
+     &                    LBi, UBi, LBj, UBj,                           &
+     &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
+     &                    sustr_iw, svstr_iw)
+#  endif
 #  ifdef ICE_LANDFAST
       CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
      &                    LBi, UBi, LBj, UBj,                           &

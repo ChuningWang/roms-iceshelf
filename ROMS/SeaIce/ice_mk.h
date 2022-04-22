@@ -782,8 +782,10 @@
      &                               wfr(i,j))
 !
           ai_tmp = ai(i,j,linew)
-          ai(i,j,linew) = ai(i,j,linew) + dtice(ng)*cff *               &
-     &      (1.0_r8-ai(i,j,linew))*(phi*wao(i,j)+wfr(i,j))/i_thick(i,j)
+          cff1 = dtice(ng)*cff*(phi*wao(i,j)+wfr(i,j))/i_thick(i,j)
+          ai(i,j,linew) = (cff1 + ai(i,j,linew)) / (1.0_r8 + cff1)
+!         ai(i,j,linew) = ai(i,j,linew) + dtice(ng)*cff *               &
+!    &      (1.0_r8-ai(i,j,linew))*(phi*wao(i,j)+wfr(i,j))/i_thick(i,j)
           ai(i,j,linew) = MIN(ai(i,j,linew), max_a(ng))
 #ifndef ICE_NO_SNOW
 !
@@ -867,10 +869,10 @@
 !
       DO j=Jstr,Jend
         DO i=Istr,Iend
-          ai(i,j,linew)  = MAX(MIN(ai(i,j,linew),max_a(ng)),  0.0_r8)
-          hi(i,j,linew)  = MAX(hi(i,j,linew),                 0.0_r8)
-          hsn(i,j,linew) = MAX(hsn(i,j,linew),                0.0_r8)
-          ti(i,j,linew)  = MAX(ti(i,j,linew),               -70.0_r8)
+          ai(i,j,linew)  = MAX(MIN(ai(i,j,linew) ,max_a(ng)), 0.0_r8  )
+          hi(i,j,linew)  = MAX(    hi(i,j,linew) ,            0.0_r8  )
+          hsn(i,j,linew) = MAX(    hsn(i,j,linew),            0.0_r8  )
+          ti(i,j,linew)  = MAX(    ti(i,j,linew) ,            -70.0_r8)
           IF (hi(i,j,linew)     .le. 0.0_r8) ai(i,j,linew)     = 0.0_r8
           IF (ai(i,j,linew)     .le. 0.0_r8) hi(i,j,linew)     = 0.0_r8
           IF (ageice(i,j,linew) .le. 0.0_r8) ageice(i,j,linew) = 0.0_r8
