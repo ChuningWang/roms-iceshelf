@@ -271,19 +271,19 @@
       DO j=Jstr-1,Jend+1
         DO i=Istr-1,MIN(Iend+1,Lm(ng))
           Uair(i,j)=Uwind(i,j)-                                         &
-     &              0.5_r8*(uice(i,j,listp)+uice(i+1,j,listp))
+     &              0.5_r8*(ui(i,j,listp)+ui(i+1,j,listp))
         END DO
         IF (DOMAIN(ng)%Eastern_Edge(tile)) THEN
-          Uair(Iend+1,j)=Uwind(Iend+1,j)-uice(Iend,j,listp)
+          Uair(Iend+1,j)=Uwind(Iend+1,j)-ui(Iend,j,listp)
         END IF
       END DO
       DO i=Istr-1,Iend+1
         DO j=Jstr-1,MIN(Jend+1,Mm(ng))
           Vair(i,j)=Vwind(i,j)-                                         &
-     &              0.5_r8*(vice(i,j,listp)+vice(i,j+1,listp))
+     &              0.5_r8*(vi(i,j,listp)+vi(i,j+1,listp))
         END DO
         IF (DOMAIN(ng)%Northern_Edge(tile)) THEN
-          Vair(i,Jend+1)=Vwind(i,Jend+1)-vice(i,Jend,listp)
+          Vair(i,Jend+1)=Vwind(i,Jend+1)-vi(i,Jend,listp)
         END IF
       END DO
 # else
