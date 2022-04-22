@@ -365,7 +365,8 @@
       real(r8) :: termt, terms
       real(r8) :: wtot, phi
       real(r8) :: sao_i, sio_i
-      real(r8) :: cff, cff1
+      real(r8) :: cff, cff1, cff2
+      real(r8) :: a, b, c
 !
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: b2d
 !
@@ -495,6 +496,9 @@
 !
 !  Compute ice melt rate - wai is positive for melting
 !
+            wai(i,j) = 0.0_r8
+            wsm(i,j) = 0.0_r8
+!
             IF (hsn(i,j,linew) .le. 0.0_r8) THEN
               IF (tis(i,j) .gt. tfrz) THEN
 !
@@ -582,37 +586,42 @@
      &      ((1.0_r8-brnfr(i,j))*cpi+brnfr(i,j)*Cp)*ti(i,j,linew)
 !
           IF (ai(i,j,linew) .gt. min_a(ng)) THEN
-            cff  = alph(i,j)*hicehinv
             cff1 = cht(i,j) *rhocp
+            cff2 = alph(i,j)*hicehinv
+!
+!  Solving wio with this block
+!
             a = hfus1(i,j)
-            b = (cff1*temp_top(i,j) + cff*ti(i,j,linew)) -              &
-     &          hfus1(i,j)*(chs(i,j) + wro(i,j))         -              &
-     &          (cff1 + cff)*frln*sice(i,j)
+            b = (cff1*temp_top(i,j) + cff2*ti(i,j,linew)) -             &
+     &          hfus1(i,j)*(chs(i,j) + wro(i,j))          -             &
+     &          (cff1 + cff2)*frln*sice(i,j)
             c = -(chs(i,j) + wro(i,j))*                                 &
-     &           (cff1*temp_top(i,j) + cff*ti(i,j,linew))       -       &
+     &           (cff1*temp_top(i,j) + cff2*ti(i,j,linew))      -       &
      &           (chs(i,j)*salt_top(i,j) + wai(i,j)*sice(i,j))*         &
-     &           (cff1 + cff)*frln
-            cff2 = SQRT(b**2 - 4.0_r8*a*c)
-            wio(i,j)  = (-cff2 - b)/(2.0_r8*a)
-            s0mk(i,j) = (hfus1(i,j)*wio(i,j) + cff1*temp_top(i,j) +     &
-     &                   cff*ti(i,j,linew)) /                           &
-     &                  ((cff + cff1) / frln)
+     &           (cff1 + cff2)*frln
+            cff = SQRT(b**2 - 4.0_r8*a*c)
+            wio(i,j)  = (cff - b)/(2.0_r8*a)
+            s0mk(i,j) = (cff1*temp_top(i,j) + cff2*ti(i,j,linew) +      &
+     &                   hfus1(i,j)*wio(i,j)                       ) /  &
+     &                  ((cff1 + cff2) * frln)
             t0mk(i,j) = frln*s0mk(i,j)
-            qio(i,j)  = alph(i,j)*hicehinv*(t0mk(i,j)-ti(i,j,linew))
-!           a = (cff + cff1)*frln
-!           b = -(hfus1(i,j)*chs(i,j) + (cff + cff1)*frln*sice(i,j) +   &
-!    &            cff*ti(i,j,linew) + cff1*temp_top(i,j) +              &
+            qio(i,j)  = cff2*(t0mk(i,j)-ti(i,j,linew))
+!
+!  alternatively, Solving s0mk with this block (currently buggy)
+!
+!           a = (cff1 + cff2)*frln
+!           b = -(hfus1(i,j)*chs(i,j) + (cff1 + cff2)*frln*sice(i,j) +  &
+!    &            cff1*temp_top(i,j) + cff2*ti(i,j,linew) +             &
 !    &            hfus1(i,j)*wro(i,j))
-!           c = (cff*ti(i,j,linew) + cff1*temp_top(i,j) +               &
+!           c = (cff1*temp_top(i,j) + cff2*ti(i,j,linew) +              &
 !    &           hfus1(i,j)*wai(i,j))*sice(i,j) +                       &
 !    &          hfus1(i,j)*chs(i,j)*salt_top(i,j)
 !           cff = SQRT(b**2 - 4.0_r8*a*c)
-!           s0mk(i,j) = (cff - b)/(2.0_r8*a)
+!           s0mk(i,j) = (-cff - b)/(2.0_r8*a)
 !           t0mk(i,j) = frln*s0mk(i,j)
-!           qio(i,j)  = alph(i,j)*hicehinv*(t0mk(i,j)-ti(i,j,linew))
+!           qio(i,j)  = cff2*(t0mk(i,j)-ti(i,j,linew))
 !           wio(i,j)  = (qio(i,j) + cff1*(t0mk(i,j) - temp_top(i,j))) / &
 !    &                  (hfus1(i,j)*rho0)
-            write(*,*) i,j,s0mk(i,j),a,b,c
 !
 !  Calculate interior ice temp and heat fluxes
 !

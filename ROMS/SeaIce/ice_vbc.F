@@ -418,8 +418,8 @@
           hiy = 0.5_r8*(hi(i,j,liold)+hi(i,j-1,liold))
           spd = 0.5_r8*(wind_speed(i,j)+wind_speed(i,j-1))
           tauaiv(i,j) = aiy*rho_air(ng)*                                &
-     &      (0.5_r8*cdai(ng)*&
-     &       (1.0_r8-&
+     &      (0.5_r8*cdai(ng)*                                           &
+     &       (1.0_r8-                                                   &
      &        COS(2.0_r8*pi*MIN((hiy/(aiy+0.02_r8)+0.1_r8),0.5_r8))))*  &
      &      spd*windv(i,j)/rhoice(ng)
           tauiwv = 0.5_r8*(spdiw(i,j)+spdiw(i,j-1)) *                   &
