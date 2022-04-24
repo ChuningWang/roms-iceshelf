@@ -36,7 +36,7 @@
 ! Switch to control the computation of ice within nested and/or multiple
 ! connected grids.
 
-    Lice == T
+           Lice == T
 
 ! Set ice lateral boundary conditions keyword. Notice that a value is
 ! expected for each boundary segment per nested grid for each state variable.
@@ -62,117 +62,118 @@
 !   Rad        Radiation                                   2          j=1
 !   Mix        Mixed (clamped/gradient)             i=1         i=Lm
 !
-!                   W       S       E       N
-!                   e       o       a       o
-!                   s       u       s       r
-!                   t       t       t       t
-!                           h               h
+!                    W       S       E       N
+!                    e       o       a       o
+!                    s       u       s       r
+!                    t       t       t       t
+!                            h               h
 !
-!                   1       2       3       4
+!                    1       2       3       4
 
-  LBC(isUice)  ==   Clo     Per     Clo     Per     ! ice U-momentum
-  LBC(isVice)  ==   Clo     Per     Clo     Per     ! ice V-momentum
-  LBC(isAice)  ==   Clo     Per     Clo     Per     ! ice concentration
-  LBC(isHice)  ==   Clo     Per     Clo     Per     ! ice/snow thickness
-  LBC(isTice)  ==   Clo     Per     Clo     Per     ! ice temperature
-  LBC(isIsig)  ==   Clo     Per     Clo     Per     ! ice stress
+   LBC(isUice)  ==   Clo     Per     Clo     Per     ! ice U-momentum
+   LBC(isVice)  ==   Clo     Per     Clo     Per     ! ice V-momentum
+   LBC(isAice)  ==   Clo     Per     Clo     Per     ! ice concentration
+   LBC(isHice)  ==   Clo     Per     Clo     Per     ! ice/snow thickness
+   LBC(isTice)  ==   Clo     Per     Clo     Per     ! ice temperature
+   LBC(isIsig)  ==   Clo     Per     Clo     Per     ! ice stress
 
 ! Maximum number of iterations to achieve convergence of the nonlinear
 ! ice dynamics solution
 
-             NSTRS == 1
+          NSTRS == 1
 
 ! Number of elastic time steps per viscous step in EVP dynamics
 
-              NEVP == 60
+           NEVP == 60
 
 ! Density of sea ice [kg/m3]
 
-            RHOICE == 900.d0
+         RHOICE == 900.d0
 
 ! Ice-water bulk drag coefficient (nondimensional).
 
-              CDIW == 7.5d-3
+           CDIW == 7.5d-3
 
 ! Air-ice bulk drag coefficient (nondimensional).
 
-              CDAI == 3.0d-3
+           CDAI == 3.0d-3
 
 ! Density of air [kg/m3]
 
-           RHO_AIR = 1.267d0
+        RHO_AIR = 1.267d0
 
 ! Density of dry snow [kg/m3]
 
-       RHOSNOW_DRY == 330.d0
+    RHOSNOW_DRY == 330.d0
 
 ! Density of wet snow [kg/m3]
 
-       RHOSNOW_WET == 450.d0
+    RHOSNOW_WET == 450.d0
 
 ! Ice strength coefficient [N/m2]
 
-             PSTAR == 5.0d+03
+          PSTAR == 5.0d+03
 
 ! Ice strength coefficient in quadratic form [N/m]
 
-           PSTAR_E == 1.4d+03
+        PSTAR_E == 1.4d+03
 
 ! Ice strength exponential weighting coefficient on concentration
 ! (nondimensional)
 
-            ASTREN == 20.d0
+!        ASTREN == 20.d0  ! For linear ice strength coefficient
+         ASTREN == 20.d0  ! For quadratic ice strength coefficient
 
 ! Maximum shear strength [N/m2]
 
-           ZETAMAX == 1.0d+14
+        ZETAMAX == 1.0d+14
 
 ! Minimum shear strength [N/m2]
 
-           ZETAMIN == 0.d0
+        ZETAMIN == 0.d0
 
 ! Ellipticity squared of yield curve (nondimensional)
 
-          ELLIP_SQ == 4.d0
+       ELLIP_SQ == 4.d0
 
 ! Mohr-Coulomb stress angle [degrees]
 
-            ALPHAI == 45.d0
+         ALPHAI == 45.d0
 
 ! Tolerance against zero-divide
 
-               TOL = 1.d-16
+            TOL = 1.d-16
 
 ! Minimum average ice thickness [m]
 
-             MIN_H == 0.00d0
+          MIN_H == 0.00d0
 
 ! Minimum ice concentration (nondimensional)
 
-             MIN_A == 1.00d-30
+          MIN_A == 1.00d-30
 
 ! Maximum ice concentration (nondimensional)
 
-             MAX_A == 1.0d0
+          MAX_A == 1.0d0
 
 ! Ice-water turning angle [degrees]
 
-         STRESSANG = 0.d0
+      STRESSANG = 0.d0
 
 ! tunable parameters for Lemieux landfast ice
 
-             LF_K1 = 8.0d0
-             LF_K2 = 15.0d0
-             LF_U0 = 5.0e-5
+          LF_K1 = 8.0d0
+          LF_K2 = 15.0d0
+          LF_U0 = 5.0e-5
 
 ! Logical switches for ice climatology and nudging
 
-            LmiCLM == F
-            LaiCLM == F
-            LsiCLM == F
-       LnudgeMICLM == F
-       LnudgeAICLM == F
-       LnudgeSICLM == F
+         LmiCLM == F
+         LaiCLM == F
+         LsiCLM == F
+    LnudgeMICLM == F
+    LnudgeAICLM == F
+    LnudgeSICLM == F
 
 ! Logical switches (TRUE/FALSE) to activate writing of ice prognostic
 ! variables into HISTORY output file.
