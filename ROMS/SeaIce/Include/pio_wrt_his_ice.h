@@ -810,175 +810,7 @@
 #    endif
 #   endif
 !
-!  Write out downward shortwave radiation.
-!
-      IF (Hout(idIqswl,ng)) THEN
-        scale=1.0_dp
-        IF (HIS(ng)%pioVar(idIqswl)%dkind.eq.PIO_double) THEN
-          ioDesc => ioDesc_dp_r2dvar(ng)
-        ELSE
-          ioDesc => ioDesc_sp_r2dvar(ng)
-        END IF
-        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
-     &                     HIS(ng)%pioVar(idIqswl),                     &
-     &                     HIS(ng)%Rindex,                              &
-     &                     ioDesc,                                      &
-     &                     LBi, UBi, LBj, UBj, scale,                   &
-#   ifdef MASKING
-     &                     GRID(ng) % rmask,                            &
-#   endif
-     &                     FORCES(ng) % qswl)
-        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
-          IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIqswl)), HIS(ng)%Rindex
-          END IF
-          exit_flag=3
-          ioerror=status
-          RETURN
-        END IF
-      END IF
-!
-!  Write out downward longwave radiation.
-!
-      IF (Hout(idIqlwl,ng)) THEN
-        scale=1.0_dp
-        IF (HIS(ng)%pioVar(idIqlwl)%dkind.eq.PIO_double) THEN
-          ioDesc => ioDesc_dp_r2dvar(ng)
-        ELSE
-          ioDesc => ioDesc_sp_r2dvar(ng)
-        END IF
-        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
-     &                     HIS(ng)%pioVar(idIqlwl),                     &
-     &                     HIS(ng)%Rindex,                              &
-     &                     ioDesc,                                      &
-     &                     LBi, UBi, LBj, UBj, scale,                   &
-#   ifdef MASKING
-     &                     GRID(ng) % rmask,                            &
-#   endif
-     &                     FORCES(ng) % qlwl)
-        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
-          IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIqlwl)), HIS(ng)%Rindex
-          END IF
-          exit_flag=3
-          ioerror=status
-          RETURN
-        END IF
-      END IF
-!
-!  Write out latent heat over ice.
-!
-      IF (Hout(idIqlai,ng)) THEN
-        scale=1.0_dp
-        IF (HIS(ng)%pioVar(idIqlai)%dkind.eq.PIO_double) THEN
-          ioDesc => ioDesc_dp_r2dvar(ng)
-        ELSE
-          ioDesc => ioDesc_sp_r2dvar(ng)
-        END IF
-        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
-     &                     HIS(ng)%pioVar(idIqlai),                     &
-     &                     HIS(ng)%Rindex,                              &
-     &                     ioDesc,                                      &
-     &                     LBi, UBi, LBj, UBj, scale,                   &
-#   ifdef MASKING
-     &                     GRID(ng) % rmask,                            &
-#   endif
-     &                     FORCES(ng) % qlai)
-        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
-          IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIqlai)), HIS(ng)%Rindex
-          END IF
-          exit_flag=3
-          ioerror=status
-          RETURN
-        END IF
-      END IF
-!
-!  Write out sensible heat over ice.
-!
-      IF (Hout(idIqsei,ng)) THEN
-        scale=1.0_dp
-        IF (HIS(ng)%pioVar(idIqsei)%dkind.eq.PIO_double) THEN
-          ioDesc => ioDesc_dp_r2dvar(ng)
-        ELSE
-          ioDesc => ioDesc_sp_r2dvar(ng)
-        END IF
-        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
-     &                     HIS(ng)%pioVar(idIqsei),                     &
-     &                     HIS(ng)%Rindex,                              &
-     &                     ioDesc,                                      &
-     &                     LBi, UBi, LBj, UBj, scale,                   &
-#   ifdef MASKING
-     &                     GRID(ng) % rmask,                            &
-#   endif
-     &                     FORCES(ng) % qsei)
-        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
-          IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIqsei)), HIS(ng)%Rindex
-          END IF
-          exit_flag=3
-          ioerror=status
-          RETURN
-        END IF
-      END IF
-!
-!  Write out upward longwave over ice.
-!
-      IF (Hout(idIqlwa,ng)) THEN
-        scale=1.0_dp
-        IF (HIS(ng)%pioVar(idIqlwa)%dkind.eq.PIO_double) THEN
-          ioDesc => ioDesc_dp_r2dvar(ng)
-        ELSE
-          ioDesc => ioDesc_sp_r2dvar(ng)
-        END IF
-        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
-     &                     HIS(ng)%pioVar(idIqlwa),                     &
-     &                     HIS(ng)%Rindex,                              &
-     &                     ioDesc,                                      &
-     &                     LBi, UBi, LBj, UBj, scale,                   &
-#   ifdef MASKING
-     &                     GRID(ng) % rmask,                            &
-#   endif
-     &                     FORCES(ng) % qlwa)
-        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
-          IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIqlwa)), HIS(ng)%Rindex
-          END IF
-          exit_flag=3
-          ioerror=status
-          RETURN
-        END IF
-      END IF
-!
-!  Write out upward shortwave over ice.
-!
-      IF (Hout(idIqswa,ng)) THEN
-        scale=1.0_dp
-        IF (HIS(ng)%pioVar(idIqswa)%dkind.eq.PIO_double) THEN
-          ioDesc => ioDesc_dp_r2dvar(ng)
-        ELSE
-          ioDesc => ioDesc_sp_r2dvar(ng)
-        END IF
-        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
-     &                     HIS(ng)%pioVar(idIqswa),                     &
-     &                     HIS(ng)%Rindex,                              &
-     &                     ioDesc,                                      &
-     &                     LBi, UBi, LBj, UBj, scale,                   &
-#   ifdef MASKING
-     &                     GRID(ng) % rmask,                            &
-#   endif
-     &                     FORCES(ng) % qswa)
-        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
-          IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIqswa)), HIS(ng)%Rindex
-          END IF
-          exit_flag=3
-          ioerror=status
-          RETURN
-        END IF
-      END IF
-!
-!  Write out shortwave into ice.
+!  Write out shortwave radiation into ice.
 !
       IF (Hout(idIqswi,ng)) THEN
         scale=1.0_dp
@@ -1006,7 +838,203 @@
         END IF
       END IF
 !
-!  Write out shortwave through ice.
+!  Write out longwave radiation into ice.
+!
+      IF (Hout(idIqlwi,ng)) THEN
+        scale=1.0_dp
+        IF (HIS(ng)%pioVar(idIqlwi)%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
+     &                     HIS(ng)%pioVar(idIqlwi),                     &
+     &                     HIS(ng)%Rindex,                              &
+     &                     ioDesc,                                      &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#   ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#   endif
+     &                     FORCES(ng) % qlwi)
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idIqlwi)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+!
+!  Write out latent heat flux into ice.
+!
+      IF (Hout(idIqlai,ng)) THEN
+        scale=1.0_dp
+        IF (HIS(ng)%pioVar(idIqlai)%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
+     &                     HIS(ng)%pioVar(idIqlai),                     &
+     &                     HIS(ng)%Rindex,                              &
+     &                     ioDesc,                                      &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#   ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#   endif
+     &                     FORCES(ng) % qlai)
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idIqlai)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+!
+!  Write out sensible heat flux into ice.
+!
+      IF (Hout(idIqsei,ng)) THEN
+        scale=1.0_dp
+        IF (HIS(ng)%pioVar(idIqsei)%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
+     &                     HIS(ng)%pioVar(idIqsei),                     &
+     &                     HIS(ng)%Rindex,                              &
+     &                     ioDesc,                                      &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#   ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#   endif
+     &                     FORCES(ng) % qsei)
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idIqsei)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+!
+!  Write out downward shortwave radiation into leads.
+!
+      IF (Hout(idIqswl,ng)) THEN
+        scale=1.0_dp
+        IF (HIS(ng)%pioVar(idIqswl)%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
+     &                     HIS(ng)%pioVar(idIqswl),                     &
+     &                     HIS(ng)%Rindex,                              &
+     &                     ioDesc,                                      &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#   ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#   endif
+     &                     FORCES(ng) % qswl)
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idIqswl)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+!
+!  Write out downward longwave radiation into leads.
+!
+      IF (Hout(idIqlwl,ng)) THEN
+        scale=1.0_dp
+        IF (HIS(ng)%pioVar(idIqlwl)%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
+     &                     HIS(ng)%pioVar(idIqlwl),                     &
+     &                     HIS(ng)%Rindex,                              &
+     &                     ioDesc,                                      &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#   ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#   endif
+     &                     FORCES(ng) % qlwl)
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idIqlwl)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+!
+!  Write out upward longwave into atmosphere.
+!
+      IF (Hout(idIqlwa,ng)) THEN
+        scale=1.0_dp
+        IF (HIS(ng)%pioVar(idIqlwa)%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
+     &                     HIS(ng)%pioVar(idIqlwa),                     &
+     &                     HIS(ng)%Rindex,                              &
+     &                     ioDesc,                                      &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#   ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#   endif
+     &                     FORCES(ng) % qlwa)
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idIqlwa)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+!
+!  Write out upward shortwave into atmosphere.
+!
+      IF (Hout(idIqswa,ng)) THEN
+        scale=1.0_dp
+        IF (HIS(ng)%pioVar(idIqswa)%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
+     &                     HIS(ng)%pioVar(idIqswa),                     &
+     &                     HIS(ng)%Rindex,                              &
+     &                     ioDesc,                                      &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#   ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#   endif
+     &                     FORCES(ng) % qswa)
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idIqswa)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+!
+!  Write out shortwave radiation through ice.
 !
       IF (Hout(idIqswo,ng)) THEN
         scale=1.0_dp
@@ -1034,63 +1062,7 @@
         END IF
       END IF
 !
-!  Write out salt flux under ice.
-!
-      IF (Hout(idIsio,ng)) THEN
-        scale=1.0_dp
-        IF (HIS(ng)%pioVar(idIsio)%dkind.eq.PIO_double) THEN
-          ioDesc => ioDesc_dp_r2dvar(ng)
-        ELSE
-          ioDesc => ioDesc_sp_r2dvar(ng)
-        END IF
-        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
-     &                     HIS(ng)%pioVar(idIsio),                      &
-     &                     HIS(ng)%Rindex,                              &
-     &                     ioDesc,                                      &
-     &                     LBi, UBi, LBj, UBj, scale,                   &
-#   ifdef MASKING
-     &                     GRID(ng) % rmask,                            &
-#   endif
-     &                     FORCES(ng) % sio)
-        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
-          IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsio)), HIS(ng)%Rindex
-          END IF
-          exit_flag=3
-          ioerror=status
-          RETURN
-        END IF
-      END IF
-!
-!  Write out salt flux through leads.
-!
-      IF (Hout(idIsao,ng)) THEN
-        scale=1.0_dp
-        IF (HIS(ng)%pioVar(idIsao)%dkind.eq.PIO_double) THEN
-          ioDesc => ioDesc_dp_r2dvar(ng)
-        ELSE
-          ioDesc => ioDesc_sp_r2dvar(ng)
-        END IF
-        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
-     &                     HIS(ng)%pioVar(idIsao),                      &
-     &                     HIS(ng)%Rindex,                              &
-     &                     ioDesc,                                      &
-     &                     LBi, UBi, LBj, UBj, scale,                   &
-#   ifdef MASKING
-     &                     GRID(ng) % rmask,                            &
-#   endif
-     &                     FORCES(ng) % sao)
-        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
-          IF (Master) THEN
-            WRITE (stdout,10) TRIM(Vname(1,idIsao)), HIS(ng)%Rindex
-          END IF
-          exit_flag=3
-          ioerror=status
-          RETURN
-        END IF
-      END IF
-!
-!  Write out heat flux through leads.
+!  Write out heat flux, air-ocean.
 !
       IF (Hout(idIqao,ng)) THEN
         scale=1.0_dp
@@ -1118,7 +1090,7 @@
         END IF
       END IF
 !
-!  Write out heat flux of ice-air.
+!  Write out heat flux, air-ice.
 !
       IF (Hout(idIqai,ng)) THEN
         scale=1.0_dp
@@ -1146,7 +1118,7 @@
         END IF
       END IF
 !
-!  Write out heat flux of ice-ocean.
+!  Write out heat flux, ice-ocean.
 !
       IF (Hout(idIqio,ng)) THEN
         scale=1.0_dp
@@ -1174,7 +1146,7 @@
         END IF
       END IF
 !
-!  Write out ice heat flux.
+!  Write out heat flux, ice-snow.
 !
       IF (Hout(idIqi2,ng)) THEN
         scale=1.0_dp
@@ -1195,6 +1167,62 @@
         IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
           IF (Master) THEN
             WRITE (stdout,10) TRIM(Vname(1,idIqi2)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+!
+!  Write out salt flux, air-ocean.
+!
+      IF (Hout(idIsao,ng)) THEN
+        scale=1.0_dp
+        IF (HIS(ng)%pioVar(idIsao)%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
+     &                     HIS(ng)%pioVar(idIsao),                      &
+     &                     HIS(ng)%Rindex,                              &
+     &                     ioDesc,                                      &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#   ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#   endif
+     &                     FORCES(ng) % sao)
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idIsao)), HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
+      END IF
+!
+!  Write out salt flux, ice-ocean.
+!
+      IF (Hout(idIsio,ng)) THEN
+        scale=1.0_dp
+        IF (HIS(ng)%pioVar(idIsio)%dkind.eq.PIO_double) THEN
+          ioDesc => ioDesc_dp_r2dvar(ng)
+        ELSE
+          ioDesc => ioDesc_sp_r2dvar(ng)
+        END IF
+        status=nf_fwrite2d(ng, iNLM, HIS(ng)%pioFile,                   &
+     &                     HIS(ng)%pioVar(idIsio),                      &
+     &                     HIS(ng)%Rindex,                              &
+     &                     ioDesc,                                      &
+     &                     LBi, UBi, LBj, UBj, scale,                   &
+#   ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+#   endif
+     &                     FORCES(ng) % sio)
+        IF (FoundError(status, PIO_noerr, __LINE__, MyFile)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idIsio)), HIS(ng)%Rindex
           END IF
           exit_flag=3
           ioerror=status

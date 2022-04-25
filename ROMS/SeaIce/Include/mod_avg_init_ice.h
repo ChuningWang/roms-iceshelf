@@ -205,17 +205,17 @@
       END IF
 #    endif
 #   endif
-      IF (Aout(idIqswl,ng)) THEN
+      IF (Aout(idIqswi,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
-            AVERAGE(ng) % avgqswl(i,j) = IniVal
+            AVERAGE(ng) % avgqswi(i,j) = IniVal
           END DO
         END DO
       END IF
-      IF (Aout(idIqlwl,ng)) THEN
+      IF (Aout(idIqlwi,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
-            AVERAGE(ng) % avgqlwl(i,j) = IniVal
+            AVERAGE(ng) % avgqlwi(i,j) = IniVal
           END DO
         END DO
       END IF
@@ -233,6 +233,20 @@
           END DO
         END DO
       END IF
+      IF (Aout(idIqswl,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgqswl(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIqlwl,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgqlwl(i,j) = IniVal
+          END DO
+        END DO
+      END IF
       IF (Aout(idIqlwa,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
@@ -247,31 +261,10 @@
           END DO
         END DO
       END IF
-      IF (Aout(idIqswi,ng)) THEN
-        DO j=JstrR,JendR
-          DO i=IstrR,IendR
-            AVERAGE(ng) % avgqswi(i,j) = IniVal
-          END DO
-        END DO
-      END IF
       IF (Aout(idIqswo,ng)) THEN
         DO j=JstrR,JendR
           DO i=IstrR,IendR
             AVERAGE(ng) % avgqswo(i,j) = IniVal
-          END DO
-        END DO
-      END IF
-      IF (Aout(idIsio,ng)) THEN
-        DO j=JstrR,JendR
-          DO i=IstrR,IendR
-            AVERAGE(ng) % avgsio(i,j) = IniVal
-          END DO
-        END DO
-      END IF
-      IF (Aout(idIsao,ng)) THEN
-        DO j=JstrR,JendR
-          DO i=IstrR,IendR
-            AVERAGE(ng) % avgsao(i,j) = IniVal
           END DO
         END DO
       END IF
@@ -300,6 +293,20 @@
         DO j=JstrR,JendR
           DO i=IstrR,IendR
             AVERAGE(ng) % avgqi2(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIsao,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgsao(i,j) = IniVal
+          END DO
+        END DO
+      END IF
+      IF (Aout(idIsio,ng)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            AVERAGE(ng) % avgsio(i,j) = IniVal
           END DO
         END DO
       END IF

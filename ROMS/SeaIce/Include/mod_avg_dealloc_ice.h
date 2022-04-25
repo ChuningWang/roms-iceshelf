@@ -121,13 +121,13 @@
       END IF
 #    endif
 #   endif
-      IF (Aout(idIqswl,ng)) THEN
-        IF (.not.destroy(ng, AVERAGE(ng)%avgqswl, MyFile,               &
-     &                   __LINE__, 'AVERAGE(ng)%avgqswl')) RETURN
+      IF (Aout(idIqswi,ng)) THEN
+        IF (.not.destroy(ng, AVERAGE(ng)%avgqswi, MyFile,               &
+     &                   __LINE__, 'AVERAGE(ng)%avgqswi')) RETURN
       END IF
-      IF (Aout(idIqlwl,ng)) THEN
-        IF (.not.destroy(ng, AVERAGE(ng)%avgqlwl, MyFile,               &
-     &                   __LINE__, 'AVERAGE(ng)%avgqlwl')) RETURN
+      IF (Aout(idIqlwi,ng)) THEN
+        IF (.not.destroy(ng, AVERAGE(ng)%avgqlwi, MyFile,               &
+     &                   __LINE__, 'AVERAGE(ng)%avgqlwi')) RETURN
       END IF
       IF (Aout(idIqlai,ng)) THEN
         IF (.not.destroy(ng, AVERAGE(ng)%avgqlai, MyFile,               &
@@ -137,6 +137,14 @@
         IF (.not.destroy(ng, AVERAGE(ng)%avgqsei, MyFile,               &
      &                   __LINE__, 'AVERAGE(ng)%avgqsei')) RETURN
       END IF
+      IF (Aout(idIqswl,ng)) THEN
+        IF (.not.destroy(ng, AVERAGE(ng)%avgqswl, MyFile,               &
+     &                   __LINE__, 'AVERAGE(ng)%avgqswl')) RETURN
+      END IF
+      IF (Aout(idIqlwl,ng)) THEN
+        IF (.not.destroy(ng, AVERAGE(ng)%avgqlwl, MyFile,               &
+     &                   __LINE__, 'AVERAGE(ng)%avgqlwl')) RETURN
+      END IF
       IF (Aout(idIqlwa,ng)) THEN
         IF (.not.destroy(ng, AVERAGE(ng)%avgqlwa, MyFile,               &
      &                   __LINE__, 'AVERAGE(ng)%avgqlwa')) RETURN
@@ -145,21 +153,9 @@
         IF (.not.destroy(ng, AVERAGE(ng)%avgqswa, MyFile,               &
      &                   __LINE__, 'AVERAGE(ng)%avgqswa')) RETURN
       END IF
-      IF (Aout(idIqswi,ng)) THEN
-        IF (.not.destroy(ng, AVERAGE(ng)%avgqswi, MyFile,               &
-     &                   __LINE__, 'AVERAGE(ng)%avgqswi')) RETURN
-      END IF
       IF (Aout(idIqswo,ng)) THEN
         IF (.not.destroy(ng, AVERAGE(ng)%avgqswo, MyFile,               &
      &                   __LINE__, 'AVERAGE(ng)%avgqswo')) RETURN
-      END IF
-      IF (Aout(idIsio,ng)) THEN
-        IF (.not.destroy(ng, AVERAGE(ng)%avgsio, MyFile,                &
-     &                   __LINE__, 'AVERAGE(ng)%avgsio')) RETURN
-      END IF
-      IF (Aout(idIsao,ng)) THEN
-        IF (.not.destroy(ng, AVERAGE(ng)%avgsao, MyFile,                &
-     &                   __LINE__, 'AVERAGE(ng)%avgsao')) RETURN
       END IF
       IF (Aout(idIqao,ng)) THEN
         IF (.not.destroy(ng, AVERAGE(ng)%avgqao, MyFile,                &
@@ -176,6 +172,14 @@
       IF (Aout(idIqi2,ng)) THEN
         IF (.not.destroy(ng, AVERAGE(ng)%avgqi2, MyFile,                &
      &                   __LINE__, 'AVERAGE(ng)%avgqi2')) RETURN
+      END IF
+      IF (Aout(idIsao,ng)) THEN
+        IF (.not.destroy(ng, AVERAGE(ng)%avgsao, MyFile,                &
+     &                   __LINE__, 'AVERAGE(ng)%avgsao')) RETURN
+      END IF
+      IF (Aout(idIsio,ng)) THEN
+        IF (.not.destroy(ng, AVERAGE(ng)%avgsio, MyFile,                &
+     &                   __LINE__, 'AVERAGE(ng)%avgsio')) RETURN
       END IF
       IF (Aout(idIwsni,ng)) THEN
         IF (.not.destroy(ng, AVERAGE(ng)%avgwsni, MyFile,               &

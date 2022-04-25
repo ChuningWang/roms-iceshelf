@@ -121,12 +121,12 @@
       END IF
 #    endif
 #   endif
-      IF (Aout(idIqswl,ng)) THEN
-        allocate ( AVERAGE(ng) % avgqswl(LBi:UBi,LBj:UBj) )
+      IF (Aout(idIqswi,ng)) THEN
+        allocate ( AVERAGE(ng) % avgqswi(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
-      IF (Aout(idIqlwl,ng)) THEN
-        allocate ( AVERAGE(ng) % avgqlwl(LBi:UBi,LBj:UBj) )
+      IF (Aout(idIqlwi,ng)) THEN
+        allocate ( AVERAGE(ng) % avgqlwi(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
       IF (Aout(idIqlai,ng)) THEN
@@ -137,6 +137,14 @@
         allocate ( AVERAGE(ng) % avgqsei(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
+      IF (Aout(idIqswl,ng)) THEN
+        allocate ( AVERAGE(ng) % avgqswl(LBi:UBi,LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+size2d
+      END IF
+      IF (Aout(idIqlwl,ng)) THEN
+        allocate ( AVERAGE(ng) % avgqlwl(LBi:UBi,LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+size2d
+      END IF
       IF (Aout(idIqlwa,ng)) THEN
         allocate ( AVERAGE(ng) % avgqlwa(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
@@ -145,20 +153,8 @@
         allocate ( AVERAGE(ng) % avgqswa(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
-      IF (Aout(idIqswi,ng)) THEN
-        allocate ( AVERAGE(ng) % avgqswi(LBi:UBi,LBj:UBj) )
-        Dmem(ng)=Dmem(ng)+size2d
-      END IF
       IF (Aout(idIqswo,ng)) THEN
         allocate ( AVERAGE(ng) % avgqswo(LBi:UBi,LBj:UBj) )
-        Dmem(ng)=Dmem(ng)+size2d
-      END IF
-      IF (Aout(idIsio,ng)) THEN
-        allocate ( AVERAGE(ng) % avgsio(LBi:UBi,LBj:UBj) )
-        Dmem(ng)=Dmem(ng)+size2d
-      END IF
-      IF (Aout(idIsao,ng)) THEN
-        allocate ( AVERAGE(ng) % avgsao(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
       IF (Aout(idIqao,ng)) THEN
@@ -175,6 +171,14 @@
       END IF
       IF (Aout(idIqi2,ng)) THEN
         allocate ( AVERAGE(ng) % avgqi2(LBi:UBi,LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+size2d
+      END IF
+      IF (Aout(idIsao,ng)) THEN
+        allocate ( AVERAGE(ng) % avgsao(LBi:UBi,LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+size2d
+      END IF
+      IF (Aout(idIsio,ng)) THEN
+        allocate ( AVERAGE(ng) % avgsio(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
       IF (Aout(idIwsni,ng)) THEN

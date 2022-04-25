@@ -7,10 +7,10 @@
      &       'Write out 2D ice momentum in the ETA-direction.'
           IF (Hout(idIuiceE,ng)) WRITE (out,70) Hout(idIuiceE,ng),      &
      &       'Hout(idIuiceE)',                                          &
-     &       'Write out 2D ice momentum in the E-direction.'
+     &       'Write out 2D ice momentum in the East-direction.'
           IF (Hout(idIviceN,ng)) WRITE (out,70) Hout(idIviceN,ng),      &
      &       'Hout(idIviceN)',                                          &
-     &       'Write out 2D ice momentum in the N-direction.'
+     &       'Write out 2D ice momentum in the North-direction.'
           IF (Hout(idIaice,ng)) WRITE (out,70) Hout(idIaice,ng),        &
      &       'Hout(idIaice)',                                           &
      &       'Write out ice concentration.'
@@ -46,13 +46,13 @@
      &       'Write out ice-water friction velocity.'
           IF (Hout(idImchu,ng)) WRITE (out,70) Hout(idImchu,ng),        &
      &       'Hout(idImchu)',                                           &
-     &       'Write out ice-water momentum transfer coef.'
+     &       'Write out ice-water momentum transfer coefficient.'
           IF (Hout(idIt0mk,ng)) WRITE (out,70) Hout(idIt0mk,ng),        &
      &       'Hout(idIt0mk)',                                           &
-     &       'Write out T of molecular sublayer under ice.'
+     &       'Write out temperature of molecular sublayer under ice.'
           IF (Hout(idIs0mk,ng)) WRITE (out,70) Hout(idIs0mk,ng),        &
      &       'Hout(idIs0mk)',                                           &
-     &       'Write out S of molecular sublayer under ice.'
+     &       'Write out salinity of molecular sublayer under ice.'
           IF (Hout(idImflx,ng)) WRITE (out,70) Hout(idImflx,ng),        &
      &       'Hout(idImflx)',                                           &
      &       'Write out ice-ocean mass flux.'
@@ -85,51 +85,54 @@
 #    ifdef ICE_ALB_CSIM
           IF (Hout(idIfrsw,ng)) WRITE (out,70) Hout(idIfrsw,ng),        &
      &       'Hout(idIfrsw)',                                           &
-     &       'Write out fraction of SW penetrating into ice.'
+     &       'Write out fraction of shortwave penetrating into the ice.'
 #    endif
 #   endif
-          IF (Hout(idIqswl,ng)) WRITE (out,70) Hout(idIqswl,ng),        &
-     &       'Hout(idIqswl)',                                           &
-     &       'Write out downward shortwave radiation.'
-          IF (Hout(idIqlwl,ng)) WRITE (out,70) Hout(idIqlwl,ng),        &
-     &       'Hout(idIqlwl)',                                           &
-     &       'Write out downward longwave radiation.'
-          IF (Hout(idIqlai,ng)) WRITE (out,70) Hout(idIqlai,ng),        &
-     &       'Hout(idIqlai)',                                           &
-     &       'Write out latent heat over ice.'
-          IF (Hout(idIqsei,ng)) WRITE (out,70) Hout(idIqsei,ng),        &
-     &       'Hout(idIqsei)',                                           &
-     &       'Write out sensible heat over ice.'
-          IF (Hout(idIqlwa,ng)) WRITE (out,70) Hout(idIqlwa,ng),        &
-     &       'Hout(idIqlwa)',                                           &
-     &       'Write out upward longwave over ice.'
-          IF (Hout(idIqswa,ng)) WRITE (out,70) Hout(idIqswa,ng),        &
-     &       'Hout(idIqswa)',                                           &
-     &       'Write out upward shortwave over ice.'
           IF (Hout(idIqswi,ng)) WRITE (out,70) Hout(idIqswi,ng),        &
      &       'Hout(idIqswi)',                                           &
-     &       'Write out shortwave into ice.'
+     &       'Write out shortwave radiation into ice.'
+          IF (Hout(idIqlwi,ng)) WRITE (out,70) Hout(idIqlwi,ng),        &
+     &       'Hout(idIqlwi)',                                           &
+     &       'Write out longwave radiation into ice.'
+          IF (Hout(idIqlai,ng)) WRITE (out,70) Hout(idIqlai,ng),        &
+     &       'Hout(idIqlai)',                                           &
+     &       'Write out latent heat flux into ice.'
+          IF (Hout(idIqsei,ng)) WRITE (out,70) Hout(idIqsei,ng),        &
+     &       'Hout(idIqsei)',                                           &
+     &       'Write out sensible heat flux into ice.'
+          IF (Hout(idIqswl,ng)) WRITE (out,70) Hout(idIqswl,ng),        &
+     &       'Hout(idIqswl)',                                           &
+     &       'Write out downward shortwave radiation into leads.'
+          IF (Hout(idIqlwl,ng)) WRITE (out,70) Hout(idIqlwl,ng),        &
+     &       'Hout(idIqlwl)',                                           &
+     &       'Write out downward longwave radiation into leads.'
+          IF (Hout(idIqlwa,ng)) WRITE (out,70) Hout(idIqlwa,ng),        &
+     &       'Hout(idIqlwa)',                                           &
+     &       'Write out upward longwave into atmosphere.'
+          IF (Hout(idIqswa,ng)) WRITE (out,70) Hout(idIqswa,ng),        &
+     &       'Hout(idIqswa)',                                           &
+     &       'Write out upward shortwave into atmosphere.'
           IF (Hout(idIqswo,ng)) WRITE (out,70) Hout(idIqswo,ng),        &
      &       'Hout(idIqswo)',                                           &
-     &       'Write out shortwave through ice.'
-          IF (Hout(idIsio,ng)) WRITE (out,70) Hout(idIsio,ng),          &
-     &       'Hout(idIsio)',                                            &
-     &       'Write out salt flux under ice.'
-          IF (Hout(idIsao,ng)) WRITE (out,70) Hout(idIsao,ng),          &
-     &       'Hout(idIsao)',                                            &
-     &       'Write out salt flux through leads.'
+     &       'Write out shortwave radiation through ice.'
           IF (Hout(idIqao,ng)) WRITE (out,70) Hout(idIqao,ng),          &
      &       'Hout(idIqao)',                                            &
-     &       'Write out heat flux through leads.'
+     &       'Write out heat flux, air-ocean.'
           IF (Hout(idIqai,ng)) WRITE (out,70) Hout(idIqai,ng),          &
      &       'Hout(idIqai)',                                            &
-     &       'Write out heat flux of ice-air.'
+     &       'Write out heat flux, air-ice.'
           IF (Hout(idIqio,ng)) WRITE (out,70) Hout(idIqio,ng),          &
      &       'Hout(idIqio)',                                            &
-     &       'Write out heat flux of ice-ocean.'
+     &       'Write out heat flux, ice-ocean.'
           IF (Hout(idIqi2,ng)) WRITE (out,70) Hout(idIqi2,ng),          &
      &       'Hout(idIqi2)',                                            &
-     &       'Write out ice heat flux.'
+     &       'Write out heat flux, ice-snow.'
+          IF (Hout(idIsao,ng)) WRITE (out,70) Hout(idIsao,ng),          &
+     &       'Hout(idIsao)',                                            &
+     &       'Write out salt flux, air-ocean.'
+          IF (Hout(idIsio,ng)) WRITE (out,70) Hout(idIsio,ng),          &
+     &       'Hout(idIsio)',                                            &
+     &       'Write out salt flux, ice-ocean.'
           IF (Hout(idIwsni,ng)) WRITE (out,70) Hout(idIwsni,ng),        &
      &       'Hout(idIwsni)',                                           &
      &       'Write out snow-ice conversion.'
@@ -148,10 +151,10 @@
      &       'Write out iceshelf frictional velocity.'
           IF (Hout(idIsTb,ng)) WRITE (out,70) Hout(idIsTb,ng),          &
      &       'Hout(idIsTb)',                                            &
-     &       'Write out iceshelf molecular sublayer T.'
+     &       'Write out iceshelf molecular sublayer temperature.'
           IF (Hout(idIsSb,ng)) WRITE (out,70) Hout(idIsSb,ng),          &
      &       'Hout(idIsSb)',                                            &
-     &       'Write out iceshelf molecular sublayer S.'
+     &       'Write out iceshelf molecular sublayer salinity.'
 #  endif
 #  ifdef ICESHELF_MORPH
           IF (Hout(idIsDrft,ng)) WRITE (out,70) Hout(idIsDrft,ng),      &
@@ -177,10 +180,10 @@
      &       'Write out averaged 2D ice momentum in the ETA-direction.'
           IF (Aout(idIuiceE,ng)) WRITE (out,70) Aout(idIuiceE,ng),      &
      &       'Aout(idIuiceE)',                                          &
-     &       'Write out averaged 2D ice momentum in the E-direction.'
+     &       'Write out averaged 2D ice momentum in the East-direction.'
           IF (Aout(idIviceN,ng)) WRITE (out,70) Aout(idIviceN,ng),      &
      &       'Aout(idIviceN)',                                          &
-     &       'Write out averaged 2D ice momentum in the N-direction.'
+     &       'Write out averaged 2D ice momentum in the North-direction.'
           IF (Aout(idIaice,ng)) WRITE (out,70) Aout(idIaice,ng),        &
      &       'Aout(idIaice)',                                           &
      &       'Write out averaged ice concentration.'
@@ -216,13 +219,13 @@
      &       'Write out averaged ice-water friction velocity.'
           IF (Aout(idImchu,ng)) WRITE (out,70) Aout(idImchu,ng),        &
      &       'Aout(idImchu)',                                           &
-     &       'Write out averaged ice-water momentum transfer coef.'
+     &       'Write out averaged ice-water momentum transfer coefficient.'
           IF (Aout(idIt0mk,ng)) WRITE (out,70) Aout(idIt0mk,ng),        &
      &       'Aout(idIt0mk)',                                           &
-     &       'Write out averaged T of molecular sublayer under ice.'
+     &       'Write out averaged temperature of molecular sublayer under ice.'
           IF (Aout(idIs0mk,ng)) WRITE (out,70) Aout(idIs0mk,ng),        &
      &       'Aout(idIs0mk)',                                           &
-     &       'Write out averaged S of molecular sublayer under ice.'
+     &       'Write out averaged salinity of molecular sublayer under ice.'
           IF (Aout(idImflx,ng)) WRITE (out,70) Aout(idImflx,ng),        &
      &       'Aout(idImflx)',                                           &
      &       'Write out averaged ice-ocean mass flux.'
@@ -255,51 +258,54 @@
 #    ifdef ICE_ALB_CSIM
           IF (Aout(idIfrsw,ng)) WRITE (out,70) Aout(idIfrsw,ng),        &
      &       'Aout(idIfrsw)',                                           &
-     &       'Write out averaged fraction of SW penetrating into ice.'
+     &       'Write out averaged fraction of shortwave penetrating into the ice.'
 #    endif
 #   endif
-          IF (Aout(idIqswl,ng)) WRITE (out,70) Aout(idIqswl,ng),        &
-     &       'Aout(idIqswl)',                                           &
-     &       'Write out averaged downward shortwave radiation.'
-          IF (Aout(idIqlwl,ng)) WRITE (out,70) Aout(idIqlwl,ng),        &
-     &       'Aout(idIqlwl)',                                           &
-     &       'Write out averaged downward longwave radiation.'
-          IF (Aout(idIqlai,ng)) WRITE (out,70) Aout(idIqlai,ng),        &
-     &       'Aout(idIqlai)',                                           &
-     &       'Write out averaged latent heat over ice.'
-          IF (Aout(idIqsei,ng)) WRITE (out,70) Aout(idIqsei,ng),        &
-     &       'Aout(idIqsei)',                                           &
-     &       'Write out averaged sensible heat over ice.'
-          IF (Aout(idIqlwa,ng)) WRITE (out,70) Aout(idIqlwa,ng),        &
-     &       'Aout(idIqlwa)',                                           &
-     &       'Write out averaged upward longwave over ice.'
-          IF (Aout(idIqswa,ng)) WRITE (out,70) Aout(idIqswa,ng),        &
-     &       'Aout(idIqswa)',                                           &
-     &       'Write out averaged upward shortwave over ice.'
           IF (Aout(idIqswi,ng)) WRITE (out,70) Aout(idIqswi,ng),        &
      &       'Aout(idIqswi)',                                           &
-     &       'Write out averaged shortwave into ice.'
+     &       'Write out averaged shortwave radiation into ice.'
+          IF (Aout(idIqlwi,ng)) WRITE (out,70) Aout(idIqlwi,ng),        &
+     &       'Aout(idIqlwi)',                                           &
+     &       'Write out averaged longwave radiation into ice.'
+          IF (Aout(idIqlai,ng)) WRITE (out,70) Aout(idIqlai,ng),        &
+     &       'Aout(idIqlai)',                                           &
+     &       'Write out averaged latent heat flux into ice.'
+          IF (Aout(idIqsei,ng)) WRITE (out,70) Aout(idIqsei,ng),        &
+     &       'Aout(idIqsei)',                                           &
+     &       'Write out averaged sensible heat flux into ice.'
+          IF (Aout(idIqswl,ng)) WRITE (out,70) Aout(idIqswl,ng),        &
+     &       'Aout(idIqswl)',                                           &
+     &       'Write out averaged downward shortwave radiation into leads.'
+          IF (Aout(idIqlwl,ng)) WRITE (out,70) Aout(idIqlwl,ng),        &
+     &       'Aout(idIqlwl)',                                           &
+     &       'Write out averaged downward longwave radiation into leads.'
+          IF (Aout(idIqlwa,ng)) WRITE (out,70) Aout(idIqlwa,ng),        &
+     &       'Aout(idIqlwa)',                                           &
+     &       'Write out averaged upward longwave into atmosphere.'
+          IF (Aout(idIqswa,ng)) WRITE (out,70) Aout(idIqswa,ng),        &
+     &       'Aout(idIqswa)',                                           &
+     &       'Write out averaged upward shortwave into atmosphere.'
           IF (Aout(idIqswo,ng)) WRITE (out,70) Aout(idIqswo,ng),        &
      &       'Aout(idIqswo)',                                           &
-     &       'Write out averaged shortwave through ice.'
-          IF (Aout(idIsio,ng)) WRITE (out,70) Aout(idIsio,ng),          &
-     &       'Aout(idIsio)',                                            &
-     &       'Write out averaged salt flux under ice.'
-          IF (Aout(idIsao,ng)) WRITE (out,70) Aout(idIsao,ng),          &
-     &       'Aout(idIsao)',                                            &
-     &       'Write out averaged salt flux through leads.'
+     &       'Write out averaged shortwave radiation through ice.'
           IF (Aout(idIqao,ng)) WRITE (out,70) Aout(idIqao,ng),          &
      &       'Aout(idIqao)',                                            &
-     &       'Write out averaged heat flux through leads.'
+     &       'Write out averaged heat flux, air-ocean.'
           IF (Aout(idIqai,ng)) WRITE (out,70) Aout(idIqai,ng),          &
      &       'Aout(idIqai)',                                            &
-     &       'Write out averaged heat flux of ice-air.'
+     &       'Write out averaged heat flux, air-ice.'
           IF (Aout(idIqio,ng)) WRITE (out,70) Aout(idIqio,ng),          &
      &       'Aout(idIqio)',                                            &
-     &       'Write out averaged heat flux of ice-ocean.'
+     &       'Write out averaged heat flux, ice-ocean.'
           IF (Aout(idIqi2,ng)) WRITE (out,70) Aout(idIqi2,ng),          &
      &       'Aout(idIqi2)',                                            &
-     &       'Write out averaged ice heat flux.'
+     &       'Write out averaged heat flux, ice-snow.'
+          IF (Aout(idIsao,ng)) WRITE (out,70) Aout(idIsao,ng),          &
+     &       'Aout(idIsao)',                                            &
+     &       'Write out averaged salt flux, air-ocean.'
+          IF (Aout(idIsio,ng)) WRITE (out,70) Aout(idIsio,ng),          &
+     &       'Aout(idIsio)',                                            &
+     &       'Write out averaged salt flux, ice-ocean.'
           IF (Aout(idIwsni,ng)) WRITE (out,70) Aout(idIwsni,ng),        &
      &       'Aout(idIwsni)',                                           &
      &       'Write out averaged snow-ice conversion.'
@@ -318,10 +324,10 @@
      &       'Write out averaged iceshelf frictional velocity.'
           IF (Aout(idIsTb,ng)) WRITE (out,70) Aout(idIsTb,ng),          &
      &       'Aout(idIsTb)',                                            &
-     &       'Write out averaged iceshelf molecular sublayer T.'
+     &       'Write out averaged iceshelf molecular sublayer temperature.'
           IF (Aout(idIsSb,ng)) WRITE (out,70) Aout(idIsSb,ng),          &
      &       'Aout(idIsSb)',                                            &
-     &       'Write out averaged iceshelf molecular sublayer S.'
+     &       'Write out averaged iceshelf molecular sublayer salinity.'
 #  endif
 #  ifdef ICESHELF_MORPH
           IF (Aout(idIsDrft,ng)) WRITE (out,70) Aout(idIsDrft,ng),      &
@@ -347,10 +353,10 @@
      &       'Write out quick 2D ice momentum in the ETA-direction.'
           IF (Qout(idIuiceE,ng)) WRITE (out,70) Qout(idIuiceE,ng),      &
      &       'Qout(idIuiceE)',                                          &
-     &       'Write out quick 2D ice momentum in the E-direction.'
+     &       'Write out quick 2D ice momentum in the East-direction.'
           IF (Qout(idIviceN,ng)) WRITE (out,70) Qout(idIviceN,ng),      &
      &       'Qout(idIviceN)',                                          &
-     &       'Write out quick 2D ice momentum in the N-direction.'
+     &       'Write out quick 2D ice momentum in the North-direction.'
           IF (Qout(idIaice,ng)) WRITE (out,70) Qout(idIaice,ng),        &
      &       'Qout(idIaice)',                                           &
      &       'Write out quick ice concentration.'
@@ -386,13 +392,13 @@
      &       'Write out quick ice-water friction velocity.'
           IF (Qout(idImchu,ng)) WRITE (out,70) Qout(idImchu,ng),        &
      &       'Qout(idImchu)',                                           &
-     &       'Write out quick ice-water momentum transfer coef.'
+     &       'Write out quick ice-water momentum transfer coefficient.'
           IF (Qout(idIt0mk,ng)) WRITE (out,70) Qout(idIt0mk,ng),        &
      &       'Qout(idIt0mk)',                                           &
-     &       'Write out quick T of molecular sublayer under ice.'
+     &       'Write out quick temperature of molecular sublayer under ice.'
           IF (Qout(idIs0mk,ng)) WRITE (out,70) Qout(idIs0mk,ng),        &
      &       'Qout(idIs0mk)',                                           &
-     &       'Write out quick S of molecular sublayer under ice.'
+     &       'Write out quick salinity of molecular sublayer under ice.'
           IF (Qout(idImflx,ng)) WRITE (out,70) Qout(idImflx,ng),        &
      &       'Qout(idImflx)',                                           &
      &       'Write out quick ice-ocean mass flux.'
@@ -425,51 +431,54 @@
 #    ifdef ICE_ALB_CSIM
           IF (Qout(idIfrsw,ng)) WRITE (out,70) Qout(idIfrsw,ng),        &
      &       'Qout(idIfrsw)',                                           &
-     &       'Write out quick fraction of SW penetrating into ice.'
+     &       'Write out quick fraction of shortwave penetrating into the ice.'
 #    endif
 #   endif
-          IF (Qout(idIqswl,ng)) WRITE (out,70) Qout(idIqswl,ng),        &
-     &       'Qout(idIqswl)',                                           &
-     &       'Write out quick downward shortwave radiation.'
-          IF (Qout(idIqlwl,ng)) WRITE (out,70) Qout(idIqlwl,ng),        &
-     &       'Qout(idIqlwl)',                                           &
-     &       'Write out quick downward longwave radiation.'
-          IF (Qout(idIqlai,ng)) WRITE (out,70) Qout(idIqlai,ng),        &
-     &       'Qout(idIqlai)',                                           &
-     &       'Write out quick latent heat over ice.'
-          IF (Qout(idIqsei,ng)) WRITE (out,70) Qout(idIqsei,ng),        &
-     &       'Qout(idIqsei)',                                           &
-     &       'Write out quick sensible heat over ice.'
-          IF (Qout(idIqlwa,ng)) WRITE (out,70) Qout(idIqlwa,ng),        &
-     &       'Qout(idIqlwa)',                                           &
-     &       'Write out quick upward longwave over ice.'
-          IF (Qout(idIqswa,ng)) WRITE (out,70) Qout(idIqswa,ng),        &
-     &       'Qout(idIqswa)',                                           &
-     &       'Write out quick upward shortwave over ice.'
           IF (Qout(idIqswi,ng)) WRITE (out,70) Qout(idIqswi,ng),        &
      &       'Qout(idIqswi)',                                           &
-     &       'Write out quick shortwave into ice.'
+     &       'Write out quick shortwave radiation into ice.'
+          IF (Qout(idIqlwi,ng)) WRITE (out,70) Qout(idIqlwi,ng),        &
+     &       'Qout(idIqlwi)',                                           &
+     &       'Write out quick longwave radiation into ice.'
+          IF (Qout(idIqlai,ng)) WRITE (out,70) Qout(idIqlai,ng),        &
+     &       'Qout(idIqlai)',                                           &
+     &       'Write out quick latent heat flux into ice.'
+          IF (Qout(idIqsei,ng)) WRITE (out,70) Qout(idIqsei,ng),        &
+     &       'Qout(idIqsei)',                                           &
+     &       'Write out quick sensible heat flux into ice.'
+          IF (Qout(idIqswl,ng)) WRITE (out,70) Qout(idIqswl,ng),        &
+     &       'Qout(idIqswl)',                                           &
+     &       'Write out quick downward shortwave radiation into leads.'
+          IF (Qout(idIqlwl,ng)) WRITE (out,70) Qout(idIqlwl,ng),        &
+     &       'Qout(idIqlwl)',                                           &
+     &       'Write out quick downward longwave radiation into leads.'
+          IF (Qout(idIqlwa,ng)) WRITE (out,70) Qout(idIqlwa,ng),        &
+     &       'Qout(idIqlwa)',                                           &
+     &       'Write out quick upward longwave into atmosphere.'
+          IF (Qout(idIqswa,ng)) WRITE (out,70) Qout(idIqswa,ng),        &
+     &       'Qout(idIqswa)',                                           &
+     &       'Write out quick upward shortwave into atmosphere.'
           IF (Qout(idIqswo,ng)) WRITE (out,70) Qout(idIqswo,ng),        &
      &       'Qout(idIqswo)',                                           &
-     &       'Write out quick shortwave through ice.'
-          IF (Qout(idIsio,ng)) WRITE (out,70) Qout(idIsio,ng),          &
-     &       'Qout(idIsio)',                                            &
-     &       'Write out quick salt flux under ice.'
-          IF (Qout(idIsao,ng)) WRITE (out,70) Qout(idIsao,ng),          &
-     &       'Qout(idIsao)',                                            &
-     &       'Write out quick salt flux through leads.'
+     &       'Write out quick shortwave radiation through ice.'
           IF (Qout(idIqao,ng)) WRITE (out,70) Qout(idIqao,ng),          &
      &       'Qout(idIqao)',                                            &
-     &       'Write out quick heat flux through leads.'
+     &       'Write out quick heat flux, air-ocean.'
           IF (Qout(idIqai,ng)) WRITE (out,70) Qout(idIqai,ng),          &
      &       'Qout(idIqai)',                                            &
-     &       'Write out quick heat flux of ice-air.'
+     &       'Write out quick heat flux, air-ice.'
           IF (Qout(idIqio,ng)) WRITE (out,70) Qout(idIqio,ng),          &
      &       'Qout(idIqio)',                                            &
-     &       'Write out quick heat flux of ice-ocean.'
+     &       'Write out quick heat flux, ice-ocean.'
           IF (Qout(idIqi2,ng)) WRITE (out,70) Qout(idIqi2,ng),          &
      &       'Qout(idIqi2)',                                            &
-     &       'Write out quick ice heat flux.'
+     &       'Write out quick heat flux, ice-snow.'
+          IF (Qout(idIsao,ng)) WRITE (out,70) Qout(idIsao,ng),          &
+     &       'Qout(idIsao)',                                            &
+     &       'Write out quick salt flux, air-ocean.'
+          IF (Qout(idIsio,ng)) WRITE (out,70) Qout(idIsio,ng),          &
+     &       'Qout(idIsio)',                                            &
+     &       'Write out quick salt flux, ice-ocean.'
           IF (Qout(idIwsni,ng)) WRITE (out,70) Qout(idIwsni,ng),        &
      &       'Qout(idIwsni)',                                           &
      &       'Write out quick snow-ice conversion.'
@@ -488,10 +497,10 @@
      &       'Write out quick iceshelf frictional velocity.'
           IF (Qout(idIsTb,ng)) WRITE (out,70) Qout(idIsTb,ng),          &
      &       'Qout(idIsTb)',                                            &
-     &       'Write out quick iceshelf molecular sublayer T.'
+     &       'Write out quick iceshelf molecular sublayer temperature.'
           IF (Qout(idIsSb,ng)) WRITE (out,70) Qout(idIsSb,ng),          &
      &       'Qout(idIsSb)',                                            &
-     &       'Write out quick iceshelf molecular sublayer S.'
+     &       'Write out quick iceshelf molecular sublayer salinity.'
 #  endif
 #  ifdef ICESHELF_MORPH
           IF (Qout(idIsDrft,ng)) WRITE (out,70) Qout(idIsDrft,ng),      &

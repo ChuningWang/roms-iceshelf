@@ -541,121 +541,7 @@
 #    endif
 #   endif
 !
-!  Define downward shortwave radiation.
-!
-        IF (Sout(idIqswl,ng)) THEN
-          Vinfo( 1)=Vname(1,idIqswl)
-          Vinfo( 2)=Vname(2,idIqswl)
-          Vinfo( 3)=Vname(3,idIqswl)
-          Vinfo(14)=Vname(4,idIqswl)
-          Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqswl),  &
-     &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
-#   ifdef WET_DRY
-     &                   SetFillVal = .FALSE.,                          &
-#   else
-     &                   SetFillVal = .TRUE.,                           &
-#   endif
-     &                   SetParAccess = .TRUE.)
-          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-        END IF
-!
-!  Define downward longwave radiation.
-!
-        IF (Sout(idIqlwl,ng)) THEN
-          Vinfo( 1)=Vname(1,idIqlwl)
-          Vinfo( 2)=Vname(2,idIqlwl)
-          Vinfo( 3)=Vname(3,idIqlwl)
-          Vinfo(14)=Vname(4,idIqlwl)
-          Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqlwl),  &
-     &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
-#   ifdef WET_DRY
-     &                   SetFillVal = .FALSE.,                          &
-#   else
-     &                   SetFillVal = .TRUE.,                           &
-#   endif
-     &                   SetParAccess = .TRUE.)
-          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-        END IF
-!
-!  Define latent heat over ice.
-!
-        IF (Sout(idIqlai,ng)) THEN
-          Vinfo( 1)=Vname(1,idIqlai)
-          Vinfo( 2)=Vname(2,idIqlai)
-          Vinfo( 3)=Vname(3,idIqlai)
-          Vinfo(14)=Vname(4,idIqlai)
-          Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqlai),  &
-     &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
-#   ifdef WET_DRY
-     &                   SetFillVal = .FALSE.,                          &
-#   else
-     &                   SetFillVal = .TRUE.,                           &
-#   endif
-     &                   SetParAccess = .TRUE.)
-          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-        END IF
-!
-!  Define sensible heat over ice.
-!
-        IF (Sout(idIqsei,ng)) THEN
-          Vinfo( 1)=Vname(1,idIqsei)
-          Vinfo( 2)=Vname(2,idIqsei)
-          Vinfo( 3)=Vname(3,idIqsei)
-          Vinfo(14)=Vname(4,idIqsei)
-          Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqsei),  &
-     &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
-#   ifdef WET_DRY
-     &                   SetFillVal = .FALSE.,                          &
-#   else
-     &                   SetFillVal = .TRUE.,                           &
-#   endif
-     &                   SetParAccess = .TRUE.)
-          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-        END IF
-!
-!  Define upward longwave over ice.
-!
-        IF (Sout(idIqlwa,ng)) THEN
-          Vinfo( 1)=Vname(1,idIqlwa)
-          Vinfo( 2)=Vname(2,idIqlwa)
-          Vinfo( 3)=Vname(3,idIqlwa)
-          Vinfo(14)=Vname(4,idIqlwa)
-          Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqlwa),  &
-     &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
-#   ifdef WET_DRY
-     &                   SetFillVal = .FALSE.,                          &
-#   else
-     &                   SetFillVal = .TRUE.,                           &
-#   endif
-     &                   SetParAccess = .TRUE.)
-          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-        END IF
-!
-!  Define upward shortwave over ice.
-!
-        IF (Sout(idIqswa,ng)) THEN
-          Vinfo( 1)=Vname(1,idIqswa)
-          Vinfo( 2)=Vname(2,idIqswa)
-          Vinfo( 3)=Vname(3,idIqswa)
-          Vinfo(14)=Vname(4,idIqswa)
-          Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqswa),  &
-     &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
-#   ifdef WET_DRY
-     &                   SetFillVal = .FALSE.,                          &
-#   else
-     &                   SetFillVal = .TRUE.,                           &
-#   endif
-     &                   SetParAccess = .TRUE.)
-          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-        END IF
-!
-!  Define shortwave into ice.
+!  Define shortwave radiation into ice.
 !
         IF (Sout(idIqswi,ng)) THEN
           Vinfo( 1)=Vname(1,idIqswi)
@@ -674,7 +560,140 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 !
-!  Define shortwave through ice.
+!  Define longwave radiation into ice.
+!
+        IF (Sout(idIqlwi,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqlwi)
+          Vinfo( 2)=Vname(2,idIqlwi)
+          Vinfo( 3)=Vname(3,idIqlwi)
+          Vinfo(14)=Vname(4,idIqlwi)
+          Vinfo(16)=Vname(1,idtime)
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqlwi),  &
+     &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
+#   ifdef WET_DRY
+     &                   SetFillVal = .FALSE.,                          &
+#   else
+     &                   SetFillVal = .TRUE.,                           &
+#   endif
+     &                   SetParAccess = .TRUE.)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END IF
+!
+!  Define latent heat flux into ice.
+!
+        IF (Sout(idIqlai,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqlai)
+          Vinfo( 2)=Vname(2,idIqlai)
+          Vinfo( 3)=Vname(3,idIqlai)
+          Vinfo(14)=Vname(4,idIqlai)
+          Vinfo(16)=Vname(1,idtime)
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqlai),  &
+     &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
+#   ifdef WET_DRY
+     &                   SetFillVal = .FALSE.,                          &
+#   else
+     &                   SetFillVal = .TRUE.,                           &
+#   endif
+     &                   SetParAccess = .TRUE.)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END IF
+!
+!  Define sensible heat flux into ice.
+!
+        IF (Sout(idIqsei,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqsei)
+          Vinfo( 2)=Vname(2,idIqsei)
+          Vinfo( 3)=Vname(3,idIqsei)
+          Vinfo(14)=Vname(4,idIqsei)
+          Vinfo(16)=Vname(1,idtime)
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqsei),  &
+     &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
+#   ifdef WET_DRY
+     &                   SetFillVal = .FALSE.,                          &
+#   else
+     &                   SetFillVal = .TRUE.,                           &
+#   endif
+     &                   SetParAccess = .TRUE.)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END IF
+!
+!  Define downward shortwave radiation into leads.
+!
+        IF (Sout(idIqswl,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqswl)
+          Vinfo( 2)=Vname(2,idIqswl)
+          Vinfo( 3)=Vname(3,idIqswl)
+          Vinfo(14)=Vname(4,idIqswl)
+          Vinfo(16)=Vname(1,idtime)
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqswl),  &
+     &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
+#   ifdef WET_DRY
+     &                   SetFillVal = .FALSE.,                          &
+#   else
+     &                   SetFillVal = .TRUE.,                           &
+#   endif
+     &                   SetParAccess = .TRUE.)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END IF
+!
+!  Define downward longwave radiation into leads.
+!
+        IF (Sout(idIqlwl,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqlwl)
+          Vinfo( 2)=Vname(2,idIqlwl)
+          Vinfo( 3)=Vname(3,idIqlwl)
+          Vinfo(14)=Vname(4,idIqlwl)
+          Vinfo(16)=Vname(1,idtime)
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqlwl),  &
+     &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
+#   ifdef WET_DRY
+     &                   SetFillVal = .FALSE.,                          &
+#   else
+     &                   SetFillVal = .TRUE.,                           &
+#   endif
+     &                   SetParAccess = .TRUE.)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END IF
+!
+!  Define upward longwave into atmosphere.
+!
+        IF (Sout(idIqlwa,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqlwa)
+          Vinfo( 2)=Vname(2,idIqlwa)
+          Vinfo( 3)=Vname(3,idIqlwa)
+          Vinfo(14)=Vname(4,idIqlwa)
+          Vinfo(16)=Vname(1,idtime)
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqlwa),  &
+     &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
+#   ifdef WET_DRY
+     &                   SetFillVal = .FALSE.,                          &
+#   else
+     &                   SetFillVal = .TRUE.,                           &
+#   endif
+     &                   SetParAccess = .TRUE.)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END IF
+!
+!  Define upward shortwave into atmosphere.
+!
+        IF (Sout(idIqswa,ng)) THEN
+          Vinfo( 1)=Vname(1,idIqswa)
+          Vinfo( 2)=Vname(2,idIqswa)
+          Vinfo( 3)=Vname(3,idIqswa)
+          Vinfo(14)=Vname(4,idIqswa)
+          Vinfo(16)=Vname(1,idtime)
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqswa),  &
+     &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
+#   ifdef WET_DRY
+     &                   SetFillVal = .FALSE.,                          &
+#   else
+     &                   SetFillVal = .TRUE.,                           &
+#   endif
+     &                   SetParAccess = .TRUE.)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END IF
+!
+!  Define shortwave radiation through ice.
 !
         IF (Sout(idIqswo,ng)) THEN
           Vinfo( 1)=Vname(1,idIqswo)
@@ -693,45 +712,7 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 !
-!  Define salt flux under ice.
-!
-        IF (Sout(idIsio,ng)) THEN
-          Vinfo( 1)=Vname(1,idIsio)
-          Vinfo( 2)=Vname(2,idIsio)
-          Vinfo( 3)=Vname(3,idIsio)
-          Vinfo(14)=Vname(4,idIsio)
-          Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIsio),   &
-     &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
-#   ifdef WET_DRY
-     &                   SetFillVal = .FALSE.,                          &
-#   else
-     &                   SetFillVal = .TRUE.,                           &
-#   endif
-     &                   SetParAccess = .TRUE.)
-          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-        END IF
-!
-!  Define salt flux through leads.
-!
-        IF (Sout(idIsao,ng)) THEN
-          Vinfo( 1)=Vname(1,idIsao)
-          Vinfo( 2)=Vname(2,idIsao)
-          Vinfo( 3)=Vname(3,idIsao)
-          Vinfo(14)=Vname(4,idIsao)
-          Vinfo(16)=Vname(1,idtime)
-          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIsao),   &
-     &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
-#   ifdef WET_DRY
-     &                   SetFillVal = .FALSE.,                          &
-#   else
-     &                   SetFillVal = .TRUE.,                           &
-#   endif
-     &                   SetParAccess = .TRUE.)
-          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-        END IF
-!
-!  Define heat flux through leads.
+!  Define heat flux, air-ocean.
 !
         IF (Sout(idIqao,ng)) THEN
           Vinfo( 1)=Vname(1,idIqao)
@@ -750,7 +731,7 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 !
-!  Define heat flux of ice-air.
+!  Define heat flux, air-ice.
 !
         IF (Sout(idIqai,ng)) THEN
           Vinfo( 1)=Vname(1,idIqai)
@@ -769,7 +750,7 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 !
-!  Define heat flux of ice-ocean.
+!  Define heat flux, ice-ocean.
 !
         IF (Sout(idIqio,ng)) THEN
           Vinfo( 1)=Vname(1,idIqio)
@@ -788,7 +769,7 @@
           IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         END IF
 !
-!  Define ice heat flux.
+!  Define heat flux, ice-snow.
 !
         IF (Sout(idIqi2,ng)) THEN
           Vinfo( 1)=Vname(1,idIqi2)
@@ -797,6 +778,44 @@
           Vinfo(14)=Vname(4,idIqi2)
           Vinfo(16)=Vname(1,idtime)
           status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIqi2),   &
+     &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
+#   ifdef WET_DRY
+     &                   SetFillVal = .FALSE.,                          &
+#   else
+     &                   SetFillVal = .TRUE.,                           &
+#   endif
+     &                   SetParAccess = .TRUE.)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END IF
+!
+!  Define salt flux, air-ocean.
+!
+        IF (Sout(idIsao,ng)) THEN
+          Vinfo( 1)=Vname(1,idIsao)
+          Vinfo( 2)=Vname(2,idIsao)
+          Vinfo( 3)=Vname(3,idIsao)
+          Vinfo(14)=Vname(4,idIsao)
+          Vinfo(16)=Vname(1,idtime)
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIsao),   &
+     &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
+#   ifdef WET_DRY
+     &                   SetFillVal = .FALSE.,                          &
+#   else
+     &                   SetFillVal = .TRUE.,                           &
+#   endif
+     &                   SetParAccess = .TRUE.)
+          IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+        END IF
+!
+!  Define salt flux, ice-ocean.
+!
+        IF (Sout(idIsio,ng)) THEN
+          Vinfo( 1)=Vname(1,idIsio)
+          Vinfo( 2)=Vname(2,idIsio)
+          Vinfo( 3)=Vname(3,idIsio)
+          Vinfo(14)=Vname(4,idIsio)
+          Vinfo(16)=Vname(1,idtime)
+          status=def_var(ng, iNLM, STA(ng)%ncid, STA(ng)%Vid(idIsio),   &
      &                   NF_FOUT, 2, pgrd, Aval, Vinfo, ncname,         &
 #   ifdef WET_DRY
      &                   SetFillVal = .FALSE.,                          &

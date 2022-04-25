@@ -37,20 +37,21 @@
           real(r8), pointer :: avgfrswp(:,:)
 #    endif
 #   endif
-          real(r8), pointer :: avgqswl(:,:)
-          real(r8), pointer :: avgqlwl(:,:)
+          real(r8), pointer :: avgqswi(:,:)
+          real(r8), pointer :: avgqlwi(:,:)
           real(r8), pointer :: avgqlai(:,:)
           real(r8), pointer :: avgqsei(:,:)
+          real(r8), pointer :: avgqswl(:,:)
+          real(r8), pointer :: avgqlwl(:,:)
           real(r8), pointer :: avgqlwa(:,:)
           real(r8), pointer :: avgqswa(:,:)
-          real(r8), pointer :: avgqswi(:,:)
           real(r8), pointer :: avgqswo(:,:)
-          real(r8), pointer :: avgsio(:,:)
-          real(r8), pointer :: avgsao(:,:)
           real(r8), pointer :: avgqao(:,:)
           real(r8), pointer :: avgqai(:,:)
           real(r8), pointer :: avgqio(:,:)
           real(r8), pointer :: avgqi2(:,:)
+          real(r8), pointer :: avgsao(:,:)
+          real(r8), pointer :: avgsio(:,:)
           real(r8), pointer :: avgwsni(:,:)
 #  endif
 # endif

@@ -228,22 +228,22 @@
               Hout(idIfrsw,1:Ngrids)=Lswitch(1:Ngrids)
 #    endif
 #   endif
-            CASE ('Hout(idIqswl)')
-              IF (idIqswl.eq.0) THEN
-                IF (Master) WRITE (out,80) 'idIqswl'
+            CASE ('Hout(idIqswi)')
+              IF (idIqswi.eq.0) THEN
+                IF (Master) WRITE (out,80) 'idIqswi'
                 exit_flag=5
                 RETURN
               END IF
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idIqswl,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Hout(idIqlwl)')
-              IF (idIqlwl.eq.0) THEN
-                IF (Master) WRITE (out,80) 'idIqlwl'
+              Hout(idIqswi,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Hout(idIqlwi)')
+              IF (idIqlwi.eq.0) THEN
+                IF (Master) WRITE (out,80) 'idIqlwi'
                 exit_flag=5
                 RETURN
               END IF
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idIqlwl,1:Ngrids)=Lswitch(1:Ngrids)
+              Hout(idIqlwi,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Hout(idIqlai)')
               IF (idIqlai.eq.0) THEN
                 IF (Master) WRITE (out,80) 'idIqlai'
@@ -260,6 +260,22 @@
               END IF
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Hout(idIqsei,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Hout(idIqswl)')
+              IF (idIqswl.eq.0) THEN
+                IF (Master) WRITE (out,80) 'idIqswl'
+                exit_flag=5
+                RETURN
+              END IF
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Hout(idIqswl,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Hout(idIqlwl)')
+              IF (idIqlwl.eq.0) THEN
+                IF (Master) WRITE (out,80) 'idIqlwl'
+                exit_flag=5
+                RETURN
+              END IF
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Hout(idIqlwl,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Hout(idIqlwa)')
               IF (idIqlwa.eq.0) THEN
                 IF (Master) WRITE (out,80) 'idIqlwa'
@@ -276,14 +292,6 @@
               END IF
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Hout(idIqswa,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Hout(idIqswi)')
-              IF (idIqswi.eq.0) THEN
-                IF (Master) WRITE (out,80) 'idIqswi'
-                exit_flag=5
-                RETURN
-              END IF
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idIqswi,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Hout(idIqswo)')
               IF (idIqswo.eq.0) THEN
                 IF (Master) WRITE (out,80) 'idIqswo'
@@ -292,22 +300,6 @@
               END IF
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Hout(idIqswo,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Hout(idIsio)')
-              IF (idIsio.eq.0) THEN
-                IF (Master) WRITE (out,80) 'idIsio'
-                exit_flag=5
-                RETURN
-              END IF
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idIsio,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Hout(idIsao)')
-              IF (idIsao.eq.0) THEN
-                IF (Master) WRITE (out,80) 'idIsao'
-                exit_flag=5
-                RETURN
-              END IF
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idIsao,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Hout(idIqao)')
               IF (idIqao.eq.0) THEN
                 IF (Master) WRITE (out,80) 'idIqao'
@@ -340,6 +332,22 @@
               END IF
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Hout(idIqi2,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Hout(idIsao)')
+              IF (idIsao.eq.0) THEN
+                IF (Master) WRITE (out,80) 'idIsao'
+                exit_flag=5
+                RETURN
+              END IF
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Hout(idIsao,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Hout(idIsio)')
+              IF (idIsio.eq.0) THEN
+                IF (Master) WRITE (out,80) 'idIsio'
+                exit_flag=5
+                RETURN
+              END IF
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Hout(idIsio,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Hout(idIwsni)')
               IF (idIwsni.eq.0) THEN
                 IF (Master) WRITE (out,80) 'idIwsni'
@@ -513,36 +521,33 @@
               Aout(idIfrsw,1:Ngrids)=Lswitch(1:Ngrids)
 #    endif
 #   endif
-            CASE ('Aout(idIqswl)')
+            CASE ('Aout(idIqswi)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Aout(idIqswl,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Aout(idIqlwl)')
+              Aout(idIqswi,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Aout(idIqlwi)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Aout(idIqlwl,1:Ngrids)=Lswitch(1:Ngrids)
+              Aout(idIqlwi,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Aout(idIqlai)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Aout(idIqlai,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Aout(idIqsei)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Aout(idIqsei,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Aout(idIqswl)')
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Aout(idIqswl,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Aout(idIqlwl)')
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Aout(idIqlwl,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Aout(idIqlwa)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Aout(idIqlwa,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Aout(idIqswa)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Aout(idIqswa,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Aout(idIqswi)')
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Aout(idIqswi,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Aout(idIqswo)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Aout(idIqswo,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Aout(idIsio)')
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Aout(idIsio,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Aout(idIsao)')
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Aout(idIsao,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Aout(idIqao)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Aout(idIqao,1:Ngrids)=Lswitch(1:Ngrids)
@@ -555,6 +560,12 @@
             CASE ('Aout(idIqi2)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Aout(idIqi2,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Aout(idIsao)')
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Aout(idIsao,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Aout(idIsio)')
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Aout(idIsio,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Aout(idIwsni)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Aout(idIwsni,1:Ngrids)=Lswitch(1:Ngrids)
@@ -683,36 +694,33 @@
               Qout(idIfrsw,1:Ngrids)=Lswitch(1:Ngrids)
 #    endif
 #   endif
-            CASE ('Qout(idIqswl)')
+            CASE ('Qout(idIqswi)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Qout(idIqswl,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Qout(idIqlwl)')
+              Qout(idIqswi,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Qout(idIqlwi)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Qout(idIqlwl,1:Ngrids)=Lswitch(1:Ngrids)
+              Qout(idIqlwi,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Qout(idIqlai)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Qout(idIqlai,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Qout(idIqsei)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Qout(idIqsei,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Qout(idIqswl)')
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Qout(idIqswl,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Qout(idIqlwl)')
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Qout(idIqlwl,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Qout(idIqlwa)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Qout(idIqlwa,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Qout(idIqswa)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Qout(idIqswa,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Qout(idIqswi)')
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Qout(idIqswi,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Qout(idIqswo)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Qout(idIqswo,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Qout(idIsio)')
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Qout(idIsio,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Qout(idIsao)')
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Qout(idIsao,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Qout(idIqao)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Qout(idIqao,1:Ngrids)=Lswitch(1:Ngrids)
@@ -725,6 +733,12 @@
             CASE ('Qout(idIqi2)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Qout(idIqi2,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Qout(idIsao)')
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Qout(idIsao,1:Ngrids)=Lswitch(1:Ngrids)
+            CASE ('Qout(idIsio)')
+              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
+              Qout(idIsio,1:Ngrids)=Lswitch(1:Ngrids)
             CASE ('Qout(idIwsni)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Qout(idIwsni,1:Ngrids)=Lswitch(1:Ngrids)

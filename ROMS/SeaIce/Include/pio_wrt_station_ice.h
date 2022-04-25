@@ -508,109 +508,7 @@
 #     endif
 #    endif
 !
-!  Write out downward shortwave radiation.
-!
-      IF (Sout(idIqswl,ng)) THEN
-        scale=1.0_dp
-        CALL extract_sta2d (ng, iNLM, Cgrid, idIqswl, r2dvar,           &
-     &                      LBi, UBi, LBj, UBj,                         &
-     &                      scale, FORCES(ng)%qswl,                     &
-     &                      Nstation(ng), Xpos, Ypos, psta)
-        CALL pio_netcdf_put_fvar (ng, iNLM, STA(ng)%name,               &
-     &                            TRIM(Vname(1,idIqswl)), psta,         &
-     &                            (/1,STA(ng)%Rindex/),                 &
-     &                            (/Nstation(ng),1/),                   &
-     &                            pioFile = STA(ng)%pioFile,            &
-     &                            pioVar = STA(ng)%pioVar(idIqswl)%vd)
-        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-      END IF
-!
-!  Write out downward longwave radiation.
-!
-      IF (Sout(idIqlwl,ng)) THEN
-        scale=1.0_dp
-        CALL extract_sta2d (ng, iNLM, Cgrid, idIqlwl, r2dvar,           &
-     &                      LBi, UBi, LBj, UBj,                         &
-     &                      scale, FORCES(ng)%qlwl,                     &
-     &                      Nstation(ng), Xpos, Ypos, psta)
-        CALL pio_netcdf_put_fvar (ng, iNLM, STA(ng)%name,               &
-     &                            TRIM(Vname(1,idIqlwl)), psta,         &
-     &                            (/1,STA(ng)%Rindex/),                 &
-     &                            (/Nstation(ng),1/),                   &
-     &                            pioFile = STA(ng)%pioFile,            &
-     &                            pioVar = STA(ng)%pioVar(idIqlwl)%vd)
-        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-      END IF
-!
-!  Write out latent heat over ice.
-!
-      IF (Sout(idIqlai,ng)) THEN
-        scale=1.0_dp
-        CALL extract_sta2d (ng, iNLM, Cgrid, idIqlai, r2dvar,           &
-     &                      LBi, UBi, LBj, UBj,                         &
-     &                      scale, FORCES(ng)%qlai,                     &
-     &                      Nstation(ng), Xpos, Ypos, psta)
-        CALL pio_netcdf_put_fvar (ng, iNLM, STA(ng)%name,               &
-     &                            TRIM(Vname(1,idIqlai)), psta,         &
-     &                            (/1,STA(ng)%Rindex/),                 &
-     &                            (/Nstation(ng),1/),                   &
-     &                            pioFile = STA(ng)%pioFile,            &
-     &                            pioVar = STA(ng)%pioVar(idIqlai)%vd)
-        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-      END IF
-!
-!  Write out sensible heat over ice.
-!
-      IF (Sout(idIqsei,ng)) THEN
-        scale=1.0_dp
-        CALL extract_sta2d (ng, iNLM, Cgrid, idIqsei, r2dvar,           &
-     &                      LBi, UBi, LBj, UBj,                         &
-     &                      scale, FORCES(ng)%qsei,                     &
-     &                      Nstation(ng), Xpos, Ypos, psta)
-        CALL pio_netcdf_put_fvar (ng, iNLM, STA(ng)%name,               &
-     &                            TRIM(Vname(1,idIqsei)), psta,         &
-     &                            (/1,STA(ng)%Rindex/),                 &
-     &                            (/Nstation(ng),1/),                   &
-     &                            pioFile = STA(ng)%pioFile,            &
-     &                            pioVar = STA(ng)%pioVar(idIqsei)%vd)
-        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-      END IF
-!
-!  Write out upward longwave over ice.
-!
-      IF (Sout(idIqlwa,ng)) THEN
-        scale=1.0_dp
-        CALL extract_sta2d (ng, iNLM, Cgrid, idIqlwa, r2dvar,           &
-     &                      LBi, UBi, LBj, UBj,                         &
-     &                      scale, FORCES(ng)%qlwa,                     &
-     &                      Nstation(ng), Xpos, Ypos, psta)
-        CALL pio_netcdf_put_fvar (ng, iNLM, STA(ng)%name,               &
-     &                            TRIM(Vname(1,idIqlwa)), psta,         &
-     &                            (/1,STA(ng)%Rindex/),                 &
-     &                            (/Nstation(ng),1/),                   &
-     &                            pioFile = STA(ng)%pioFile,            &
-     &                            pioVar = STA(ng)%pioVar(idIqlwa)%vd)
-        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-      END IF
-!
-!  Write out upward shortwave over ice.
-!
-      IF (Sout(idIqswa,ng)) THEN
-        scale=1.0_dp
-        CALL extract_sta2d (ng, iNLM, Cgrid, idIqswa, r2dvar,           &
-     &                      LBi, UBi, LBj, UBj,                         &
-     &                      scale, FORCES(ng)%qswa,                     &
-     &                      Nstation(ng), Xpos, Ypos, psta)
-        CALL pio_netcdf_put_fvar (ng, iNLM, STA(ng)%name,               &
-     &                            TRIM(Vname(1,idIqswa)), psta,         &
-     &                            (/1,STA(ng)%Rindex/),                 &
-     &                            (/Nstation(ng),1/),                   &
-     &                            pioFile = STA(ng)%pioFile,            &
-     &                            pioVar = STA(ng)%pioVar(idIqswa)%vd)
-        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-      END IF
-!
-!  Write out shortwave into ice.
+!  Write out shortwave radiation into ice.
 !
       IF (Sout(idIqswi,ng)) THEN
         scale=1.0_dp
@@ -627,7 +525,126 @@
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
       END IF
 !
-!  Write out shortwave through ice.
+!  Write out longwave radiation into ice.
+!
+      IF (Sout(idIqlwi,ng)) THEN
+        scale=1.0_dp
+        CALL extract_sta2d (ng, iNLM, Cgrid, idIqlwi, r2dvar,           &
+     &                      LBi, UBi, LBj, UBj,                         &
+     &                      scale, FORCES(ng)%qlwi,                     &
+     &                      Nstation(ng), Xpos, Ypos, psta)
+        CALL pio_netcdf_put_fvar (ng, iNLM, STA(ng)%name,               &
+     &                            TRIM(Vname(1,idIqlwi)), psta,         &
+     &                            (/1,STA(ng)%Rindex/),                 &
+     &                            (/Nstation(ng),1/),                   &
+     &                            pioFile = STA(ng)%pioFile,            &
+     &                            pioVar = STA(ng)%pioVar(idIqlwi)%vd)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+      END IF
+!
+!  Write out latent heat flux into ice.
+!
+      IF (Sout(idIqlai,ng)) THEN
+        scale=1.0_dp
+        CALL extract_sta2d (ng, iNLM, Cgrid, idIqlai, r2dvar,           &
+     &                      LBi, UBi, LBj, UBj,                         &
+     &                      scale, FORCES(ng)%qlai,                     &
+     &                      Nstation(ng), Xpos, Ypos, psta)
+        CALL pio_netcdf_put_fvar (ng, iNLM, STA(ng)%name,               &
+     &                            TRIM(Vname(1,idIqlai)), psta,         &
+     &                            (/1,STA(ng)%Rindex/),                 &
+     &                            (/Nstation(ng),1/),                   &
+     &                            pioFile = STA(ng)%pioFile,            &
+     &                            pioVar = STA(ng)%pioVar(idIqlai)%vd)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+      END IF
+!
+!  Write out sensible heat flux into ice.
+!
+      IF (Sout(idIqsei,ng)) THEN
+        scale=1.0_dp
+        CALL extract_sta2d (ng, iNLM, Cgrid, idIqsei, r2dvar,           &
+     &                      LBi, UBi, LBj, UBj,                         &
+     &                      scale, FORCES(ng)%qsei,                     &
+     &                      Nstation(ng), Xpos, Ypos, psta)
+        CALL pio_netcdf_put_fvar (ng, iNLM, STA(ng)%name,               &
+     &                            TRIM(Vname(1,idIqsei)), psta,         &
+     &                            (/1,STA(ng)%Rindex/),                 &
+     &                            (/Nstation(ng),1/),                   &
+     &                            pioFile = STA(ng)%pioFile,            &
+     &                            pioVar = STA(ng)%pioVar(idIqsei)%vd)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+      END IF
+!
+!  Write out downward shortwave radiation into leads.
+!
+      IF (Sout(idIqswl,ng)) THEN
+        scale=1.0_dp
+        CALL extract_sta2d (ng, iNLM, Cgrid, idIqswl, r2dvar,           &
+     &                      LBi, UBi, LBj, UBj,                         &
+     &                      scale, FORCES(ng)%qswl,                     &
+     &                      Nstation(ng), Xpos, Ypos, psta)
+        CALL pio_netcdf_put_fvar (ng, iNLM, STA(ng)%name,               &
+     &                            TRIM(Vname(1,idIqswl)), psta,         &
+     &                            (/1,STA(ng)%Rindex/),                 &
+     &                            (/Nstation(ng),1/),                   &
+     &                            pioFile = STA(ng)%pioFile,            &
+     &                            pioVar = STA(ng)%pioVar(idIqswl)%vd)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+      END IF
+!
+!  Write out downward longwave radiation into leads.
+!
+      IF (Sout(idIqlwl,ng)) THEN
+        scale=1.0_dp
+        CALL extract_sta2d (ng, iNLM, Cgrid, idIqlwl, r2dvar,           &
+     &                      LBi, UBi, LBj, UBj,                         &
+     &                      scale, FORCES(ng)%qlwl,                     &
+     &                      Nstation(ng), Xpos, Ypos, psta)
+        CALL pio_netcdf_put_fvar (ng, iNLM, STA(ng)%name,               &
+     &                            TRIM(Vname(1,idIqlwl)), psta,         &
+     &                            (/1,STA(ng)%Rindex/),                 &
+     &                            (/Nstation(ng),1/),                   &
+     &                            pioFile = STA(ng)%pioFile,            &
+     &                            pioVar = STA(ng)%pioVar(idIqlwl)%vd)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+      END IF
+!
+!  Write out upward longwave into atmosphere.
+!
+      IF (Sout(idIqlwa,ng)) THEN
+        scale=1.0_dp
+        CALL extract_sta2d (ng, iNLM, Cgrid, idIqlwa, r2dvar,           &
+     &                      LBi, UBi, LBj, UBj,                         &
+     &                      scale, FORCES(ng)%qlwa,                     &
+     &                      Nstation(ng), Xpos, Ypos, psta)
+        CALL pio_netcdf_put_fvar (ng, iNLM, STA(ng)%name,               &
+     &                            TRIM(Vname(1,idIqlwa)), psta,         &
+     &                            (/1,STA(ng)%Rindex/),                 &
+     &                            (/Nstation(ng),1/),                   &
+     &                            pioFile = STA(ng)%pioFile,            &
+     &                            pioVar = STA(ng)%pioVar(idIqlwa)%vd)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+      END IF
+!
+!  Write out upward shortwave into atmosphere.
+!
+      IF (Sout(idIqswa,ng)) THEN
+        scale=1.0_dp
+        CALL extract_sta2d (ng, iNLM, Cgrid, idIqswa, r2dvar,           &
+     &                      LBi, UBi, LBj, UBj,                         &
+     &                      scale, FORCES(ng)%qswa,                     &
+     &                      Nstation(ng), Xpos, Ypos, psta)
+        CALL pio_netcdf_put_fvar (ng, iNLM, STA(ng)%name,               &
+     &                            TRIM(Vname(1,idIqswa)), psta,         &
+     &                            (/1,STA(ng)%Rindex/),                 &
+     &                            (/Nstation(ng),1/),                   &
+     &                            pioFile = STA(ng)%pioFile,            &
+     &                            pioVar = STA(ng)%pioVar(idIqswa)%vd)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+      END IF
+!
+!  Write out shortwave radiation through ice.
 !
       IF (Sout(idIqswo,ng)) THEN
         scale=1.0_dp
@@ -644,41 +661,7 @@
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
       END IF
 !
-!  Write out salt flux under ice.
-!
-      IF (Sout(idIsio,ng)) THEN
-        scale=1.0_dp
-        CALL extract_sta2d (ng, iNLM, Cgrid, idIsio, r2dvar,            &
-     &                      LBi, UBi, LBj, UBj,                         &
-     &                      scale, FORCES(ng)%sio,                      &
-     &                      Nstation(ng), Xpos, Ypos, psta)
-        CALL pio_netcdf_put_fvar (ng, iNLM, STA(ng)%name,               &
-     &                            TRIM(Vname(1,idIsio)), psta,          &
-     &                            (/1,STA(ng)%Rindex/),                 &
-     &                            (/Nstation(ng),1/),                   &
-     &                            pioFile = STA(ng)%pioFile,            &
-     &                            pioVar = STA(ng)%pioVar(idIsio)%vd)
-        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-      END IF
-!
-!  Write out salt flux through leads.
-!
-      IF (Sout(idIsao,ng)) THEN
-        scale=1.0_dp
-        CALL extract_sta2d (ng, iNLM, Cgrid, idIsao, r2dvar,            &
-     &                      LBi, UBi, LBj, UBj,                         &
-     &                      scale, FORCES(ng)%sao,                      &
-     &                      Nstation(ng), Xpos, Ypos, psta)
-        CALL pio_netcdf_put_fvar (ng, iNLM, STA(ng)%name,               &
-     &                            TRIM(Vname(1,idIsao)), psta,          &
-     &                            (/1,STA(ng)%Rindex/),                 &
-     &                            (/Nstation(ng),1/),                   &
-     &                            pioFile = STA(ng)%pioFile,            &
-     &                            pioVar = STA(ng)%pioVar(idIsao)%vd)
-        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
-      END IF
-!
-!  Write out heat flux through leads.
+!  Write out heat flux, air-ocean.
 !
       IF (Sout(idIqao,ng)) THEN
         scale=1.0_dp
@@ -695,7 +678,7 @@
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
       END IF
 !
-!  Write out heat flux of ice-air.
+!  Write out heat flux, air-ice.
 !
       IF (Sout(idIqai,ng)) THEN
         scale=1.0_dp
@@ -712,7 +695,7 @@
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
       END IF
 !
-!  Write out heat flux of ice-ocean.
+!  Write out heat flux, ice-ocean.
 !
       IF (Sout(idIqio,ng)) THEN
         scale=1.0_dp
@@ -729,7 +712,7 @@
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
       END IF
 !
-!  Write out ice heat flux.
+!  Write out heat flux, ice-snow.
 !
       IF (Sout(idIqi2,ng)) THEN
         scale=1.0_dp
@@ -743,6 +726,40 @@
      &                            (/Nstation(ng),1/),                   &
      &                            pioFile = STA(ng)%pioFile,            &
      &                            pioVar = STA(ng)%pioVar(idIqi2)%vd)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+      END IF
+!
+!  Write out salt flux, air-ocean.
+!
+      IF (Sout(idIsao,ng)) THEN
+        scale=1.0_dp
+        CALL extract_sta2d (ng, iNLM, Cgrid, idIsao, r2dvar,            &
+     &                      LBi, UBi, LBj, UBj,                         &
+     &                      scale, FORCES(ng)%sao,                      &
+     &                      Nstation(ng), Xpos, Ypos, psta)
+        CALL pio_netcdf_put_fvar (ng, iNLM, STA(ng)%name,               &
+     &                            TRIM(Vname(1,idIsao)), psta,          &
+     &                            (/1,STA(ng)%Rindex/),                 &
+     &                            (/Nstation(ng),1/),                   &
+     &                            pioFile = STA(ng)%pioFile,            &
+     &                            pioVar = STA(ng)%pioVar(idIsao)%vd)
+        IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
+      END IF
+!
+!  Write out salt flux, ice-ocean.
+!
+      IF (Sout(idIsio,ng)) THEN
+        scale=1.0_dp
+        CALL extract_sta2d (ng, iNLM, Cgrid, idIsio, r2dvar,            &
+     &                      LBi, UBi, LBj, UBj,                         &
+     &                      scale, FORCES(ng)%sio,                      &
+     &                      Nstation(ng), Xpos, Ypos, psta)
+        CALL pio_netcdf_put_fvar (ng, iNLM, STA(ng)%name,               &
+     &                            TRIM(Vname(1,idIsio)), psta,          &
+     &                            (/1,STA(ng)%Rindex/),                 &
+     &                            (/Nstation(ng),1/),                   &
+     &                            pioFile = STA(ng)%pioFile,            &
+     &                            pioVar = STA(ng)%pioVar(idIsio)%vd)
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
       END IF
 !
