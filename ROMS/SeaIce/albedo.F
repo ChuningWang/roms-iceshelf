@@ -50,6 +50,9 @@
      &                  LBi, UBi, LBj, UBj,                             &
      &                  IminS, ImaxS, JminS, JmaxS,                     &
      &                  liold(ng), linew(ng),                           &
+# ifdef ICESHELF
+     &                  GRID(ng) % zice,                                &
+# endif
      &                  ICE(ng) % ai,                                   &
      &                  ICE(ng) % hi,                                   &
      &                  ICE(ng) % hsn,                                  &
@@ -76,6 +79,9 @@
      &                        LBi, UBi, LBj, UBj,                       &
      &                        IminS, ImaxS, JminS, JmaxS,               &
      &                        liold, linew,                             &
+# ifdef ICESHELF
+     &                        zice,                                     &
+# endif
      &                        ai, hi, hsn, tis,                         &
 # ifdef CLOUDS
      &                        latr, lonr, cloud,                        &
@@ -104,6 +110,9 @@
       integer, intent(in) :: linew
 !
 # ifdef ASSUMED_SHAPE
+#  ifdef ICESHELF
+      real(r8), intent(in) :: zice(LBi:,LBj:)
+#  endif
       real(r8), intent(in) :: ai(LBi:,LBj:,:)
       real(r8), intent(in) :: hi(LBi:,LBj:,:)
       real(r8), intent(in) :: hsn(LBi:,LBj:,:)
@@ -121,6 +130,9 @@
       real(r8), intent(out) :: frswp(LBi:,LBj:)
 
 # else
+#  ifdef ICESHELF
+      real(r8), intent(in) :: zice(LBi:UBi,LBj:UBj)
+#  endif
       real(r8), intent(in) :: ai(LBi:UBi,LBj:UBj,2)
       real(r8), intent(in) :: hi(LBi:UBi,LBj:UBj,2)
       real(r8), intent(in) :: hsn(LBi:UBi,LBj:UBj,2)
@@ -294,6 +306,19 @@
 
       DO j=Jstr-1,JendR
         DO i=Istr-1,IendR
+# ifdef ICESHELF
+          IF (zice(i,j).ne.0.0_r8) THEN
+!
+!  Zero out fluxes under iceshelf
+!
+            albi(i,j) = 0.0_r8
+            albo(i,j) = 0.0_r8
+            frswp(i,j) = 0.0_r8
+#  ifdef ICE_LMD_SHORTWAVE
+            rfaci(i,j) = 0.0_r8
+#  endif
+          ELSE
+# endif
 !
 ! Calculate the ice/snow albedo
 !
@@ -526,6 +551,9 @@
           cff2 = (1.0_r8 - albi(i,j))*frswp(i,j)
           rfaci(i,j) = (1.0_r8-ai(i,j,listp))*cff1 /                    &
      &      MAX(tol,((1.0_r8-ai(i,j,listp))*cff1 + ai(i,j,listp)*cff2))
+# endif
+# ifdef ICESHELF
+          END IF
 # endif
         END DO
       END DO

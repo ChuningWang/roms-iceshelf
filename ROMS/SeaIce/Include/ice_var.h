@@ -90,7 +90,7 @@
             CASE ('idIqlwa')
               idIqlwa=varid
             CASE ('idIqlwi')
-              idIqlwa=varid
+              idIqlwi=varid
             CASE ('idIqlwl')
               idIqlwl=varid
             CASE ('idIqlai')

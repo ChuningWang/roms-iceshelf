@@ -107,6 +107,9 @@
      &                     FORCES(ng) % sustr_aw,                       &
      &                     FORCES(ng) % svstr_aw,                       &
      &                     FORCES(ng) % qswi,                           &
+#  ifdef LONGWAVE_OUT
+     &                     FORCES(ng) % qlwi,                           &
+#  endif
 #  ifdef ICE_DIAGS
      &                     FORCES(ng) % qswl,                           &
      &                     FORCES(ng) % qlwl,                           &
@@ -168,6 +171,9 @@
      &                           wsf,                                   &
      &                           sustr_aw, svstr_aw,                    &
      &                           qswi,                                  &
+#  ifdef LONGWAVE_OUT
+     &                           qlwi,                                  &
+#  endif
 #  ifdef ICE_DIAGS
      &                           qswl, qlwl,                            &
 #  endif
@@ -261,6 +267,9 @@
       real(r8), intent(out) :: sustr_aw(LBi:,LBj:)
       real(r8), intent(out) :: svstr_aw(LBi:,LBj:)
       real(r8), intent(out) :: qswi(LBi:,LBj:)
+#   ifdef LONGWAVE_OUT
+      real(r8), intent(out) :: qlwi(LBi:,LBj:)
+#   endif
 #   ifdef ICE_DIAGS
       real(r8), intent(out) :: qswl(LBi:,LBj:)
       real(r8), intent(out) :: qlwl(LBi:,LBj:)
@@ -335,6 +344,9 @@
       real(r8), intent(out) :: sustr_aw(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: svstr_aw(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: qswi(LBi:UBi,LBj:UBj)
+#   ifdef LONGWAVE_OUT
+      real(r8), intent(out) :: qlwi(LBi:UBi,LBj:UBj)
+#   endif
 #   ifdef ICE_DIAGS
       real(r8), intent(out) :: qswl(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: qlwl(LBi:UBi,LBj:UBj)
@@ -761,6 +773,9 @@
 !-----------------------------------------------------------------------
 !
           qswi(i,j) = srflx(i,j)*Hscale
+#  ifdef LONGWAVE_OUT
+          qlwi(i,j) = lrflx(i,j)*Hscale
+#  endif
 #  ifdef ICE_ALBEDO
 !
 !  Correct shortwave radiation for ocean albedo
@@ -978,13 +993,10 @@
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          qswi)
-#  ifdef ICE_DIAGS
+#  ifdef LONGWAVE_OUT
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
-     &                          qswl)
-        CALL exchange_r2d_tile (ng, tile,                               &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          qlwl)
+     &                          qlwi)
 #  endif
 # endif
       END IF
@@ -1015,17 +1027,18 @@
      &                    NghostPoints,                                 &
      &                    EWperiodic(ng), NSperiodic(ng),               &
      &                    wsf, sustr_aw, svstr_aw)
+#   ifdef LONGWAVE_OUT
+      CALL mp_exchange2d (ng, tile, iNLM, 3,                            &
+     &                    LBi, UBi, LBj, UBj,                           &
+     &                    NghostPoints,                                 &
+     &                    EWperiodic(ng), NSperiodic(ng),               &
+     &                    srflx, qswi, qlwi)
+#   else
       CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints,                                 &
      &                    EWperiodic(ng), NSperiodic(ng),               &
      &                    srflx, qswi)
-#   ifdef ICE_DIAGS
-      CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
-     &                    LBi, UBi, LBj, UBj,                           &
-     &                    NghostPoints,                                 &
-     &                    EWperiodic(ng), NSperiodic(ng),               &
-     &                    qswl, qlwl)
 #   endif
 #  endif
 # endif

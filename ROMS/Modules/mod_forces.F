@@ -512,6 +512,7 @@
           real(r8), pointer :: taux_ai(:,:)
           real(r8), pointer :: tauy_ai(:,:)
           real(r8), pointer :: qswi(:,:)
+          real(r8), pointer :: qlwi(:,:)
 # endif
 # ifdef PERFECT_RESTART
           real(r8), pointer :: stflx_save(:,:,:)
@@ -546,7 +547,6 @@
           real(r8), pointer :: qswa(:,:)
           real(r8), pointer :: qswl(:,:)
           real(r8), pointer :: qlwa(:,:)
-          real(r8), pointer :: qlwi(:,:)
           real(r8), pointer :: qlwl(:,:)
           real(r8), pointer :: qlai(:,:)
           real(r8), pointer :: qsei(:,:)
@@ -1066,6 +1066,8 @@
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( FORCES(ng) % qswi(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % qlwi(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
 # endif
 # ifdef PERFECT_RESTART
       allocate ( FORCES(ng) % stflx_save(LBi:UBi,LBj:UBj,NAT) )
@@ -1115,8 +1117,6 @@
       allocate ( FORCES(ng) % qswl(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( FORCES(ng) % qlwa(LBi:UBi,LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % qlwi(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( FORCES(ng) % qlwl(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
@@ -1654,6 +1654,9 @@
 
       IF (.not.destroy(ng, FORCES(ng)%qswi, MyFile,                     &
      &                 __LINE__, 'FORCES(ng)%qswi')) RETURN
+
+      IF (.not.destroy(ng, FORCES(ng)%qlwi, MyFile,                     &
+     &                 __LINE__, 'FORCES(ng)%qlwi')) RETURN
 #  endif
 #  ifdef PERFECT_RESTART
 
@@ -1718,9 +1721,6 @@
 
       IF (.not.destroy(ng, FORCES(ng)%qlwa, MyFile,                     &
      &                 __LINE__, 'FORCES(ng)%qlwa')) RETURN
-
-      IF (.not.destroy(ng, FORCES(ng)%qlwi, MyFile,                     &
-     &                 __LINE__, 'FORCES(ng)%qlwi')) RETURN
 
       IF (.not.destroy(ng, FORCES(ng)%qlwl, MyFile,                     &
      &                 __LINE__, 'FORCES(ng)%qlwl')) RETURN
@@ -2205,6 +2205,7 @@
             FORCES(ng) % taux_ai(i,j) = IniVal
             FORCES(ng) % tauy_ai(i,j) = IniVal
             FORCES(ng) % qswi(i,j) = IniVal
+            FORCES(ng) % qlwi(i,j) = IniVal
 # endif
 # ifdef PERFECT_RESTART
             FORCES(ng) % stflx_save(i,j,1) = IniVal
@@ -2245,7 +2246,6 @@
             FORCES(ng) % qswa(i,j) = IniVal
             FORCES(ng) % qswl(i,j) = IniVal
             FORCES(ng) % qlwa(i,j) = IniVal
-            FORCES(ng) % qlwi(i,j) = IniVal
             FORCES(ng) % qlwl(i,j) = IniVal
             FORCES(ng) % qlai(i,j) = IniVal
             FORCES(ng) % qsei(i,j) = IniVal

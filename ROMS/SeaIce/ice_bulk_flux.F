@@ -59,6 +59,9 @@
      &                         GRID(ng) % umask_wet,                    &
      &                         GRID(ng) % vmask_wet,                    &
 # endif
+# ifdef ICESHELF
+     &                         GRID(ng) % zice,                         &
+# endif
 # ifdef WIND_MINUS_CURRENT
      &                         ICE(ng) % ui,                            &
      &                         ICE(ng) % vi,                            &
@@ -81,12 +84,16 @@
      &                         FORCES(ng) % taux_ai,                    &
      &                         FORCES(ng) % tauy_ai,                    &
      &                         FORCES(ng) % qswi,                       &
+     &                         FORCES(ng) % qlwi,                       &
      &                         FORCES(ng) % qswo,                       &
      &                         FORCES(ng) % qai,                        &
 # ifdef ICE_DIAGS
+#  ifdef ICESHELF
+     &                         FORCES(ng) % qswl,                       &
+     &                         FORCES(ng) % qlwl,                       &
+#  endif
      &                         FORCES(ng) % qswa,                       &
      &                         FORCES(ng) % qlwa,                       &
-     &                         FORCES(ng) % qlwi,                       &
      &                         FORCES(ng) % qlai,                       &
      &                         FORCES(ng) % qsei,                       &
 # endif
@@ -110,6 +117,9 @@
 # ifdef WET_DRY
      &                               rmask_wet, umask_wet, vmask_wet,   &
 # endif
+# ifdef ICESHELF
+     &                               zice,                              &
+# endif
 # ifdef WIND_MINUS_CURRENT
      &                               ui, vi,                            &
 # endif
@@ -122,9 +132,12 @@
      &                               albo, albi, frswp,                 &
 # endif
      &                               taux_ai, tauy_ai,                  &
-     &                               qswi, qswo, qai,                   &
+     &                               qswi, qlwi, qswo, qai,             &
 # ifdef ICE_DIAGS
-     &                               qswa, qlwa, qlwi, qlai, qsei,      &
+#  ifdef ICESHELF
+     &                               qswl, qlwl,                        &
+#  endif
+     &                               qswa, qlwa, qlai, qsei,            &
 # endif
      &                               coef_ice_heat, rhs_ice_heat)
 !***********************************************************************
@@ -155,6 +168,9 @@
       real(r8), intent(in) :: umask_wet(LBi:,LBj:)
       real(r8), intent(in) :: vmask_wet(LBi:,LBj:)
 #  endif
+#  ifdef ICESHELF
+      real(r8), intent(in) :: zice(LBi:,LBj:)
+#  endif
 #  ifdef WIND_MINUS_CURRENT
       real(r8), intent(in) :: ui(LBi:,LBj:,:)
       real(r8), intent(in) :: vi(LBi:,LBj:,:)
@@ -177,12 +193,16 @@
       real(r8), intent(out) :: taux_ai(LBi:,LBj:)
       real(r8), intent(out) :: tauy_ai(LBi:,LBj:)
       real(r8), intent(inout) :: qswi(LBi:,LBj:)
+      real(r8), intent(inout) :: qlwi(LBi:,LBj:)
       real(r8), intent(out) :: qswo(LBi:,LBj:)
       real(r8), intent(out) :: qai(LBi:,LBj:)
 #  ifdef ICE_DIAGS
+#   ifdef ICESHELF
+      real(r8), intent(inout) :: qswl(LBi:,LBj:)
+      real(r8), intent(inout) :: qlwl(LBi:,LBj:)
+#   endif
       real(r8), intent(out) :: qswa(LBi:,LBj:)
       real(r8), intent(out) :: qlwa(LBi:,LBj:)
-      real(r8), intent(out) :: qlwi(LBi:,LBj:)
       real(r8), intent(out) :: qlai(LBi:,LBj:)
       real(r8), intent(out) :: qsei(LBi:,LBj:)
 #  endif
@@ -198,6 +218,9 @@
       real(r8), intent(in) :: rmask_wet(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: umask_wet(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: vmask_wet(LBi:UBi,LBj:UBj)
+#  endif
+#  ifdef ICESHELF
+      real(r8), intent(in) :: zice(LBi:UBi,LBj:UBj)
 #  endif
 #  ifdef WIND_MINUS_CURRENT
       real(r8), intent(in) :: ui(LBi:UBi,LBj:UBj,2)
@@ -221,12 +244,16 @@
       real(r8), intent(out) :: taux_ai(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: tauy_ai(LBi:UBi,LBj:UBj)
       real(r8), intent(inout) :: qswi(LBi:UBi,LBj:UBj)
+      real(r8), intent(inout) :: qlwi(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: qswo(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: qai(LBi:UBi,LBj:UBj)
 #  ifdef ICE_DIAGS
+#   ifdef ICESHELF
+      real(r8), intent(inout) :: qswl(LBi:UBi,LBj:UBj)
+      real(r8), intent(inout) :: qlwl(LBi:UBi,LBj:UBj)
+#   endif
       real(r8), intent(out) :: qswa(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: qlwa(LBi:UBi,LBj:UBj)
-      real(r8), intent(out) :: qlwi(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: qlai(LBi:UBi,LBj:UBj)
       real(r8), intent(out) :: qsei(LBi:UBi,LBj:UBj)
 #  endif
@@ -300,23 +327,53 @@
 
       DO j=Jstr-1,JendR
         DO i=Istr-1,IendR
+# ifdef ICESHELF
+          IF (zice(i,j).ne.0.0_r8) THEN
 !
-!  Preparations.
+!  Zero out fluxes under iceshelf
 !
-          Wmag=SQRT(Uair(i,j)*Uair(i,j)+Vair(i,j)*Vair(i,j))
-          Wgus=0.5_r8
-          delW=SQRT(Wmag*Wmag+Wgus*Wgus)
-          PairM=Pair(i,j)
-          TairC=Tair(i,j)
-          TairK=TairC+273.16_r8
-          RH=Hair(i,j)
-          cff=(1.0007_r8+3.46E-6_r8*PairM)*6.1121_r8*                   &
-     &        EXP(17.502_r8*TairC/(240.97_r8+TairC))
-          IF (RH.lt.2.0_r8) THEN                     ! RH fraction
-            cff=cff*RH                               ! Vapor pres (mb)
-            Q=0.62197_r8*(cff/(PairM-0.378_r8*cff))  ! Spec hum (kg/kg)
-          ELSE  !RH input was actually specific humidity in g/kg
-            Q=RH*0.001_r8                            !Spec Hum (kg/kg)
+            taux_ai(i,j)       = 0.0_r8
+            tauy_ai(i,j)       = 0.0_r8
+            qswi(i,j)          = 0.0_r8
+            qlwi(i,j)          = 0.0_r8
+            qswo(i,j)          = 0.0_r8
+            qai(i,j)           = 0.0_r8
+#  ifdef ICE_DIAGS
+            qswl(i,j)          = 0.0_r8
+            qlwl(i,j)          = 0.0_r8
+            qswa(i,j)          = 0.0_r8
+            qlwa(i,j)          = 0.0_r8
+            qlai(i,j)          = 0.0_r8
+            qsei(i,j)          = 0.0_r8
+#  endif
+            coef_ice_heat(i,j) = 0.0_r8
+            rhs_ice_heat(i,j)  = 0.0_r8
+          ELSE
+# endif
+!
+!  Preparations
+!
+          Wmag  = SQRT(Uair(i,j)*Uair(i,j)+Vair(i,j)*Vair(i,j))
+          Wgus  = 0.5_r8
+          delW  = SQRT(Wmag*Wmag+Wgus*Wgus)
+          PairM = Pair(i,j)
+          TairC = Tair(i,j)
+          TairK = TairC+273.16_r8
+          RH    = Hair(i,j)
+          cff = (1.0007_r8+3.46E-6_r8*PairM)*6.1121_r8*                 &
+     &          EXP(17.502_r8*TairC/(240.97_r8+TairC))
+          IF (RH.lt.2.0_r8) THEN
+!
+! RH is relative humidity. First calculate vapor pressure (mb), then
+!   calculate specific humidity (kg/kg)
+!
+            cff = cff*RH
+            Q   = 0.62197_r8*(cff/(PairM-0.378_r8*cff))
+          ELSE
+!
+! RH is specific humidity in g/kg
+!
+            Q=RH*0.001_r8
           END IF
           rhoAir=PairM*100.0_r8/(blk_Rgas*TairK*(1.0_r8+0.61_r8*Q))
 !
@@ -379,24 +436,30 @@
 !
             cff     = Q/(1.0_r8+Q)
             vap_p_i = slp*cff/(0.62197 + cff)
-# if defined LONGWAVE || defined LONGWAVE_OUT
+# if defined LONGWAVE
             qlwi_i = emmiss*StefBo*(TairK**4)*                          &
      &               (0.39_r8-0.005_r8*SQRT(vap_p_i))*                  &
      &               (1.0_r8-0.65_r8*cloud(i,j)) -                      &
-     &               4._r8*StefBo*emmiss*TairK**3*(sfc_temp-TairK)
+     &               4._r8*emmiss*StefBo*TairK**3*(sfc_temp-TairK)
 
             coef_ice_heat(i,j) = coef_ice_heat(i,j) +                   &
-     &                           4._r8*StefBo*emmiss*TairK**3
+     &                           4._r8*emmiss*StefBo*TairK**3
             rhs_ice_heat(i,j)  = rhs_ice_heat(i,j)  -                   &
      &                           emmiss*StefBo*(TairK**4)*              &
      &                           ((0.39_r8-0.005_r8*SQRT(vap_p_i))*     &
      &                            (1.0_r8-0.65_r8*cloud(i,j)) - 4.0_r8)
-#  ifdef ICE_DIAGS
-            qlwa(i,j) = emmiss*StefBo*sfc_temp**4
-            qlwi(i,j) = qlwi_i
-#  endif
+# elif defined LONGWAVE_OUT
+            qlwi_i = qlwi(i,j) - emmiss*StefBo*sfc_temp**4
+            coef_ice_heat(i,j) = coef_ice_heat(i,j) +                   &
+     &                           4._r8*StefBo*emmiss*sfc_temp**3
+            rhs_ice_heat(i,j)  = rhs_ice_heat(i,j) + qlwi(i,j) +        &
+     &                           3._r8*emmiss*StefBo*sfc_temp**4
 # else
             qlwi_i = 0.0_r8
+# endif
+# ifdef ICE_DIAGS
+            qlwa(i,j) = emmiss*StefBo*sfc_temp**4
+            qlwi(i,j) = qlwi_i
 # endif
 !
 !  Correct for Kelvin to Celsius in RHS
@@ -482,6 +545,9 @@
             qsei(i,j) = 0._r8
 # endif
           END IF
+# ifdef ICESHELF
+          END IF
+# endif
         END DO
       END DO
 !
@@ -501,9 +567,6 @@
      &                          qai)
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
-     &                          qswi)
-        CALL exchange_r2d_tile (ng, tile,                               &
-     &                          LBi, UBi, LBj, UBj,                     &
      &                          qswo)
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
@@ -511,23 +574,6 @@
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          rhs_ice_heat)
-# ifdef ICE_DIAGS
-        CALL exchange_r2d_tile (ng, tile,                               &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          qswa)
-        CALL exchange_r2d_tile (ng, tile,                               &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          qlwa)
-        CALL exchange_r2d_tile (ng, tile,                               &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          qlwi)
-        CALL exchange_r2d_tile (ng, tile,                               &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          qlai)
-        CALL exchange_r2d_tile (ng, tile,                               &
-     &                          LBi, UBi, LBj, UBj,                     &
-     &                          qsei)
-# endif
       END IF
 
 # ifdef DISTRIBUTE
@@ -536,28 +582,16 @@
      &                    NghostPoints,                                 &
      &                    EWperiodic(ng), NSperiodic(ng),               &
      &                    taux_ai, tauy_ai)
-      CALL mp_exchange2d (ng, tile, iNLM, 3,                            &
+      CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints,                                 &
      &                    EWperiodic(ng), NSperiodic(ng),               &
-     &                    qai, qswi, qswo)
+     &                    qai, qswo)
       CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    NghostPoints,                                 &
      &                    EWperiodic(ng), NSperiodic(ng),               &
      &                    coef_ice_heat, rhs_ice_heat)
-#  ifdef ICE_DIAGS
-      CALL mp_exchange2d (ng, tile, iNLM, 3,                            &
-     &                    LBi, UBi, LBj, UBj,                           &
-     &                    NghostPoints,                                 &
-     &                    EWperiodic(ng), NSperiodic(ng),               &
-     &                    qswa, qlwa, qlwi)
-      CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
-     &                    LBi, UBi, LBj, UBj,                           &
-     &                    NghostPoints,                                 &
-     &                    EWperiodic(ng), NSperiodic(ng),               &
-     &                    qlai, qsei)
-#  endif
 # endif
 !
       RETURN

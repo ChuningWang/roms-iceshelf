@@ -539,13 +539,6 @@
           t2(i,j)       = t2(i,j)*rmask_wet(i,j)
           ti(i,j,linew) = ti(i,j,linew)*rmask_wet(i,j)
 #endif
-#ifdef ICESHELF
-          IF (zice(i,j).ne.0.0_r8) THEN
-            tis(i,j)      = 0.0_r8
-            t2(i,j)       = 0.0_r8
-            ti(i,j,linew) = -2.0_r8
-          END IF
-#endif
         END DO
       END DO
 !
@@ -688,75 +681,62 @@
 !    Note that stflx follows the ROMS heat flux convention, which is in
 !    unit of degC/m2, not watt/m2
 !
-#ifdef ICESHELF
-          IF (zice(i,j).eq.0.0_r8) THEN
-#endif
-!
 !  Modify heat flux
 !
-            stflx(i,j,itemp) =                                          &
-     &        (1.0_r8-ai(i,j,linew))* qao(i,j)              +           &
-     &                ai(i,j,linew) *(qio(i,j) - qswo(i,j)) -           &
-     &        wtot*hfus1(i,j)*rho0
+          stflx(i,j,itemp) =                                            &
+     &      (1.0_r8-ai(i,j,linew))* qao(i,j)              +             &
+     &              ai(i,j,linew) *(qio(i,j) - qswo(i,j)) -             &
+     &      wtot*hfus1(i,j)*rho0
 !
 !  Change heat flux back to ROMS convention
 !
-            stflx(i,j,itemp) = -rhocpr*stflx(i,j,itemp)
+          stflx(i,j,itemp) = -rhocpr*stflx(i,j,itemp)
 #ifdef MASKING
-            stflx(i,j,itemp) = stflx(i,j,itemp)*rmask(i,j)
+          stflx(i,j,itemp) = stflx(i,j,itemp)*rmask(i,j)
 #endif
 #ifdef WET_DRY
-            stflx(i,j,itemp) = stflx(i,j,itemp)*rmask_wet(i,j)
+          stflx(i,j,itemp) = stflx(i,j,itemp)*rmask_wet(i,j)
 #endif
 !
 !  Modify salt flux
 !
-            sao_i = stflx(i,j,isalt) +                                  &
-     &              wao(i,j)*(salt_top(i,j)-sice(i,j))
-            sio_i = (wio(i,j)-wai(i,j))*(salt_top(i,j)-sice(i,j)) -     &
-     &               wsm(i,j)          * salt_top(i,j)
+          sao_i = stflx(i,j,isalt) +                                    &
+     &            wao(i,j)*(salt_top(i,j)-sice(i,j))
+          sio_i = (wio(i,j)-wai(i,j))*(salt_top(i,j)-sice(i,j)) -       &
+     &             wsm(i,j)          * salt_top(i,j)
 #ifdef BULK_FLUXES
 !
 !  Assume 100% drainage of rain and unfrozen snow
 !
 # ifdef ICE_SNOWFALL
-            IF (snow(i,j).gt.0._r8 .and. wsf(i,j).eq.0._r8) THEN
-              sio = sio - (rain(i,j)+snow(i,j))*rhowr*salt_top(i,j)
-            ELSE
-              sio = sio -  rain(i,j)           *rhowr*salt_top(i,j)
-            END IF
+          IF (snow(i,j).gt.0._r8 .and. wsf(i,j).eq.0._r8) THEN
+            sio = sio - (rain(i,j)+snow(i,j))*rhowr*salt_top(i,j)
+          ELSE
+            sio = sio -  rain(i,j)           *rhowr*salt_top(i,j)
+          END IF
 # else
-            IF (rain(i,j).gt.0._r8 .and. wsf(i,j).eq.0._r8) THEN
-              sio = sio -  rain(i,j)           *rhowr*salt_top(i,j)
-            END IF
+          IF (rain(i,j).gt.0._r8 .and. wsf(i,j).eq.0._r8) THEN
+            sio = sio -  rain(i,j)           *rhowr*salt_top(i,j)
+          END IF
 # endif
 #endif
-            stflx(i,j,isalt) = (1.0_r8-ai(i,j,linew))*sao_i +           &
-     &                                 ai(i,j,linew) *sio_i
+          stflx(i,j,isalt) = (1.0_r8-ai(i,j,linew))*sao_i +             &
+     &                               ai(i,j,linew) *sio_i
 #ifdef ICE_DIAGS
-            sao(i,j) = sao_i
-            sio(i,j) = sio_i
+          sao(i,j) = sao_i
+          sio(i,j) = sio_i
 #endif
 !
 !  Net ice production rate, positive for growth
 !
-            iomflx(i,j) = wtot - ai(i,j,linew)*wro(i,j) + wfr(i,j)
+          iomflx(i,j) = wtot - ai(i,j,linew)*wro(i,j) + wfr(i,j)
 #ifdef MASKING
-            stflx(i,j,isalt) = stflx(i,j,isalt)*rmask(i,j)
-            iomflx(i,j) = iomflx(i,j)*rmask(i,j)
+          stflx(i,j,isalt) = stflx(i,j,isalt)*rmask(i,j)
+          iomflx(i,j) = iomflx(i,j)*rmask(i,j)
 #endif
 #ifdef WET_DRY
-            stflx(i,j,isalt) = stflx(i,j,isalt)*rmask_wet(i,j)
-            iomflx(i,j) = iomflx(i,j)*rmask_wet(i,j)
-#endif
-#ifdef ICESHELF
-          ELSE
-            iomflx(i,j) = 0.0_r8
-# ifdef ICE_DIAGS
-            sao(i,j) = 0.0_r8
-            sio(i,j) = 0.0_r8
-# endif
-          END IF
+          stflx(i,j,isalt) = stflx(i,j,isalt)*rmask_wet(i,j)
+          iomflx(i,j) = iomflx(i,j)*rmask_wet(i,j)
 #endif
         END DO
       END DO
@@ -830,15 +810,6 @@
           ai(i,j,linew) = ai(i,j,linew)*rmask(i,j)
           hi(i,j,linew) = hi(i,j,linew)*rmask(i,j)
 #endif
-#ifdef ICESHELF
-          IF (zice(i,j).ne.0.0_r8) THEN
-            ai(i,j,linew) = 0.0_r8
-            hi(i,j,linew) = 0.0_r8
-# ifdef ICE_DIAGS
-            wsni(i,j) = 0.0_r8
-#  endif
-          END IF
-#endif
 !
 !  Determine age of the sea ice
 !
@@ -878,6 +849,43 @@
           IF (hage(i,j,linew)   .le. 0.0_r8) hage(i,j,linew)   = 0.0_r8
         END DO
       END DO
+#ifdef ICESHELF
+!
+!-----------------------------------------------------------------------
+!  Zero out fluxes under iceshelf.
+!-----------------------------------------------------------------------
+!
+      DO j = Jstr,Jend
+        DO i = Istr,Iend
+          IF (zice(i,j).ne.0.0_r8) THEN
+            ai(i,j,linew)       = 0.0_r8
+            hi(i,j,linew)       = 0.0_r8
+            hsn(i,j,linew)      = 0.0_r8
+            ageice(i,j,linew)   = 0.0_r8
+            tis(i,j)            = 0.0_r8
+            t2(i,j)             = 0.0_r8
+            ti(i,j,linew)       = -2.0_r8
+            enthalpi(i,j,linew) = 0.0_r8
+            hage(i,j,linew)     = 0.0_r8
+            iomflx(i,j)         = 0.0_r8
+            s0mk(i,j)           = salt_top(i,j)
+            t0mk(i,j)           = temp_top(i,j)
+            wai(i,j)            = 0.0_r8
+            wao(i,j)            = 0.0_r8
+            wio(i,j)            = 0.0_r8
+            wro(i,j)            = 0.0_r8
+            qao(i,j)            = 0.0_r8
+            qio(i,j)            = 0.0_r8
+            qi2(i,j)            = 0.0_r8
+# ifdef ICE_DIAGS
+            wsni(i,j)           = 0.0_r8
+            sao(i,j)            = 0.0_r8
+            sio(i,j)            = 0.0_r8
+# endif
+          END IF
+        END DO
+      END DO
+#endif
 !
 !-----------------------------------------------------------------------
 !  Exchange boundary information.
