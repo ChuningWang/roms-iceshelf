@@ -123,8 +123,8 @@
       real(r8), intent(in) :: on_u(LBi:,LBj:)
       real(r8), intent(in) :: om_v(LBi:,LBj:)
       real(r8), intent(in) :: omn(LBi:,LBj:)
-      real(r8), intent(in) :: ui(LBi:,LBj:,:)
-      real(r8), intent(in) :: vi(LBi:,LBj:,:)
+      real(r8), intent(inout) :: ui(LBi:,LBj:,:)
+      real(r8), intent(inout) :: vi(LBi:,LBj:,:)
       real(r8), intent(inout) :: ai(LBi:,LBj:,:)
       real(r8), intent(inout) :: hi(LBi:,LBj:,:)
       real(r8), intent(inout) :: hsn(LBi:,LBj:,:)
@@ -154,8 +154,8 @@
       real(r8), intent(in) :: on_u(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: om_v(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: omn(LBi:UBi,LBj:UBj)
-      real(r8), intent(in) :: ui(LBi:UBi,LBj:UBj,2)
-      real(r8), intent(in) :: vi(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: ui(LBi:UBi,LBj:UBj,2)
+      real(r8), intent(inout) :: vi(LBi:UBi,LBj:UBj,2)
       real(r8), intent(inout) :: ai(LBi:UBi,LBj:UBj,2)
       real(r8), intent(inout) :: hi(LBi:UBi,LBj:UBj,2)
       real(r8), intent(inout) :: hsn(LBi:UBi,LBj:UBj,2)
@@ -320,6 +320,27 @@
       END DO
 !
 ! ---------------------------------------------------------------------
+!  Clear ice velocities where ice is not presented.
+! ---------------------------------------------------------------------
+!
+      IF (min_a(ng).le.0.0_r8) THEN
+        DO j=Jstr,Jend
+          DO i=IstrP,Iend
+            IF ((ai(i,j,linew)+ai(i-1,j,linew)).le.0.0_r8) THEN
+              ui(i,j,linew) = 0.0_r8
+            END IF
+          END DO
+        END DO
+        DO j=JstrP,Jend
+          DO i=Istr,Iend
+            IF ((ai(i,j,linew)+ai(i,j-1,linew)).le.0.0_r8) THEN
+              vi(i,j,linew) = 0.0_r8
+            END IF
+          END DO
+        END DO
+      END IF
+!
+! ---------------------------------------------------------------------
 !  Boundary data exchange.
 ! ---------------------------------------------------------------------
 !
@@ -368,6 +389,12 @@
         CALL exchange_r2d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          hage(:,:,linew))
+        CALL exchange_u2d_tile (ng, tile,                               &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          ui(:,:,linew))
+        CALL exchange_v2d_tile (ng, tile,                               &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          vi(:,:,linew))
       END IF
 # ifdef DISTRIBUTE
 !
@@ -382,6 +409,11 @@
      &                    NghostPoints, EWperiodic(ng), NSperiodic(ng), &
      &                    ti(:,:,linew), enthalpi(:,:,linew),           &
      &                    ageice(:,:,linew), hage(:,:,linew))
+      CALL mp_exchange2d (ng, tile, iNLM, 2,                            &
+     &                    LBi, UBi, LBj, UBj,                           &
+     &                    NghostPoints,                                 &
+     &                    EWperiodic(ng), NSperiodic(ng),               &
+     &                    ui(:,:,liunw), vi(:,:,liunw))
 # endif
 #endif
       RETURN

@@ -309,7 +309,7 @@
 #  endif
 #  ifdef ICE_BULK_FLUXES
 #   ifdef ICESHELF
-          IF (zice(i,j).eq.0.0_r8) THEN
+          IF ((zice(i,j)*zice(i-1,j)).eq.0.0_r8) THEN
 #   endif
           sustr_iw(i,j) = chux*(ui(i,j,liuol)-uwater(i,j))
           sustr(i,j) = aix*sustr_iw(i,j) + (1.0_r8-aix)*sustr_aw(i,j)
@@ -338,7 +338,7 @@
 #  endif
 #  ifdef ICE_BULK_FLUXES
 #   ifdef ICESHELF
-          IF (zice(i,j).EQ.0.0_r8) THEN
+          IF ((zice(i,j)*zice(i,j-1)).eq.0.0_r8) THEN
 #   endif
           svstr_iw(i,j) = chuy*(vi(i,j,liuol)-vwater(i,j))
           svstr(i,j) = aiy*svstr_iw(i,j) + (1.0_r8-aiy)*svstr_aw(i,j)
@@ -397,7 +397,7 @@
           sustr_iw(i,j) = tauiwu
 #  ifdef ICE_BULK_FLUXES
 #   ifdef ICESHELF
-          IF (zice(i,j).eq.0.0_r8) THEN
+          IF ((zice(i,j)*zice(i-1,j)).eq.0.0_r8) THEN
 #   endif
           sustr(i,j) = aix*tauiwu + (1.0_r8-aix)*0.5_r8*                &
      &                              (sustr_aw(i,j)+sustr_aw(i-1,j))
@@ -427,7 +427,7 @@
           svstr_iw(i,j) = tauiwv
 #  ifdef ICE_BULK_FLUXES
 #   ifdef ICESHELF
-          IF (zice(i,j).EQ.0.0_r8) THEN
+          IF ((zice(i,j)*zice(i,j-1)).eq.0.0_r8) THEN
 #   endif
           svstr(i,j) = aiy*tauiwv + (1.0_r8-aiy)*0.5_r8*                &
      &                              (svstr_aw(i,j)+svstr_aw(i,j-1))
