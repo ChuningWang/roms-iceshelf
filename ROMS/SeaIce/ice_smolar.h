@@ -86,7 +86,7 @@
       USE mod_param
       USE mod_scalars
 !
-      USE exchange_2d_mod, ONLY : exchange_r2d_tile
+      USE exchange_2d_mod
 #ifdef DISTRIBUTE
       USE mp_exchange_mod, ONLY : mp_exchange2d
 #endif
