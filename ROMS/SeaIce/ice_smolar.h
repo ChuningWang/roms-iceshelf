@@ -323,22 +323,20 @@
 !  Clear ice velocities where ice is not presented.
 ! ---------------------------------------------------------------------
 !
-      IF (min_a(ng).le.0.0_r8) THEN
-        DO j=Jstr,Jend
-          DO i=IstrP,Iend
-            IF ((ai(i,j,linew)+ai(i-1,j,linew)).le.0.0_r8) THEN
-              ui(i,j,linew) = 0.0_r8
-            END IF
-          END DO
+      DO j=Jstr,Jend
+        DO i=IstrP,Iend
+          IF ((ai(i,j,linew)+ai(i-1,j,linew)).le.min_a(ng)) THEN
+            ui(i,j,linew) = 0.0_r8
+          END IF
         END DO
-        DO j=JstrP,Jend
-          DO i=Istr,Iend
-            IF ((ai(i,j,linew)+ai(i,j-1,linew)).le.0.0_r8) THEN
-              vi(i,j,linew) = 0.0_r8
-            END IF
-          END DO
+      END DO
+      DO j=JstrP,Jend
+        DO i=Istr,Iend
+          IF ((ai(i,j,linew)+ai(i,j-1,linew)).le.min_a(ng)) THEN
+            vi(i,j,linew) = 0.0_r8
+          END IF
         END DO
-      END IF
+      END DO
 !
 ! ---------------------------------------------------------------------
 !  Boundary data exchange.

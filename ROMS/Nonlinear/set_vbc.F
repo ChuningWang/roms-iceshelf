@@ -55,7 +55,7 @@
      &                   LBi, UBi, LBj, UBj,                            &
      &                   IminS, ImaxS, JminS, JmaxS,                    &
      &                   nrhs(ng),                                      &
-#  if defined ICE_MODEL && defined ICE_NO_SCORRECTION
+#  if defined ICE_MODEL && defined ICE_NO_CORRECTION
      &                   liold(ng),                                     &
 #  endif
      &                   GRID(ng) % Hz,                                 &
@@ -88,7 +88,7 @@
      &                   FORCES(ng) % bustr,                            &
      &                   FORCES(ng) % bvstr,                            &
 #  endif
-#  if defined ICE_MODEL && defined ICE_NO_SCORRECTION
+#  if defined ICE_MODEL && defined ICE_NO_CORRECTION
      &                   ICE(ng) % ai,                                  &
 #  endif
      &                   FORCES(ng) % stflux,                           &
@@ -107,7 +107,7 @@
      &                         LBi, UBi, LBj, UBj,                      &
      &                         IminS, ImaxS, JminS, JmaxS,              &
      &                         nrhs,                                    &
-#  if defined ICE_MODEL && defined ICE_NO_SCORRECTION
+#  if defined ICE_MODEL && defined ICE_NO_CORRECTION
      &                         liold,                                   &
 #  endif
      &                         Hz,                                      &
@@ -137,7 +137,7 @@
 #  ifndef BBL_MODEL
      &                         bustr, bvstr,                            &
 #  endif
-#  if defined ICE_MODEL && defined ICE_NO_SCORRECTION
+#  if defined ICE_MODEL && defined ICE_NO_CORRECTION
      &                         ai,                                      &
 #  endif
      &                         stflux, btflux,                          &
@@ -158,7 +158,7 @@
       integer, intent(in) :: LBi, UBi, LBj, UBj
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
       integer, intent(in) :: nrhs
-#  if defined ICE_MODEL && defined ICE_NO_SCORRECTION
+#  if defined ICE_MODEL && defined ICE_NO_CORRECTION
       integer, intent(in) :: liold
 #  endif
 !
@@ -195,7 +195,7 @@
       real(r8), intent(inout) :: bustr(LBi:,LBj:)
       real(r8), intent(inout) :: bvstr(LBi:,LBj:)
 #   endif
-#   if defined ICE_MODEL && defined ICE_NO_SCORRECTION
+#   if defined ICE_MODEL && defined ICE_NO_CORRECTION
       real(r8), intent(in) :: ai(LBi:,LBj:,:)
 #   endif
       real(r8), intent(inout) :: stflx(LBi:,LBj:,:)
@@ -233,7 +233,7 @@
       real(r8), intent(inout) :: bustr(LBi:UBi,LBj:UBj)
       real(r8), intent(inout) :: bvstr(LBi:UBi,LBj:UBj)
 #   endif
-#   if defined ICE_MODEL && defined ICE_NO_SCORRECTION
+#   if defined ICE_MODEL && defined ICE_NO_CORRECTION
       real(r8), intent(in) :: ai(LBi:UBi,LBj:UBj,2)
 #   endif
       real(r8), intent(inout) :: stflx(LBi:UBi,LBj:UBj,NT(ng))
@@ -248,7 +248,7 @@
 #  if !defined BBL_MODEL || defined LIMIT_STFLX_COOLING
       real(r8) :: cff, cff1, cff2, cff3
 #  endif
-#  if defined ICE_MODEL && defined ICE_NO_SCORRECTION
+#  if defined ICE_MODEL && defined ICE_NO_CORRECTION
       real(r8) :: fac_ice
 #  endif
 
@@ -275,9 +275,20 @@
       DO j=JstrR,JendR
         DO i=IstrR,IendR
 #  ifdef TCORRECTION
+#   if defined ICE_MODEL && defined ICE_NO_CORRECTION
+          IF(ai(i,j,liold).ge.0.1_r8) THEN
+            fac_ice = 0.0_r8
+          ELSE
+            fac_ice = 1.0_r8
+          END IF
+          stflx(i,j,itemp)=stflux(i,j,itemp) - fac_ice*                 &
+     &                     obcfac(ng)*Tnudg(itemp,ng)*Hz(i,j,N(ng))*    &
+     &                     (t(i,j,N(ng),nrhs,itemp)-sst(i,j))
+#   else
           stflx(i,j,itemp)=stflux(i,j,itemp)-                           &
      &                     obcfac(ng)*Tnudg(itemp,ng)*Hz(i,j,N(ng))*    &
      &                     (t(i,j,N(ng),nrhs,itemp)-sst(i,j))
+#   endif
 #  else
           stflx(i,j,itemp)=stflux(i,j,itemp)
 #  endif
@@ -295,8 +306,18 @@
 !
       DO j=JstrR,JendR
         DO i=IstrR,IendR
+#   if defined ICE_MODEL && defined ICE_NO_CORRECTION
+          IF(ai(i,j,liold).ge.0.1_r8) THEN
+            fac_ice = 0.0_r8
+          ELSE
+            fac_ice = 1.0_r8
+          END IF
+          stflx(i,j,itemp)=stflx(i,j,itemp)+ fac_ice*                   &
+     &                     dqdt(i,j)*(t(i,j,N(ng),nrhs,itemp)-sst(i,j))
+#   else
           stflx(i,j,itemp)=stflx(i,j,itemp)+                            &
      &                     dqdt(i,j)*(t(i,j,N(ng),nrhs,itemp)-sst(i,j))
+#   endif
         END DO
       END DO
 #  endif
@@ -344,7 +365,7 @@
         DO i=IstrR,IendR
           EmP=stflux(i,j,isalt)
 #   if defined SCORRECTION
-#    if defined ICE_MODEL && defined ICE_NO_SCORRECTION
+#    if defined ICE_MODEL && defined ICE_NO_CORRECTION
           IF(ai(i,j,liold).ge.0.1_r8) THEN
             fac_ice = 0.0_r8
           ELSE

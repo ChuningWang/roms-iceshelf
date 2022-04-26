@@ -399,7 +399,7 @@
 !
 ! Approximated values for ice alb (depends on COSZ, but small variation)
 !
-            IF (ai(i,j,listp) .ge. min_a(ng)) THEN
+            IF (ai(i,j,listp) .gt. min_a(ng)) THEN
               i_thick = MAX(i_thick, 1.0E-6_r8)
               IF (i_thick.ge.2._r8) THEN
                 albi(i,j) = 0.561632_r8
@@ -523,7 +523,7 @@
 !
 !  Calculate shortwave penetration factor
 !
-          IF (ai(i,j,listp) .ge. min_a(ng)) THEN
+          IF (ai(i,j,listp) .gt. min_a(ng)) THEN
 # ifdef ICE_ALB_CSIM
 !
 ! Note: We assume that only the visual part incident on snow-uncovered

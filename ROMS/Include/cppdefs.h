@@ -617,7 +617,7 @@
 ** ICE_MK              use for Mellor-Kantha thermodynamics (only choice)    **
 ** ICE_MOMENTUM        use for momentum component                            **
 ** ICE_MOM_BULK        use for another ice-water stress computation option   **
-** ICE_NO_SCORRECTION  use for no scorrection under the ice                  **
+** ICE_NO_CORRECTION   use for no t/scorrection under the ice                **
 ** ICE_NO_SNOW         use to remove snow layer in ice model                 **
 ** ICE_OUTFLOW_MASK    use for Hibler style outflow cells                    **
 ** ICE_SHOREFAST       use for a simple shorefast-ice algorithm (Budgell)    **
