@@ -6,9 +6,6 @@
       SUBROUTINE lmd_swfrac_tile (ng, tile,                             &
      &                            LBi, UBi, LBj, UBj,                   &
      &                            IminS, ImaxS, JminS, JmaxS,           &
-# ifdef ICE_LMD_SHORTWAVE
-     &                            rfaci,                                &
-# endif
      &                            Zscale, Z, swdk)
 !
 !git $Id$
@@ -45,6 +42,9 @@
       USE mod_param
       USE mod_mixing
       USE mod_scalars
+# ifdef ICE_LMD_SHORTWAVE
+      USE mod_ice
+# endif
 !
       implicit none
 !
@@ -53,14 +53,6 @@
       integer, intent(in) :: ng, tile
       integer, intent(in) :: LBi, UBi, LBj, UBj
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
-
-# ifdef ICE_LMD_SHORTWAVE
-#  ifdef ASSUMED_SHAPE
-      real(r8), intent(in) :: rfaci(LBi:,LBj:)
-#  else
-      real(r8), intent(in) :: rfaci(LBi:UBi,LBj:UBj)
-#  endif
-# endif
 
       real(r8), intent(in) :: Zscale
 
@@ -86,7 +78,7 @@
           fac1(i)=Zscale/lmd_mu1(Jindex)
           fac2(i)=Zscale/lmd_mu2(Jindex)
 # ifdef ICE_LMD_SHORTWAVE
-          fac3(i)=lmd_r1(Jindex)*rfaci(i,j)
+          fac3(i)=lmd_r1(Jindex)*ICE(ng)%rfaci(i,j)
 # else
           fac3(i)=lmd_r1(Jindex)
 # endif
