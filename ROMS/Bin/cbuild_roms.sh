@@ -1,9 +1,9 @@
 #!/bin/bash
 #
 # git $Id$
-# svn $Id: cbuild_roms.sh 1064 2021-05-10 19:55:56Z arango $
+# svn $Id: cbuild_roms.sh 1120 2022-04-08 19:14:36Z arango $
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# Copyright (c) 2002-2021 The ROMS/TOMS Group                           :::
+# Copyright (c) 2002-2022 The ROMS/TOMS Group                           :::
 #   Licensed under a MIT/X style license                                :::
 #   See License_ROMS.txt                                                :::
 #:::::::::::::::::::::::::::::::::::::::::::::::::::::: David Robertson :::
@@ -365,7 +365,7 @@ fi
 
 my_hdir="-DMY_HEADER_DIR=${MY_HEADER_DIR}"
 
-if [ $dprint -eq 0 ]; then
+if [[ $dprint -eq 0 && $clean -eq 1 ]]; then
   if [[ -z ${USE_ECBUILD+x} || "${USE_ECBUILD}" == "off" ]]; then
     conf_com="cmake"
     cmake -DAPP=${ROMS_APPLICATION} \

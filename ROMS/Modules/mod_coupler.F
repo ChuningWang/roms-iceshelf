@@ -4,9 +4,9 @@
 #if defined MODEL_COUPLING && defined MCT_LIB
 !
 !git $Id$
-!svn $Id: mod_coupler.F 1083 2021-07-28 19:00:42Z arango $
+!svn $Id: mod_coupler.F 1122 2022-04-13 19:50:43Z arango $
 !================================================== Hernan G. Arango ===
-!  Copyright (c) 2002-2021 The ROMS/TOMS Group                         !
+!  Copyright (c) 2002-2022 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
 !    See License_ROMS.txt                                              !
 !=======================================================================
@@ -199,7 +199,7 @@
       character (len=40 ) :: code
       character (len=80 ) :: string
       character (len=256) :: io_errmsg
-      character (len=120), dimension(5) :: Vinfo
+      character (len=MaxLen), dimension(5) :: Vinfo
 !
 !-----------------------------------------------------------------------
 !  Read in coupling export/import variable information.

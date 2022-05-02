@@ -3,9 +3,9 @@
 #ifdef ADJOINT
 !
 !git $Id$
-!svn $Id: ad_ini_fields.F 1098 2021-12-28 03:52:35Z arango $
+!svn $Id: ad_ini_fields.F 1120 2022-04-08 19:14:36Z arango $
 !================================================== Hernan G. Arango ===
-!  Copyright (c) 2002-2021 The ROMS/TOMS Group       Andrew M. Moore   !
+!  Copyright (c) 2002-2022 The ROMS/TOMS Group       Andrew M. Moore   !
 !    Licensed under a MIT/X style license                              !
 !    See License_ROMS.txt                                              !
 !=======================================================================
@@ -1685,27 +1685,27 @@
         CALL ad_exchange_u3d_tile (ng, tile,                            &
      &                             LBi, UBi, LBj, UBj, 1, N(ng),        &
      &                             ad_u(:,:,:,nnew))
-      CALL ad_v3dbc_tile (ng, tile,                                     &
-     &                    LBi, UBi, LBj, UBj, N(ng),                    &
-     &                    IminS, ImaxS, JminS, JmaxS,                   &
-     &                    nstp, nnew,                                   &
-     &                    ad_v)
-      CALL ad_v3dbc_tile (ng, tile,                                     &
-     &                    LBi, UBi, LBj, UBj, N(ng),                    &
-     &                    IminS, ImaxS, JminS, JmaxS,                   &
-     &                    nstp, nstp,                                   &
-     &                    ad_v)
-      CALL ad_u3dbc_tile (ng, tile,                                     &
-     &                    LBi, UBi, LBj, UBj, N(ng),                    &
-     &                    IminS, ImaxS, JminS, JmaxS,                   &
-     &                    nstp, nnew,                                   &
-     &                    ad_u)
-      CALL ad_u3dbc_tile (ng, tile,                                     &
-     &                    LBi, UBi, LBj, UBj, N(ng),                    &
-     &                    IminS, ImaxS, JminS, JmaxS,                   &
-     &                    nstp, nstp,                                   &
-     &                    ad_u)
       END IF
+      CALL ad_v3dbc_tile (ng, tile,                                     &
+     &                    LBi, UBi, LBj, UBj, N(ng),                    &
+     &                    IminS, ImaxS, JminS, JmaxS,                   &
+     &                    nstp, nnew,                                   &
+     &                    ad_v)
+      CALL ad_v3dbc_tile (ng, tile,                                     &
+     &                    LBi, UBi, LBj, UBj, N(ng),                    &
+     &                    IminS, ImaxS, JminS, JmaxS,                   &
+     &                    nstp, nstp,                                   &
+     &                    ad_v)
+      CALL ad_u3dbc_tile (ng, tile,                                     &
+     &                    LBi, UBi, LBj, UBj, N(ng),                    &
+     &                    IminS, ImaxS, JminS, JmaxS,                   &
+     &                    nstp, nnew,                                   &
+     &                    ad_u)
+      CALL ad_u3dbc_tile (ng, tile,                                     &
+     &                    LBi, UBi, LBj, UBj, N(ng),                    &
+     &                    IminS, ImaxS, JminS, JmaxS,                   &
+     &                    nstp, nstp,                                   &
+     &                    ad_u)
 !
 !  Add second piece of the 3D adjoint momentum solution into IO arrays.
 !  The first is loaded in "ad_step3d_uv".
