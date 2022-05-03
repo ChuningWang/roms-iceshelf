@@ -175,9 +175,9 @@
     LnudgeAICLM == F
     LnudgeSICLM == F
 
-! Logical switches for iceshelf melt water tracers
+! Logical switches for iceshelf melt water passive tracers
 
-  LtracerIce == T                          ! inert
+     LtracerIce == T       ! dye_01, ...        inert passive tracers
 
 ! Logical switches (TRUE/FALSE) to activate writing of ice prognostic
 ! variables into HISTORY output file.
