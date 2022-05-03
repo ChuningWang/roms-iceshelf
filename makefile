@@ -479,8 +479,8 @@ ifdef USE_ICESHELF
 endif
 ifdef USE_SEAICE
  includes +=	ROMS/SeaIce
-endif
  includes +=	ROMS/SeaIce/Include
+endif
 
 ifdef MY_HEADER_DIR
  includes +=	$(MY_HEADER_DIR)

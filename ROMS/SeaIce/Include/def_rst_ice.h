@@ -19,6 +19,7 @@
         Vinfo(20)='mask_u'
 #  endif
 # endif
+        Vinfo(21)=Vname(6,idIuice)
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idIuice,ng),r8)
 # ifdef PERFECT_RESTART
@@ -57,6 +58,7 @@
         Vinfo(20)='mask_v'
 #  endif
 # endif
+        Vinfo(21)=Vname(6,idIvice)
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idIvice,ng),r8)
 # ifdef PERFECT_RESTART
@@ -95,6 +97,7 @@
         Vinfo(20)='mask_rho'
 #  endif
 # endif
+        Vinfo(21)=Vname(6,idIaice)
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idIaice,ng),r8)
 # ifdef PERFECT_RESTART
@@ -133,6 +136,7 @@
         Vinfo(20)='mask_rho'
 #  endif
 # endif
+        Vinfo(21)=Vname(6,idIhice)
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idIhice,ng),r8)
 # ifdef PERFECT_RESTART
@@ -171,6 +175,7 @@
         Vinfo(20)='mask_rho'
 #  endif
 # endif
+        Vinfo(21)=Vname(6,idIhsno)
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idIhsno,ng),r8)
 # ifdef PERFECT_RESTART
@@ -209,6 +214,7 @@
         Vinfo(20)='mask_rho'
 #  endif
 # endif
+        Vinfo(21)=Vname(6,idIagei)
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idIagei,ng),r8)
 # ifdef PERFECT_RESTART
@@ -247,6 +253,7 @@
         Vinfo(20)='mask_rho'
 #  endif
 # endif
+        Vinfo(21)=Vname(6,idItice)
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idItice,ng),r8)
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idItice),    &
@@ -275,6 +282,7 @@
         Vinfo(20)='mask_rho'
 #  endif
 # endif
+        Vinfo(21)=Vname(6,idItmid)
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idItmid,ng),r8)
 # ifdef PERFECT_RESTART
@@ -313,6 +321,7 @@
         Vinfo(20)='mask_rho'
 #  endif
 # endif
+        Vinfo(21)=Vname(6,idIsg11)
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idIsg11,ng),r8)
 # ifdef PERFECT_RESTART
@@ -351,6 +360,7 @@
         Vinfo(20)='mask_rho'
 #  endif
 # endif
+        Vinfo(21)=Vname(6,idIsg12)
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idIsg12,ng),r8)
 # ifdef PERFECT_RESTART
@@ -389,6 +399,7 @@
         Vinfo(20)='mask_rho'
 #  endif
 # endif
+        Vinfo(21)=Vname(6,idIsg22)
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idIsg22,ng),r8)
 # ifdef PERFECT_RESTART
@@ -428,6 +439,7 @@
         Vinfo(20)='mask_rho'
 #   endif
 #  endif
+        Vinfo(21)=Vname(6,idIutau)
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idIutau,ng),r8)
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIutau),    &
@@ -456,6 +468,7 @@
         Vinfo(20)='mask_rho'
 #   endif
 #  endif
+        Vinfo(21)=Vname(6,idImchu)
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idImchu,ng),r8)
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idImchu),    &
@@ -485,6 +498,7 @@
         Vinfo(20)='mask_rho'
 #  endif
 # endif
+        Vinfo(21)=Vname(6,idIt0mk)
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idIt0mk,ng),r8)
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIt0mk),    &
@@ -513,6 +527,7 @@
         Vinfo(20)='mask_rho'
 #  endif
 # endif
+        Vinfo(21)=Vname(6,idIs0mk)
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idIs0mk,ng),r8)
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIs0mk),    &
@@ -540,6 +555,7 @@
           Vinfo(20)='mask_rho'
 #   endif
 #  endif
+          Vinfo(21)=Vname(6,idTsur(itrc))
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idTsur(itrc),ng),r8)
           status=def_var(ng, iNLM, RST(ng)%ncid,                        &
@@ -564,6 +580,7 @@
         Vinfo(20)='mask_rho'
 #   endif
 #  endif
+        Vinfo(21)=Vname(6,idUsms)
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idUsms,ng),r8)
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idUsms),     &
@@ -592,6 +609,7 @@
         Vinfo(20)='mask_rho'
 #   endif
 #  endif
+        Vinfo(21)=Vname(6,idVsms)
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idVsms,ng),r8)
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idVsms),     &
@@ -624,6 +642,7 @@
         Vinfo(20)='mask_rho'
 #   endif
 #  endif
+        Vinfo(21)=Vname(6,idIsDrft)
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idIsDrft,ng),r8)
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIsDrft),   &
@@ -654,6 +673,7 @@
         Vinfo(20)='mask_rho'
 #   endif
 #  endif
+        Vinfo(21)=Vname(6,idIsVol)
         Vinfo(22)='coordinates'
         Aval(5)=REAL(Iinfo(1,idIsVol,ng),r8)
         status=def_var(ng, iNLM, RST(ng)%ncid, RST(ng)%Vid(idIsVol),    &
@@ -680,6 +700,7 @@
           Vinfo(20)='mask_rho'
 #   endif
 #  endif
+          Vinfo(21)=Vname(6,idIsTrc(itrc))
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIsTrc(itrc),ng),r8)
           status=def_var(ng, iNLM, RST(ng)%ncid,                        &

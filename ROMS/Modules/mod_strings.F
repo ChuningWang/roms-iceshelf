@@ -139,7 +139,7 @@
         integer, parameter :: Fregion = 80      ! start of 4D-Var region
         integer, parameter :: Mregion = 60      ! start of mpi-region
 #ifdef ICE_MODEL
-        integer, parameter :: Iceregion = 91    ! ice model
+        integer, parameter :: Iceregion = 92    ! ice model
         integer, parameter :: Nregion = 96
 #else
         integer, parameter :: Nregion = 88

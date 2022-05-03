@@ -15,6 +15,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_u'
 #   endif
+          Vinfo(21)=Vname(6,idIuice)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIuice,ng),r8)
           AVG(ng)%pioVar(idIuice)%dkind=PIO_FOUT
@@ -37,6 +38,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_v'
 #   endif
+          Vinfo(21)=Vname(6,idIvice)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIvice,ng),r8)
           AVG(ng)%pioVar(idIvice)%dkind=PIO_FOUT
@@ -59,6 +61,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idIuiceE)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIuiceE,ng),r8)
           AVG(ng)%pioVar(idIuiceE)%dkind=PIO_FOUT
@@ -81,6 +84,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idIviceN)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIviceN,ng),r8)
           AVG(ng)%pioVar(idIviceN)%dkind=PIO_FOUT
@@ -103,6 +107,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idIaice)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIaice,ng),r8)
           AVG(ng)%pioVar(idIaice)%dkind=PIO_FOUT
@@ -125,6 +130,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idIhice)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIhice,ng),r8)
           AVG(ng)%pioVar(idIhice)%dkind=PIO_FOUT
@@ -147,6 +153,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idIhsno)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIhsno,ng),r8)
           AVG(ng)%pioVar(idIhsno)%dkind=PIO_FOUT
@@ -169,6 +176,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idIagei)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIagei,ng),r8)
           AVG(ng)%pioVar(idIagei)%dkind=PIO_FOUT
@@ -191,6 +199,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idItice)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idItice,ng),r8)
           AVG(ng)%pioVar(idItice)%dkind=PIO_FOUT
@@ -213,6 +222,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idItmid)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idItmid,ng),r8)
           AVG(ng)%pioVar(idItmid)%dkind=PIO_FOUT
@@ -235,6 +245,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idIt2ic)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIt2ic,ng),r8)
           AVG(ng)%pioVar(idIt2ic)%dkind=PIO_FOUT
@@ -257,6 +268,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idIsg11)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIsg11,ng),r8)
           AVG(ng)%pioVar(idIsg11)%dkind=PIO_FOUT
@@ -279,6 +291,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idIsg12)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIsg12,ng),r8)
           AVG(ng)%pioVar(idIsg12)%dkind=PIO_FOUT
@@ -301,6 +314,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idIsg22)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIsg22,ng),r8)
           AVG(ng)%pioVar(idIsg22)%dkind=PIO_FOUT
@@ -323,6 +337,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idIutau)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIutau,ng),r8)
           AVG(ng)%pioVar(idIutau)%dkind=PIO_FOUT
@@ -345,6 +360,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idImchu)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idImchu,ng),r8)
           AVG(ng)%pioVar(idImchu)%dkind=PIO_FOUT
@@ -367,6 +383,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idIt0mk)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIt0mk,ng),r8)
           AVG(ng)%pioVar(idIt0mk)%dkind=PIO_FOUT
@@ -389,6 +406,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idIs0mk)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIs0mk,ng),r8)
           AVG(ng)%pioVar(idIs0mk)%dkind=PIO_FOUT
@@ -411,6 +429,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idImflx)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idImflx,ng),r8)
           AVG(ng)%pioVar(idImflx)%dkind=PIO_FOUT
@@ -433,6 +452,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idIwfr)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIwfr,ng),r8)
           AVG(ng)%pioVar(idIwfr)%dkind=PIO_FOUT
@@ -455,6 +475,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idIwai)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIwai,ng),r8)
           AVG(ng)%pioVar(idIwai)%dkind=PIO_FOUT
@@ -477,6 +498,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idIwao)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIwao,ng),r8)
           AVG(ng)%pioVar(idIwao)%dkind=PIO_FOUT
@@ -499,6 +521,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idIwio)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIwio,ng),r8)
           AVG(ng)%pioVar(idIwio)%dkind=PIO_FOUT
@@ -521,6 +544,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idIwro)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIwro,ng),r8)
           AVG(ng)%pioVar(idIwro)%dkind=PIO_FOUT
@@ -543,6 +567,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idIwdiv)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIwdiv,ng),r8)
           AVG(ng)%pioVar(idIwdiv)%dkind=PIO_FOUT
@@ -567,6 +592,7 @@
 #     if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #     endif
+          Vinfo(21)=Vname(6,idIalbO)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIalbO,ng),r8)
           AVG(ng)%pioVar(idIalbO)%dkind=PIO_FOUT
@@ -589,6 +615,7 @@
 #     if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #     endif
+          Vinfo(21)=Vname(6,idIalbI)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIalbI,ng),r8)
           AVG(ng)%pioVar(idIalbI)%dkind=PIO_FOUT
@@ -612,6 +639,7 @@
 #      if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #      endif
+          Vinfo(21)=Vname(6,idIfrsw)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIfrsw,ng),r8)
           AVG(ng)%pioVar(idIfrsw)%dkind=PIO_FOUT
@@ -636,6 +664,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIqswi)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIqswi,ng),r8)
           AVG(ng)%pioVar(idIqswi)%dkind=PIO_FOUT
@@ -658,6 +687,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIqlwi)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIqlwi,ng),r8)
           AVG(ng)%pioVar(idIqlwi)%dkind=PIO_FOUT
@@ -680,6 +710,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIqlai)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIqlai,ng),r8)
           AVG(ng)%pioVar(idIqlai)%dkind=PIO_FOUT
@@ -702,6 +733,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIqsei)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIqsei,ng),r8)
           AVG(ng)%pioVar(idIqsei)%dkind=PIO_FOUT
@@ -724,6 +756,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIqswl)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIqswl,ng),r8)
           AVG(ng)%pioVar(idIqswl)%dkind=PIO_FOUT
@@ -746,6 +779,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIqlwl)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIqlwl,ng),r8)
           AVG(ng)%pioVar(idIqlwl)%dkind=PIO_FOUT
@@ -768,6 +802,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIqlwa)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIqlwa,ng),r8)
           AVG(ng)%pioVar(idIqlwa)%dkind=PIO_FOUT
@@ -790,6 +825,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIqswa)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIqswa,ng),r8)
           AVG(ng)%pioVar(idIqswa)%dkind=PIO_FOUT
@@ -812,6 +848,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIqswo)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIqswo,ng),r8)
           AVG(ng)%pioVar(idIqswo)%dkind=PIO_FOUT
@@ -834,6 +871,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIqao)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIqao,ng),r8)
           AVG(ng)%pioVar(idIqao)%dkind=PIO_FOUT
@@ -856,6 +894,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIqai)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIqai,ng),r8)
           AVG(ng)%pioVar(idIqai)%dkind=PIO_FOUT
@@ -878,6 +917,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIqio)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIqio,ng),r8)
           AVG(ng)%pioVar(idIqio)%dkind=PIO_FOUT
@@ -900,6 +940,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIqi2)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIqi2,ng),r8)
           AVG(ng)%pioVar(idIqi2)%dkind=PIO_FOUT
@@ -922,6 +963,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIsao)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIsao,ng),r8)
           AVG(ng)%pioVar(idIsao)%dkind=PIO_FOUT
@@ -944,6 +986,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIsio)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIsio,ng),r8)
           AVG(ng)%pioVar(idIsio)%dkind=PIO_FOUT
@@ -966,6 +1009,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIwsni)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIwsni,ng),r8)
           AVG(ng)%pioVar(idIwsni)%dkind=PIO_FOUT
@@ -991,6 +1035,7 @@
 #   if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #   endif
+          Vinfo(21)=Vname(6,idIsMr)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIsMr,ng),r8)
           AVG(ng)%pioVar(idIsMr)%dkind=PIO_FOUT
@@ -1014,6 +1059,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIsTs)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIsTs,ng),r8)
           AVG(ng)%pioVar(idIsTs)%dkind=PIO_FOUT
@@ -1036,6 +1082,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIsUs)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIsUs,ng),r8)
           AVG(ng)%pioVar(idIsUs)%dkind=PIO_FOUT
@@ -1058,6 +1105,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIsTb)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIsTb,ng),r8)
           AVG(ng)%pioVar(idIsTb)%dkind=PIO_FOUT
@@ -1080,6 +1128,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIsSb)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIsSb,ng),r8)
           AVG(ng)%pioVar(idIsSb)%dkind=PIO_FOUT
@@ -1104,6 +1153,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIsDrft)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIsDrft,ng),r8)
           AVG(ng)%pioVar(idIsDrft)%dkind=PIO_FOUT
@@ -1128,6 +1178,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIsSOFs)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIsSOFs,ng),r8)
           AVG(ng)%pioVar(idIsSOFs)%dkind=PIO_FOUT
@@ -1150,6 +1201,7 @@
 #    if !defined WET_DRY && (defined WRITE_WATER && defined MASKING)
           Vinfo(20)='mask_rho'
 #    endif
+          Vinfo(21)=Vname(6,idIsSOFh)
           Vinfo(22)='coordinates'
           Aval(5)=REAL(Iinfo(1,idIsSOFh,ng),r8)
           AVG(ng)%pioVar(idIsSOFh)%dkind=PIO_FOUT
