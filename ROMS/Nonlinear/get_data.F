@@ -2108,7 +2108,7 @@
         IF (FoundError(exit_flag, NoError, __LINE__, MyFile)) RETURN
         CALL get_2dfld (ng, iNLM, idS22clm, CLMncid(idS22clm,ng),       &
 #  if defined PIO_LIB && defined DISTRIBUTE
-     &                  CLMpioFile(idS22clm(i),ng),                     &
+     &                  CLMpioFile(idS22clm,ng),                        &
 #  endif
      &                  nCLMfiles(ng), CLM(1,ng), update(1),            &
      &                  LBi, UBi, LBj, UBj, 2, 1,                       &

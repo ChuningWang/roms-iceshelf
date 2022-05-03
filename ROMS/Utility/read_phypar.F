@@ -73,9 +73,6 @@
       logical, allocatable :: Linert(:,:)
 #endif
       logical, allocatable :: Ltracer(:,:)
-#if defined ICESHELF && defined T_PASSIVE && defined ICESHELF_TRACER
-      logical, allocatable :: LtracerI(:,:)
-#endif
 #if defined AD_SENSITIVITY    || defined I4DVAR_ANA_SENSITIVITY || \
     defined FORCING_SV        || defined OPT_OBSERVATIONS       || \
     defined SENSITIVITY_4DVAR || defined SO_SEMI                || \
@@ -388,11 +385,6 @@
               IF (.not.allocated(Ltracer)) THEN
                 allocate (Ltracer(NAT+NPT,Ngrids))
               END IF
-#if defined ICESHELF && defined T_PASSIVE && defined ICESHELF_TRACER
-              IF (.not.allocated(LtracerI)) THEN
-                allocate (LtracerI(NPT,Ngrids))
-              END IF
-#endif
 #if defined SOLVE3D && defined T_PASSIVE
               IF (.not.allocated(Linert)) THEN
                 allocate (Linert(NPT,Ngrids))
@@ -1066,16 +1058,6 @@
 # endif
               END DO
 #endif
-#if defined ICESHELF && defined T_PASSIVE && defined ICESHELF_TRACER
-            CASE ('LtracerIce')
-              Npts=load_l(Nval, Cval, NPT, Ngrids, LtracerI)
-              DO ng=1,Ngrids
-                DO i=1,NPT
-                  itrc=inert(i)
-                  LtracerIce(itrc,ng)=LtracerI(i,ng)
-                END DO
-              END DO
-#endif
             CASE ('LsshCLM')
               Npts=load_l(Nval, Cval, Ngrids, LsshCLM)
             CASE ('Lm2CLM')
@@ -1413,76 +1395,6 @@
               END IF
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Hout(idFsur,1:Ngrids)=Lswitch(1:Ngrids)
-#ifdef ICESHELF
-            CASE ('Hout(idIsMr)')
-              IF (idIsMr.eq.0) THEN
-                IF (Master) WRITE (out,280) 'idIsMr'
-                exit_flag=5
-                RETURN
-              END IF
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idIsMr,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Hout(idIsTs)')
-              IF (idIsTs.eq.0) THEN
-                IF (Master) WRITE (out,280) 'idIsTs'
-                exit_flag=5
-                RETURN
-              END IF
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idIsTs,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Hout(idIsUs)')
-              IF (idIsUs.eq.0) THEN
-                IF (Master) WRITE (out,280) 'idIsUs'
-                exit_flag=5
-                RETURN
-              END IF
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idIsUs,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Hout(idIsTb)')
-              IF (idIsTb.eq.0) THEN
-                IF (Master) WRITE (out,280) 'idIsTb'
-                exit_flag=5
-                RETURN
-              END IF
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idIsTb,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Hout(idIsSb)')
-              IF (idIsSb.eq.0) THEN
-                IF (Master) WRITE (out,280) 'idIsSb'
-                exit_flag=5
-                RETURN
-              END IF
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idIsSb,1:Ngrids)=Lswitch(1:Ngrids)
-# if defined ICESHELF_MORPH
-            CASE ('Hout(idIsDrft)')
-              IF (idIsDrft.eq.0) THEN
-                IF (Master) WRITE (out,280) 'idIsDrft'
-                exit_flag=5
-                RETURN
-              END IF
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idIsDrft,1:Ngrids)=Lswitch(1:Ngrids)
-# endif
-# if defined ICESHELF_SOF 
-            CASE ('Hout(idIsSOFs)')
-              IF (idIsSOFs.eq.0) THEN
-                IF (Master) WRITE (out,280) 'idIsSOFs'
-                exit_flag=5
-                RETURN
-              END IF
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idIsSOFs,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Hout(idIsSOFh)')
-              IF (idIsSOFh.eq.0) THEN
-                IF (Master) WRITE (out,280) 'idIsSOFh'
-                exit_flag=5
-                RETURN
-              END IF
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Hout(idIsSOFh,1:Ngrids)=Lswitch(1:Ngrids)
-# endif
-#endif
 #if defined SEDIMENT && defined SED_MORPH
             CASE ('Hout(idBath)')
               IF (idbath.eq.0) THEN
@@ -2403,36 +2315,6 @@
             CASE ('Aout(idFsur)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Aout(idFsur,1:Ngrids)=Lswitch(1:Ngrids)
-# ifdef ICESHELF
-            CASE ('Aout(idIsMr)')
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Aout(idIsMr,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Aout(idIsTs)')
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Aout(idIsTs,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Aout(idIsUs)')
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Aout(idIsUs,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Aout(idIsTb)')
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Aout(idIsTb,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Aout(idIsSb)')
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Aout(idIsSb,1:Ngrids)=Lswitch(1:Ngrids)
-#  if defined ICESHELF_MORPH
-            CASE ('Aout(idIsDrft)')
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Aout(idIsDrft,1:Ngrids)=Lswitch(1:Ngrids)
-#  endif
-#  if defined ICESHELF_SOF 
-            CASE ('Aout(idIsSOFs)')
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Aout(idIsSOFs,1:Ngrids)=Lswitch(1:Ngrids)
-            CASE ('Aout(idIsSOFh)')
-              Npts=load_l(Nval, Cval, Ngrids, Lswitch)
-              Aout(idIsSOFh,1:Ngrids)=Lswitch(1:Ngrids)
-#  endif
-# endif
             CASE ('Aout(idu2dE)')
               Npts=load_l(Nval, Cval, Ngrids, Lswitch)
               Aout(idu2dE,1:Ngrids)=Lswitch(1:Ngrids)
@@ -5047,20 +4929,6 @@
           END DO
 # endif
 #endif
-#if defined ICESHELF && defined T_PASSIVE && defined ICESHELF_TRACER
-          DO i=1,NPT
-            itrc=inert(i)
-            IF (LtracerIce(itrc,ng)) THEN
-              WRITE (out,185) LtracerIce(itrc,ng), 'LtracerIce', itrc,  &
-     &            'Turning ON  point Sources/Sinks on iceshelf tracer ',&
-     &            itrc, TRIM(Vname(1,idTvar(itrc)))
-            ELSE
-              WRITE (out,185) LtracerIce(itrc,ng), 'LtracerIce', itrc,  &
-     &            'Turning OFF point Sources/Sinks on iceshelf tracer ',&
-     &            itrc, TRIM(Vname(1,idTvar(itrc)))
-            END IF
-          END DO
-#endif
           IF (LsshCLM(ng)) THEN
             WRITE (out,170) LsshCLM(ng), 'LsshCLM',                     &
      &          'Turning ON  processing of SSH climatology.'
@@ -5344,36 +5212,6 @@
 #endif
           IF ((nHIS(ng).gt.0).and.ANY(Hout(:,ng))) THEN
             WRITE (out,'(1x)')
-#if defined ICESHELF
-            IF (Hout(idIsMr,ng)) WRITE (out,170) Hout(idIsMr,ng),       &
-     &         'Hout(idIsMr)',                                          &
-     &         'Write out ice shelf melt rate.'
-            IF (Hout(idIsTs,ng)) WRITE (out,170) Hout(idIsTs,ng),       &
-     &         'Hout(idIsTs)',                                          &
-     &         'Write out temperature drive force at base of iceshelf.'
-            IF (Hout(idIsUs,ng)) WRITE (out,170) Hout(idIsUs,ng),       &
-     &         'Hout(idIsUs)',                                          &
-     &         'Write out Friction velocity at base of ice shelf.'
-            IF (Hout(idIsTb,ng)) WRITE (out,170) Hout(idIsTb,ng),       &
-     &         'Hout(idIsTb)',                                          &
-     &         'Write out temperature at base of ice shelf.'
-            IF (Hout(idIsSb,ng)) WRITE (out,170) Hout(idIsSb,ng),       &
-     &         'Hout(idIsSb)',                                          &
-     &         'Write out temperature at base of ice shelf.'
-# if defined ICESHELF_MORPH
-            IF (Hout(idIsDrft,ng)) WRITE (out,170) Hout(idIsDrft,ng),   &
-     &         'Hout(idIsDrft)',                                        &
-     &         'Write out time-dependent ice draft.'
-# endif
-# if defined ICESHELF_SOF
-            IF (Hout(idIsSOFs,ng)) WRITE (out,170) Hout(idSIsOFs,ng),   &
-     &         'Hout(idIsSOFs)',                                        &
-     &         'Write out surface salt overflux.'
-            IF (Hout(idIsSOFh,ng)) WRITE (out,170) Hout(idIsSOFh,ng),   &
-     &         'Hout(idIsSOFh)',                                        &
-     &         'Write out surface heat overflux.'
-# endif
-#endif
 #if defined SEDIMENT && defined SED_MORPH
             IF (Hout(idBath,ng)) WRITE (out,170) Hout(idBath,ng),       &
      &         'Hout(idBath)',                                          &
@@ -5986,36 +5824,6 @@
             IF (Aout(idFsur,ng)) WRITE (out,170) Aout(idFsur,ng),       &
      &         'Aout(idFsur)',                                          &
      &         'Write out averaged free-surface.'
-# if defined ICESHELF
-            IF (Aout(idIsMr,ng)) WRITE (out,170) Aout(idIsMr,ng),       &
-     &         'Aout(idIsMr)',                                          &
-     &         'Write out averaged ice shelf melt rate.'
-            IF (Aout(idIsTs,ng)) WRITE (out,170) Aout(idIsTs,ng),       &
-     &         'Aout(idIsTs)',                                          &
-     &         'Write out averaged T drive force at base of iceshelf.'
-            IF (Aout(idIsUs,ng)) WRITE (out,170) Aout(idIsUs,ng),       &
-     &         'Aout(idIsUs)',                                          &
-     &         'Write out averaged friction vel at base of ice shelf.'
-            IF (Aout(idIsTb,ng)) WRITE (out,170) Aout(idIsTb,ng),       &
-     &         'Aout(idIsTb)',                                          &
-     &         'Write out averaged temperature at base of ice shelf.'
-            IF (Aout(idIsSb,ng)) WRITE (out,170) Aout(idIsSb,ng),       &
-     &         'Aout(idIsSb)',                                          &
-     &         'Write out averaged salinity at base of ice shelf.'
-#  if defined ICESHELF_MORPH
-            IF (Aout(idIsDrft,ng)) WRITE (out,170) Aout(idIsDrft,ng),   &
-     &         'Aout(idIsDrft)',                                        &
-     &         'Write out averaged ice draft.'
-#  endif
-#  if defined ICESHELF_SOF
-            IF (Aout(idIsSOFs,ng)) WRITE (out,170) Aout(idSIsOFs,ng),   &
-     &         'Aout(idIsSOFs)',                                        &
-     &         'Write out averaged surface salt overflux.'
-            IF (Aout(idIsSOFh,ng)) WRITE (out,170) Aout(idIsSOFh,ng),   &
-     &         'Aout(idIsSOFh)',                                        &
-     &         'Write out averaged surface heat overflux.'
-#  endif
-# endif
             IF (Aout(idUbar,ng)) WRITE (out,170) Aout(idUbar,ng),       &
      &         'Aout(idUbar)',                                          &
      &         'Write out averaged 2D U-momentum component.'
