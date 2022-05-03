@@ -2,9 +2,11 @@
       SUBROUTINE seaice
 #ifdef ICE_MODEL
 !
-!=======================================================================
-!  Copyright (c) 2002-2020 The ROMS/TOMS Group                         !
 !================================================== Hernan G. Arango ===
+!  Copyright (c) 2002-2022 The ROMS/TOMS Group          Chuning Wang   !
+!    Licensed under a MIT/X style license                              !
+!    See License_ROMS.txt                                              !
+!=======================================================================
 !                                                                      !
 !  This is the main driver routine for the sea ice portion of the      !
 !  model.                                                              !

@@ -2,9 +2,11 @@
       MODULE ice_limit_mod
 #ifdef ICE_MODEL
 !
-!============================================== W. Paul Budgell ========
-!  Copyright (c) 2002-2021 ROMS/TOMS Group                             !
-!============================================== Hernan G. Arango =======
+!=================================================== W. Paul Budgell ===
+!  Copyright (c) 2002-2022 The ROMS/TOMS Group          Chuning Wang   !
+!    Licensed under a MIT/X style license                              !
+!    See License_ROMS.txt                                              !
+!================================================== Hernan G. Arango ===
 !                                                                      !
 !  Limit ice tracer variables, for instance to not allow negative ice  !
 !  concentration or thickness.                                         !

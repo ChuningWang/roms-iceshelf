@@ -2,9 +2,11 @@
       MODULE ice_elastic_mod
 #ifdef ICE_EVP
 !
-!=======================================================================
-!  Copyright (c) 2002-2020 The ROMS/TOMS Group                         !
 !================================================== Hernan G. Arango ===
+!  Copyright (c) 2002-2022 The ROMS/TOMS Group          Chuning Wang   !
+!    Licensed under a MIT/X style license                              !
+!    See License_ROMS.txt                                              !
+!=======================================================================
 !                                                                      !
 !  This routine timesteps the ice momentum equations.                  !
 !                                                                      !

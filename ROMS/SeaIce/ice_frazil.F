@@ -2,9 +2,11 @@
       MODULE ice_frazil_mod
 #if defined ICE_THERMO && !defined TS_FIXED
 !
-!=======================================================================
-!  Copyright (c) 2002-2021 The ROMS/TOMS Group                         !
 !================================================== Hernan G. Arango ===
+!  Copyright (c) 2002-2022 The ROMS/TOMS Group          Chuning Wang   !
+!    Licensed under a MIT/X style license                              !
+!    See License_ROMS.txt                                              !
+!=======================================================================
 !                                                                      !
 !  This routine computes the frazil ice growth in the water when the   !
 !  water temperature gets below freezing. It adjusts the water         !

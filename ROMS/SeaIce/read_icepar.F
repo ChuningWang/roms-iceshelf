@@ -2,9 +2,8 @@
 #if defined ICE_MODEL || defined ICESHELF
       SUBROUTINE read_IcePar (inp, out, Lwrite)
 !
-!svn $Id$
 !================================================== Hernan G. Arango ===
-!  Copyright (c) 2002-2020 The ROMS/TOMS Group                         !
+!  Copyright (c) 2002-2022 The ROMS/TOMS Group          Chuning Wang   !
 !    Licensed under a MIT/X style license                              !
 !    See License_ROMS.txt                                              !
 !=======================================================================

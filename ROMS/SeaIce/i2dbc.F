@@ -4,7 +4,7 @@
 ! 
 !=======================================================================
 !  Copyright (c) 2002-2021 The ROMS/TOMS Group                         !
-!    Licensed under a MIT/X style license                              !
+!    Licensed under a MIT/X style license               Chuning Wang   !
 !    See License_ROMS.txt                           Hernan G. Arango   !
 !========================================== Alexander F. Shchepetkin ===
 !                                                                      !

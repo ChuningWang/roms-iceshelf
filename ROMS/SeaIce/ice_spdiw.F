@@ -2,9 +2,11 @@
       MODULE ice_spdiw_mod
 #ifdef ICE_MODEL
 !
-!=======================================================================
-!  Copyright (c) 2002-2021 The ROMS/TOMS Group                         !
 !================================================== Hernan G. Arango ===
+!  Copyright (c) 2002-2022 The ROMS/TOMS Group          Chuning Wang   !
+!    Licensed under a MIT/X style license                              !
+!    See License_ROMS.txt                                              !
+!=======================================================================
 !                                                                      !
 !  This module computes the magnitude of the shear between the ice     !
 !  and the surface water. In this case, the surface water is defined   !

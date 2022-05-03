@@ -3,8 +3,10 @@
 #ifdef ICE_ADVECT
 !
 !=================================================== W. Paul Budgell ===
-!  Copyright (c) 2002-2020 The ROMS/TOMS Group                         !
-!================================================== Hernan G. Arango ===
+!  Copyright (c) 2002-2022 The ROMS/TOMS Group          Chuning Wang   !
+!    Licensed under a MIT/X style license                              !
+!    See License_ROMS.txt                                              !
+!=======================================================================
 !                                                                      !
 !  This subroutine performs advection of ice using one of 2 options:   !
 !  (1) Smolarkiewicz second-order upwind scheme. Reference:            !

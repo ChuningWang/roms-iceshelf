@@ -2,8 +2,10 @@
       MODULE ice_evp_sig_mod
 #ifdef ICE_EVP
 !
-!================================================ W. Paul Budgell ======
-!  Copyright (c) 2002-2021 The ROMS/TOMS Group                         !
+!=================================================== W. Paul Budgell ===
+!  Copyright (c) 2002-2022 The ROMS/TOMS Group          Chuning Wang   !
+!    Licensed under a MIT/X style license                              !
+!    See License_ROMS.txt                                              !
 !================================================== Hernan G. Arango ===
 !                                                                      !
 !  This routine time steps the EVP stresses term.                      !

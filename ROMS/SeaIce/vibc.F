@@ -3,8 +3,8 @@
 #ifdef ICE_MODEL
 ! 
 !=======================================================================
-!  Copyright (c) 2002-2021 The ROMS/TOMS Group                         !
-!    Licensed under a MIT/X style license                              !
+!  Copyright (c) 2002-2022 The ROMS/TOMS Group                         !
+!    Licensed under a MIT/X style license               Chuning Wang   !
 !    See License_ROMS.txt                           Hernan G. Arango   !
 !========================================== Alexander F. Shchepetkin ===
 !                                                                      !

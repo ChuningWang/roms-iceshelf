@@ -2,10 +2,10 @@
       MODULE ini_strengthcoef_mod
 #ifdef ICE_STRENGTH_QUAD
 !
-!=======================================================================
-!  Copyright (c) 2002-2022 The ROMS/TOMS Group                         !
+!================================================== Hernan G. Arango ===
+!  Copyright (c) 2002-2022 The ROMS/TOMS Group          Chuning Wang   !
 !    Licensed under a MIT/X style license                              !
-!    See License_ROMS.txt                           Hernan G. Arango   !
+!    See License_ROMS.txt                                              !
 !=======================================================================
 !                                                                      !
 !  This routine initializes pstar_grid based on the grid spacing.      !

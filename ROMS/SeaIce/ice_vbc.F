@@ -2,9 +2,11 @@
       MODULE ice_vbc_mod
 #ifdef ICE_MODEL
 !
-!=======================================================================
-!  Copyright (c) 2002-2021 The ROMS/TOMS Group                         !
 !================================================== Hernan G. Arango ===
+!  Copyright (c) 2002-2022 The ROMS/TOMS Group          Chuning Wang   !
+!    Licensed under a MIT/X style license                              !
+!    See License_ROMS.txt                                              !
+!=======================================================================
 !                                                                      !
 !  This module sets the ice-water and ice-air stresses for the ice     !
 !    momentum equation.                                                !
