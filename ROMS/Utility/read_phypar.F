@@ -4810,7 +4810,7 @@
      &            'for tracer ', itrc, TRIM(Vname(1,idTvar(itrc)))
           END DO
 # ifdef TCORRECTION
-          IF (Tnudg(isalt,ng).le.0.0_r8) THEN
+          IF (Tnudg(itemp,ng).le.0.0_r8) THEN
             WRITE (out,265) 'Tnudg(itemp) = ', Tnudg(itemp,ng),         &
      &            'Must be greater than zero for temp flux correction.'
             exit_flag=5

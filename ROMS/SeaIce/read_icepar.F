@@ -29,6 +29,7 @@
 !
       integer :: Npts, Nval, ng, status
       integer :: igrid, nline
+      integer :: i, itrc
 
       logical, allocatable       :: Lswitch(:)
 #if defined ICESHELF && defined T_PASSIVE && defined ICESHELF_TRACER
@@ -336,6 +337,7 @@
   70  FORMAT (10x,l1,2x,a,t30,a)
   80  FORMAT (/,' READ_ICEPAR - Variable index not yet loaded, ', a)
  170  FORMAT (10x,l1,2x,a,t32,a)
+ 185  FORMAT (10x,l1,2x,a,'(',i2.2,')',t32,a,i2.2,':',1x,a)
       RETURN
       END SUBROUTINE read_IcePar
 #endif
