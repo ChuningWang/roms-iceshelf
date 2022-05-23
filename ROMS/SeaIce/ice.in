@@ -179,6 +179,10 @@
 
      LtracerIce == T       ! dye_01, ...        inert passive tracers
 
+! Logical switches for ice freezing passive tracers (High Salinity Water)
+
+     LtracerFrz == T       ! dye_01, ...        inert passive tracers
+
 ! Logical switches (TRUE/FALSE) to activate writing of ice prognostic
 ! variables into HISTORY output file.
 

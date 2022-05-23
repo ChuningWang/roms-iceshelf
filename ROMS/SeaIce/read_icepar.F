@@ -181,6 +181,16 @@
                 END DO
               END DO
 # endif
+# if defined ICE_MODEL && defined T_PASSIVE && defined ICE_FRZ_TRACER
+            CASE ('LtracerFrz')
+              Npts=load_l(Nval, Cval, NPT, Ngrids, LtracerI)
+              DO ng=1,Ngrids
+                DO i=1,NPT
+                  itrc=inert(i)
+                  LtracerFrz(itrc,ng)=LtracerI(i,ng)
+                END DO
+              END DO
+# endif
 !
 ! Output options.
 !

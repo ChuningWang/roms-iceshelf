@@ -357,7 +357,7 @@
       real(r8), parameter :: ykf = 3.14_r8
       real(r8), parameter :: rhowr = 0.001_r8
 !
-      integer :: i, j
+      integer :: i, j, itrc
 !
       real(r8) :: tfrz, cot, ai_tmp
       real(r8) :: hicehinv  ! 1./(0.5*i_thick)
@@ -740,6 +740,19 @@
 #endif
         END DO
       END DO
+#if defined T_PASSIVE && defined ICE_FRZ_TRACER
+      DO itrc=NAT+1,NT(ng)
+        IF (LtracerFrz(itrc,ng)) THEN
+          DO j=Jstr,Jend
+            DO i=Istr,Iend
+              stflx(i,j,itrc)=                                          &
+     &          MAX(0.0_r8, wao(i,j))*(1.0_r8-ai(i,j,linew)) +          &
+     &          MAX(0.0_r8, wio(i,j))*        ai(i,j,linew)
+            END DO
+          END DO
+        END IF
+      END DO
+#endif
 !
 !-----------------------------------------------------------------------
 !  Determine new concentration and thicknes of sea ice

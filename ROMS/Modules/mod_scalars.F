@@ -535,6 +535,9 @@
 #if defined ICESHELF && defined T_PASSIVE && defined ICESHELF_TRACER
         logical, allocatable :: LtracerIce(:,:)      ! iceshelf tracers
 #endif
+#if defined ICE_MODEL && defined T_PASSIVE && defined ICE_FRZ_TRACER
+        logical, allocatable :: LtracerFrz(:,:)      ! iceshelf tracers
+#endif
 !
 !  Execution termination flag.
 !
@@ -2307,6 +2310,12 @@
         Dmem(1)=Dmem(1)+REAL(MT*Ngrids,r8)
       END IF
 #endif
+#if defined ICE_MODEL && defined T_PASSIVE && defined ICE_FRZ_TRACER
+      IF (.not.allocated(LtracerFrz)) THEN
+        allocate ( LtracerFrz(MT,Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(MT*Ngrids,r8)
+      END IF
+#endif
 
       IF (.not.allocated(maxspeed)) THEN
         allocate ( maxspeed(Ngrids) )
@@ -3692,6 +3701,9 @@
 #if defined ICESHELF && defined T_PASSIVE && defined ICESHELF_TRACER
       IF (allocated(LtracerIce))        deallocate ( LtracerIce )
 #endif
+#if defined ICE_MODEL && defined T_PASSIVE && defined ICE_FRZ_TRACER
+      IF (allocated(LtracerFrz))        deallocate ( LtracerFrz )
+#endif
       IF (allocated(maxspeed))          deallocate ( maxspeed )
 
       IF (allocated(maxrho))            deallocate ( maxrho )
@@ -4544,6 +4556,9 @@
           LtracerSrc(itrc,ng)=.FALSE.
 #if defined ICESHELF && defined T_PASSIVE && defined ICESHELF_TRACER
           LtracerIce(itrc,ng)=.FALSE.
+#endif
+#if defined ICE_MODEL && defined T_PASSIVE && defined ICE_FRZ_TRACER
+          LtracerFrz(itrc,ng)=.FALSE.
 #endif
           LtracerSponge(itrc,ng)=.FALSE.
           ad_Akt_fac(itrc,ng)=1.0_r8
