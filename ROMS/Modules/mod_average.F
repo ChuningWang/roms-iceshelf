@@ -6,7 +6,7 @@
    (defined TL_AVERAGES && defined TANGENT)
 !
 !git $Id$
-!svn $Id: mod_average.F 1099 2022-01-06 21:01:01Z arango $
+!svn $Id: mod_average.F 1126 2022-05-13 03:17:28Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2022 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -71,14 +71,14 @@
 #  ifdef SHORTWAVE
 !  avgsrf     Shortwave radiation flux (W/m2).                         !
 #  endif
-#  ifdef BULK_FLUXES
+#  if defined BULK_FLUXES || defined FRC_COUPLING
 !  avglhf     Latent heat flux (W/m2).                                 !
 !  avglrf     Longwave radiation flux (W/m2).                          !
 !  avgshf     Sensible heat flux (W/m2).                               !
-#   ifdef EMINUSP
+#  endif
+#  if defined BULK_FLUXES && defined EMINUSP
 !  avgevap    Surface net evaporation (kg/m2/s).                       !
 !  avgrain    Surface net rain fall (kg/m2/s).                         !
-#   endif
 #  endif
 # endif
 
@@ -222,14 +222,14 @@
 #  ifdef SHORTWAVE
           real(r8), pointer :: avgsrf(:,:)
 #  endif
-#  ifdef BULK_FLUXES
+#  if defined BULK_FLUXES || defined FRC_COUPLING
           real(r8), pointer :: avglhf(:,:)
           real(r8), pointer :: avglrf(:,:)
           real(r8), pointer :: avgshf(:,:)
-#   ifdef EMINUSP
+#  endif
+#  if defined BULK_FLUXES && defined EMINUSP
           real(r8), pointer :: avgevap(:,:)
           real(r8), pointer :: avgrain(:,:)
-#   endif
 #  endif
 # endif
 
@@ -505,7 +505,7 @@
         Dmem(ng)=Dmem(ng)+size2d
       END IF
 #  endif
-#  ifdef BULK_FLUXES
+#  if defined BULK_FLUXES || defined FRC_COUPLING
       IF (Aout(idLhea,ng)) THEN
         allocate ( AVERAGE(ng) % avglhf(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
@@ -518,7 +518,8 @@
         allocate ( AVERAGE(ng) % avgshf(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
-#   ifdef EMINUSP
+#  endif
+#  if defined BULK_FLUXES && defined EMINUSP
       IF (Aout(idevap,ng)) THEN
         allocate ( AVERAGE(ng) % avgevap(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
@@ -527,7 +528,6 @@
         allocate ( AVERAGE(ng) % avgrain(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
-#   endif
 #  endif
 # endif
 
@@ -926,7 +926,7 @@
       END IF
 #   endif
 
-#   ifdef BULK_FLUXES
+#   if defined BULK_FLUXES || defined FRC_COUPLING
       IF (Aout(idLhea,ng)) THEN
         IF (.not.destroy(ng, AVERAGE(ng)%avglhf, MyFile,                &
      &                   __LINE__, 'AVERAGE(ng)%avglhf')) RETURN
@@ -941,8 +941,9 @@
         IF (.not.destroy(ng, AVERAGE(ng)%avgshf, MyFile,                &
      &                   __LINE__, 'AVERAGE(ng)%avgshf')) RETURN
       END IF
+#   endif
 
-#    ifdef EMINUSP
+#   if defined BULK_FLUXES && defined EMINUSP
       IF (Aout(idevap,ng)) THEN
         IF (.not.destroy(ng, AVERAGE(ng)%avgevap, MyFile,               &
      &                   __LINE__, 'AVERAGE(ng)%avgevap')) RETURN
@@ -952,7 +953,6 @@
         IF (.not.destroy(ng, AVERAGE(ng)%avgrain, MyFile,               &
      &                   __LINE__, 'AVERAGE(ng)%avgrain')) RETURN
       END IF
-#    endif
 #   endif
 #  endif
 
@@ -1517,7 +1517,7 @@
       END IF
 #  endif
 
-#  ifdef BULK_FLUXES
+#  if defined BULK_FLUXES || defined FRC_COUPLING
       IF (Aout(idLhea,ng)) THEN
         DO j=Jmin,Jmax
           DO i=Imin,Imax
@@ -1539,8 +1539,9 @@
           END DO
         END DO
       END IF
+#  endif
 
-#   ifdef EMINUSP
+#  if defined BULK_FLUXES && defined EMINUSP
       IF (Aout(idevap,ng)) THEN
         DO j=Jmin,Jmax
           DO i=Imin,Imax
@@ -1555,7 +1556,6 @@
           END DO
         END DO
       END IF
-#   endif
 #  endif
 # endif
 

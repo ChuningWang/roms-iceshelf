@@ -2,7 +2,7 @@
       MODULE wrt_quick_mod
 !
 !git $Id$
-!svn $Id: wrt_quick.F 1099 2022-01-06 21:01:01Z arango $
+!svn $Id: wrt_quick.F 1126 2022-05-13 03:17:28Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2022 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -1144,7 +1144,7 @@
         END IF
       END DO
 
-# ifdef BULK_FLUXES
+# if defined BULK_FLUXES || defined FRC_COUPLING
 !
 !  Write out latent heat flux.
 !
@@ -1190,7 +1190,7 @@
         END IF
       END IF
 !
-!  Write out longwave radiation flux.
+!  Write out net longwave radiation flux.
 !
       IF (Qout(idLrad,ng)) THEN
         scale=rho0*Cp
@@ -1211,6 +1211,9 @@
           RETURN
         END IF
       END IF
+# endif
+
+# ifdef BULK_FLUXES
 #  ifdef EMINUSP
 !
 !  Write out evaporation rate (kg/m2/s).
@@ -1282,7 +1285,7 @@
       END IF
 # ifdef SHORTWAVE
 !
-!  Write out shortwave radiation flux.
+!  Write out net shortwave radiation flux.
 !
       IF (Qout(idSrad,ng)) THEN
         scale=rho0*Cp
@@ -3609,7 +3612,7 @@
         END IF
       END DO
 
-#  ifdef BULK_FLUXES
+#  if defined BULK_FLUXES || defined FRC_COUPLING
 !
 !  Write out latent heat flux.
 !
@@ -3667,7 +3670,7 @@
         END IF
       END IF
 !
-!  Write out longwave radiation flux.
+!  Write out net longwave radiation flux.
 !
       IF (Qout(idLrad,ng)) THEN
         scale=rho0*Cp
@@ -3694,7 +3697,9 @@
           RETURN
         END IF
       END IF
+#  endif
 
+#  ifdef BULK_FLUXES
 #   ifdef EMINUSP
 !
 !  Write out evaporation rate (kg/m2/s).
@@ -3785,7 +3790,7 @@
 
 #  ifdef SHORTWAVE
 !
-!  Write out shortwave radiation flux.
+!  Write out net shortwave radiation flux.
 !
       IF (Qout(idSrad,ng)) THEN
         scale=rho0*Cp
