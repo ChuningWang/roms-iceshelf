@@ -32,7 +32,8 @@
       integer :: i, itrc
 
       logical, allocatable       :: Lswitch(:)
-#if defined ICESHELF && defined T_PASSIVE && defined ICESHELF_TRACER
+#if defined T_PASSIVE && ( defined ICESHELF_TRACER || \
+                           defined ICE_FRZ_TRACER )
       logical, allocatable       :: LtracerI(:,:)
 #endif
 
@@ -61,7 +62,8 @@
           IF (.not.allocated(Lswitch)) THEN
             allocate ( Lswitch(Ngrids) )
           END IF
-#if defined ICESHELF && defined T_PASSIVE && defined ICESHELF_TRACER
+#if defined T_PASSIVE && ( defined ICESHELF_TRACER || \
+                           defined ICE_FRZ_TRACER )
           IF (.not.allocated(LtracerI)) THEN
             allocate ( LtracerI(NPT,Ngrids) )
           END IF
@@ -181,7 +183,7 @@
                 END DO
               END DO
 # endif
-# if defined ICE_MODEL && defined T_PASSIVE && defined ICE_FRZ_TRACER
+# if defined ICE_MODEL && defined ICE_FRZ_TRACER && defined T_PASSIVE
             CASE ('LtracerFrz')
               Npts=load_l(Nval, Cval, NPT, Ngrids, LtracerI)
               DO ng=1,Ngrids
@@ -255,6 +257,10 @@
      &          'Dry snow density (kg/m3).'
           WRITE (out,60) rhosnow_wet(ng), 'RHOSNOW_WET',                &
      &          'Wet snow density (kg/m3).'
+          WRITE (out,60) pstar(ng), 'PSTAR',                            &
+     &          'Ice stength coefficient (N/m2).'
+          WRITE (out,60) pstar_e(ng), 'PSTAR_E',                        &
+     &          'Ice stength coefficient in quadratic form (N/m).'
           WRITE (out,60) alphai(ng)*rad2deg, 'ALPHAI',                  &
      &          'Mohr-Coulomb stress angle (degrees).'
           WRITE (out,60) min_h(ng), 'MIN_H',                            &
@@ -328,6 +334,20 @@
      &            itrc, TRIM(Vname(1,idTvar(itrc)))
             ELSE
               WRITE (out,185) LtracerIce(itrc,ng), 'LtracerIce', itrc,  &
+     &            'Turning OFF point Sources/Sinks on iceshelf tracer ',&
+     &            itrc, TRIM(Vname(1,idTvar(itrc)))
+            END IF
+          END DO
+# endif
+# if defined ICE_MODEL && defined ICE_FRZ_TRACER && defined T_PASSIVE
+          DO i=1,NPT
+            itrc=inert(i)
+            IF (LtracerFrz(itrc,ng)) THEN
+              WRITE (out,185) LtracerFrz(itrc,ng), 'LtracerFrz', itrc,  &
+     &            'Turning ON  point Sources/Sinks on iceshelf tracer ',&
+     &            itrc, TRIM(Vname(1,idTvar(itrc)))
+            ELSE
+              WRITE (out,185) LtracerFrz(itrc,ng), 'LtracerFrz', itrc,  &
      &            'Turning OFF point Sources/Sinks on iceshelf tracer ',&
      &            itrc, TRIM(Vname(1,idTvar(itrc)))
             END IF

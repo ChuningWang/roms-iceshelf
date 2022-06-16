@@ -134,7 +134,7 @@
      &                              rmask,                              &
 # endif
      &                              z_r, z_w,                           &
-     &                              zice,f,                             &
+     &                              zice, f,                            &
 # ifdef ICESHELF_MORPH
      &                              iceshelf_draft,                     &
 #  ifdef FISOC_DDDT

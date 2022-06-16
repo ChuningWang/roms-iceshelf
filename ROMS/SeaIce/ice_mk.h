@@ -740,19 +740,6 @@
 #endif
         END DO
       END DO
-#if defined T_PASSIVE && defined ICE_FRZ_TRACER
-      DO itrc=NAT+1,NT(ng)
-        IF (LtracerFrz(itrc,ng)) THEN
-          DO j=Jstr,Jend
-            DO i=Istr,Iend
-              stflx(i,j,itrc)=                                          &
-     &          MAX(0.0_r8, wao(i,j))*(1.0_r8-ai(i,j,linew)) +          &
-     &          MAX(0.0_r8, wio(i,j))*        ai(i,j,linew)
-            END DO
-          END DO
-        END IF
-      END DO
-#endif
 !
 !-----------------------------------------------------------------------
 !  Determine new concentration and thicknes of sea ice
@@ -897,6 +884,24 @@
 # endif
           END IF
         END DO
+      END DO
+#endif
+#if defined T_PASSIVE && defined ICE_FRZ_TRACER
+!
+!-----------------------------------------------------------------------
+!  Modify tracer fluxes from ice brine rejection.
+!-----------------------------------------------------------------------
+!
+      DO itrc=NAT+1,NT(ng)
+        IF (LtracerFrz(itrc,ng)) THEN
+          DO j=Jstr,Jend
+            DO i=Istr,Iend
+              stflx(i,j,itrc)=                                          &
+     &          MAX(0.0_r8, wao(i,j))*(1.0_r8-ai(i,j,linew)) +          &
+     &          MAX(0.0_r8, wio(i,j))*        ai(i,j,linew)
+            END DO
+          END DO
+        END IF
       END DO
 #endif
 !
