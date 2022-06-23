@@ -18,7 +18,7 @@
 !                                                                      !
 !  ================================                                    !
 !                                                                      !
-!   Laminar sublayer  Tb, Sb, ustar                                    !
+!   Laminar sublayer  Tb, Sb, Ustar                                    !
 !                                                                      !
 !  --------------------------------                                    !
 !                                                                      !
@@ -492,7 +492,7 @@
 !
 !  Use 2-Equation formula
 !
-            TFb = a*Sm + b - c*zice(i,j)
+            TFb = a*Sm + b + c*zice(i,j)
 !
             stflx(i,j,itemp)=gamma*(TFb-Tm)
             stflx(i,j,isalt)=Cp*stflx(i,j,itemp)*refSalt/L
@@ -501,31 +501,31 @@
 !
 !  Calculate exchange coefficients. Note that this assumes log profile 
 !
-            ustar(i,j) = SQRT(SQRT(                                     &
+            Ustar(i,j) = SQRT(SQRT(                                     &
      &                   (0.5_r8*(sustr(i,j)+sustr(i+1,j)))**2+         &
      &                   (0.5_r8*(svstr(i,j)+svstr(i,j+1)))**2))
-            IF (ustar(i,j).lt.small) ustar(i,j)=small
+            IF (Ustar(i,j).lt.small) Ustar(i,j)=small
 #  ifdef GAMMAS_KY1972
 !
 !  Use KY 1972
 !
-            turb = 2.12_r8*LOG((ustar(i,j)*Hz(i,j,N(ng)))/visc)
-            gammaT(i,j) = ustar(i,j)/(turb + Pradj - 9.0_r8)
-            gammaS(i,j) = ustar(i,j)/(turb + Scadj - 9.0_r8)
+            turb = 2.12_r8*LOG((Ustar(i,j)*Hz(i,j,N(ng)))/visc)
+            gammaT(i,j) = Ustar(i,j)/(turb + Pradj - 9.0_r8)
+            gammaS(i,j) = Ustar(i,j)/(turb + Scadj - 9.0_r8)
 #  elif defined GAMMAS_Mc1987
 !
 !  Use simplified version of McPhee 1987
 !
-            IF (ustar(i,j).gt.small.and.ABS(f(i,j)).gt.1.0E-8) THEN
+            IF (Ustar(i,j).gt.small.and.ABS(f(i,j)).gt.1.0E-8) THEN
               turb = 2.5_r8*                                            &
-     &               LOG(5300.0_r8*ustar(i,j)*ustar(i,j)/ABS(f(i,j)))   &
+     &               LOG(5300.0_r8*Ustar(i,j)*Ustar(i,j)/ABS(f(i,j)))   &
      &               + 7.12_r8  
             ELSE
               turb = 0.0_r8
             END IF
 !
-            gammaT(i,j) = ustar(i,j)/(turb + Pradj - 6.0_r8)
-            gammaS(i,j) = ustar(i,j)/(turb + Scadj - 6.0_r8)
+            gammaT(i,j) = Ustar(i,j)/(turb + Pradj - 6.0_r8)
+            gammaS(i,j) = Ustar(i,j)/(turb + Scadj - 6.0_r8)
 #  else
 !
 !  Use constant exchange coefficients
@@ -595,14 +595,13 @@
 !  Use 3-EQ formula
 !
             cff1 = a*(gammaT(i,j)*cp_w-gammaS(i,j)*cp_i)
-            cff2 = gammaS(i,j)*cp_i*(a*sM-b-c*zice(i,j) +               &
-     &                               Ti - (L/cp_i)) -                   &
+            cff2 = gammaS(i,j)*cp_i*(a*sM-b-c*zice(i,j)+Ti-(L/cp_i)) -  &
      &             gammaT(i,j)*cp_w*(Tm-b-c*zice(i,j)+a*Si)
             cff3 = gammaS(i,j)*Sm*(cp_i*(b+c*zice(i,j)-Ti) + L) +       &
      &             gammaT(i,j)*Si*cp_w*(Tm-b-c*zice(i,j))
 !
-            Sb(i,j) = -1.0_r8*(cff2 + SQRT(cff2**2-4.0*cff1*cff3)) /    &
-     &                (2.0_r8*cff1)
+            Sb(i,j) = -(cff2 + SQRT(cff2**2-4.0*cff1*cff3)) /           &
+     &                 (2.0_r8*cff1)
             Tb(i,j) = a*Sb(i,j) + b + c*zice(i,j)
             m(i,j) = gammaS(i,j)*(Sm-Sb(i,j))/Sb(i,j)
 !
@@ -611,13 +610,13 @@
 !  Freezing, use boundary layer temperature to recalculate melt rates
 !
               cff1 = a*gammaT(i,j)*cp_w
-              cff2 = -1.0_r8*gammaS(i,j)*L -                            &
-     &               gammaT(i,j)*cp_w*(Tm-b-c*zice(i,j)+a*Si)
+              cff2 = -gammaS(i,j)*L -                                   &
+     &                gammaT(i,j)*cp_w*(Tm-b-c*zice(i,j)+a*Si)
               cff3 = gammaS(i,j)*Sm*L +                                 &
-     &               gammaT(i,j)*Si*cp_w*(Tm-b-c*zice(i,j))
+     &               gammaT(i,j)*cp_w*Si*(Tm-b-c*zice(i,j))
 !
-              Sb(i,j) = -1.0_r8*(cff2+SQRT(cff2*cff2-4.0*cff1*cff3)) /  &
-     &                  (2.0_r8*cff1)
+              Sb(i,j) = -(cff2+SQRT(cff2*cff2-4.0*cff1*cff3)) /         &
+     &                   (2.0_r8*cff1)
               Tb(i,j) = a*Sb(i,j) + b + c*zice(i,j)
               m(i,j) = gammaS(i,j)*(Sm-Sb(i,j))/Sb(i,j)
             END IF
