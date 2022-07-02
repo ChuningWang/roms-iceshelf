@@ -190,10 +190,10 @@
 !  sao          Salt flux from air to ocean.                           !
 !  wsni         Snow-ice conversion rate.                              !
 !                                                                      !
-!  sustr_aw     Air/ocean momentum stress in XI direction [m2 s-2].    !
-!  svstr_aw     Air/ocean momentum stress in ETA direction [m2 s-2].   !
 !  sustr_iw     Ice/ocean momentum stress in XI direction [m2 s-2].    !
 !  svstr_iw     Ice/ocean momentum stress in ETA direction [m2 s-2].   !
+!  sustr_aw     Air/ocean momentum stress in XI direction [m2 s-2].    !
+!  svstr_aw     Air/ocean momentum stress in ETA direction [m2 s-2].   !
 !  taux_ai      Air/ice momentum stress in XI direction [kg m-1 s-2].  !
 !  tayy_ai      Air/ice momentum stress in ETA direction [kg m-1 s-2]. !
 !                                                                      !
@@ -505,11 +505,11 @@
           real(r8), pointer :: qio(:,:)
           real(r8), pointer :: qi2(:,:)
           real(r8), pointer :: qswo(:,:)
+          real(r8), pointer :: sustr_iw(:,:)
+          real(r8), pointer :: svstr_iw(:,:)
 # ifdef ICE_BULK_FLUXES
           real(r8), pointer :: sustr_aw(:,:)
           real(r8), pointer :: svstr_aw(:,:)
-          real(r8), pointer :: sustr_iw(:,:)
-          real(r8), pointer :: svstr_iw(:,:)
           real(r8), pointer :: taux_ai(:,:)
           real(r8), pointer :: tauy_ai(:,:)
           real(r8), pointer :: qswi(:,:)
@@ -1052,14 +1052,14 @@
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( FORCES(ng) % qswo(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % sustr_iw(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
+      allocate ( FORCES(ng) % svstr_iw(LBi:UBi,LBj:UBj) )
+      Dmem(ng)=Dmem(ng)+size2d
 # ifdef ICE_BULK_FLUXES
       allocate ( FORCES(ng) % sustr_aw(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( FORCES(ng) % svstr_aw(LBi:UBi,LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % sustr_iw(LBi:UBi,LBj:UBj) )
-      Dmem(ng)=Dmem(ng)+size2d
-      allocate ( FORCES(ng) % svstr_iw(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
       allocate ( FORCES(ng) % taux_ai(LBi:UBi,LBj:UBj) )
       Dmem(ng)=Dmem(ng)+size2d
@@ -1633,6 +1633,12 @@
 
       IF (.not.destroy(ng, FORCES(ng)%qswo, MyFile,                     &
      &                 __LINE__, 'FORCES(ng)%qswo')) RETURN
+
+      IF (.not.destroy(ng, FORCES(ng)%sustr_iw, MyFile,                 &
+     &                 __LINE__, 'FORCES(ng)%sustr_iw')) RETURN
+
+      IF (.not.destroy(ng, FORCES(ng)%svstr_iw, MyFile,                 &
+     &                 __LINE__, 'FORCES(ng)%svstr_iw')) RETURN
 #  ifdef ICE_BULK_FLUXES
 
       IF (.not.destroy(ng, FORCES(ng)%sustr_aw, MyFile,                 &
@@ -1640,12 +1646,6 @@
 
       IF (.not.destroy(ng, FORCES(ng)%svstr_aw, MyFile,                 &
      &                 __LINE__, 'FORCES(ng)%svstr_aw')) RETURN
-
-      IF (.not.destroy(ng, FORCES(ng)%sustr_iw, MyFile,                 &
-     &                 __LINE__, 'FORCES(ng)%sustr_iw')) RETURN
-
-      IF (.not.destroy(ng, FORCES(ng)%svstr_iw, MyFile,                 &
-     &                 __LINE__, 'FORCES(ng)%svstr_iw')) RETURN
 
       IF (.not.destroy(ng, FORCES(ng)%taux_ai, MyFile,                  &
      &                 __LINE__, 'FORCES(ng)%taux_ai')) RETURN
@@ -2198,11 +2198,11 @@
             FORCES(ng) % qio(i,j) = IniVal
             FORCES(ng) % qi2(i,j) = IniVal
             FORCES(ng) % qswo(i,j) = IniVal
+            FORCES(ng) % sustr_iw(i,j) = IniVal
+            FORCES(ng) % svstr_iw(i,j) = IniVal
 # ifdef ICE_BULK_FLUXES
             FORCES(ng) % sustr_aw(i,j) = IniVal
             FORCES(ng) % svstr_aw(i,j) = IniVal
-            FORCES(ng) % sustr_iw(i,j) = IniVal
-            FORCES(ng) % svstr_iw(i,j) = IniVal
             FORCES(ng) % taux_ai(i,j) = IniVal
             FORCES(ng) % tauy_ai(i,j) = IniVal
             FORCES(ng) % qswi(i,j) = IniVal

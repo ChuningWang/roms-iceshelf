@@ -365,7 +365,7 @@
       real(r8) :: termt, terms
       real(r8) :: wtot, phi
       real(r8) :: sao_i, sio_i
-      real(r8) :: cff, cff1
+      real(r8) :: cff, cff1, cff2
 !
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: b2d
 !
@@ -397,6 +397,9 @@
 !
       DO j = Jstr,Jend
         DO i = Istr,Iend
+#ifdef ICESHELF
+          IF (zice(i,j).eq.0.0_r8) THEN
+#endif
 !
 !  Pass in sea surface states
 !
@@ -445,17 +448,12 @@
           alph(i,j) = alph(i,j)*corfac
           coa(i,j)  = 2.0_r8*alph(i,j)*s_thick(i,j) /                   &
      &                (alphsn*(i_thick(i,j)+eps))
-        END DO
-      END DO
 !
-! Compute ice thermodynamic variables specify snow fall rate and snow
-!   thickness compute net ice atmos. surface heat transfer zero if
-!   temperature is below freezing.
+!  Compute ice thermodynamic variables specify snow fall rate and snow
+!    thickness compute net ice atmos. surface heat transfer zero if
+!    temperature is below freezing.
 !
-!     Solve for temperature at the top of the ice layer
-!
-      DO j = Jstr,Jend
-        DO i = Istr,Iend
+!  First, solve for temperature at the top of the ice layer.
 !
 !  Gradient coefficient for heat conductivity part
 !
@@ -471,35 +469,21 @@
      &                          b2d(i,j)*ti(i,j,linew)
             tis(i,j) = rhs_ice_heat(i,j)/coef_ice_heat(i,j)
             tis(i,j) = MAX(tis(i,j),-45._r8)
-          ELSE
-            tis(i,j) = 0.0_r8
-          END IF
-        END DO
-      END DO
-
-      DO j = Jstr,Jend
-        DO i = Istr,Iend
 !
 !  Calculate interior ice temp and heat fluxes
 !
-          IF (ai(i,j,linew) .gt. min_a(ng)) THEN
             cot = cpi - frln*sice(i,j)*hfus/(ti(i,j,linew)-eps)**2
             ti(i,j,linew) = ti(i,j,linew) +                             &
      & dtice(ng)*2._r8*alph(i,j)/(rhoice(ng)*i_thick(i,j)**2*cot)*      &
      & (t0mk(i,j) +                                                     &
      &  (tis(i,j) - (2._r8+coa(i,j))*ti(i,j,linew))/(1._r8+coa(i,j)))
 !
-            ti(i,j,linew) = MAX(ti(i,j,linew),-35._r8)
-            ti(i,j,linew) = MIN(ti(i,j,linew),-eps   )
-          ELSE
-            ti(i,j,linew) = -2.0_r8
-          END IF
-        END DO
-      END DO
-
-      DO j = Jstr,Jend
-        DO i = Istr,Iend
-          IF (ai(i,j,linew) .gt. min_a(ng)) THEN
+!  Sanity check
+!
+            ti(i,j,linew) = MIN(MAX(ti(i,j,linew),-35._r8), -eps)
+!
+!  Temperature of ice/snow boundary
+!
             t2(i,j) = (tis(i,j)+coa(i,j)*ti(i,j,linew)) /               &
      &                (1._r8+coa(i,j))
             hicehinv = 2._r8/i_thick(i,j)
@@ -513,31 +497,29 @@
 !    Mellor and Kantha Eq (11)
 !
             qio(i,j) = alph(i,j)*(t0mk(i,j)    -ti(i,j,linew))*hicehinv
-          END IF
-        END DO
-      END DO
+          ELSE
 !
 !  For open water ice fluxes set to zero
 !
-      DO j = Jstr,Jend
-        DO i = Istr,Iend
-          IF (ai(i,j,linew) .le. min_a(ng)) THEN
-            tis(i,j)       = 0.0_r8
-            t2(i,j)        = 0.0_r8
-            ti(i,j,linew)  = -2.0_r8
+            tis(i,j) = 0.0_r8
+            ti(i,j,linew) = -2.0_r8
+            t2(i,j) = 0.0_r8
             qio(i,j)       = 0._r8
             qi2(i,j)       = 0._r8
             hsn(i,j,linew) = 0._r8
           END IF
 #ifdef MASKING
           tis(i,j)      = tis(i,j)*rmask(i,j)
-          t2(i,j)       = t2(i,j)*rmask(i,j)
           ti(i,j,linew) = ti(i,j,linew)*rmask(i,j)
+          t2(i,j)       = t2(i,j)*rmask(i,j)
 #endif
 #ifdef WET_DRY
           tis(i,j)      = tis(i,j)*rmask_wet(i,j)
-          t2(i,j)       = t2(i,j)*rmask_wet(i,j)
           ti(i,j,linew) = ti(i,j,linew)*rmask_wet(i,j)
+          t2(i,j)       = t2(i,j)*rmask_wet(i,j)
+#endif
+#ifdef ICESHELF
+          END IF
 #endif
         END DO
       END DO
@@ -547,6 +529,9 @@
 !
       DO j = Jstr,Jend
         DO i = Istr,Iend
+#ifdef ICESHELF
+          IF (zice(i,j).eq.0.0_r8) THEN
+#endif
 !
 !  Sea ice freezing point temperature
 !
@@ -614,18 +599,13 @@
      &                       dtice(ng)*ai(i,j,linew)*(wsf(i,j)-wsm(i,j))
             hsn(i,j,linew) = MAX(0.0_r8,hsn(i,j,linew))
 #endif
-          END IF
 !
 !  Now convert snow melt rate wsm from snow equivalent depth to water
 !    equivalent depth
 !
-          wsm(i,j) = wsm(i,j)*cff1
-          wro(i,j) = wai(i,j) + wsm(i,j)
-        END DO
-      END DO
-!
-      DO j = Jstr,Jend
-        DO i = Istr,Iend
+            wsm(i,j) = wsm(i,j)*cff1
+            wro(i,j) = wai(i,j) + wsm(i,j)
+          END IF
 !
 !  Compute freezing rate, at ocean surface (wao) and ice base (wio)
 !
@@ -644,11 +624,11 @@
 !
 !         IF (temp_top(i,j).le.tfrz .and. qao(i,j).gt.0.0_r8)           &
 !    &      wao(i,j) = qao(i,j)/(hfus1(i,j)*rho0)
-          cff = qao(i,j)*dtice(ng) -                                    &
-     &          (temp_top(i,j) - tfrz)*rhocp*                           &
-     &          (z_w(i,j,N(ng)) - z_w(i,j,N(ng)-1))
-          IF (cff .gt. 0.0_r8)                                          &
-     &      wao(i,j) = cff / (hfus1(i,j)*rho0*dtice(ng))
+          cff2 = qao(i,j)*dtice(ng) -                                   &
+     &           (temp_top(i,j) - tfrz)*rhocp*                          &
+     &           (z_w(i,j,N(ng)) - z_w(i,j,N(ng)-1))
+          IF (cff2 .gt. 0.0_r8)                                         &
+     &      wao(i,j) = cff2 / (hfus1(i,j)*rho0*dtice(ng))
 !
 !  Calculate s0mk, t0mk and total freeze/melt of ice layer
 !    Note s0mk and t0mk are used in the next time step, thus the first
@@ -738,6 +718,9 @@
           stflx(i,j,isalt) = stflx(i,j,isalt)*rmask_wet(i,j)
           iomflx(i,j) = iomflx(i,j)*rmask_wet(i,j)
 #endif
+#ifdef ICESHELF
+          END IF
+#endif
         END DO
       END DO
 !
@@ -751,6 +734,37 @@
 !
       DO j = Jstr,Jend
         DO i = Istr,Iend
+#ifdef ICESHELF
+          IF (zice(i,j).ne.0.0_r8) THEN
+!
+!  Reset variables under iceshelf.
+!
+            ai(i,j,linew)       = 0.0_r8
+            hi(i,j,linew)       = 0.0_r8
+            hsn(i,j,linew)      = 0.0_r8
+            ageice(i,j,linew)   = 0.0_r8
+            tis(i,j)            = 0.0_r8
+            t2(i,j)             = 0.0_r8
+            ti(i,j,linew)       = -2.0_r8
+            enthalpi(i,j,linew) = 0.0_r8
+            hage(i,j,linew)     = 0.0_r8
+            iomflx(i,j)         = 0.0_r8
+            s0mk(i,j)           = salt_top(i,j)
+            t0mk(i,j)           = temp_top(i,j)
+            wai(i,j)            = 0.0_r8
+            wao(i,j)            = 0.0_r8
+            wio(i,j)            = 0.0_r8
+            wro(i,j)            = 0.0_r8
+            qao(i,j)            = 0.0_r8
+            qio(i,j)            = 0.0_r8
+            qi2(i,j)            = 0.0_r8
+# ifdef ICE_DIAGS
+            wsni(i,j)           = 0.0_r8
+            sao(i,j)            = 0.0_r8
+            sio(i,j)            = 0.0_r8
+# endif
+          ELSE
+#endif
           IF (wao(i,j) .lt. 0.0_r8 ) THEN
             phi = 0.5_r8
           ELSE
@@ -813,79 +827,41 @@
 !
 !  Determine age of the sea ice
 !
-!  Case 1 - new ice
-!
           IF (ageice(i,j,linew).le.0.0_r8   .and.                       &
      &            hi(i,j,linew).gt.min_h(ng)) THEN
+!
+!  Case 1 - new ice forming
+!
             ageice(i,j,linew) = dtice(ng)/86400._r8
+          ELSEIF(ageice(i,j,linew).gt.0.0_r8   .and.                    &
+     &               hi(i,j,linew).gt.min_h(ng)) THEN
 !
 !  Case 2 - existing ice gets older
 !
-          ELSEIF(ageice(i,j,linew).gt.0.0_r8   .and.                    &
-     &               hi(i,j,linew).gt.min_h(ng)) THEN
             ageice(i,j,linew) = ageice(i,j,linew)+dtice(ng)/86400._r8
+          ELSE
 !
 !  Case 3 - all ice in cell melted or is open water and stays open water
 !
-          ELSE
             ageice(i,j,linew) = 0.0_r8
           END IF
           hage(i,j,linew) = hi(i,j,linew)*ageice(i,j,linew)
-        END DO
-      END DO
 !
-!-----------------------------------------------------------------------
 !  Limit variable values.
-!-----------------------------------------------------------------------
 !
-      DO j=Jstr,Jend
-        DO i=Istr,Iend
           ai(i,j,linew)  = MAX(MIN(ai(i,j,linew) ,max_a(ng)), 0.0_r8  )
           hi(i,j,linew)  = MAX(    hi(i,j,linew) ,            0.0_r8  )
           hsn(i,j,linew) = MAX(    hsn(i,j,linew),            0.0_r8  )
-          IF (hi(i,j,linew)     .le. 0.0_r8) ai(i,j,linew)     = 0.0_r8
-          IF (ai(i,j,linew)     .le. 0.0_r8) hi(i,j,linew)     = 0.0_r8
-          IF (ageice(i,j,linew) .le. 0.0_r8) ageice(i,j,linew) = 0.0_r8
-          IF (hage(i,j,linew)   .le. 0.0_r8) hage(i,j,linew)   = 0.0_r8
-        END DO
-      END DO
+          ageice(i,j,linew) = MAX(ageice(i,j,linew), 0.0_r8)
+          hage(i,j,linew)   = MAX(hage(i,j,linew)  , 0.0_r8)
+!
+          IF (hi(i,j,linew) .le. 0.0_r8) ai(i,j,linew) = 0.0_r8
+          IF (ai(i,j,linew) .le. 0.0_r8) hi(i,j,linew) = 0.0_r8
 #ifdef ICESHELF
-!
-!-----------------------------------------------------------------------
-!  Zero out fluxes under iceshelf.
-!-----------------------------------------------------------------------
-!
-      DO j = Jstr,Jend
-        DO i = Istr,Iend
-          IF (zice(i,j).ne.0.0_r8) THEN
-            ai(i,j,linew)       = 0.0_r8
-            hi(i,j,linew)       = 0.0_r8
-            hsn(i,j,linew)      = 0.0_r8
-            ageice(i,j,linew)   = 0.0_r8
-            tis(i,j)            = 0.0_r8
-            t2(i,j)             = 0.0_r8
-            ti(i,j,linew)       = -2.0_r8
-            enthalpi(i,j,linew) = 0.0_r8
-            hage(i,j,linew)     = 0.0_r8
-            iomflx(i,j)         = 0.0_r8
-            s0mk(i,j)           = salt_top(i,j)
-            t0mk(i,j)           = temp_top(i,j)
-            wai(i,j)            = 0.0_r8
-            wao(i,j)            = 0.0_r8
-            wio(i,j)            = 0.0_r8
-            wro(i,j)            = 0.0_r8
-            qao(i,j)            = 0.0_r8
-            qio(i,j)            = 0.0_r8
-            qi2(i,j)            = 0.0_r8
-# ifdef ICE_DIAGS
-            wsni(i,j)           = 0.0_r8
-            sao(i,j)            = 0.0_r8
-            sio(i,j)            = 0.0_r8
-# endif
           END IF
+#endif
         END DO
       END DO
-#endif
 #if defined T_PASSIVE && defined ICE_FRZ_TRACER
 !
 !-----------------------------------------------------------------------
