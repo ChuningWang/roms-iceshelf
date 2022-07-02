@@ -173,6 +173,12 @@
             CASE ('LnudgeSICLM')
               Npts=load_l(Nval, Cval, Ngrids, LnudgeSICLM)
 # endif
+# ifdef ICESHELF
+            CASE ('GAMMA_U')
+              Npts=load_r(Nval, Rval, Ngrids, gamU)
+            CASE ('USTAR_MIN')
+              Npts=load_r(Nval, Rval, Ngrids, ustar_min)
+# endif
 # if defined ICESHELF && defined ICESHELF_TRACER && defined T_PASSIVE
             CASE ('LtracerIce')
               Npts=load_l(Nval, Cval, NPT, Ngrids, LtracerI)
@@ -324,6 +330,12 @@
             WRITE (out,170) LnudgeSICLM(ng), 'LnudgeSICLM',             &
      &          'Turning OFF nudging of ice stress climatology.'
           END IF
+# endif
+# ifdef ICESHELF
+          WRITE (out,60) gamU(ng), 'GAMMA_U',                           &
+     &          'Iceshelf Ustar scaling factor (nondimensional).'
+          WRITE (out,60) ustar_min(ng), 'USTAR_MIN',                    &
+     &          'Iceshelf minimum Ustar value.'
 # endif
 # if defined ICESHELF && defined ICESHELF_TRACER && defined T_PASSIVE
           DO i=1,NPT

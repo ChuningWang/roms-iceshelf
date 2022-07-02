@@ -2029,7 +2029,9 @@
       END DO
 # endif
 
-#include "wrt_avg_ice.h"
+# if defined ICE_MODEL || defined ICESHELF
+#  include "wrt_avg_ice.h"
+# endif
 !
 !-----------------------------------------------------------------------
 !  Synchronize time-average NetCDF file to disk to allow other processes
@@ -4448,7 +4450,9 @@
       END DO
 #  endif
 
-#include "pio_wrt_avg_ice.h"
+#  if defined ICE_MODEL || defined ICESHELF
+#   include "pio_wrt_avg_ice.h"
+#  endif
 !
 !-----------------------------------------------------------------------
 !  Synchronize time-average NetCDF file to disk to allow other processes

@@ -2645,7 +2645,9 @@
       END IF
 #endif
 
-#include "wrt_his_ice.h"
+#if defined ICE_MODEL || defined ICESHELF
+# include "wrt_his_ice.h"
+#endif
 !
 !-----------------------------------------------------------------------
 !  Synchronize history NetCDF file to disk to allow other processes
@@ -5867,7 +5869,9 @@
       END IF
 # endif
 
-#include "pio_wrt_his_ice.h"
+# if defined ICE_MODEL || defined ICESHELF
+#  include "pio_wrt_his_ice.h"
+# endif
 !
 !-----------------------------------------------------------------------
 !  Synchronize history NetCDF file to disk to allow other processes

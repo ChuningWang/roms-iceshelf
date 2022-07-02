@@ -1172,7 +1172,9 @@
 # endif
 #endif
 
-#include "wrt_rst_ice.h"
+#if defined ICE_MODEL || defined ICESHELF
+# include "wrt_rst_ice.h"
+#endif
 !
 !-----------------------------------------------------------------------
 !  Synchronize restart NetCDF file to disk.
@@ -2536,7 +2538,9 @@
 #  endif
 # endif
 
-#include "pio_wrt_rst_ice.h"
+# if defined ICE_MODEL || defined ICESHELF
+#  include "pio_wrt_rst_ice.h"
+# endif
 !
 !-----------------------------------------------------------------------
 !  Synchronize restart NetCDF file to disk.

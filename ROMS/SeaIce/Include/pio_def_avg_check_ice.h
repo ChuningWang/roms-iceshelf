@@ -1,4 +1,3 @@
-#  if defined ICE_MODEL || defined ICESHELF
 !
 !-----------------------------------------------------------------------
 !  Ice model variables.
@@ -7,7 +6,7 @@
         DO i=1,n_var
           IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idtime))) THEN
             got_var(idtime)=.TRUE.
-#   ifdef ICE_MODEL
+#  ifdef ICE_MODEL
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIuice))) THEN
             got_var(idIuice)=.TRUE.
             AVG(ng)%pioVar(idIuice)%vd=var_desc(i)
@@ -133,8 +132,8 @@
             AVG(ng)%pioVar(idIwdiv)%vd=var_desc(i)
             AVG(ng)%pioVar(idIwdiv)%dkind=PIO_FOUT
             AVG(ng)%pioVar(idIwdiv)%gtype=r2dvar
-#    ifdef ICE_DIAGS
-#     ifdef ICE_ALBEDO
+#   ifdef ICE_DIAGS
+#    ifdef ICE_ALBEDO
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIalbO))) THEN
             got_var(idIalbO)=.TRUE.
             AVG(ng)%pioVar(idIalbO)%vd=var_desc(i)
@@ -145,14 +144,14 @@
             AVG(ng)%pioVar(idIalbI)%vd=var_desc(i)
             AVG(ng)%pioVar(idIalbI)%dkind=PIO_FOUT
             AVG(ng)%pioVar(idIalbI)%gtype=r2dvar
-#      ifdef ICE_ALB_CSIM
+#     ifdef ICE_ALB_CSIM
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIfrsw))) THEN
             got_var(idIfrsw)=.TRUE.
             AVG(ng)%pioVar(idIfrsw)%vd=var_desc(i)
             AVG(ng)%pioVar(idIfrsw)%dkind=PIO_FOUT
             AVG(ng)%pioVar(idIfrsw)%gtype=r2dvar
-#      endif
 #     endif
+#    endif
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqswi))) THEN
             got_var(idIqswi)=.TRUE.
             AVG(ng)%pioVar(idIqswi)%vd=var_desc(i)
@@ -233,15 +232,15 @@
             AVG(ng)%pioVar(idIwsni)%vd=var_desc(i)
             AVG(ng)%pioVar(idIwsni)%dkind=PIO_FOUT
             AVG(ng)%pioVar(idIwsni)%gtype=r2dvar
-#    endif
 #   endif
-#   ifdef ICESHELF
+#  endif
+#  ifdef ICESHELF
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsMr))) THEN
             got_var(idIsMr)=.TRUE.
             AVG(ng)%pioVar(idIsMr)%vd=var_desc(i)
             AVG(ng)%pioVar(idIsMr)%dkind=PIO_FOUT
             AVG(ng)%pioVar(idIsMr)%gtype=r2dvar
-#    ifdef ICESHELF_3EQN_VBC
+#   ifdef ICESHELF_3EQN_VBC
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsTs))) THEN
             got_var(idIsTs)=.TRUE.
             AVG(ng)%pioVar(idIsTs)%vd=var_desc(i)
@@ -262,15 +261,15 @@
             AVG(ng)%pioVar(idIsSb)%vd=var_desc(i)
             AVG(ng)%pioVar(idIsSb)%dkind=PIO_FOUT
             AVG(ng)%pioVar(idIsSb)%gtype=r2dvar
-#    endif
-#    ifdef ICESHELF_MORPH
+#   endif
+#   ifdef ICESHELF_MORPH
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsDrft))) THEN
             got_var(idIsDrft)=.TRUE.
             AVG(ng)%pioVar(idIsDrft)%vd=var_desc(i)
             AVG(ng)%pioVar(idIsDrft)%dkind=PIO_FOUT
             AVG(ng)%pioVar(idIsDrft)%gtype=r2dvar
-#    endif
-#    ifdef ICESHELF_SOF
+#   endif
+#   ifdef ICESHELF_SOF
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsSOFs))) THEN
             got_var(idIsSOFs)=.TRUE.
             AVG(ng)%pioVar(idIsSOFs)%vd=var_desc(i)
@@ -281,14 +280,14 @@
             AVG(ng)%pioVar(idIsSOFh)%vd=var_desc(i)
             AVG(ng)%pioVar(idIsSOFh)%dkind=PIO_FOUT
             AVG(ng)%pioVar(idIsSOFh)%gtype=r2dvar
-#    endif
 #   endif
+#  endif
           END IF
         END DO
 !
 !  Check if variables are available in input NetCDF file.
 !
-#   ifdef ICE_MODEL
+#  ifdef ICE_MODEL
         IF (.not.got_var(idIuice).and.Aout(idIuice,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIuice)),         &
      &                                  TRIM(ncname)
@@ -439,8 +438,8 @@
           exit_flag=3
           RETURN
         END IF
-#    ifdef ICE_DIAGS
-#     ifdef ICE_ALBEDO
+#   ifdef ICE_DIAGS
+#    ifdef ICE_ALBEDO
         IF (.not.got_var(idIalbO).and.Aout(idIalbO,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIalbO)),         &
      &                                  TRIM(ncname)
@@ -453,15 +452,15 @@
           exit_flag=3
           RETURN
         END IF
-#      ifdef ICE_ALB_CSIM
+#     ifdef ICE_ALB_CSIM
         IF (.not.got_var(idIfrsw).and.Aout(idIfrsw,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIfrsw)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-#      endif
 #     endif
+#    endif
         IF (.not.got_var(idIqswi).and.Aout(idIqswi,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIqswi)),         &
      &                                  TRIM(ncname)
@@ -558,16 +557,16 @@
           exit_flag=3
           RETURN
         END IF
-#    endif
 #   endif
-#   ifdef ICESHELF
+#  endif
+#  ifdef ICESHELF
         IF (.not.got_var(idIsMr).and.Aout(idIsMr,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsMr)),          &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-#    ifdef ICESHELF_3EQN_VBC
+#   ifdef ICESHELF_3EQN_VBC
         IF (.not.got_var(idIsTs).and.Aout(idIsTs,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsTs)),          &
      &                                  TRIM(ncname)
@@ -592,16 +591,16 @@
           exit_flag=3
           RETURN
         END IF
-#    endif
-#    ifdef ICESHELF_MORPH
+#   endif
+#   ifdef ICESHELF_MORPH
         IF (.not.got_var(idIsDrft).and.Aout(idIsDrft,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsDrft)),        &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-#    endif
-#    ifdef ICESHELF_SOF
+#   endif
+#   ifdef ICESHELF_SOF
         IF (.not.got_var(idIsSOFs).and.Aout(idIsSOFs,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsSOFs)),        &
      &                                  TRIM(ncname)
@@ -614,6 +613,5 @@
           exit_flag=3
           RETURN
         END IF
-#    endif
 #   endif
 #  endif

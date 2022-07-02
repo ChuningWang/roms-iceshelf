@@ -1,4 +1,3 @@
-# if defined ICE_MODEL || defined ICESHELF
 !
 !-----------------------------------------------------------------------
 !  Ice model variables.
@@ -7,7 +6,7 @@
         DO i=1,n_var
           IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idtime))) THEN
             got_var(idtime)=.TRUE.
-#  ifdef ICE_MODEL
+# ifdef ICE_MODEL
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIuice))) THEN
             got_var(idIuice)=.TRUE.
             AVG(ng)%Vid(idIuice)=var_id(i)
@@ -83,20 +82,20 @@
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIwdiv))) THEN
             got_var(idIwdiv)=.TRUE.
             AVG(ng)%Vid(idIwdiv)=var_id(i)
-#   ifdef ICE_DIAGS
-#    ifdef ICE_ALBEDO
+#  ifdef ICE_DIAGS
+#   ifdef ICE_ALBEDO
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIalbO))) THEN
             got_var(idIalbO)=.TRUE.
             AVG(ng)%Vid(idIalbO)=var_id(i)
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIalbI))) THEN
             got_var(idIalbI)=.TRUE.
             AVG(ng)%Vid(idIalbI)=var_id(i)
-#     ifdef ICE_ALB_CSIM
+#    ifdef ICE_ALB_CSIM
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIfrsw))) THEN
             got_var(idIfrsw)=.TRUE.
             AVG(ng)%Vid(idIfrsw)=var_id(i)
-#     endif
 #    endif
+#   endif
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIqswi))) THEN
             got_var(idIqswi)=.TRUE.
             AVG(ng)%Vid(idIqswi)=var_id(i)
@@ -145,13 +144,13 @@
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIwsni))) THEN
             got_var(idIwsni)=.TRUE.
             AVG(ng)%Vid(idIwsni)=var_id(i)
-#   endif
 #  endif
-#  ifdef ICESHELF
+# endif
+# ifdef ICESHELF
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsMr))) THEN
             got_var(idIsMr)=.TRUE.
             AVG(ng)%Vid(idIsMr)=var_id(i)
-#   ifdef ICESHELF_3EQN_VBC
+#  ifdef ICESHELF_3EQN_VBC
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsTs))) THEN
             got_var(idIsTs)=.TRUE.
             AVG(ng)%Vid(idIsTs)=var_id(i)
@@ -164,27 +163,27 @@
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsSb))) THEN
             got_var(idIsSb)=.TRUE.
             AVG(ng)%Vid(idIsSb)=var_id(i)
-#   endif
-#   ifdef ICESHELF_MORPH
+#  endif
+#  ifdef ICESHELF_MORPH
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsDrft))) THEN
             got_var(idIsDrft)=.TRUE.
             AVG(ng)%Vid(idIsDrft)=var_id(i)
-#   endif
-#   ifdef ICESHELF_SOF
+#  endif
+#  ifdef ICESHELF_SOF
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsSOFs))) THEN
             got_var(idIsSOFs)=.TRUE.
             AVG(ng)%Vid(idIsSOFs)=var_id(i)
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsSOFh))) THEN
             got_var(idIsSOFh)=.TRUE.
             AVG(ng)%Vid(idIsSOFh)=var_id(i)
-#   endif
 #  endif
+# endif
           END IF
         END DO
 !
 !  Check if variables are available in input NetCDF file.
 !
-#  ifdef ICE_MODEL
+# ifdef ICE_MODEL
         IF (.not.got_var(idIuice).and.Aout(idIuice,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIuice)),         &
      &                                  TRIM(ncname)
@@ -335,8 +334,8 @@
           exit_flag=3
           RETURN
         END IF
-#   ifdef ICE_DIAGS
-#    ifdef ICE_ALBEDO
+#  ifdef ICE_DIAGS
+#   ifdef ICE_ALBEDO
         IF (.not.got_var(idIalbO).and.Aout(idIalbO,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIalbO)),         &
      &                                  TRIM(ncname)
@@ -349,15 +348,15 @@
           exit_flag=3
           RETURN
         END IF
-#     ifdef ICE_ALB_CSIM
+#    ifdef ICE_ALB_CSIM
         IF (.not.got_var(idIfrsw).and.Aout(idIfrsw,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIfrsw)),         &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-#     endif
 #    endif
+#   endif
         IF (.not.got_var(idIqswi).and.Aout(idIqswi,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIqswi)),         &
      &                                  TRIM(ncname)
@@ -454,16 +453,16 @@
           exit_flag=3
           RETURN
         END IF
-#   endif
 #  endif
-#  ifdef ICESHELF
+# endif
+# ifdef ICESHELF
         IF (.not.got_var(idIsMr).and.Aout(idIsMr,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsMr)),          &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-#   ifdef ICESHELF_3EQN_VBC
+#  ifdef ICESHELF_3EQN_VBC
         IF (.not.got_var(idIsTs).and.Aout(idIsTs,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsTs)),          &
      &                                  TRIM(ncname)
@@ -488,16 +487,16 @@
           exit_flag=3
           RETURN
         END IF
-#   endif
-#   ifdef ICESHELF_MORPH
+#  endif
+#  ifdef ICESHELF_MORPH
         IF (.not.got_var(idIsDrft).and.Aout(idIsDrft,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsDrft)),        &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-#   endif
-#   ifdef ICESHELF_SOF
+#  endif
+#  ifdef ICESHELF_SOF
         IF (.not.got_var(idIsSOFs).and.Aout(idIsSOFs,ng)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsSOFs)),        &
      &                                  TRIM(ncname)
@@ -510,6 +509,5 @@
           exit_flag=3
           RETURN
         END IF
-#   endif
 #  endif
 # endif

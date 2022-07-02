@@ -131,19 +131,18 @@
       real(r8) :: t_freeze, s1, z1, sice, t_fr, gamma_k, delta_wfr
       real(r8) :: cff
 !
-!  Inline functions
+!  A few choices for freezing temperature formula
 !
 !  Freezing temperature (Gill, 1982)
-!     t_freeze(s1,z1) = -0.0575*s1 + 1.710523d-3*sqrt(s1)**3
-!    &       - 2.154996d-4*s1*s1 + 0.000753*z1
+!     t_freeze(s,z) = -0.0575*s + 1.710523d-3*sqrt(s)**3 -
+!                     2.154996d-4*s**2 + 0.000753*z
 !
-!  Freezing temperature (Steele et al. 1989)
-!     t_freeze(s1,z1) = frln*s1 + 0.000759*z1
+!  Freezing temperature (Steele et al. 1989) (default)
+!     t_freeze(s,z) = frln*s + 0.000759*z
 !
-!  Another simple formula - perhaps works better for potential
-!  temperature
+!  Another simple formula
 !
-      t_freeze(s1,z1) = frln*s1
+!     t_freeze(s,z) = frln*s
 !
 # include "set_bounds.h"
 !
@@ -163,7 +162,7 @@
 # elif defined MASKING
             IF (rmask(i,j) .ne. 0.0_r8) THEN
 # endif
-              t_fr = t_freeze(t(i,j,k,nnew,isalt),z_r(i,j,k))
+              t_fr = frln*t(i,j,k,nnew,isalt) + 0.000759_r8*z_r(i,j,k)
               delta_wfr = 0._r8
               IF (t(i,j,k,nnew,itemp) .lt. t_fr) THEN
                 gamma_k = (t_fr - t(i,j,k,nnew,itemp)) /                &

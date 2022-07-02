@@ -1613,7 +1613,9 @@
 # endif
 #endif
 
-#include "def_rst_ice.h"
+#if defined ICE_MODEL || defined ICESHELF
+# include "def_rst_ice.h"
+#endif
 !
 !-----------------------------------------------------------------------
 !  Leave definition mode.
@@ -2094,7 +2096,9 @@
 # endif
 #endif
 
-#include "def_rst_check_ice.h"
+#if defined ICE_MODEL || defined ICESHELF
+# include "def_rst_check_ice.h"
+#endif
 !
 !  Set unlimited time record dimension to current value.
 !
@@ -3803,7 +3807,9 @@
 # endif
 #endif
 
-#include "pio_def_rst_ice.h"
+#if defined ICE_MODEL || defined ICESHELF
+# include "pio_def_rst_ice.h"
+#endif
 !
 !-----------------------------------------------------------------------
 !  Leave definition mode.
@@ -4364,7 +4370,9 @@
 # endif
 #endif
 
-#include "pio_def_rst_check_ice.h"
+#if defined ICE_MODEL || defined ICESHELF
+# include "pio_def_rst_check_ice.h"
+#endif
 !
 !  Set unlimited time record dimension to current value.
 !

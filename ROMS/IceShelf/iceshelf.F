@@ -501,10 +501,10 @@
 !
 !  Calculate exchange coefficients. Note that this assumes log profile 
 !
-            Ustar(i,j) = SQRT(SQRT(                                     &
+            Ustar(i,j) = gamU(ng)*SQRT(SQRT(                            &
      &                   (0.5_r8*(sustr(i,j)+sustr(i+1,j)))**2+         &
      &                   (0.5_r8*(svstr(i,j)+svstr(i,j+1)))**2))
-            IF (Ustar(i,j).lt.small) Ustar(i,j)=small
+            IF (Ustar(i,j).lt.ustar_min(ng)) Ustar(i,j)=ustar_min(ng)
 #  ifdef GAMMAS_KY1972
 !
 !  Use KY 1972
@@ -516,7 +516,8 @@
 !
 !  Use simplified version of McPhee 1987
 !
-            IF (Ustar(i,j).gt.small.and.ABS(f(i,j)).gt.1.0E-8) THEN
+            IF (Ustar(i,j).gt.ustar_min(ng).and.                        &
+     &          ABS(f(i,j)).gt.1.0E-8) THEN
               turb = 2.5_r8*                                            &
      &               LOG(5300.0_r8*Ustar(i,j)*Ustar(i,j)/ABS(f(i,j)))   &
      &               + 7.12_r8  

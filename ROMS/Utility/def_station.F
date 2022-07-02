@@ -1504,7 +1504,9 @@
         END IF
 # endif
 
-#include "def_station_ice.h"
+# if defined ICE_MODEL || defined ICESHELF
+#  include "def_station_ice.h"
+# endif
 !
 !-----------------------------------------------------------------------
 !  Leave definition mode.
@@ -2353,7 +2355,9 @@
 #  endif
 # endif
 
-#include "def_station_check_ice.h"
+# if defined ICE_MODEL || defined ICESHELF
+#  include "def_station_check_ice.h"
+# endif
 !
 !  Set unlimited time record dimension to the appropriate value.
 !
@@ -4091,7 +4095,9 @@
         END IF
 # endif
 
-#include "pio_def_station_ice.h"
+# if defined ICE_MODEL || defined ICESHELF
+#  include "pio_def_station_ice.h"
+# endif
 !
 !-----------------------------------------------------------------------
 !  Leave definition mode.
@@ -5103,7 +5109,9 @@
 #  endif
 # endif
 
-#include "pio_def_station_check_ice.h"
+# if defined ICE_MODEL || defined ICESHELF
+#  include "pio_def_station_check_ice.h"
+# endif
 !
 !  Set unlimited time record dimension to the appropriate value.
 !

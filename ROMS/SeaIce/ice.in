@@ -175,6 +175,15 @@
     LnudgeAICLM == F
     LnudgeSICLM == F
 
+! Iceshelf Ustar scaling factor
+
+        GAMMA_U == 1.0d0
+
+! Iceshelf Ustar minimum value.
+! 8.0d-6 for diffusion only, 1.0d-3 for diffusion + tidal forcing
+
+      USTAR_MIN == 8.0d-6
+
 ! Logical switches for iceshelf melt water passive tracers
 
      LtracerIce == T       ! dye_01, ...        inert passive tracers

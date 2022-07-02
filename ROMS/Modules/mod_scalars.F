@@ -1884,6 +1884,10 @@
         real(r8), allocatable :: lf_u0(:)
 # endif
 #endif
+#ifdef ICESHELF
+        real(r8), allocatable :: gamU(:)
+        real(r8), allocatable :: ustar_min(:)
+#endif
 
       CONTAINS
 !
@@ -3485,6 +3489,16 @@
       END IF
 # endif
 #endif
+#ifdef ICESHELF
+      IF (.not. allocated(gamU)) THEN
+        allocate ( gamU(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+      IF (.not. allocated(ustar_min)) THEN
+        allocate ( ustar_min(Ngrids) )
+        Dmem(1)=Dmem(1)+REAL(Ngrids,r8)
+      END IF
+#endif
 !
       RETURN
       END SUBROUTINE allocate_scalars
@@ -4261,8 +4275,13 @@
       IF (allocated(lf_k2))             deallocate ( lf_k2 )
 
       IF (allocated(lf_u0))             deallocate ( lf_u0 )
-      END IF
 # endif
+#endif
+#ifdef ICESHELF
+
+      IF (allocated(gamU))              deallocate ( gamU )
+
+      IF (allocated(ustar_min))         deallocate ( ustar_min )
 #endif
 !
       RETURN

@@ -2323,7 +2323,9 @@
 #  endif
 # endif
 
-#include "get_state_ice.h"
+# if defined ICE_MODEL || defined ICESHELF
+#  include "get_state_ice.h"
+# endif
       END IF NLM_STATE
 #endif
 
@@ -9899,7 +9901,9 @@
 #   endif
 #  endif
 
-#include "pio_get_state_ice.h"
+#  if defined ICE_MODEL || defined ICESHELF
+#   include "pio_get_state_ice.h"
+#  endif
       END IF NLM_STATE
 # endif
 

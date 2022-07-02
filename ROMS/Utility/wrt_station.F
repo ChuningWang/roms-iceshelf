@@ -1536,7 +1536,9 @@
       END IF
 # endif
 
-#include "wrt_station.h"
+# if defined ICE_MODEL || defined ICESHELF
+#  include "wrt_station_ice.h"
+# endif
 !
 !-----------------------------------------------------------------------
 !  Synchronize stations NetCDF file to disk.
@@ -3026,7 +3028,9 @@
       END IF
 #  endif
 
-#include "pio_wrt_station.h"
+#  if defined ICE_MODEL || defined ICESHELF
+#   include "pio_wrt_station_ice.h"
+#  endif
 !
 !-----------------------------------------------------------------------
 !  Synchronize stations NetCDF file to disk.

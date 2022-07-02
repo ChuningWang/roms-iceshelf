@@ -2084,7 +2084,9 @@
 #  endif
 # endif
 
-#include "def_avg_ice.h"
+# if defined ICE_MODEL || defined ICESHELF
+#  include "def_avg_ice.h"
+# endif
 !
 !-----------------------------------------------------------------------
 !  Leave definition mode.
@@ -2980,7 +2982,9 @@
 #  endif
 # endif
 
-#include "def_avg_check_ice.h"
+# if defined ICE_MODEL || defined ICESHELF
+#  include "def_avg_check_ice.h"
+# endif
 !
 !  Set unlimited time record dimension to the appropriate value.
 !
@@ -5338,7 +5342,9 @@
 #   endif
 #  endif
 
-#include "pio_def_avg_ice.h"
+#  if defined ICE_MODEL || defined ICESHELF
+#   include "pio_def_avg_ice.h"
+#  endif
 !
 !-----------------------------------------------------------------------
 !  Leave definition mode.
@@ -6392,7 +6398,9 @@
 #   endif
 #  endif
 
-#include "pio_def_avg_check_ice.h"
+#  if defined ICE_MODEL || defined ICESHELF
+#   include "pio_def_avg_check_ice.h"
+#  endif
 !
 !  Set unlimited time record dimension to the appropriate value.
 !

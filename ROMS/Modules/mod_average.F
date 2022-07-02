@@ -294,7 +294,9 @@
           real(r8), pointer :: avgrvor3d(:,:,:)
 # endif
 
-#include "mod_avg_ice.h"
+# if defined ICE_MODEL || defined ICESHELF
+#  include "mod_avg_ice.h"
+# endif
 
         END TYPE T_AVERAGE
 !
@@ -692,7 +694,9 @@
       END IF
 # endif
 !
-#include "mod_avg_alloc_ice.h"
+# if defined ICE_MODEL || defined ICESHELF
+#  include "mod_avg_alloc_ice.h"
+# endif
 
       RETURN
       END SUBROUTINE allocate_average
@@ -1138,7 +1142,9 @@
       END IF
 #  endif
 
-#include "mod_avg_dealloc_ice.h"
+# if defined ICE_MODEL || defined ICESHELF
+#  include "mod_avg_dealloc_ice.h"
+# endif
 
 # endif
 !
@@ -1871,7 +1877,9 @@
       END IF
 # endif
 
-#include "mod_avg_init_ice.h"
+# if defined ICE_MODEL || defined ICESHELF
+#  include "mod_avg_init_ice.h"
+# endif
 
       RETURN
       END SUBROUTINE initialize_average

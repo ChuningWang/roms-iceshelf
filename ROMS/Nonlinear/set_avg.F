@@ -3980,7 +3980,9 @@
 # endif
       END IF
 
-#include "set_avg_ice.h"
+# if defined ICE_MODEL || defined ICESHELF
+#  include "set_avg_ice.h"
+# endif
 
       RETURN
       END SUBROUTINE set_avg_tile

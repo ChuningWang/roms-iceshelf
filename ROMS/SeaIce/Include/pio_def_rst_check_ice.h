@@ -1,4 +1,3 @@
-# if defined ICE_MODEL || defined ICESHELF
 !
 !-----------------------------------------------------------------------
 !  Ice model variables.
@@ -7,7 +6,7 @@
         DO i=1,n_var
           IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idtime))) THEN
             got_var(idtime)=.TRUE.
-#  ifdef ICE_MODEL
+# ifdef ICE_MODEL
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIuice))) THEN
             got_var(idIuice)=.TRUE.
             RST(ng)%pioVar(idIuice)%vd=var_desc(i)
@@ -63,7 +62,7 @@
             RST(ng)%pioVar(idIsg22)%vd=var_desc(i)
             RST(ng)%pioVar(idIsg22)%dkind=PIO_FRST
             RST(ng)%pioVar(idIsg22)%gtype=r2dvar
-#   ifndef ICE_MOM_BULK
+#  ifndef ICE_MOM_BULK
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIutau))) THEN
             got_var(idIutau)=.TRUE.
             RST(ng)%pioVar(idIutau)%vd=var_desc(i)
@@ -74,7 +73,7 @@
             RST(ng)%pioVar(idImchu)%vd=var_desc(i)
             RST(ng)%pioVar(idImchu)%dkind=PIO_FRST
             RST(ng)%pioVar(idImchu)%gtype=r2dvar
-#   endif
+#  endif
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIt0mk))) THEN
             got_var(idIt0mk)=.TRUE.
             RST(ng)%pioVar(idIt0mk)%vd=var_desc(i)
@@ -85,7 +84,7 @@
             RST(ng)%pioVar(idIs0mk)%vd=var_desc(i)
             RST(ng)%pioVar(idIs0mk)%dkind=PIO_FRST
             RST(ng)%pioVar(idIs0mk)%gtype=r2dvar
-#   ifdef PERFECT_RESTART
+#  ifdef PERFECT_RESTART
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idUsms))) THEN
             got_var(idUsms)=.TRUE.
             RST(ng)%pioVar(idUsms)%vd=var_desc(i)
@@ -96,26 +95,26 @@
             RST(ng)%pioVar(idVsms)%vd=var_desc(i)
             RST(ng)%pioVar(idVsms)%dkind=PIO_FRST
             RST(ng)%pioVar(idVsms)%gtype=r2dvar
-#   endif
 #  endif
-#  ifdef ICESHELF
-#   ifdef ICESHELF_MORPH
+# endif
+# ifdef ICESHELF
+#  ifdef ICESHELF_MORPH
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsDrft))) THEN
             got_var(idIsDrft)=.TRUE.
             RST(ng)%pioVar(idIsDrft)%vd=var_desc(i)
             RST(ng)%pioVar(idIsDrft)%dkind=PIO_FRST
             RST(ng)%pioVar(idIsDrft)%gtype=r2dvar
-#   endif
-#   ifdef ICESHELF_TRACER
+#  endif
+#  ifdef ICESHELF_TRACER
           ELSE IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsVol))) THEN
             got_var(idIsVol)=.TRUE.
             RST(ng)%pioVar(idIsVol)%vd=var_desc(i)
             RST(ng)%pioVar(idIsVol)%dkind=PIO_FRST
             RST(ng)%pioVar(idIsVol)%gtype=r2dvar
-#   endif
 #  endif
+# endif
           END IF
-#  if defined ICE_MODEL && defined PERFECT_RESTART
+# if defined ICE_MODEL && defined PERFECT_RESTART
           DO itrc=1,NAT
             IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idTsur(itrc)))) THEN
               got_var(idTsur(itrc))=.TRUE.
@@ -124,8 +123,8 @@
               RST(ng)%pioVar(idTsur(itrc))%gtype=r2dvar
             END IF
           END DO
-#  endif
-#  if defined ICESHELF && defined ICESHELF_TRACER
+# endif
+# if defined ICESHELF && defined ICESHELF_TRACER
           DO itrc=NAT+1,NT(ng)
             IF (TRIM(var_name(i)).eq.TRIM(Vname(1,idIsTrc(itrc)))) THEN
               got_var(idIsTrc(itrc))=.TRUE.
@@ -134,12 +133,12 @@
               RST(ng)%pioVar(idIsTrc(itrc))%gtype=r2dvar
             END IF
           END DO
-#  endif
+# endif
         END DO
 !
 !  Check if variables are available in input NetCDF file.
 !
-#  ifdef ICE_MODEL
+# ifdef ICE_MODEL
         IF (.not.got_var(idIuice)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIuice)),         &
      &                                  TRIM(ncname)
@@ -206,7 +205,7 @@
           exit_flag=3
           RETURN
         END IF
-#   ifndef ICE_MOM_BULK
+#  ifndef ICE_MOM_BULK
         IF (.not.got_var(idIutau)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIutau)),         &
      &                                  TRIM(ncname)
@@ -219,7 +218,7 @@
           exit_flag=3
           RETURN
         END IF
-#   endif
+#  endif
         IF (.not.got_var(idIt0mk)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIt0mk)),         &
      &                                  TRIM(ncname)
@@ -232,7 +231,7 @@
           exit_flag=3
           RETURN
         END IF
-#   ifdef PERFECT_RESTART
+#  ifdef PERFECT_RESTART
         DO itrc=1,NAT
           IF (.not.got_var(idTsur(itrc))) THEN
             IF (Master) WRITE (stdout,60) TRIM(Vname(1,idTsur(itrc))),    &
@@ -253,18 +252,18 @@
           exit_flag=3
           RETURN
         END IF
-#   endif
 #  endif
-#  ifdef ICESHELF
-#   ifdef ICESHELF_MORPH
+# endif
+# ifdef ICESHELF
+#  ifdef ICESHELF_MORPH
         IF (.not.got_var(idIsDrft)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsDrft)),        &
      &                                  TRIM(ncname)
           exit_flag=3
           RETURN
         END IF
-#   endif
-#   ifdef ICESHELF_TRACER
+#  endif
+#  ifdef ICESHELF_TRACER
         IF (.not.got_var(idIsVol)) THEN
           IF (Master) WRITE (stdout,60) TRIM(Vname(1,idIsVol)),         &
      &                                  TRIM(ncname)
@@ -279,6 +278,5 @@
             RETURN
           END IF
         END DO
-#   endif
 #  endif
 # endif
