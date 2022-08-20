@@ -88,7 +88,7 @@
      &                    OCEAN(ng) % eq_tide,                          &
 #endif
 #ifdef ICESHELF
-     &                  GRID(ng) % zice,                                &
+     &                    GRID(ng) % zice,                              &
 #endif
 #ifdef ATM_PRESS
      &                    FORCES(ng) % Pair,                            &
